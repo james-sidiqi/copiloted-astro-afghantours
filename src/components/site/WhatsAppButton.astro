@@ -1,9 +1,9 @@
 ---
-// Floating WhatsApp contact button
+import { siteConfig } from '@lib/config';
 ---
 
 <a
-  href="https://wa.me/15551234567"
+  href={siteConfig.whatsapp.url}
   target="_blank"
   rel="noopener noreferrer"
   aria-label="Chat with us on WhatsApp"

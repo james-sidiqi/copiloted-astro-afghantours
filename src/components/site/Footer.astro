@@ -1,4 +1,5 @@
 ---
+import { siteConfig } from '@lib/config';
 const quickLinks = [
   { label: 'Tours',          href: '/tours' },
   { label: 'Attractions',    href: '/attractions' },
@@ -24,7 +25,7 @@ const quickLinks = [
         <!-- Social links -->
         <div class="flex gap-4 mt-5">
           <a
-            href="https://wa.me/15551234567"
+            href={siteConfig.whatsapp.url}
             target="_blank"
             rel="noopener noreferrer"
             aria-label="WhatsApp"
@@ -35,7 +36,7 @@ const quickLinks = [
             </svg>
           </a>
           <a
-            href="mailto:info@afghantours.com"
+            href={`mailto:${siteConfig.email}`}
             aria-label="Email"
             class="flex items-center justify-center w-9 h-9 rounded-full bg-white/10 hover:bg-[#1f4aa8] transition-colors duration-200"
           >
@@ -74,7 +75,7 @@ const quickLinks = [
             <svg class="w-4 h-4 mt-0.5 shrink-0 text-[#b88a2a]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
             </svg>
-            <span>info@afghantours.com</span>
+            <span>{siteConfig.email}</span>
           </li>
           <li class="flex items-start gap-2">
             <svg class="w-4 h-4 mt-0.5 shrink-0 text-[#b88a2a]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
