@@ -1,8 +1,6 @@
-slug,name,description,hero_image,map_image,highlights,best_season,climate,featured
-kabul-region,Kabul Region,"The heart of Afghanistan, home to the capital city with historic bazaars, museums, and the ancient Bala Hissar fortress.",/images/regions/kabul.jpg,,Historic bazaars;Museums;Bala Hissar,Spring and Autumn,Semi-arid,true
-bamiyan-region,Bamiyan Region,"High-altitude valley famous for the colossal Buddha niches and stunning Band-e Amir lakes – Afghanistan's first national park.",/images/regions/bamiyan.jpg,,Band-e Amir;Buddha niches;Shahr-e Gholghola,Summer,Alpine,true
-herat-region,Herat Region,"Western Afghanistan's cultural gem, featuring a magnificent 15th-century citadel, Friday Mosque, and a vibrant craft tradition.",/images/regions/herat.jpg,,Herat Citadel;Friday Mosque;Craft bazaars,Spring and Autumn,Semi-arid,true
-balkh-region,Balkh Region,"Ancient Bactria – one of the world's oldest cities – plus Mazar-i-Sharif's dazzling Blue Mosque and the Shrine of Hazrat Ali.",/images/regions/balkh.jpg,,Blue Mosque;Ancient Balkh;Nawruz Festival,Spring,Semi-arid,true
-nuristan-region,Nuristan Region,"Remote mountainous region with pristine rivers, dense forests, and unique wooden architecture unlike anywhere else in Afghanistan.",/images/regions/nuristan.jpg,,Pristine rivers;Forest trekking;Wooden architecture,Summer,Mountain,false
-wakhan-region,Wakhan Corridor,"The remote eastern finger of Afghanistan stretching between Tajikistan and Pakistan – spectacular high-altitude wilderness for trekkers.",/images/regions/wakhan.jpg,,Pamir trekking;Marco Polo sheep;Ancient forts,Summer,Alpine,false
-kandahar-region,Kandahar Region,"Afghanistan's second-largest city, the spiritual and cultural heartland of the Pashtun people, with ancient shrines and pomegranate orchards.",/images/regions/kandahar.jpg,,Ahmad Shah Durrani;Pomegranate orchards;Chihilzina,Spring and Autumn,Arid,false
+region_code,region_name,parent_code,region_slug,description,img_path,is_active,sort_order
+CENTRAL,Central Highlands,AFG,central,"Mountainous heartland including Kabul, Bamyan, and the historic corridors linking north and south.",/assets/images/province/central.webp,1,1
+NORTH,Northern Afghanistan,AFG,north,"Fertile plains and ancient cities along the Amu Darya, including Balkh and the northern Silk Road.",/assets/images/province/north.webp,1,2
+WEST,Western Afghanistan,AFG,west,"Silk Road crossroads around Herat, desert frontiers, and remote highlands including Ghor and Badghis.",/assets/images/province/west.webp,1,3
+SOUTH,Southern Afghanistan,AFG,south,"Historic southern heartlands including Kandahar and Helmand, shaped by desert routes and river valleys.",/assets/images/province/south.webp,1,4
+EAST,Eastern Afghanistan,AFG,east,"Rugged eastern valleys and passes bordering Pakistan, including Jalalabad and the forested provinces.",/assets/images/province/east.webp,1,5

@@ -1,8 +1,7 @@
-slug,origin_slug,destination_slug,airline,flight_number,frequency,duration_hours,price_usd_approx,notes
-kabul-mazar,kabul-city,mazar-i-sharif,Ariana Afghan Airlines,FG301,Daily,1.0,120,Schedule varies; check with airline
-kabul-herat,kabul-city,herat-city,Ariana Afghan Airlines,FG401,Daily,1.5,140,
-kabul-herat-kam,kabul-city,herat-city,Kam Air,RQ401,Daily,1.5,135,
-kabul-bamiyan,kabul-city,bamiyan-city,Ariana Afghan Airlines,FG201,2x weekly,0.75,90,Small aircraft; luggage limit 15 kg
-kabul-faizabad,kabul-city,faizabad,Ariana Afghan Airlines,FG501,3x weekly,1.5,130,
-herat-mazar,herat-city,mazar-i-sharif,Ariana Afghan Airlines,FG450,4x weekly,1.5,130,
-kabul-kandahar,kabul-city,kandahar-city,Ariana Afghan Airlines,FG601,Daily,1.0,110,
+flight_id,airline,origin,destination,origin_slug,dest_slug,map_image_path,is_active
+FL-KBL-HER,Ariana/Kam Air,Kabul,Herat,kabul,herat,/assets/images/maps/flight_routes/plane_kbl_her.png,1
+FL-HER-KBL,Ariana/Kam Air,Herat,Kabul,herat,kabul,/assets/images/maps/flight_routes/plane_her_kbl.png,1
+FL-KBL-MAZ,Ariana/Kam Air,Kabul,Mazar-e-Sharif,kabul,mazar-e-sharif,/assets/images/maps/flight_routes/plane_kbl_maz.png,1
+FL-MAZ-KBL,Ariana/Kam Air,Mazar-e-Sharif,Kabul,mazar-e-sharif,kabul,/assets/images/maps/flight_routes/plan_maz_kbl.png,1
+FL-KBL-KDR,Ariana/Kam Air,Kabul,Kandahar,kabul,kandahar,/assets/images/maps/flight_routes/plane_kbl_kdr.png,1
+FL-KDR-KBL,Ariana/Kam Air,Kandahar,Kabul,kandahar,kabul,/assets/images/maps/flight_routes/plane_kdr_kbl.png,1

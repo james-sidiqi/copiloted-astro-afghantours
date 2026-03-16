@@ -1,9 +1,49 @@
-slug,name,type,province_slug,region_slug,latitude,longitude,description,featured,airport_code
-kabul-city,Kabul City,city,kabul,kabul-region,34.5260,69.1837,"Afghanistan's capital and largest city, a hub for history, culture, and commerce.",true,KBL
-mazar-i-sharif,Mazar-i-Sharif,city,balkh,balkh-region,36.7069,67.1100,"Northern Afghanistan's largest city, famous for the Blue Mosque and Nawruz celebrations.",true,MZR
-herat-city,Herat City,city,herat,herat-region,34.3482,62.2041,"Western Afghanistan's cultural capital, known for its Persian architecture and crafts.",true,HEA
-bamiyan-city,Bamiyan City,city,bamiyan,bamiyan-region,34.8237,67.8233,"High-altitude mountain city at 2,500 m, gateway to the famous Buddha niches.",true,BIN
-jalalabad,Jalalabad,city,nangarhar,kabul-region,34.4415,70.4382,"Warm-climate city on the Kabul River, known for its gardens and fruit orchards.",false,JAA
-faizabad,Faizabad,city,badakhshan,wakhan-region,37.1195,70.5811,"Remote northeastern city, gateway to Badakhshan's mountains and the Wakhan.",false,FBD
-kandahar-city,Kandahar City,city,kandahar,kandahar-region,31.6129,65.7372,"Afghanistan's second city, the historic Pashtun capital.",false,KDH
-band-e-amir,Band-e Amir,national_park,bamiyan,bamiyan-region,34.8464,67.2089,"Afghanistan's first national park – six jewel-coloured natural lakes in a high canyon.",true,
+location_code,name,type,parent_code,slug,is_active,sort_order
+AFG,Afghanistan,country,,afghanistan,1,0
+CENTRAL,Central Highlands,region,AFG,central,1,1
+NORTH,Northern Afghanistan,region,AFG,north,1,2
+WEST,Western Afghanistan,region,AFG,west,1,3
+SOUTH,Southern Afghanistan,region,AFG,south,1,4
+EAST,Eastern Afghanistan,region,AFG,east,1,5
+BDK,Badakhshan,province,NORTH,badakhshan,1,100
+BDG,Badghis,province,WEST,badghis,1,100
+BAG,Baghlan,province,NORTH,baghlan,1,100
+BAL,Balkh,province,NORTH,balkh,1,100
+BMY,Bamyan,province,CENTRAL,bamyan,1,100
+DYK,Daykundi,province,CENTRAL,daykundi,1,100
+FRH,Farah,province,WEST,farah,1,100
+FRY,Faryab,province,NORTH,faryab,1,100
+GHZ,Ghazni,province,CENTRAL,ghazni,1,100
+GHO,Ghor,province,WEST,ghor,1,100
+HLM,Helmand,province,SOUTH,helmand,1,100
+HER,Herat,province,WEST,herat,1,100
+JOW,Jowzjan,province,NORTH,jowzjan,1,100
+KBL,Kabul,province,CENTRAL,kabul,1,100
+KDR,Kandahar,province,SOUTH,kandahar,1,100
+KPS,Kapisa,province,CENTRAL,kapisa,1,100
+KHT,Khost,province,EAST,khost,1,100
+KNR,Kunar,province,EAST,kunar,1,100
+KDZ,Kunduz,province,NORTH,kunduz,1,100
+LGM,Laghman,province,EAST,laghman,1,100
+LGR,Logar,province,CENTRAL,logar,1,100
+NGH,Nangarhar,province,EAST,nangarhar,1,100
+NIM,Nimroz,province,SOUTH,nimroz,1,100
+NRS,Nuristan,province,EAST,nuristan,1,100
+PTA,Paktia,province,EAST,paktia,1,100
+PTK,Paktika,province,EAST,paktika,1,100
+PJR,Panjshir,province,CENTRAL,panjshir,1,100
+PRW,Parwan,province,CENTRAL,parwan,1,100
+SAM,Samangan,province,NORTH,samangan,1,100
+SEP,Sar-e-Pol,province,NORTH,sar-e-pol,1,100
+TKH,Takhar,province,NORTH,takhar,1,100
+URZ,Uruzgan,province,SOUTH,uruzgan,1,100
+WRD,Wardak,province,CENTRAL,wardak,1,100
+ZBL,Zabul,province,SOUTH,zabul,1,100
+KBLC,Kabul,destination,KBL,kabul-city,1,10
+JBDC,Jalalabad,destination,NGH,jalalabad-city,1,11
+KDRC,Kandahar,destination,KDR,kandahar-city,1,12
+GHZC,Ghazni,destination,GHZ,ghazni-city,1,13
+BMYC,Bamyan,destination,BMY,bamyan-city,1,14
+MAZC,Mazar-e-Sharif,destination,BAL,mazar-e-sharif-city,1,15
+FAIC,Faizabad,destination,BDK,faizabad-city,1,16
+HERC,Herat,destination,HER,herat-city,1,17
