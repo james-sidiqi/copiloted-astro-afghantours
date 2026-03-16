@@ -1,0 +1,21 @@
+slug,title,type,description,url,tags,region_slug
+band-e-amir-explorer,Band-e Amir Explorer,tour,"5-day tour to Band-e Amir national park and Bamiyan Buddha niches",/tours/band-e-amir-explorer,"band-e-amir;bamiyan;nature;lakes;buddha",bamiyan-region
+kabul-city-break,Kabul City Break,tour,"3-day cultural tour of Afghanistan's capital city",/tours/kabul-city-break,"kabul;culture;museum;garden;bazaar",kabul-region
+herat-silk-road,Herat Silk Road Journey,tour,"4-day journey through Herat's Timurid heritage",/tours/herat-silk-road,"herat;silk-road;history;citadel;mosque",herat-region
+north-afghanistan-loop,North Afghanistan Loop,tour,"6-day northern Afghanistan tour from Mazar to Balkh",/tours/north-afghanistan-loop,"mazar;balkh;blue-mosque;nawruz",balkh-region
+wakhan-trekking,Wakhan Corridor Trekking,tour,"10-day high-altitude trekking adventure",/tours/wakhan-trekking,"wakhan;trekking;pamir;adventure",wakhan-region
+kabul-bamiyan-combo,Kabul & Bamiyan Combo,tour,"7-day combo covering Kabul and Bamiyan highlights",/tours/kabul-bamiyan-combo,"kabul;bamiyan;combo;highlights",kabul-region
+baburs-garden,Babur's Garden,attraction,"16th-century Mughal terraced garden in Kabul",/attractions/baburs-garden,"kabul;garden;mughal;babur;history",kabul-region
+national-museum-kabul,National Museum of Afghanistan,attraction,"Afghanistan's premier museum with Gandharan art",/attractions/national-museum-kabul,"kabul;museum;gandharan;art;history",kabul-region
+band-e-amir-lakes,Band-e Amir Lakes,attraction,"Afghanistan's first national park – six blue crater lakes",/attractions/band-e-amir-lakes,"band-e-amir;lakes;national-park;nature",bamiyan-region
+bamiyan-buddha-niches,Bamiyan Buddha Niches,attraction,"The iconic niches of the former Bamiyan Buddhas",/attractions/bamiyan-buddha-niches,"bamiyan;buddha;history;UNESCO",bamiyan-region
+herat-citadel,Herat Citadel,attraction,"Ancient fortress and Timurid citadel of Herat",/attractions/herat-citadel,"herat;citadel;fortress;history;timurid",herat-region
+blue-mosque-mazar,Blue Mosque (Shrine of Hazrat Ali),attraction,"The famous blue-tiled mosque and shrine of Mazar-i-Sharif",/attractions/blue-mosque-mazar,"mazar;mosque;shrine;blue;hazrat-ali",balkh-region
+kabuli-pulao,Kabuli Pulao,dish,"Afghanistan's national rice dish with lamb and raisins",/food-culture/kabuli-pulao,"food;rice;lamb;national-dish;pulao",kabul-region
+ashak,Ashak,dish,"Afghan chive dumplings with yoghurt sauce",/food-culture/ashak,"food;dumplings;vegetarian;kabul",kabul-region
+mantu,Mantu,dish,"Steamed Afghan dumplings with lamb and yoghurt",/food-culture/mantu,"food;dumplings;lamb;traditional",kabul-region
+aush,Aush,dish,"Northern Afghan noodle soup with lamb and yoghurt",/food-culture/aush,"food;noodles;soup;north;balkh",balkh-region
+bamiyan-region,Bamiyan Region,region,"High-altitude valley with Band-e Amir and Buddha niches",/regions/bamiyan-region,"bamiyan;region;mountains;lakes",bamiyan-region
+kabul-region,Kabul Region,region,"Capital region with ancient history and modern culture",/regions/kabul-region,"kabul;capital;culture;history",kabul-region
+herat-region,Herat Region,region,"Western Afghanistan's Silk Road cultural gem",/regions/herat-region,"herat;silk-road;culture;history",herat-region
+balkh-region,Balkh Region,region,"Ancient Bactria with Mazar's Blue Mosque",/regions/balkh-region,"balkh;mazar;blue-mosque;ancient",balkh-region

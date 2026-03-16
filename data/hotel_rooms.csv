@@ -1,0 +1,11 @@
+hotel_slug,room_type,description,price_usd,capacity,amenities,available
+serena-kabul,Deluxe Room,"Spacious room with garden view, king bed and marble bathroom.",180,2,"King bed;Garden view;Minibar;Safe;WiFi",true
+serena-kabul,Suite,"Luxurious suite with living area, mountain views and butler service.",350,2,"King bed;Living room;Mountain view;Butler;Minibar;Safe;WiFi",true
+kabul-logement,Standard Room,"Clean comfortable room with private bathroom.",65,2,"Double bed;Private bathroom;WiFi",true
+kabul-logement,Family Room,"Larger room with two beds, suitable for families.",95,4,"Two beds;Private bathroom;WiFi",true
+marco-polo-hotel,Standard Room,"Comfortable room with Afghan decor and garden views.",55,2,"Double bed;Private bathroom;WiFi",true
+bamiyan-silk-road,Standard Room,"Simple room with views of the Buddha niches.",80,2,"Double bed;Shared or private bathroom;WiFi",true
+bamiyan-silk-road,Dormitory,Shared dormitory for budget travellers.,25,1,"Bunk bed;Shared bathroom;WiFi",true
+golden-star-herat,Standard Room,"Comfortable room in old-city Herat.",90,2,"Double bed;Private bathroom;WiFi;AC",true
+golden-star-herat,Superior Room,"Larger room with courtyard views.",120,2,"King bed;Courtyard view;Private bathroom;WiFi;AC",true
+mazar-international,Standard Room,Well-kept room near the Blue Mosque.,70,2,"Double bed;Private bathroom;WiFi",true

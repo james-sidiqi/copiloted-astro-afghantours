@@ -1,0 +1,7 @@
+origin_slug,destination_slug,via,distance_km,duration_hours,transport_type,notes
+kabul-city,bamiyan-city,Maidan Shahr,230,4,4WD,Spectacular mountain road
+kabul-city,mazar-i-sharif,Salang Pass,420,8,4WD,Salang Tunnel at 3400m
+kabul-city,herat-city,,1100,16,Flight recommended,Very long overland; fly recommended
+kabul-city,jalalabad,Kabul gorge,150,2.5,4WD,Good road
+bamiyan-city,band-e-amir,,75,1.5,4WD,Rough road; 4WD essential
+mazar-i-sharif,balkh,,20,0.5,Car,Short easy drive

@@ -1,0 +1,9 @@
+slug,name,type,province_slug,region_slug,latitude,longitude,description,featured,airport_code
+kabul-city,Kabul City,city,kabul,kabul-region,34.5260,69.1837,"Afghanistan's capital and largest city, a hub for history, culture, and commerce.",true,KBL
+mazar-i-sharif,Mazar-i-Sharif,city,balkh,balkh-region,36.7069,67.1100,"Northern Afghanistan's largest city, famous for the Blue Mosque and Nawruz celebrations.",true,MZR
+herat-city,Herat City,city,herat,herat-region,34.3482,62.2041,"Western Afghanistan's cultural capital, known for its Persian architecture and crafts.",true,HEA
+bamiyan-city,Bamiyan City,city,bamiyan,bamiyan-region,34.8237,67.8233,"High-altitude mountain city at 2,500 m, gateway to the famous Buddha niches.",true,BIN
+jalalabad,Jalalabad,city,nangarhar,kabul-region,34.4415,70.4382,"Warm-climate city on the Kabul River, known for its gardens and fruit orchards.",false,JAA
+faizabad,Faizabad,city,badakhshan,wakhan-region,37.1195,70.5811,"Remote northeastern city, gateway to Badakhshan's mountains and the Wakhan.",false,FBD
+kandahar-city,Kandahar City,city,kandahar,kandahar-region,31.6129,65.7372,"Afghanistan's second city, the historic Pashtun capital.",false,KDH
+band-e-amir,Band-e Amir,national_park,bamiyan,bamiyan-region,34.8464,67.2089,"Afghanistan's first national park – six jewel-coloured natural lakes in a high canyon.",true,

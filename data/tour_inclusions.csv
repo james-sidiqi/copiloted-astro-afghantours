@@ -1,0 +1,33 @@
+tour_slug,category,item,included
+band-e-amir-explorer,Accommodation,3 nights in guesthouse/hotel,true
+band-e-amir-explorer,Accommodation,1 night Kabul transfer hotel,true
+band-e-amir-explorer,Meals,All breakfasts,true
+band-e-amir-explorer,Meals,All lunches (picnic or restaurant),true
+band-e-amir-explorer,Meals,All dinners,true
+band-e-amir-explorer,Transport,Private 4WD vehicle,true
+band-e-amir-explorer,Transport,All airport transfers,true
+band-e-amir-explorer,Guide,Licensed English-speaking guide,true
+band-e-amir-explorer,Entrance Fees,All park and site entrance fees,true
+band-e-amir-explorer,Exclusions,International flights,false
+band-e-amir-explorer,Exclusions,Travel insurance,false
+band-e-amir-explorer,Exclusions,Personal expenses,false
+kabul-city-break,Accommodation,2 nights boutique hotel,true
+kabul-city-break,Meals,All breakfasts,true
+kabul-city-break,Meals,Welcome dinner,true
+kabul-city-break,Meals,Farewell lunch,true
+kabul-city-break,Transport,All transfers in private vehicle,true
+kabul-city-break,Guide,Expert local guide all 3 days,true
+kabul-city-break,Entrance Fees,Museum and garden fees,true
+kabul-city-break,Exclusions,International flights,false
+kabul-city-break,Exclusions,Travel insurance,false
+herat-silk-road,Accommodation,3 nights riad-style guesthouse,true
+herat-silk-road,Meals,All breakfasts,true
+herat-silk-road,Meals,Most lunches,true
+herat-silk-road,Meals,Welcome dinner,true
+herat-silk-road,Transport,Airport transfers,true
+herat-silk-road,Transport,All local transfers,true
+herat-silk-road,Guide,Expert Herat guide,true
+herat-silk-road,Activity,Craft workshop session,true
+herat-silk-road,Entrance Fees,Citadel museum and all site fees,true
+herat-silk-road,Exclusions,International flights,false
+herat-silk-road,Exclusions,Travel insurance,false
