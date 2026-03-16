@@ -1,0 +1,63 @@
+---
+interface Props {
+  dish: import('@lib/types/view-models').Dish;
+}
+const { dish } = Astro.props;
+
+const mealTypeColors: Record<string, string> = {
+  Breakfast: 'bg-amber-50 text-amber-700',
+  Lunch:     'bg-green-50 text-green-700',
+  Dinner:    'bg-indigo-50 text-indigo-700',
+  Snack:     'bg-rose-50 text-rose-700',
+  Dessert:   'bg-purple-50 text-purple-700',
+};
+const mealClass = mealTypeColors[dish.mealType] ?? 'bg-gray-100 text-gray-700';
+---
+
+<article class="group bg-white rounded-[14px] shadow-[0_2px_16px_0_rgba(0,0,0,0.08)] hover:shadow-[0_10px_30px_rgba(15,23,42,0.08)] transition-shadow duration-300 overflow-hidden flex flex-col">
+  <!-- Image -->
+  <a href={`/food-culture/${dish.slug}`} class="block overflow-hidden aspect-[4/3] bg-gray-100 shrink-0">
+    {dish.imagePath
+      ? <img
+          src={dish.imagePath}
+          alt={dish.name}
+          class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+          loading="lazy"
+        />
+      : <div class="w-full h-full bg-gradient-to-br from-amber-50 to-orange-50 flex items-center justify-center">
+          <svg class="w-12 h-12 text-orange-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+          </svg>
+        </div>
+    }
+  </a>
+
+  <!-- Body -->
+  <div class="flex flex-col flex-1 p-5 gap-2">
+    <!-- Badges row -->
+    <div class="flex flex-wrap gap-1.5">
+      {dish.category && (
+        <span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-[#1f4aa8]/10 text-[#1f4aa8]">
+          {dish.category}
+        </span>
+      )}
+      {dish.mealType && (
+        <span class={`text-xs font-semibold px-2 py-0.5 rounded-full ${mealClass}`}>
+          {dish.mealType}
+        </span>
+      )}
+    </div>
+
+    <a href={`/food-culture/${dish.slug}`} class="block">
+      <h3 class="font-display text-base font-semibold text-[#1e3a5f] leading-snug group-hover:text-[#1f4aa8] transition-colors duration-150 line-clamp-2">
+        {dish.name}
+      </h3>
+    </a>
+
+    {dish.descShort && (
+      <p class="text-sm text-[rgba(15,23,42,0.7)] leading-relaxed line-clamp-3 flex-1">
+        {dish.descShort}
+      </p>
+    )}
+  </div>
+</article>

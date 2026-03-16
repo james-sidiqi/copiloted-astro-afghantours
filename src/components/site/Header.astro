@@ -1,0 +1,79 @@
+---
+const navLinks = [
+  { label: 'Home',          href: '/' },
+  { label: 'Tours',         href: '/tours' },
+  { label: 'Attractions',   href: '/attractions' },
+  { label: 'Regions',       href: '/regions' },
+  { label: 'Food & Culture',href: '/food-culture' },
+  { label: 'About',         href: '/about' },
+  { label: 'Contact',       href: '/contact' },
+];
+---
+
+<header class="sticky top-0 z-50 bg-white shadow-sm">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16">
+      <!-- Logo -->
+      <a href="/" class="flex items-center gap-2 shrink-0">
+        <span class="font-display text-xl font-bold text-[#1f4aa8] leading-tight">Afghan<span class="text-[#b88a2a]">Tours</span></span>
+      </a>
+
+      <!-- Desktop Nav -->
+      <nav class="hidden md:flex items-center gap-1">
+        {navLinks.map(link => (
+          <a
+            href={link.href}
+            class="px-3 py-2 rounded-md text-sm font-medium text-[#0f172a] hover:text-[#1f4aa8] hover:bg-primary-50 transition-colors duration-150"
+          >
+            {link.label}
+          </a>
+        ))}
+      </nav>
+
+      <!-- Mobile hamburger -->
+      <button
+        id="menu-btn"
+        aria-label="Toggle navigation menu"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+        class="md:hidden p-2 rounded-md text-[#0f172a] hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-[#1f4aa8]"
+      >
+        <svg id="icon-open" class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+        <svg id="icon-close" class="w-6 h-6 hidden" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile Menu -->
+  <nav id="mobile-menu" class="hidden md:hidden border-t border-gray-100 bg-white" aria-label="Mobile navigation">
+    <div class="px-4 py-2 space-y-1">
+      {navLinks.map(link => (
+        <a
+          href={link.href}
+          class="block px-3 py-2 rounded-md text-sm font-medium text-[#0f172a] hover:text-[#1f4aa8] hover:bg-primary-50 transition-colors duration-150"
+        >
+          {link.label}
+        </a>
+      ))}
+    </div>
+  </nav>
+</header>
+
+<script>
+  const btn = document.getElementById('menu-btn');
+  const menu = document.getElementById('mobile-menu');
+  const iconOpen = document.getElementById('icon-open');
+  const iconClose = document.getElementById('icon-close');
+
+  btn?.addEventListener('click', () => {
+    const isOpen = !menu?.classList.contains('hidden');
+    menu?.classList.toggle('hidden', isOpen);
+    btn.setAttribute('aria-expanded', String(!isOpen));
+    iconOpen?.classList.toggle('hidden', !isOpen);
+    iconClose?.classList.toggle('hidden', isOpen);
+  });
+</script>

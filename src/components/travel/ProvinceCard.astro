@@ -1,0 +1,38 @@
+---
+interface Props {
+  province: import('@lib/types/view-models').Province;
+}
+const { province } = Astro.props;
+---
+
+<article class="group bg-white rounded-[14px] shadow-[0_2px_16px_0_rgba(0,0,0,0.08)] hover:shadow-[0_10px_30px_rgba(15,23,42,0.08)] transition-shadow duration-300 overflow-hidden flex flex-col">
+  <!-- Square image -->
+  <a href={`/provinces/${province.provinceSlug}`} class="block overflow-hidden aspect-square bg-gray-100 shrink-0">
+    {province.squareImagePath
+      ? <img
+          src={province.squareImagePath}
+          alt={province.provinceName}
+          class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+          loading="lazy"
+        />
+      : <div class="w-full h-full bg-gradient-to-br from-[#1e3a5f] to-[#1f4aa8] flex items-center justify-center">
+          <span class="font-display text-4xl font-bold text-white/30">{province.provinceName.charAt(0)}</span>
+        </div>
+    }
+  </a>
+
+  <!-- Body -->
+  <div class="p-4 flex flex-col gap-1.5">
+    <a href={`/provinces/${province.provinceSlug}`} class="block">
+      <h3 class="font-display text-base font-semibold text-[#1e3a5f] group-hover:text-[#1f4aa8] transition-colors duration-150">
+        {province.provinceName}
+      </h3>
+    </a>
+
+    {province.shortBlurb && (
+      <p class="text-xs text-[rgba(15,23,42,0.65)] leading-relaxed line-clamp-3">
+        {province.shortBlurb}
+      </p>
+    )}
+  </div>
+</article>
