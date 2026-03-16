@@ -1,0 +1,167 @@
+# AfghanTours Copilot Design Blueprint
+
+This brief was generated from the uploaded source ZIP `afghantours_final_site_v3.zip` and the companion CSV files in the conversation. Use it as the single source of truth for rebuilding the site in Astro + Tailwind while preserving content, route intent, and data relationships.
+
+## Primary objective
+- Rebuild the existing static AfghanTours website into a polished Astro + Tailwind site.
+- Preserve page intent, existing written copy, current route structure, and CSV-driven data model.
+- Use Tailwind for all new layout/styling work, but preserve the brand system from the original `bundle.css`.
+
+## Existing page inventory
+- **index.html** → `/` — title: **Afghan Tours | Home** — key headings: Afghan Tours | Discover Afghanistan | Welcome to AfghanTours.com | Featured Attractions | Frequently Asked Questions | Contact Us | Policies
+- **about.html** → `/about` — title: **Afghan Tours | About** — key headings: Afghan Tours | About AfghanTours | Who We Are | Meet the Team | James (Amir) Sidiqi | Mohammad (Edrees) Rahimi | Ramin Sediqi | Licensed Afghan Tour Operator | Why Travel With Us | Talk With Us
+- **destinations.html** → `/destinations` — title: **Afghan Tours | Destinations** — key headings: Afghan Tours | Destinations | Attractions | Provinces | Attraction | Tours Featuring this Attraction
+- **contact.html** → `/contact` — title: **Afghan Tours | Contact** — key headings: Afghan Tours | Contact Us | Get in touch
+- **safety.html** → `/safety` — title: **Afghan Tours | Safety & Risk Management** — key headings: Afghan Tours | Safety &amp; Risk Management | Our Commitment | Intelligence-Led Planning | Professional Guidance &amp; Coordination | Emergency &amp; Evacuation Protocols | Client Responsibility &amp; Conduct | Safety FAQ | Ready to Start?
+- **terms.html** → `/terms` — title: **Afghan Tours | Terms of Service** — key headings: Afghan Tours | Terms of Service | Download or View Terms | View Policy Inline | General
+- **refund.html** → `/refund` — title: **Afghan Tours | Refunds & Payment Policy** — key headings: Afghan Tours | Refunds &amp; Payment Policy | Download or View Policy | View Policy Inline | 1. Payment Structure &amp; Confirmation
+- **tour.html** → `/tour` — title: **Afghan Tours | Tour Details** — key headings: Afghan Tours | Tour | Overview | Request dates | Upcoming dates | Itinerary | Highlights | Other tours
+- **hotels.html** → `/hotels` — title: **Afghan Tours | Hotels** — key headings: Afghan Tours | Hotels & Accommodations | Filter Hotels | Browse Hotels
+- **tours.html** → `/tours` — title: **Afghan Tours | Tours** — key headings: Afghan Tours | Tours | Featured Tours | All Tours
+- **faq.html** → `/faq` — title: **AfghanTours — FAQ** — key headings: Afghan Tours | AfghanTours FAQ | Cultural Etiquette &amp; Photography | Afghanistan Travel FAQs | Booking &amp; Payments | Safety &amp; Security
+- **privacy.html** → `/privacy` — title: **Afghan Tours | Privacy Policy** — key headings: Afghan Tours | Privacy Policy | Download or View Policy | View Policy Inline | Policy Summary
+- **attractions.html** → `/attractions` — title: **Afghan Tours | Attractions** — key headings: Afghan Tours | Attractions | Filter | All Attractions
+
+## Existing design tokens from `assets/css/bundle.css`
+- `bg` = `#f6f7fb`
+- `surface` = `#ffffff`
+- `text` = `#0f172a`
+- `muted` = `rgba(15, 23, 42, .70)`
+- `border` = `rgba(15, 23, 42, .10)`
+- `blue` = `#1f4aa8`
+- `blue-2` = `#16397f`
+- `gold` = `#b88a2a`
+- `gold-2` = `#9a7322`
+- `shadow` = `0 10px 30px rgba(15,23,42,.08)`
+- `shadow2` = `0 14px 40px rgba(15,23,42,.10)`
+- `radius` = `14px`
+- `radius2` = `18px`
+- `container` = `1160px`
+- `gutter` = `20px`
+
+### Tailwind mapping recommendation
+- `page` / `bg` → page background
+- `surface` → cards, drawers, filters, section panels
+- `text` + `muted` → heading/body hierarchy
+- `blue` / `blue-2` → primary CTA + active states
+- `gold` / `gold-2` → accent, eyebrow labels, emphasis, premium highlights
+- `shadow` / `shadow2` → soft elevated travel-card styling
+- `radius` / `radius2` → card and panel radii
+
+## Existing JS/page behavior from ZIP
+- `assets/js/components/api.bundle.js`
+- `assets/js/components/floatingWhatsApp.js`
+- `assets/js/components/attractionDrawer.js`
+- `assets/js/components/api.global.js`
+- `assets/js/components/routeAnimator.js`
+- `assets/js/components/attractionModal.js`
+- `assets/js/data/api.js`
+- `assets/js/data/csv.js`
+- `assets/js/pages/hotels.js`
+- `assets/js/pages/tours.js`
+- `assets/js/pages/destinations.js`
+- `assets/js/pages/home.js`
+- `assets/js/pages/faq.js`
+- `assets/js/pages/attractions.js`
+- `assets/js/pages/tourDetail.js`
+- `assets/js/components/backup components march 3/attractionDrawer.js`
+- `assets/js/data/generated/faqData.js`
+- `assets/js/data/generated/tourAttractionsMapData.js`
+- `assets/js/data/generated/tourDatesData.js`
+- `assets/js/data/generated/hotelPropertiesData.js`
+- `assets/js/data/generated/toursData.js`
+- `assets/js/data/generated/attractionsData.js`
+- `assets/js/data/generated/tourItineraryData.js`
+- `assets/js/data/generated/locationsData.js`
+- `assets/js/data/generated/tourInclusionsData.js`
+- `assets/js/data/generated/provincesData.js`
+- `assets/js/data/generated/hotelRoomsData.js`
+- `assets/js/data/generated/regionsData.js`
+
+### Important behaviors to preserve or reimplement
+- Homepage featured attractions and FAQ teaser
+- Tours listing and individual tour detail page
+- Attractions index with filters
+- Destinations page behavior based on attractions/provinces relationships
+- Hotels page with filters and hotel cards
+- Floating WhatsApp CTA
+- Attraction drawer/modal behavior if useful in Astro
+- CSV-powered data loading and generated data helpers
+
+## Data files available
+- **attractions_master.csv** — headers: attraction_code | name | slug | province | province_code | region | category | desc_short | desc_long | tags | latitude | longitude | thumbnail_path | image_path | svg_path | priority | is_active
+- **dishes.csv** — headers: dish_code | name | slug | region_code | province_code | destination_code | category | meal_type | is_produce | season_start | season_end | desc_short | image_path | is_active
+- **domestic_flights.csv** — headers: flight_id | airline | origin | destination | origin_slug | dest_slug | map_image_path | is_active
+- **faq.csv** — headers: faq_id | page_assignment | category | tour_slug | question | answer | is_active
+- **ground_transport.csv** — headers: transport_id | transport_name | transport_slug | tier | vehicle_type | min_pax | max_pax | route_group_id | logic_notes | is_active
+- **hotel_properties.csv** — headers: Hotel_id | hotel_slug | hotel_name | destinations_code | tier | star_rating | per_night_price_from | description | image_path_property_1 | image_path_property_2 | image_path_property_3 | is_active
+- **hotel_rooms.csv** — headers: Hotel_id | hotel_slug | hotel_name | destinations_code | tier | star_rating | room_id | room_type | max_occupancy | nightly_cost_usd | nightly_sell_price_usd | description | image_path_property_1 | image_path_property_2 | image_path_property_3 | image_path_room_option_1 | image_path_room_option_2 | is_active
+- **locations.csv** — headers: location_code | name | type | parent_code | slug | is_active | sort_order
+- **provinces.csv** — headers: province_code | province_name | province_slug | region | short_blurb | full_blurb | center_lat | center_lon | cover_image_path | square_image_path | svg_map_path | is_featured | feature_rank
+- **regions.csv** — headers: region_code | region_name | parent_code | region_slug | description | img_path | is_active | sort_order
+- **route_group_members.csv** — headers: route_group_id | location_code
+- **route_groups.csv** — headers: route_group_id | route_group_name | season_start_month | season_end_month | notes | is_active
+- **route_matrix.csv** — headers: route_id | from_code | to_code | distance_km | drive_hours_low | drive_hours_high | road_class | bus_allowed | armored_allowed | armored_months | notes
+- **site_data_mapping.csv** — headers: page | csv_files | image_files
+- **site_search_index.csv** — headers: entity_type | code | name | slug | url | region_code | province_code | category | is_active | sort_order | keywords
+- **tour_attractions_map.csv** — headers: tour_code | tour_slug | day_number | attraction_code
+- **tour_dates.csv** — headers: tour_code | tour_slug | date_start | date_end | status | notes
+- **tour_inclusions.csv** — headers: tour_code | tour_slug | day_number | title | location | description | flight_id | drive_time_notes | attraction_codes
+- **tour_itinerary.csv** — headers: tour_code | tour_slug | day_number | title | location | description | flight_id | drive_time_notes | attraction_codes
+- **tours.csv** — headers: tour_code | name | slug | summary | thumbnail_image_path | hero_image_path | image_path_slide1 | image_path_slide2 | price_from | duration_days | group_size | travel_style | physical_activity_level | regions | provinces | accommodation_note | transport_note | price_from | duration_days | min_group_size | max_group_size | travel_style | activity_level | primary_location_slug | accommodation_note | transport_note | season | is_featured | is_active
+
+## Content preservation requirements
+- Inspect and preserve the written content in these existing pages: `index.html`, `about.html`, `contact.html`, `safety.html`, `faq.html`, `terms.html`, `privacy.html`, `refund.html`, `tours.html`, `tour.html`, `attractions.html`, `destinations.html`, `hotels.html`.
+- Do not replace real copy with placeholder text when existing text is already available in the ZIP.
+- Preserve leadership content on About page: James (Amir) Sidiqi, Mohammad (Edrees) Rahimi, Ramin Sediqi.
+- Preserve policy/legal page intent: safety, terms, refund, privacy, FAQ.
+
+## Recommended Astro route structure
+```text
+src/pages/
+  index.astro
+  about.astro
+  contact.astro
+  safety.astro
+  faq.astro
+  terms.astro
+  privacy.astro
+  refund.astro
+  tours/index.astro
+  tours/[slug].astro
+  attractions/index.astro
+  attractions/[slug].astro
+  destinations/index.astro
+  destinations/[slug].astro   # optional if destination nodes are exposed
+  hotels/index.astro
+  regions/index.astro
+  regions/[slug].astro
+  provinces/[slug].astro
+  food-culture/index.astro
+  food-culture/[slug].astro
+```
+
+## Design direction for Copilot
+- Build a premium modern travel-site UI with Tailwind.
+- Reuse the original static site’s structure and copy, but improve hierarchy, spacing, cards, filters, and responsive layout.
+- Strong hero sections, elevated cards, clean section spacing, premium but restrained visuals.
+- Keep the site light, fast, and static-output friendly.
+- Prioritize readability and conversion over decorative effects.
+
+## Components Copilot should create
+- `Header`, `Footer`, `Hero`, `SectionHeader`, `PolicyPageLayout`
+- `TourCard`, `TourHero`, `ItineraryBlock`, `InclusionsBlock`, `TourDatesBlock`
+- `AttractionCard`, `AttractionMeta`, `AttractionGallery`
+- `RegionCard`, `ProvinceCard`, `HotelCard`, `DishCard`, `FoodFilters`
+- `WhatsAppFloatingButton`
+
+## Route and file cleanup requirements
+- Rename any `.astro.txt` files to `.astro`.
+- Remove route conflicts like `src/pages/attractions.astro` vs `src/pages/attractions/index.astro`. Prefer folder-based routes where dynamic detail pages exist.
+- Convert all CSV loaders to shared TypeScript loaders using a single `readCsv.ts`.
+- Remove `papaparse`; use `csv-parse/sync`.
+
+## Final deliverable Copilot should aim for
+- A polished Astro + Tailwind rebuild that matches the AfghanTours content and data model from the source ZIP.
+- Working dynamic pages for tours, attractions, food, regions, provinces, hotels, and optionally destinations.
+- Existing copy incorporated from the original static site wherever available.

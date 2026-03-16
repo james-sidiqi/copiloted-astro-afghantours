@@ -1,0 +1,49 @@
+type,name,route_or_filename,title_or_headers,notes
+page,index.html,/,Afghan Tours | Home,Afghan Tours | Discover Afghanistan | Welcome to AfghanTours.com | Featured Attractions | Frequently Asked Questions | Contact Us | Policies
+page,about.html,/about,Afghan Tours | About,Afghan Tours | About AfghanTours | Who We Are | Meet the Team | James (Amir) Sidiqi | Mohammad (Edrees) Rahimi | Ramin Sediqi | Licensed Afghan Tour Operator | Why Travel With Us | Talk With Us
+page,destinations.html,/destinations,Afghan Tours | Destinations,Afghan Tours | Destinations | Attractions | Provinces | Attraction | Tours Featuring this Attraction
+page,contact.html,/contact,Afghan Tours | Contact,Afghan Tours | Contact Us | Get in touch
+page,safety.html,/safety,Afghan Tours | Safety & Risk Management,Afghan Tours | Safety &amp; Risk Management | Our Commitment | Intelligence-Led Planning | Professional Guidance &amp; Coordination | Emergency &amp; Evacuation Protocols | Client Responsibility &amp; Conduct | Safety FAQ | Ready to Start?
+page,terms.html,/terms,Afghan Tours | Terms of Service,Afghan Tours | Terms of Service | Download or View Terms | View Policy Inline | General
+page,refund.html,/refund,Afghan Tours | Refunds & Payment Policy,Afghan Tours | Refunds &amp; Payment Policy | Download or View Policy | View Policy Inline | 1. Payment Structure &amp; Confirmation
+page,tour.html,/tour,Afghan Tours | Tour Details,Afghan Tours | Tour | Overview | Request dates | Upcoming dates | Itinerary | Highlights | Other tours
+page,hotels.html,/hotels,Afghan Tours | Hotels,Afghan Tours | Hotels & Accommodations | Filter Hotels | Browse Hotels
+page,tours.html,/tours,Afghan Tours | Tours,Afghan Tours | Tours | Featured Tours | All Tours
+page,faq.html,/faq,AfghanTours — FAQ,Afghan Tours | AfghanTours FAQ | Cultural Etiquette &amp; Photography | Afghanistan Travel FAQs | Booking &amp; Payments | Safety &amp; Security
+page,privacy.html,/privacy,Afghan Tours | Privacy Policy,Afghan Tours | Privacy Policy | Download or View Policy | View Policy Inline | Policy Summary
+page,attractions.html,/attractions,Afghan Tours | Attractions,Afghan Tours | Attractions | Filter | All Attractions
+dataset,attractions_master.csv,attractions_master.csv,attraction_code | name | slug | province | province_code | region | category | desc_short | desc_long | tags | latitude | longitude | thumbnail_path | image_path | svg_path | priority | is_active,BDK-001 | Badakhshan Mountains & Lakes | badakhshan-mountains-lakes | Badakhshan | BDK | North
+dataset,dishes.csv,dishes.csv,dish_code | name | slug | region_code | province_code | destination_code | category | meal_type | is_produce | season_start | season_end | desc_short | image_path | is_active,AF-KAB-PUL | Kabuli Pulao | kabuli-pulao | CENTRAL | KAB | KBLC
+dataset,domestic_flights.csv,domestic_flights.csv,flight_id | airline | origin | destination | origin_slug | dest_slug | map_image_path | is_active,FL-KBL-HER | Ariana/Kam Air | Kabul | Herat | kabul | herat
+dataset,faq.csv,faq.csv,faq_id | page_assignment | category | tour_slug | question | answer | is_active,"LDR-01 | home | Leadership | all | What makes Afghan Tours unique? | Our leadership includes a US citizen who has lived and worked in Kabul for 15 years, providing an unmatched local network and safety oversight."
+dataset,ground_transport.csv,ground_transport.csv,transport_id | transport_name | transport_slug | tier | vehicle_type | min_pax | max_pax | route_group_id | logic_notes | is_active,GT-TAXI-BUD | Taxi (Budget) | taxi-budget | budget | taxi | 1
+dataset,hotel_properties.csv,hotel_properties.csv,Hotel_id | hotel_slug | hotel_name | destinations_code | tier | star_rating | per_night_price_from | description | image_path_property_1 | image_path_property_2 | image_path_property_3 | is_active,htk | taj_kabul | Taj Hotel | KBLC | premium | 5
+dataset,hotel_rooms.csv,hotel_rooms.csv,Hotel_id | hotel_slug | hotel_name | destinations_code | tier | star_rating | room_id | room_type | max_occupancy | nightly_cost_usd | nightly_sell_price_usd | description | image_path_property_1 | image_path_property_2 | image_path_property_3 | image_path_room_option_1 | image_path_room_option_2 | is_active,htk | taj_kabul | Taj Hotel | KBLC | premium | 5
+dataset,locations.csv,locations.csv,location_code | name | type | parent_code | slug | is_active | sort_order,AFG | Afghanistan | country |  | afghanistan | 1
+dataset,provinces.csv,provinces.csv,province_code | province_name | province_slug | region | short_blurb | full_blurb | center_lat | center_lon | cover_image_path | square_image_path | svg_map_path | is_featured | feature_rank,"BMY | Bamyan | bamyan | CENTRAL | The crown jewel of Afghan tourism, home to UNESCO Buddhas and sapphire lakes. | Afghanistan’s premier cultural destination. Stand before the towering empty niches of the destroyed 6th-century Buddhas and explore the sapphire-blue travertine lakes of Band-e-Amir National Park. Known for its cool climate and the red fortress of Shahr-e Zohak, it is the spiritual and scenic heart of the Hazarajat."
+dataset,regions.csv,regions.csv,region_code | region_name | parent_code | region_slug | description | img_path | is_active | sort_order,"CENTRAL | Central Highlands | AFG | central | Mountainous heartland including Kabul, Bamyan, and the historic corridors linking north and south. | assets/images/province/central.webp"
+dataset,route_group_members.csv,route_group_members.csv,route_group_id | location_code,ALL_EXCEPT_NUR | BAL
+dataset,route_groups.csv,route_groups.csv,route_group_id | route_group_name | season_start_month | season_end_month | notes | is_active,CORRIDOR_RING | Main corridor network |  |  | For buses/newer vans/armored: Kabul–Mazar–Jalalabad–Kandahar–Khost–Herat and key nodes on main thoroughfares. | 1
+dataset,route_matrix.csv,route_matrix.csv,route_id | from_code | to_code | distance_km | drive_hours_low | drive_hours_high | road_class | bus_allowed | armored_allowed | armored_months | notes,RT-KBL-MAZ | KBL | MAZ | 425 | 8.0 | 10.0
+dataset,site_data_mapping.csv,site_data_mapping.csv,page | csv_files | image_files,index.html | tours.csv|attractions_master.csv|faq.csv | assets/images/heroes/hero-home.jpg|assets/images/logo/header-logo.png|assets/images/logo/footer-logo.png|assets/images/province-images/place-holder.jpg
+dataset,site_search_index.csv,site_search_index.csv,entity_type | code | name | slug | url | region_code | province_code | category | is_active | sort_order | keywords,country | AFG | Afghanistan | afghanistan | /afghanistan | 
+dataset,tour_attractions_map.csv,tour_attractions_map.csv,tour_code | tour_slug | day_number | attraction_code,ADTF | afghanistan-discovery-tour-fall | 1 | KBL-013
+dataset,tour_dates.csv,tour_dates.csv,tour_code | tour_slug | date_start | date_end | status | notes,CAD-1 | central-afghanistan-discovery | 2026-04-06 | 2026-04-12 | open | Spring window (placeholder)
+dataset,tour_inclusions.csv,tour_inclusions.csv,tour_code | tour_slug | day_number | title | location | description | flight_id | drive_time_notes | attraction_codes,"ADTF | afghanistan-discovery-tour-fall | 1 | Arrival & Orientation | Kabul | “Airport pickup, hotel check-in, and a relaxed orientation Sightseeing depending on arrival time.”"
+dataset,tour_itinerary.csv,tour_itinerary.csv,tour_code | tour_slug | day_number | title | location | description | flight_id | drive_time_notes | attraction_codes,"ADTF | afghanistan-discovery-tour-fall | 1 | Arrival & Orientation | Kabul | “Airport pickup, hotel check-in, and a relaxed orientation Sightseeing depending on arrival time.”"
+dataset,tours.csv,tours.csv,tour_code | name | slug | summary | thumbnail_image_path | hero_image_path | image_path_slide1 | image_path_slide2 | price_from | duration_days | group_size | travel_style | physical_activity_level | regions | provinces | accommodation_note | transport_note | price_from | duration_days | min_group_size | max_group_size | travel_style | activity_level | primary_location_slug | accommodation_note | transport_note | season | is_featured | is_active,"CAD | Central Afghanistan Discovery | central-afghanistan-discovery | Ancient cities, mountain valleys, and everyday Afghan life—planned safely and guided locally. | assets/images/tours/central-afghanistan-discovery.webp | assets/images/tours/central-afghanistan-discovery.webp"
+design_token,bg,bg,#f6f7fb,from bundle.css
+design_token,surface,surface,#ffffff,from bundle.css
+design_token,text,text,#0f172a,from bundle.css
+design_token,muted,muted,"rgba(15, 23, 42, .70)",from bundle.css
+design_token,border,border,"rgba(15, 23, 42, .10)",from bundle.css
+design_token,blue,blue,#1f4aa8,from bundle.css
+design_token,blue-2,blue-2,#16397f,from bundle.css
+design_token,gold,gold,#b88a2a,from bundle.css
+design_token,gold-2,gold-2,#9a7322,from bundle.css
+design_token,shadow,shadow,"0 10px 30px rgba(15,23,42,.08)",from bundle.css
+design_token,shadow2,shadow2,"0 14px 40px rgba(15,23,42,.10)",from bundle.css
+design_token,radius,radius,14px,from bundle.css
+design_token,radius2,radius2,18px,from bundle.css
+design_token,container,container,1160px,from bundle.css
+design_token,gutter,gutter,20px,from bundle.css

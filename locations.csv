@@ -1,0 +1,49 @@
+location_code,name,type,parent_code,slug,is_active,sort_order
+AFG,Afghanistan,country,,afghanistan,1,0
+CENTRAL,Central Highlands,region,AFG,central,1,1
+NORTH,Northern Afghanistan,region,AFG,north,1,2
+WEST,Western Afghanistan,region,AFG,west,1,3
+SOUTH,Southern Afghanistan,region,AFG,south,1,4
+EAST,Eastern Afghanistan,region,AFG,east,1,5
+BDK,Badakhshan,province,NORTH,badakhshan,1,100
+BDG,Badghis,province,WEST,badghis,1,100
+BAG,Baghlan,province,NORTH,baghlan,1,100
+BAL,Balkh,province,NORTH,balkh,1,100
+BMY,Bamyan,province,CENTRAL,bamyan,1,100
+DYK,Daykundi,province,CENTRAL,daykundi,1,100
+FRH,Farah,province,WEST,farah,1,100
+FRY,Faryab,province,NORTH,faryab,1,100
+GHZ,Ghazni,province,CENTRAL,ghazni,1,100
+GHO,Ghor,province,WEST,ghor,1,100
+HLM,Helmand,province,SOUTH,helmand,1,100
+HER,Herat,province,WEST,herat,1,100
+JOW,Jowzjan,province,NORTH,jowzjan,1,100
+KBL,Kabul,province,CENTRAL,kabul,1,100
+KDR,Kandahar,province,SOUTH,kandahar,1,100
+KPS,Kapisa,province,CENTRAL,kapisa,1,100
+KHT,Khost,province,EAST,khost,1,100
+KNR,Kunar,province,EAST,kunar,1,100
+KDZ,Kunduz,province,NORTH,kunduz,1,100
+LGM,Laghman,province,EAST,laghman,1,100
+LGR,Logar,province,CENTRAL,logar,1,100
+NGH,Nangarhar,province,EAST,nangarhar,1,100
+NIM,Nimroz,province,SOUTH,nimroz,1,100
+NRS,Nuristan,province,EAST,nuristan,1,100
+PTA,Paktia,province,EAST,paktia,1,100
+PTK,Paktika,province,EAST,paktika,1,100
+PJR,Panjshir,province,CENTRAL,panjshir,1,100
+PRW,Parwan,province,CENTRAL,parwan,1,100
+SAM,Samangan,province,NORTH,samangan,1,100
+SEP,Sar-e-Pol,province,NORTH,sar-e-pol,1,100
+TKH,Takhar,province,NORTH,takhar,1,100
+URZ,Uruzgan,province,SOUTH,uruzgan,1,100
+WRD,Wardak,province,CENTRAL,wardak,1,100
+ZBL,Zabul,province,SOUTH,zabul,1,100
+KBLC,Kabul,destination,KBL,kabul-city,1,10
+JBDC,Jalalabad,destination,NGH,jalalabad-city,1,11
+KDRC,Kandahar,destination,KDR,kandahar-city,1,12
+GHZC,Ghazni,destination,GHZ,ghazni-city,1,13
+BMYC,Bamyan,destination,BMY,bamyan-city,1,14
+MAZC,Mazar-e-Sharif,destination,BAL,mazar-e-sharif-city,1,15
+FAIC,Faizabad,destination,BDK,faizabad-city,1,16
+HERC,Herat,destination,HER,herat-city,1,17
