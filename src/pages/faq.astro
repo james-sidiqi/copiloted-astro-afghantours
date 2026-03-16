@@ -1,0 +1,58 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import Hero from '@components/site/Hero.astro';
+import SectionHeader from '@components/ui/SectionHeader.astro';
+import FaqAccordion from '@components/travel/FaqAccordion.astro';
+import { buildSiteData } from '@lib/data/buildRelations';
+
+const data = buildSiteData();
+const faqs = data.faqs.filter(f => f.isActive);
+const categories = [...new Set(faqs.map(f => f.category).filter(Boolean))].sort();
+---
+
+<BaseLayout title="Frequently Asked Questions – Afghan Tours" description="Find answers to common questions about touring Afghanistan with Afghan Tours.">
+  <Hero
+    title="Frequently Asked Questions"
+    subtitle="Everything you need to know about travelling to Afghanistan with us"
+  />
+
+  <section class="py-20 bg-[#f6f7fb]">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6">
+      {faqs.length > 0 ? (
+        categories.length > 0 ? (
+          <div class="space-y-14">
+            {categories.map(category => {
+              const categoryFaqs = faqs.filter(f => f.category === category);
+              return (
+                <div>
+                  <div class="mb-6">
+                    <SectionHeader eyebrow="Category" title={category} />
+                  </div>
+                  <FaqAccordion faqs={categoryFaqs} />
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          <FaqAccordion faqs={faqs} />
+        )
+      ) : (
+        <div class="text-center py-20 text-gray-500">
+          <p class="text-lg font-medium">No FAQs available at this time.</p>
+          <p class="mt-2 text-sm">Please <a href="/contact" class="text-[#1f4aa8] underline">contact us</a> with your question.</p>
+        </div>
+      )}
+    </div>
+  </section>
+
+  <!-- Still have questions CTA -->
+  <section class="py-16 bg-[#1e3a5f]">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 text-center text-white">
+      <h2 class="font-display text-2xl font-bold mb-3">Still Have Questions?</h2>
+      <p class="text-white/80 mb-6">We're happy to answer anything. Reach out directly and we'll respond within 24 hours.</p>
+      <a href="/contact" class="inline-block px-8 py-3.5 rounded-full bg-[#b88a2a] hover:bg-[#a07820] text-white font-semibold shadow-lg transition-all duration-200">
+        Contact Us
+      </a>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,13 +1,9 @@
 import { readFileSync } from 'fs';
 import { parse } from 'csv-parse/sync';
-import { fileURLToPath } from 'url';
-import { join, dirname } from 'path';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+import { join } from 'path';
 
 export function readCsv<T>(filename: string): T[] {
-  const dataDir = join(__dirname, '../../../../data');
+  const dataDir = join(process.cwd(), 'data');
   const filePath = join(dataDir, filename);
   const content = readFileSync(filePath, 'utf-8');
   return parse(content, {

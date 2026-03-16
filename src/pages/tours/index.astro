@@ -1,0 +1,54 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import Hero from '@components/site/Hero.astro';
+import SectionHeader from '@components/ui/SectionHeader.astro';
+import TourCard from '@components/travel/TourCard.astro';
+import { buildSiteData } from '@lib/data/buildRelations';
+
+const data = buildSiteData();
+const tours = data.tours.filter(t => t.isActive);
+---
+
+<BaseLayout title="Tours – Afghan Tours" description="Explore all of our expert-guided tours to Afghanistan.">
+  <Hero
+    title="Our Tours"
+    subtitle="Discover Afghanistan through our carefully crafted itineraries"
+    ctaText="Contact Us"
+    ctaHref="/contact"
+  />
+
+  <section class="py-20 bg-[#f6f7fb]">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <div class="mb-10">
+        <SectionHeader
+          eyebrow="All Tours"
+          title="Choose Your Adventure"
+          subtitle="From cultural city tours to mountain treks — find the perfect Afghan journey."
+        />
+        <p class="mt-4 text-sm text-[rgba(15,23,42,0.55)]">Filter by region, duration or style coming soon. For custom queries, <a href="/contact" class="text-[#1f4aa8] underline">contact us</a>.</p>
+      </div>
+
+      {tours.length > 0 ? (
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+          {tours.map(tour => <TourCard tour={tour} />)}
+        </div>
+      ) : (
+        <div class="text-center py-20 text-gray-500">
+          <p class="text-lg font-medium">No tours available at this time.</p>
+          <p class="text-sm mt-2">Please check back soon or <a href="/contact" class="text-[#1f4aa8] underline">contact us</a>.</p>
+        </div>
+      )}
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="py-16 bg-[#1e3a5f]">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 text-center text-white">
+      <h2 class="font-display text-3xl font-bold mb-4">Can't find what you're looking for?</h2>
+      <p class="text-white/80 mb-8">We offer custom tours tailored to your interests, timeline, and group size.</p>
+      <a href="/contact" class="inline-block px-8 py-3.5 rounded-full bg-[#b88a2a] hover:bg-[#a07820] text-white font-semibold shadow-lg transition-all duration-200">
+        Request a Custom Tour
+      </a>
+    </div>
+  </section>
+</BaseLayout>

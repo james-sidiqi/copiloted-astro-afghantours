@@ -1,0 +1,105 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import SectionHeader from '@components/ui/SectionHeader.astro';
+import type { Dish } from '@lib/types/view-models';
+import { buildSiteData } from '@lib/data/buildRelations';
+
+export async function getStaticPaths() {
+  const data = buildSiteData();
+  return data.dishes.filter(d => d.isActive).map(d => ({
+    params: { slug: d.slug },
+    props: { dish: d },
+  }));
+}
+
+interface Props { dish: Dish; }
+const { dish } = Astro.props;
+
+const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+const validMonth = (n: number) => n >= 1 && n <= 12;
+const seasonRange = (validMonth(dish.seasonStart) && validMonth(dish.seasonEnd))
+  ? `${months[dish.seasonStart - 1]} – ${months[dish.seasonEnd - 1]}`
+  : null;
+---
+
+<BaseLayout title={`${dish.name} – Afghan Tours`} description={dish.descShort || `${dish.name}: Afghan cuisine`}>
+  <!-- Header image -->
+  <div class="relative w-full h-[45vh] min-h-[280px] bg-[#1e3a5f] overflow-hidden">
+    {dish.imagePath ? (
+      <img
+        src={dish.imagePath}
+        alt={dish.name}
+        class="w-full h-full object-cover object-center"
+        loading="eager"
+      />
+    ) : (
+      <div class="w-full h-full bg-gradient-to-br from-amber-800 to-orange-700" />
+    )}
+    <div class="absolute inset-0 bg-gradient-to-t from-[#0f172a]/70 to-transparent" />
+    <div class="absolute bottom-0 left-0 right-0 max-w-6xl mx-auto px-4 sm:px-6 pb-8">
+      <div class="flex flex-wrap gap-2 mb-3">
+        {dish.category && (
+          <span class="text-xs font-semibold px-3 py-1 rounded-full bg-[#b88a2a] text-white">{dish.category}</span>
+        )}
+        {dish.mealType && (
+          <span class="text-xs font-semibold px-3 py-1 rounded-full bg-white/20 text-white">{dish.mealType}</span>
+        )}
+      </div>
+      <h1 class="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-white">{dish.name}</h1>
+    </div>
+  </div>
+
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 py-16">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+      <!-- Main content -->
+      <div class="lg:col-span-2 space-y-8">
+        <section>
+          <SectionHeader eyebrow="About" title={dish.name} />
+          {dish.descShort && (
+            <p class="mt-4 text-[rgba(15,23,42,0.75)] leading-relaxed text-base">{dish.descShort}</p>
+          )}
+        </section>
+      </div>
+
+      <!-- Sidebar details -->
+      <aside>
+        <div class="bg-white rounded-2xl shadow-[0_2px_20px_rgba(0,0,0,0.08)] p-6">
+          <h3 class="font-semibold text-[#1e3a5f] mb-4 text-sm uppercase tracking-wider">Details</h3>
+          <ul class="space-y-3 text-sm text-[rgba(15,23,42,0.75)]">
+            {dish.category && (
+              <li class="flex justify-between">
+                <span class="font-medium text-[#1e3a5f]">Category</span>
+                <span>{dish.category}</span>
+              </li>
+            )}
+            {dish.mealType && (
+              <li class="flex justify-between">
+                <span class="font-medium text-[#1e3a5f]">Meal Type</span>
+                <span>{dish.mealType}</span>
+              </li>
+            )}
+            {dish.isProduce && (
+              <li class="flex justify-between">
+                <span class="font-medium text-[#1e3a5f]">Type</span>
+                <span>Produce / Ingredient</span>
+              </li>
+            )}
+            {seasonRange && (
+              <li class="flex justify-between">
+                <span class="font-medium text-[#1e3a5f]">Season</span>
+                <span>{seasonRange}</span>
+              </li>
+            )}
+          </ul>
+        </div>
+
+        <div class="mt-4 bg-[#1e3a5f] rounded-2xl p-5 text-white text-center">
+          <p class="font-semibold mb-2 text-sm">Taste This on a Tour</p>
+          <a href="/tours" class="block w-full text-center py-2.5 rounded-full bg-[#b88a2a] hover:bg-[#a07820] text-white font-semibold text-sm transition-all duration-200 mt-3">
+            Browse Tours
+          </a>
+        </div>
+      </aside>
+    </div>
+  </div>
+</BaseLayout>

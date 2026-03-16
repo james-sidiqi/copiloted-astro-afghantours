@@ -1,0 +1,102 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import Hero from '@components/site/Hero.astro';
+import SectionHeader from '@components/ui/SectionHeader.astro';
+import FaqAccordion from '@components/travel/FaqAccordion.astro';
+import { buildSiteData } from '@lib/data/buildRelations';
+
+const data = buildSiteData();
+const safetyFaqs = data.faqs.filter(f => f.isActive && f.pageAssignment.toLowerCase().includes('safety'));
+
+const pillars = [
+  {
+    title: 'Intelligence-Led Planning',
+    desc: 'Every itinerary is assessed against real-time security intelligence before and during the tour. We work with trusted local partners, NGO networks, and security advisors to ensure routes are safe and conditions are favourable.',
+    icon: 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z',
+  },
+  {
+    title: 'Professional Guidance & Coordination',
+    desc: 'Our guides are experienced professionals who know the terrain, customs, and people of Afghanistan deeply. We maintain clear communication protocols and check-in schedules throughout every journey.',
+    icon: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z',
+  },
+  {
+    title: 'Emergency & Evacuation Protocols',
+    desc: 'We have established emergency response plans and evacuation protocols in place for every tour. Our team is trained in first aid and crisis management, with direct lines to local authorities and international embassies.',
+    icon: 'M13 10V3L4 14h7v7l9-11h-7z',
+  },
+  {
+    title: 'Client Responsibility & Conduct',
+    desc: 'We brief all guests thoroughly before departure on expected behaviours, cultural sensitivities, and safety guidelines. Responsible conduct from our guests is integral to the safety and success of every tour.',
+    icon: 'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253',
+  },
+];
+---
+
+<BaseLayout title="Safety & Risk Management – Afghan Tours" description="Learn about our comprehensive safety approach and risk management protocols for touring Afghanistan.">
+  <Hero
+    title="Safety &amp; Risk Management"
+    subtitle="Your safety is our first priority — always"
+    ctaText="Contact Us"
+    ctaHref="/contact"
+  />
+
+  <!-- Commitment section -->
+  <section class="py-20 bg-white">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6">
+      <div class="mb-8">
+        <SectionHeader eyebrow="Our Commitment" title="Safety at Afghan Tours" />
+      </div>
+      <div class="text-[rgba(15,23,42,0.75)] leading-relaxed space-y-5 text-base">
+        <p>Travelling to Afghanistan requires careful planning, honest information, and experienced guidance. We take our responsibility to our guests extremely seriously. Our safety framework has been developed over years of on-the-ground experience and is continuously updated to reflect current conditions.</p>
+        <p>We do not take unnecessary risks. If conditions are not right, we will modify or postpone a tour. The safety of our guests and our team comes before any commercial consideration.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Safety Pillars -->
+  <section class="py-20 bg-[#f6f7fb]">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6">
+      <div class="mb-12 text-center">
+        <SectionHeader eyebrow="How We Keep You Safe" title="Our Four Safety Pillars" centered />
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {pillars.map((pillar, i) => (
+          <div class="bg-white rounded-2xl shadow-sm p-6 flex gap-5">
+            <div class="w-12 h-12 rounded-xl bg-[#1e3a5f] flex items-center justify-center shrink-0">
+              <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d={pillar.icon} />
+              </svg>
+            </div>
+            <div>
+              <h3 class="font-display text-base font-bold text-[#1e3a5f] mb-2">{pillar.title}</h3>
+              <p class="text-sm text-[rgba(15,23,42,0.7)] leading-relaxed">{pillar.desc}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Safety FAQs -->
+  {safetyFaqs.length > 0 && (
+    <section class="py-20 bg-white">
+      <div class="max-w-3xl mx-auto px-4 sm:px-6">
+        <div class="mb-10 text-center">
+          <SectionHeader eyebrow="Your Questions" title="Safety FAQs" centered />
+        </div>
+        <FaqAccordion faqs={safetyFaqs} />
+      </div>
+    </section>
+  )}
+
+  <!-- CTA -->
+  <section class="py-16 bg-[#1e3a5f]">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 text-center text-white">
+      <h2 class="font-display text-3xl font-bold mb-4">Ready to Start?</h2>
+      <p class="text-white/80 mb-8">Have questions about safety? We'll be happy to discuss your concerns in detail.</p>
+      <a href="/contact" class="inline-block px-8 py-3.5 rounded-full bg-[#b88a2a] hover:bg-[#a07820] text-white font-semibold shadow-lg transition-all duration-200">
+        Contact Us
+      </a>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,60 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import Hero from '@components/site/Hero.astro';
+import SectionHeader from '@components/ui/SectionHeader.astro';
+import ProvinceCard from '@components/travel/ProvinceCard.astro';
+import AttractionCard from '@components/travel/AttractionCard.astro';
+import type { Region } from '@lib/types/view-models';
+import { buildSiteData } from '@lib/data/buildRelations';
+
+export async function getStaticPaths() {
+  const data = buildSiteData();
+  return data.regions.filter(r => r.isActive).map(r => ({
+    params: { slug: r.regionSlug },
+    props: { region: r },
+  }));
+}
+
+interface Props { region: Region; }
+const { region } = Astro.props;
+---
+
+<BaseLayout title={`${region.regionName} Region – Afghan Tours`} description={region.description || `Explore the ${region.regionName} region of Afghanistan.`}>
+  <Hero
+    title={region.regionName}
+    subtitle={region.description || undefined}
+    imagePath={region.imgPath || undefined}
+    ctaText="Plan a Visit"
+    ctaHref="/contact"
+  />
+
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 py-16 space-y-16">
+    <!-- Provinces -->
+    {region.provinces.length > 0 && (
+      <section>
+        <div class="mb-8">
+          <SectionHeader eyebrow="Provinces" title={`Provinces of ${region.regionName}`} />
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {region.provinces.map(province => <ProvinceCard province={province} />)}
+        </div>
+      </section>
+    )}
+
+    <!-- Attractions -->
+    {region.attractions.length > 0 && (
+      <section>
+        <div class="mb-8">
+          <SectionHeader eyebrow="Highlights" title={`Attractions in ${region.regionName}`} />
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {region.attractions.filter(a => a.isActive).map(attraction => <AttractionCard attraction={attraction} />)}
+        </div>
+      </section>
+    )}
+
+    {region.provinces.length === 0 && region.attractions.length === 0 && (
+      <p class="text-center text-gray-500 py-12">Content coming soon for this region.</p>
+    )}
+  </div>
+</BaseLayout>
