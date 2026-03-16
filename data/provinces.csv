@@ -1,0 +1,8 @@
+slug,name,region_slug,capital,description,area_km2,population_approx,highlights,featured
+kabul,Kabul,kabul-region,Kabul City,"Afghanistan's capital province, a blend of ancient history and modern urban life.",4462,4500000,Babur's Garden;National Museum;Chicken Street,true
+bamiyan,Bamiyan,bamiyan-region,Bamiyan City,"High-altitude province home to the famous Buddha niches and Band-e Amir national park.",18029,500000,Band-e Amir;Buddha Niches;Shahr-e Gholghola,true
+herat,Herat,herat-region,Herat City,"Afghanistan's third-largest city, a historic Silk Road hub with Persian-influenced culture.",61315,2000000,Herat Citadel;Friday Mosque;Gawhar Shad Mausoleum,true
+balkh,Balkh,balkh-region,Mazar-i-Sharif,"Province containing one of the world's oldest cities and the famous Blue Mosque.",17249,1400000,Blue Mosque;Ancient Balkh;Haibak Caves,true
+nangarhar,Nangarhar,kabul-region,Jalalabad,"Eastern province with a warm climate, lush Jalalabad gardens, and ancient Silk Road sites.",7727,1600000,Jalalabad;Hadda Stupas;Kunar River,false
+badakhshan,Badakhshan,wakhan-region,Faizabad,"Remote northeastern province with lapis lazuli mines and the dramatic Wakhan Corridor.",44059,1000000,Wakhan Corridor;Lapis mines;Sar-e Pol,false
+kandahar,Kandahar,kandahar-region,Kandahar City,"The historic capital of the Durrani Empire and spiritual heartland of Pashtun culture.",54022,1400000,Ahmad Shah Durrani tomb;Pomegranate orchards;Arghandab valley,false

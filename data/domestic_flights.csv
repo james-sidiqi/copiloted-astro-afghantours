@@ -1,0 +1,8 @@
+slug,origin_slug,destination_slug,airline,flight_number,frequency,duration_hours,price_usd_approx,notes
+kabul-mazar,kabul-city,mazar-i-sharif,Ariana Afghan Airlines,FG301,Daily,1.0,120,Schedule varies; check with airline
+kabul-herat,kabul-city,herat-city,Ariana Afghan Airlines,FG401,Daily,1.5,140,
+kabul-herat-kam,kabul-city,herat-city,Kam Air,RQ401,Daily,1.5,135,
+kabul-bamiyan,kabul-city,bamiyan-city,Ariana Afghan Airlines,FG201,2x weekly,0.75,90,Small aircraft; luggage limit 15 kg
+kabul-faizabad,kabul-city,faizabad,Ariana Afghan Airlines,FG501,3x weekly,1.5,130,
+herat-mazar,herat-city,mazar-i-sharif,Ariana Afghan Airlines,FG450,4x weekly,1.5,130,
+kabul-kandahar,kabul-city,kandahar-city,Ariana Afghan Airlines,FG601,Daily,1.0,110,

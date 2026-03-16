@@ -1,0 +1,9 @@
+page_type,slug,data_source,primary_key,related_tables,notes
+tour,band-e-amir-explorer,tours.csv,slug,"tour_itinerary.csv;tour_dates.csv;tour_inclusions.csv;tour_attractions_map.csv",
+tour,kabul-city-break,tours.csv,slug,"tour_itinerary.csv;tour_dates.csv;tour_inclusions.csv;tour_attractions_map.csv",
+attraction,baburs-garden,attractions_master.csv,slug,,
+region,bamiyan-region,regions.csv,slug,"tours.csv;attractions_master.csv;dishes.csv",
+province,bamiyan,provinces.csv,slug,"attractions_master.csv;hotel_properties.csv",
+location,kabul-city,locations.csv,slug,"hotel_properties.csv;attractions_master.csv",
+dish,kabuli-pulao,dishes.csv,slug,,
+hotel,serena-kabul,hotel_properties.csv,slug,hotel_rooms.csv,

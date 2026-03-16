@@ -1,0 +1,7 @@
+slug,origin_slug,destination_slug,type,operator,duration_hours,price_usd_approx,distance_km,road_condition,notes
+kabul-bamiyan-road,kabul-city,bamiyan-city,4WD Private,AfghanTours,4.0,150,230,Fair,"High-altitude road; may be closed in winter."
+kabul-mazar-road,kabul-city,mazar-i-sharif,4WD Private,AfghanTours,8.0,200,420,Fair,"Long drive through Salang Pass; allow a full day."
+kabul-jalalabad-road,kabul-city,jalalabad,4WD Private,AfghanTours,2.5,80,150,Good,Scenic road along Kabul River gorge.
+bamiyan-band-e-amir,bamiyan-city,band-e-amir,4WD Private,AfghanTours,1.5,60,75,Rough,4WD required.
+mazar-balkh-road,mazar-i-sharif,mazar-i-sharif,4WD Private,AfghanTours,0.5,20,20,Good,Short city transfer to ancient Balkh.
+herat-local,herat-city,herat-city,Car + Driver,AfghanTours,,,5,Good,Full-day city car and driver for Herat sightseeing.
