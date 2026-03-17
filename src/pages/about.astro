@@ -8,6 +8,7 @@ import SectionHeader from '@components/ui/SectionHeader.astro';
   <Hero
     title="About Afghan Tours"
     subtitle="A passionate team dedicated to sharing the real Afghanistan with the world"
+    imagePath="/assets/images/heroes/hero-about.webp"
     ctaText="Contact Us"
     ctaHref="/contact"
   />
@@ -35,7 +36,14 @@ import SectionHeader from '@components/ui/SectionHeader.astro';
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
         <!-- James Sidiqi -->
         <div class="bg-white rounded-2xl shadow-sm p-6 text-center flex flex-col items-center gap-4">
-          <div class="w-20 h-20 rounded-full bg-gradient-to-br from-[#1e3a5f] to-[#1f4aa8] flex items-center justify-center text-white font-display text-2xl font-bold">
+          <img
+            src="/assets/images/about/president.webp"
+            alt="James (Amir) Sidiqi"
+            class="w-20 h-20 rounded-full object-cover object-center"
+            loading="lazy"
+            onerror="this.onerror=null;this.style.display='none';this.nextElementSibling.style.display='flex'"
+          />
+          <div class="w-20 h-20 rounded-full bg-gradient-to-br from-[#1e3a5f] to-[#1f4aa8] items-center justify-center text-white font-display text-2xl font-bold" style="display:none">
             JS
           </div>
           <div>
@@ -47,7 +55,14 @@ import SectionHeader from '@components/ui/SectionHeader.astro';
 
         <!-- Mohammad Rahimi -->
         <div class="bg-white rounded-2xl shadow-sm p-6 text-center flex flex-col items-center gap-4">
-          <div class="w-20 h-20 rounded-full bg-gradient-to-br from-[#1e3a5f] to-[#1f4aa8] flex items-center justify-center text-white font-display text-2xl font-bold">
+          <img
+            src="/assets/images/about/vice-president.webp"
+            alt="Mohammad (Edrees) Rahimi"
+            class="w-20 h-20 rounded-full object-cover object-center"
+            loading="lazy"
+            onerror="this.onerror=null;this.style.display='none';this.nextElementSibling.style.display='flex'"
+          />
+          <div class="w-20 h-20 rounded-full bg-gradient-to-br from-[#1e3a5f] to-[#1f4aa8] items-center justify-center text-white font-display text-2xl font-bold" style="display:none">
             MR
           </div>
           <div>
@@ -107,6 +122,28 @@ import SectionHeader from '@components/ui/SectionHeader.astro';
             </div>
           </div>
         ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Licensing & Credentials -->
+  <section class="py-16 bg-white">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6">
+      <div class="mb-8 text-center">
+        <SectionHeader eyebrow="Credentials" title="Licensed & Certified" centered />
+      </div>
+      <div class="flex flex-col sm:flex-row items-center gap-8 justify-center">
+        <img
+          src="/assets/images/about/jtt-license.webp"
+          alt="Afghan Tours License & Certification"
+          class="w-full sm:w-64 rounded-xl shadow-md object-contain"
+          loading="lazy"
+        />
+        <div class="max-w-sm text-center sm:text-left">
+          <p class="text-[rgba(15,23,42,0.75)] leading-relaxed text-sm">
+            Afghan Tours operates under a full tourism license in compliance with Afghan regulations, giving our guests the assurance of a legitimate, accountable, and professional operation.
+          </p>
+        </div>
       </div>
     </div>
   </section>

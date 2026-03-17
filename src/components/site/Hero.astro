@@ -20,6 +20,7 @@ const { title, subtitle, imagePath, ctaText, ctaHref } = Astro.props;
       aria-hidden="true"
       class="absolute inset-0 w-full h-full object-cover object-center"
       loading="eager"
+      onerror="this.onerror=null;this.src='/assets/images/heroes/default-hero.webp'"
     />
   )}
 

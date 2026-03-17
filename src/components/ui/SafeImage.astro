@@ -1,0 +1,29 @@
+---
+/**
+ * SafeImage: renders an <img> with a graceful onerror fallback.
+ * If `src` is empty/null, the fallback is used immediately.
+ * If `src` loads but returns a 404, onerror swaps it with `fallback`.
+ */
+interface Props {
+  src?: string | null | undefined;
+  fallback: string;
+  alt: string;
+  class?: string;
+  loading?: 'lazy' | 'eager';
+  width?: number;
+  height?: number;
+}
+
+const { src, fallback, alt, class: className = '', loading = 'lazy', width, height } = Astro.props;
+const effectiveSrc = src || fallback;
+---
+
+<img
+  src={effectiveSrc}
+  alt={alt}
+  class={className}
+  loading={loading}
+  width={width}
+  height={height}
+  onerror={`this.onerror=null;this.src='${fallback}'`}
+/>

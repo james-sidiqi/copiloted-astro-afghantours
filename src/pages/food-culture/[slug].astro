@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '@layouts/BaseLayout.astro';
 import SectionHeader from '@components/ui/SectionHeader.astro';
+import SafeImage from '@components/ui/SafeImage.astro';
 import type { Dish } from '@lib/types/view-models';
 import { buildSiteData } from '@lib/data/buildRelations';
 
@@ -25,16 +26,13 @@ const seasonRange = (validMonth(dish.seasonStart) && validMonth(dish.seasonEnd))
 <BaseLayout title={`${dish.name} – Afghan Tours`} description={dish.descShort || `${dish.name}: Afghan cuisine`}>
   <!-- Header image -->
   <div class="relative w-full h-[45vh] min-h-[280px] bg-[#1e3a5f] overflow-hidden">
-    {dish.imagePath ? (
-      <img
-        src={dish.imagePath}
-        alt={dish.name}
-        class="w-full h-full object-cover object-center"
-        loading="eager"
-      />
-    ) : (
-      <div class="w-full h-full bg-gradient-to-br from-amber-800 to-orange-700" />
-    )}
+    <SafeImage
+      src={dish.imagePath}
+      fallback="/assets/images/placeholders/default-food.webp"
+      alt={dish.name}
+      class="w-full h-full object-cover object-center"
+      loading="eager"
+    />
     <div class="absolute inset-0 bg-gradient-to-t from-[#0f172a]/70 to-transparent" />
     <div class="absolute bottom-0 left-0 right-0 max-w-6xl mx-auto px-4 sm:px-6 pb-8">
       <div class="flex flex-wrap gap-2 mb-3">
