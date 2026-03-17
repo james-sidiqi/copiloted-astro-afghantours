@@ -3,8 +3,9 @@ import BaseLayout from '@layouts/BaseLayout.astro';
 import Hero from '@components/site/Hero.astro';
 import SectionHeader from '@components/ui/SectionHeader.astro';
 import AttractionCard from '@components/travel/AttractionCard.astro';
-import ItineraryBlock from '@components/travel/ItineraryBlock.astro';
-import type { Tour } from '@lib/types/view-models';
+import ItineraryTimeline from '@components/travel/ItineraryTimeline.astro';
+import TourMap from '@components/travel/TourMap.astro';
+import type { Tour, MapStop } from '@lib/types/view-models';
 import { buildSiteData } from '@lib/data/buildRelations';
 
 export async function getStaticPaths() {
@@ -17,6 +18,31 @@ export async function getStaticPaths() {
 
 interface Props { tour: Tour; }
 const { tour } = Astro.props;
+
+// Build ordered map stops from itinerary days (deduplicated by attraction code)
+const seenCodes = new Set<string>();
+const mapStops: MapStop[] = [];
+let stopNumber = 0;
+for (const day of tour.itinerary) {
+  for (const attraction of day.attractions) {
+    if (!attraction.attractionCode || seenCodes.has(attraction.attractionCode)) continue;
+    if (!attraction.latitude || !attraction.longitude) continue;
+    seenCodes.add(attraction.attractionCode);
+    stopNumber += 1;
+    mapStops.push({
+      stopNumber,
+      dayNumber: day.dayNumber,
+      attractionCode: attraction.attractionCode,
+      name: attraction.name,
+      lat: attraction.latitude,
+      lng: attraction.longitude,
+      province: attraction.province,
+      category: attraction.category,
+      descShort: attraction.descShort,
+      slug: attraction.slug,
+    });
+  }
+}
 ---
 
 <BaseLayout title={`${tour.name} – Afghan Tours`} description={tour.summary}>
@@ -98,7 +124,12 @@ const { tour } = Astro.props;
             <div class="mb-6">
               <SectionHeader eyebrow="Day by Day" title="Tour Itinerary" />
             </div>
-            <ItineraryBlock days={tour.itinerary} />
+            {mapStops.length > 0 && (
+              <div class="mb-8">
+                <TourMap stops={mapStops} tourName={tour.name} />
+              </div>
+            )}
+            <ItineraryTimeline days={tour.itinerary} />
           </section>
         )}
 
