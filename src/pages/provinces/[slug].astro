@@ -1,0 +1,68 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import Hero from '@components/site/Hero.astro';
+import SectionHeader from '@components/ui/SectionHeader.astro';
+import AttractionCard from '@components/travel/AttractionCard.astro';
+import TourCard from '@components/travel/TourCard.astro';
+import type { Province } from '@lib/types/view-models';
+import { buildSiteData } from '@lib/data/buildRelations';
+
+export async function getStaticPaths() {
+  const data = buildSiteData();
+  return data.provinces.map(p => ({
+    params: { slug: p.provinceSlug },
+    props: { province: p },
+  }));
+}
+
+interface Props { province: Province; }
+const { province } = Astro.props;
+---
+
+<BaseLayout title={`${province.provinceName} Province – Afghan Tours`} description={province.shortBlurb || `Explore ${province.provinceName} province, Afghanistan.`}>
+  <Hero
+    title={province.provinceName}
+    subtitle={province.shortBlurb || undefined}
+    imagePath={province.coverImagePath || undefined}
+    ctaText="Plan a Visit"
+    ctaHref="/contact"
+  />
+
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 py-16 space-y-16">
+    <!-- About -->
+    {province.fullBlurb && (
+      <section>
+        <div class="mb-6">
+          <SectionHeader eyebrow={province.region} title={`About ${province.provinceName}`} />
+        </div>
+        <div class="prose prose-lg max-w-none text-[rgba(15,23,42,0.75)] leading-relaxed">
+          <p>{province.fullBlurb}</p>
+        </div>
+      </section>
+    )}
+
+    <!-- Attractions -->
+    {province.attractions.filter(a => a.isActive).length > 0 && (
+      <section>
+        <div class="mb-8">
+          <SectionHeader eyebrow="Highlights" title={`Attractions in ${province.provinceName}`} />
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {province.attractions.filter(a => a.isActive).map(attraction => <AttractionCard attraction={attraction} />)}
+        </div>
+      </section>
+    )}
+
+    <!-- Tours -->
+    {province.tours.filter(t => t.isActive).length > 0 && (
+      <section>
+        <div class="mb-8">
+          <SectionHeader eyebrow="Tours" title={`Tours Featuring ${province.provinceName}`} />
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {province.tours.filter(t => t.isActive).map(tour => <TourCard tour={tour} />)}
+        </div>
+      </section>
+    )}
+  </div>
+</BaseLayout>

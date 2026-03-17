@@ -1,0 +1,41 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import Hero from '@components/site/Hero.astro';
+import SectionHeader from '@components/ui/SectionHeader.astro';
+import RegionCard from '@components/travel/RegionCard.astro';
+import { buildSiteData } from '@lib/data/buildRelations';
+
+const data = buildSiteData();
+const regions = data.regions.filter(r => r.isActive).sort((a, b) => a.sortOrder - b.sortOrder);
+---
+
+<BaseLayout title="Regions of Afghanistan – Afghan Tours" description="Explore the diverse regions of Afghanistan, from the Hindu Kush mountains to the arid south.">
+  <Hero
+    title="Regions of Afghanistan"
+    subtitle="From the snow-capped Hindu Kush to the ancient deserts of the south"
+    ctaText="Plan Your Trip"
+    ctaHref="/contact"
+  />
+
+  <section class="py-20 bg-[#f6f7fb]">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <div class="mb-10">
+        <SectionHeader
+          eyebrow="Explore"
+          title="Afghanistan's Regions"
+          subtitle="Each region of Afghanistan has its own distinct character, history, and natural beauty."
+        />
+      </div>
+
+      {regions.length > 0 ? (
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+          {regions.map(region => <RegionCard region={region} />)}
+        </div>
+      ) : (
+        <div class="text-center py-20 text-gray-500">
+          <p class="text-lg font-medium">No regions available at this time.</p>
+        </div>
+      )}
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,210 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import Hero from '@components/site/Hero.astro';
+import SectionHeader from '@components/ui/SectionHeader.astro';
+import AttractionCard from '@components/travel/AttractionCard.astro';
+import ItineraryBlock from '@components/travel/ItineraryBlock.astro';
+import type { Tour } from '@lib/types/view-models';
+import { buildSiteData } from '@lib/data/buildRelations';
+
+export async function getStaticPaths() {
+  const data = buildSiteData();
+  return data.tours.filter(t => t.isActive).map(tour => ({
+    params: { slug: tour.slug },
+    props: { tour },
+  }));
+}
+
+interface Props { tour: Tour; }
+const { tour } = Astro.props;
+---
+
+<BaseLayout title={`${tour.name} – Afghan Tours`} description={tour.summary}>
+  <!-- Hero -->
+  <Hero
+    title={tour.name}
+    imagePath={tour.heroImagePath || tour.thumbnailImagePath}
+  />
+
+  <!-- Overview bar -->
+  <div class="bg-[#1e3a5f] text-white py-4">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 flex flex-wrap gap-6 justify-center sm:justify-start text-sm font-medium">
+      <span class="flex items-center gap-1.5">
+        <svg class="w-4 h-4 text-[#b88a2a]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        From ${tour.priceFrom.toLocaleString()}
+      </span>
+      <span class="flex items-center gap-1.5">
+        <svg class="w-4 h-4 text-[#b88a2a]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+        {tour.durationDays} {tour.durationDays === 1 ? 'Day' : 'Days'}
+      </span>
+      {tour.groupSize && (
+        <span class="flex items-center gap-1.5">
+          <svg class="w-4 h-4 text-[#b88a2a]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+          Group: {tour.groupSize}
+        </span>
+      )}
+      {tour.season && (
+        <span class="flex items-center gap-1.5">
+          <svg class="w-4 h-4 text-[#b88a2a]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707M17.657 17.657l-.707-.707M6.343 6.343l-.707-.707M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          {tour.season}
+        </span>
+      )}
+      {tour.activityLevel && (
+        <span class="flex items-center gap-1.5">
+          <svg class="w-4 h-4 text-[#b88a2a]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+          Activity: {tour.activityLevel}
+        </span>
+      )}
+    </div>
+  </div>
+
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 py-16">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+      <!-- Main content -->
+      <div class="lg:col-span-2 space-y-14">
+        <!-- Overview -->
+        <section>
+          <SectionHeader eyebrow="Overview" title="About This Tour" />
+          <p class="mt-4 text-[rgba(15,23,42,0.75)] leading-relaxed text-base">{tour.summary}</p>
+
+          {(tour.regions.length > 0 || tour.provinces.length > 0) && (
+            <div class="mt-6 flex flex-wrap gap-4 text-sm">
+              {tour.regions.length > 0 && (
+                <div>
+                  <span class="font-semibold text-[#1e3a5f]">Regions: </span>
+                  <span class="text-[rgba(15,23,42,0.7)]">{tour.regions.join(', ')}</span>
+                </div>
+              )}
+              {tour.provinces.length > 0 && (
+                <div>
+                  <span class="font-semibold text-[#1e3a5f]">Provinces: </span>
+                  <span class="text-[rgba(15,23,42,0.7)]">{tour.provinces.join(', ')}</span>
+                </div>
+              )}
+            </div>
+          )}
+
+          {tour.travelStyle && (
+            <div class="mt-3 text-sm">
+              <span class="font-semibold text-[#1e3a5f]">Travel Style: </span>
+              <span class="text-[rgba(15,23,42,0.7)]">{tour.travelStyle}</span>
+            </div>
+          )}
+        </section>
+
+        <!-- Itinerary -->
+        {tour.itinerary.length > 0 && (
+          <section>
+            <div class="mb-6">
+              <SectionHeader eyebrow="Day by Day" title="Tour Itinerary" />
+            </div>
+            <ItineraryBlock days={tour.itinerary} />
+          </section>
+        )}
+
+        <!-- Inclusions -->
+        {tour.inclusions.length > 0 && (
+          <section>
+            <div class="mb-6">
+              <SectionHeader eyebrow="What's Included" title="Tour Inclusions" />
+            </div>
+            <ul class="space-y-3">
+              {tour.inclusions.map(item => (
+                <li class="flex items-start gap-3 bg-white rounded-xl p-4 shadow-sm">
+                  <svg class="w-5 h-5 text-green-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                  <div>
+                    <p class="font-semibold text-[#1e3a5f] text-sm">{item.title}</p>
+                    {item.description && <p class="text-xs text-[rgba(15,23,42,0.65)] mt-0.5">{item.description}</p>}
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+
+        <!-- Related Attractions -->
+        {tour.attractions.length > 0 && (
+          <section>
+            <div class="mb-6">
+              <SectionHeader eyebrow="Highlights" title="Featured Attractions" />
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              {tour.attractions.slice(0, 4).map(a => <AttractionCard attraction={a} />)}
+            </div>
+          </section>
+        )}
+      </div>
+
+      <!-- Sidebar -->
+      <aside class="space-y-6">
+        <!-- Price & Book CTA -->
+        <div class="bg-white rounded-2xl shadow-[0_2px_20px_rgba(0,0,0,0.08)] p-6 sticky top-6">
+          <p class="text-xs font-semibold uppercase tracking-wider text-[#b88a2a] mb-1">Price Per Person</p>
+          <p class="font-display text-3xl font-bold text-[#1e3a5f] mb-4">From ${tour.priceFrom.toLocaleString()}</p>
+          <a href="/contact" class="block w-full text-center py-3 rounded-full bg-[#b88a2a] hover:bg-[#a07820] text-white font-semibold transition-all duration-200 shadow-md mb-3">
+            Book This Tour
+          </a>
+          <a href="/contact" class="block w-full text-center py-3 rounded-full border-2 border-[#1e3a5f] text-[#1e3a5f] font-semibold hover:bg-[#1e3a5f] hover:text-white transition-all duration-200">
+            Enquire Now
+          </a>
+
+          <!-- Quick facts -->
+          <ul class="mt-6 space-y-3 text-sm text-[rgba(15,23,42,0.75)] border-t border-gray-100 pt-5">
+            <li class="flex justify-between"><span class="font-medium text-[#1e3a5f]">Duration</span><span>{tour.durationDays} days</span></li>
+            {tour.groupSize && <li class="flex justify-between"><span class="font-medium text-[#1e3a5f]">Group Size</span><span>{tour.groupSize}</span></li>}
+            {tour.activityLevel && <li class="flex justify-between"><span class="font-medium text-[#1e3a5f]">Activity Level</span><span>{tour.activityLevel}</span></li>}
+            {tour.season && <li class="flex justify-between"><span class="font-medium text-[#1e3a5f]">Best Season</span><span>{tour.season}</span></li>}
+            {tour.travelStyle && <li class="flex justify-between"><span class="font-medium text-[#1e3a5f]">Style</span><span>{tour.travelStyle}</span></li>}
+          </ul>
+        </div>
+
+        <!-- Accommodation note -->
+        {tour.accommodationNote && (
+          <div class="bg-white rounded-2xl shadow-sm p-5">
+            <h4 class="font-semibold text-[#1e3a5f] mb-2 text-sm">Accommodation</h4>
+            <p class="text-xs text-[rgba(15,23,42,0.7)] leading-relaxed">{tour.accommodationNote}</p>
+          </div>
+        )}
+
+        <!-- Transport note -->
+        {tour.transportNote && (
+          <div class="bg-white rounded-2xl shadow-sm p-5">
+            <h4 class="font-semibold text-[#1e3a5f] mb-2 text-sm">Transport</h4>
+            <p class="text-xs text-[rgba(15,23,42,0.7)] leading-relaxed">{tour.transportNote}</p>
+          </div>
+        )}
+
+        <!-- Upcoming dates -->
+        {tour.dates.length > 0 && (
+          <div class="bg-white rounded-2xl shadow-sm p-5">
+            <h4 class="font-semibold text-[#1e3a5f] mb-3 text-sm">Upcoming Dates</h4>
+            <div class="overflow-x-auto">
+              <table class="w-full text-xs">
+                <thead>
+                  <tr class="text-left text-[rgba(15,23,42,0.5)] border-b border-gray-100">
+                    <th class="pb-2 font-semibold">Start</th>
+                    <th class="pb-2 font-semibold">End</th>
+                    <th class="pb-2 font-semibold">Status</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-50">
+                  {tour.dates.map(d => (
+                    <tr class="text-[rgba(15,23,42,0.7)]">
+                      <td class="py-2">{d.dateStart}</td>
+                      <td class="py-2">{d.dateEnd}</td>
+                      <td class="py-2">
+                        <span class={`px-2 py-0.5 rounded-full text-xs font-semibold ${d.status === 'available' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'}`}>
+                          {d.status}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+      </aside>
+    </div>
+  </div>
+</BaseLayout>

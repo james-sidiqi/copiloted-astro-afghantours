@@ -1,0 +1,131 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import Hero from '@components/site/Hero.astro';
+import SectionHeader from '@components/ui/SectionHeader.astro';
+import TourCard from '@components/travel/TourCard.astro';
+import AttractionCard from '@components/travel/AttractionCard.astro';
+import FaqAccordion from '@components/travel/FaqAccordion.astro';
+import { buildSiteData } from '@lib/data/buildRelations';
+
+const data = buildSiteData();
+const featuredTours = data.tours.filter(t => t.isActive).slice(0, 3);
+const featuredAttractions = data.attractions.filter(a => a.isActive && a.priority >= 5).slice(0, 6);
+const homeFaqs = data.faqs.filter(f => f.isActive && f.pageAssignment === 'home').slice(0, 6);
+---
+
+<BaseLayout title="Afghan Tours – Expert-Guided Tours to Afghanistan" description="Discover Afghanistan with expert-guided tours to one of the world's most extraordinary destinations.">
+  <Hero
+    title="Discover Afghanistan"
+    subtitle="Expert-guided tours to one of the world's most extraordinary destinations"
+    ctaText="Explore Tours"
+    ctaHref="/tours"
+  />
+
+  <!-- Featured Tours -->
+  <section class="py-20 bg-white">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <div class="mb-10">
+        <SectionHeader eyebrow="Our Tours" title="Curated Afghan Adventures" subtitle="Hand-crafted itineraries designed to show you the real Afghanistan." />
+      </div>
+      {featuredTours.length > 0 ? (
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {featuredTours.map(tour => <TourCard tour={tour} />)}
+        </div>
+      ) : (
+        <p class="text-center text-gray-500 py-12">Tours coming soon.</p>
+      )}
+      <div class="mt-10 text-center">
+        <a href="/tours" class="inline-block px-8 py-3 rounded-full border-2 border-[#1e3a5f] text-[#1e3a5f] font-semibold hover:bg-[#1e3a5f] hover:text-white transition-all duration-200">
+          View All Tours
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Attractions -->
+  <section class="py-20 bg-[#f6f7fb]">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <div class="mb-10">
+        <SectionHeader eyebrow="Highlights" title="Afghanistan's Iconic Attractions" subtitle="From the azure lakes of Band-e-Amir to the ancient city of Herat — wonders await." />
+      </div>
+      {featuredAttractions.length > 0 ? (
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {featuredAttractions.map(attraction => <AttractionCard attraction={attraction} />)}
+        </div>
+      ) : (
+        <p class="text-center text-gray-500 py-12">Attractions coming soon.</p>
+      )}
+      <div class="mt-10 text-center">
+        <a href="/attractions" class="inline-block px-8 py-3 rounded-full border-2 border-[#1e3a5f] text-[#1e3a5f] font-semibold hover:bg-[#1e3a5f] hover:text-white transition-all duration-200">
+          Explore All Attractions
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Why Travel With Us -->
+  <section class="py-20 bg-white">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <div class="mb-12 text-center">
+        <SectionHeader eyebrow="Why Afghan Tours" title="Why Travel With Us" centered />
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="text-center flex flex-col items-center gap-4 p-6 rounded-2xl bg-[#f6f7fb]">
+          <div class="w-14 h-14 rounded-full bg-[#1e3a5f] flex items-center justify-center text-white">
+            <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064"/>
+            </svg>
+          </div>
+          <h3 class="font-display text-xl font-bold text-[#1e3a5f]">Local Expertise</h3>
+          <p class="text-sm text-[rgba(15,23,42,0.7)] leading-relaxed">Our team has 15+ years of on-the-ground experience in Afghanistan. We know the land, the people, and the hidden gems no guidebook covers.</p>
+        </div>
+        <div class="text-center flex flex-col items-center gap-4 p-6 rounded-2xl bg-[#f6f7fb]">
+          <div class="w-14 h-14 rounded-full bg-[#1e3a5f] flex items-center justify-center text-white">
+            <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+            </svg>
+          </div>
+          <h3 class="font-display text-xl font-bold text-[#1e3a5f]">Safety First</h3>
+          <p class="text-sm text-[rgba(15,23,42,0.7)] leading-relaxed">Intelligence-led planning, vetted local partners, and emergency protocols ensure every journey is as safe as it is extraordinary.</p>
+        </div>
+        <div class="text-center flex flex-col items-center gap-4 p-6 rounded-2xl bg-[#f6f7fb]">
+          <div class="w-14 h-14 rounded-full bg-[#1e3a5f] flex items-center justify-center text-white">
+            <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+            </svg>
+          </div>
+          <h3 class="font-display text-xl font-bold text-[#1e3a5f]">Authentic Experiences</h3>
+          <p class="text-sm text-[rgba(15,23,42,0.7)] leading-relaxed">Go beyond sightseeing. Share meals with local families, attend traditional festivals, and build connections that last a lifetime.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Teaser -->
+  {homeFaqs.length > 0 && (
+    <section class="py-20 bg-[#f6f7fb]">
+      <div class="max-w-3xl mx-auto px-4 sm:px-6">
+        <div class="mb-10 text-center">
+          <SectionHeader eyebrow="Common Questions" title="Frequently Asked Questions" centered />
+        </div>
+        <FaqAccordion faqs={homeFaqs} />
+        <div class="mt-10 text-center">
+          <a href="/faq" class="inline-block px-8 py-3 rounded-full border-2 border-[#1e3a5f] text-[#1e3a5f] font-semibold hover:bg-[#1e3a5f] hover:text-white transition-all duration-200">
+            View All FAQs
+          </a>
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- CTA -->
+  <section class="py-20 bg-[#1e3a5f]">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 text-center text-white">
+      <h2 class="font-display text-3xl sm:text-4xl font-bold mb-4">Ready to explore?</h2>
+      <p class="text-white/80 text-lg mb-8">Get in touch and let us craft the Afghan adventure of a lifetime.</p>
+      <a href="/contact" class="inline-block px-10 py-4 rounded-full bg-[#b88a2a] hover:bg-[#a07820] text-white font-semibold text-base shadow-lg transition-all duration-200">
+        Contact Us
+      </a>
+    </div>
+  </section>
+</BaseLayout>

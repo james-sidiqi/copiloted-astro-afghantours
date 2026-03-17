@@ -1,0 +1,72 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import SectionHeader from '@components/ui/SectionHeader.astro';
+import AttractionCard from '@components/travel/AttractionCard.astro';
+import TourCard from '@components/travel/TourCard.astro';
+import type { Location, SiteData } from '@lib/types/view-models';
+import { buildSiteData } from '@lib/data/buildRelations';
+
+export async function getStaticPaths() {
+  const data = buildSiteData();
+  const destinations = data.locations.filter(l => l.type === 'destination' && l.isActive);
+  return destinations.map(dest => ({
+    params: { slug: dest.slug },
+    props: { destination: dest, data },
+  }));
+}
+
+interface Props {
+  destination: Location;
+  data: SiteData;
+}
+const { destination, data } = Astro.props;
+
+const destNameLower = destination.name.toLowerCase();
+const relatedAttractions = data.attractions.filter(
+  a => a.isActive && a.provinceCode === destination.parentCode
+);
+const relatedTours = data.tours.filter(
+  t => t.isActive && t.provinces.some(p => p.toLowerCase() === destNameLower)
+);
+---
+
+<BaseLayout title={`${destination.name} – Afghan Tours`} description={`Explore ${destination.name}, Afghanistan.`}>
+  <!-- Hero block -->
+  <div class="bg-[#1e3a5f] py-20 text-white text-center px-4">
+    <p class="text-xs font-semibold uppercase tracking-widest text-[#b88a2a] mb-3">Destination</p>
+    <h1 class="font-display text-4xl sm:text-5xl font-bold">{destination.name}</h1>
+  </div>
+
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 py-16 space-y-16">
+    <!-- Related Attractions -->
+    {relatedAttractions.length > 0 && (
+      <section>
+        <div class="mb-8">
+          <SectionHeader eyebrow="Explore" title={`Attractions Near ${destination.name}`} />
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {relatedAttractions.map(a => <AttractionCard attraction={a} />)}
+        </div>
+      </section>
+    )}
+
+    <!-- Related Tours -->
+    {relatedTours.length > 0 && (
+      <section>
+        <div class="mb-8">
+          <SectionHeader eyebrow="Tours" title={`Tours to ${destination.name}`} />
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {relatedTours.map(t => <TourCard tour={t} />)}
+        </div>
+      </section>
+    )}
+
+    {relatedAttractions.length === 0 && relatedTours.length === 0 && (
+      <div class="text-center py-12 text-gray-500">
+        <p class="text-lg font-medium">Content coming soon for {destination.name}.</p>
+        <a href="/contact" class="mt-4 inline-block text-[#1f4aa8] underline text-sm">Contact us for information</a>
+      </div>
+    )}
+  </div>
+</BaseLayout>

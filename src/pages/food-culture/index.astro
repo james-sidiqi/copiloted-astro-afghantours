@@ -1,0 +1,51 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import Hero from '@components/site/Hero.astro';
+import SectionHeader from '@components/ui/SectionHeader.astro';
+import DishCard from '@components/travel/DishCard.astro';
+import { buildSiteData } from '@lib/data/buildRelations';
+
+const data = buildSiteData();
+const dishes = data.dishes.filter(d => d.isActive);
+const categories = [...new Set(dishes.map(d => d.category).filter(Boolean))].sort();
+---
+
+<BaseLayout title="Food & Culture – Afghan Tours" description="Explore the rich culinary traditions and cultural heritage of Afghanistan.">
+  <Hero
+    title="Food &amp; Culture"
+    subtitle="Taste the flavours and traditions of Afghanistan"
+    ctaText="Book a Tour"
+    ctaHref="/tours"
+  />
+
+  <section class="py-20 bg-[#f6f7fb]">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <div class="mb-10">
+        <SectionHeader
+          eyebrow="Cuisine & Culture"
+          title="Afghan Food & Traditions"
+          subtitle="From fragrant rice dishes to seasonal produce — Afghan cuisine reflects the country's diverse landscape and rich history."
+        />
+        {categories.length > 0 && (
+          <div class="mt-6 flex flex-wrap gap-2">
+            {categories.map(cat => (
+              <span class="text-xs font-semibold px-3 py-1.5 rounded-full bg-white border border-gray-200 text-[#1e3a5f] shadow-sm">
+                {cat}
+              </span>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {dishes.length > 0 ? (
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+          {dishes.map(dish => <DishCard dish={dish} />)}
+        </div>
+      ) : (
+        <div class="text-center py-20 text-gray-500">
+          <p class="text-lg font-medium">Content coming soon.</p>
+        </div>
+      )}
+    </div>
+  </section>
+</BaseLayout>
