@@ -1,0 +1,104 @@
+---
+import type { ItineraryDay } from '@lib/types/view-models';
+
+interface Props {
+  days: ItineraryDay[];
+}
+const { days } = Astro.props;
+---
+
+<ol class="relative border-l-2 border-[#1f4aa8]/20 ml-4 space-y-0">
+  {days.map((day) => (
+    <li class="relative pb-10 last:pb-0 pl-8">
+      <!-- Timeline dot -->
+      <span class="absolute -left-[13px] top-1 flex items-center justify-center w-6 h-6 rounded-full bg-[#1f4aa8] text-white text-xs font-bold ring-4 ring-[#f6f7fb]">
+        {day.dayNumber}
+      </span>
+
+      <div class="bg-white rounded-[14px] shadow-[0_2px_16px_0_rgba(0,0,0,0.06)] p-5">
+        <!-- Day header -->
+        <div class="flex flex-wrap items-start gap-2 mb-3">
+          <span class="text-xs font-semibold uppercase tracking-wider text-[#b88a2a]">
+            Day {day.dayNumber}
+          </span>
+          {day.location && (
+            <span class="text-xs text-[rgba(15,23,42,0.5)] flex items-center gap-1">
+              <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+              </svg>
+              {day.location}
+            </span>
+          )}
+        </div>
+
+        <h4 class="font-display text-base font-semibold text-[#1e3a5f] leading-snug mb-2">
+          {day.title}
+        </h4>
+
+        {day.description && (
+          <p class="text-sm text-[rgba(15,23,42,0.7)] leading-relaxed mb-3">
+            {day.description}
+          </p>
+        )}
+
+        <!-- Flight info -->
+        {day.flightId && (
+          <div class="flex items-center gap-2 mt-2 text-xs text-[#1f4aa8] font-medium bg-[#1f4aa8]/5 rounded-lg px-3 py-2">
+            <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+            </svg>
+            Flight: {day.flightId}
+          </div>
+        )}
+
+        <!-- Drive time notes -->
+        {day.driveTimeNotes && (
+          <p class="mt-2 text-xs text-[rgba(15,23,42,0.5)] italic flex items-center gap-1.5">
+            <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+            </svg>
+            {day.driveTimeNotes}
+          </p>
+        )}
+
+        <!-- Related attractions -->
+        {day.attractions && day.attractions.length > 0 && (
+          <div class="mt-4 pt-4 border-t border-gray-100">
+            <p class="text-xs font-semibold uppercase tracking-wider text-[rgba(15,23,42,0.4)] mb-3">
+              Stops on this day
+            </p>
+            <div class="flex flex-wrap gap-3">
+              {day.attractions.map((attraction) => (
+                <a
+                  href={`/attractions/${attraction.slug}`}
+                  class="group flex items-center gap-2.5 bg-[#f6f7fb] hover:bg-[#1f4aa8]/5 rounded-xl px-3 py-2 transition-colors duration-150 no-underline max-w-[calc(50%-6px)]"
+                >
+                  {attraction.thumbnailPath && (
+                    <img
+                      src={attraction.thumbnailPath}
+                      alt={attraction.name}
+                      width="40"
+                      height="40"
+                      class="w-10 h-10 rounded-lg object-cover shrink-0 bg-gray-200"
+                      loading="lazy"
+                      onerror="this.alt='';this.style.display='none'"
+                    />
+                  )}
+                  <div class="min-w-0">
+                    <p class="text-xs font-semibold text-[#1e3a5f] group-hover:text-[#1f4aa8] leading-tight truncate transition-colors duration-150">
+                      {attraction.name}
+                    </p>
+                    <p class="text-[10px] text-[rgba(15,23,42,0.45)] truncate">
+                      {attraction.category}
+                    </p>
+                  </div>
+                </a>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    </li>
+  ))}
+</ol>

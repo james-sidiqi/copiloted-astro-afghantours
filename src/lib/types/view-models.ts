@@ -27,6 +27,7 @@ export interface ItineraryDay {
   flightId: string;
   driveTimeNotes: string;
   attractionCodes: string[];
+  attractions: Attraction[];
 }
 
 export interface InclusionDay {
@@ -169,6 +170,19 @@ export interface HotelProperty {
   description: string;
   imagePaths: string[];
   isActive: boolean;
+}
+
+export interface MapStop {
+  stopNumber: number;
+  dayNumber: number;
+  attractionCode: string;
+  name: string;
+  lat: number;
+  lng: number;
+  province: string;
+  category: string;
+  descShort: string;
+  slug: string;
 }
 
 export interface SiteData {

@@ -28,7 +28,7 @@ import { loadDishes } from './loadDishes.js';
 
 function splitCodes(raw: string): string[] {
   if (!raw) return [];
-  return raw.split(';').map((s) => s.trim()).filter(Boolean);
+  return raw.split(/[;,|]/).map((s) => s.trim()).filter(Boolean);
 }
 
 function loadItinerary(): ItineraryDay[] {
@@ -127,6 +127,8 @@ export function buildSiteData(): SiteData {
 
   // Build tour attractions map: tourCode → Set<attractionCode>
   const tourAttractionCodes = new Map<string, Set<string>>();
+  // Build tour+day attractions map: `${tourCode}:${dayNumber}` → Set<attractionCode>
+  const tourDayAttractionCodes = new Map<string, Set<string>>();
   for (const row of tourAttractionMapRows) {
     if (!row.attraction_code) continue;
     let set = tourAttractionCodes.get(row.tour_code);
@@ -135,17 +137,33 @@ export function buildSiteData(): SiteData {
       tourAttractionCodes.set(row.tour_code, set);
     }
     set.add(row.attraction_code);
+
+    const dayKey = `${row.tour_code}:${row.day_number}`;
+    let daySet = tourDayAttractionCodes.get(dayKey);
+    if (!daySet) {
+      daySet = new Set();
+      tourDayAttractionCodes.set(dayKey, daySet);
+    }
+    daySet.add(row.attraction_code);
   }
 
-  // Build itinerary map: tourCode → ItineraryDay[]
+  // Build itinerary map: tourCode → ItineraryDay[] (with resolved attractions)
   const itineraryByTour = new Map<string, ItineraryDay[]>();
   for (const day of itineraryRows) {
+    const dayKey = `${day.tourCode}:${day.dayNumber}`;
+    const mapCodes = tourDayAttractionCodes.get(dayKey) ?? new Set<string>();
+    const allCodes = new Set([...day.attractionCodes, ...mapCodes]);
+    const dayAttractions = Array.from(allCodes)
+      .map((c) => attractionByCode.get(c))
+      .filter((a): a is Attraction => a !== undefined);
+    const enrichedDay: ItineraryDay = { ...day, attractions: dayAttractions };
+
     let arr = itineraryByTour.get(day.tourCode);
     if (!arr) {
       arr = [];
       itineraryByTour.set(day.tourCode, arr);
     }
-    arr.push(day);
+    arr.push(enrichedDay);
   }
 
   // Build inclusions map: tourCode → InclusionDay[]
