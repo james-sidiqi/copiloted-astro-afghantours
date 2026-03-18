@@ -23,7 +23,7 @@ const { tour } = Astro.props;
   <!-- Hero -->
   <Hero
     title={tour.name}
-    imagePath={tour.heroImagePath || tour.thumbnailImagePath}
+    imagePath={tour.heroImagePath || tour.thumbnailImagePath || '/assets/images/heroes/hero-tour.webp'}
   />
 
   <!-- Overview bar -->

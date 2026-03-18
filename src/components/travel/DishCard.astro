@@ -1,4 +1,6 @@
 ---
+import SafeImage from '@components/ui/SafeImage.astro';
+
 interface Props {
   dish: import('@lib/types/view-models').Dish;
 }
@@ -17,19 +19,13 @@ const mealClass = mealTypeColors[dish.mealType] ?? 'bg-gray-100 text-gray-700';
 <article class="group bg-white rounded-[14px] shadow-[0_2px_16px_0_rgba(0,0,0,0.08)] hover:shadow-[0_10px_30px_rgba(15,23,42,0.08)] transition-shadow duration-300 overflow-hidden flex flex-col">
   <!-- Image -->
   <a href={`/food-culture/${dish.slug}`} class="block overflow-hidden aspect-[4/3] bg-gray-100 shrink-0">
-    {dish.imagePath
-      ? <img
-          src={dish.imagePath}
-          alt={dish.name}
-          class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-          loading="lazy"
-        />
-      : <div class="w-full h-full bg-gradient-to-br from-amber-50 to-orange-50 flex items-center justify-center">
-          <svg class="w-12 h-12 text-orange-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
-          </svg>
-        </div>
-    }
+    <SafeImage
+      src={dish.imagePath}
+      fallback="/assets/images/placeholders/default-food.webp"
+      alt={dish.name}
+      class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+      loading="lazy"
+    />
   </a>
 
   <!-- Body -->
