@@ -42,6 +42,7 @@ function loadItinerary(): ItineraryDay[] {
     flightId: r.flight_id,
     driveTimeNotes: r.drive_time_notes,
     attractionCodes: splitCodes(r.attraction_codes),
+    attractions: [], // enriched later in buildSiteData()
   }));
 }
 
