@@ -1,5 +1,7 @@
 # build output
-dist/
+dist/*
+!dist/
+!dist/**
 .output/
 
 # generated types
@@ -24,3 +26,4 @@ pnpm-debug.log*
 Thumbs.db
 
 *.zip
+node_modules
