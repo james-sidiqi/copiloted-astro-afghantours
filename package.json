@@ -5,11 +5,11 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
+    "build:zip": "zip -r dist.zip dist/",
     "preview": "astro preview",
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/node": "^9.5.5",
     "@astrojs/tailwind": "^5.1.0",
     "astro": "^5.15.8",
     "csv-parse": "^5.5.6",
