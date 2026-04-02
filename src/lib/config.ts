@@ -5,11 +5,11 @@ export const siteConfig = {
   email: 'info@afghantours.com',
   phone: {
     display: '+93-78-012-3456',
-    number: '93780123456',
+    number: '0093780123456',
     url: 'tel:+93780123456',
   },
   whatsapp: {
-    number: '93780123456',
-    url: 'https://wa.me/93780123456',
+    number: '0093780123456',
+    url: 'https://wa.me/0093780123456',
   },
 } as const;

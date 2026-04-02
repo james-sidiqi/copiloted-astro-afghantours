@@ -1,0 +1,101 @@
+---
+/**
+ * /plan — Interactive Itinerary Builder page
+ *
+ * All CSV data is loaded at build time and embedded into the page.
+ * The ItineraryBuilder component runs the planning engine fully client-side.
+ * No server, API route, or runtime filesystem access is required.
+ */
+
+import BaseLayout from '@layouts/BaseLayout.astro';
+import ItineraryBuilder from '@components/travel/ItineraryBuilder.astro';
+import { loadAttractions } from '@lib/data/loadAttractions';
+import { loadRouteMatrix } from '@lib/data/loadRouteMatrix';
+import { loadLocations } from '@lib/data/loadLocations';
+import { readCsv } from '@lib/data/readCsv';
+import type { ClientHotelRates } from '@lib/engine/client-engine';
+
+// ── Load and slim attractions (only fields the engine needs) ──────────────────
+const attractions = loadAttractions().map(a => ({
+  attractionCode: a.attractionCode,
+  name: a.name,
+  category: a.category,
+  province: a.province,
+  provinceCode: a.provinceCode,
+  region: a.region,
+}));
+
+// ── Route matrix ──────────────────────────────────────────────────────────────
+const routeMatrix = loadRouteMatrix();
+
+// ── Locations (hub name lookup) ───────────────────────────────────────────────
+const locations = loadLocations().map(l => ({
+  locationCode: l.locationCode,
+  name: l.name,
+  isHub: l.isHub,
+}));
+
+// ── Hotel nightly rates: averaged by CSV tier, mapped to engine tiers ─────────
+// CSV tiers: budget → budget, standard → comfort, premium|luxury → premium
+interface HotelRow {
+  tier: string;
+  per_night_price_from: string;
+  is_active: string;
+}
+
+function avgRate(rows: HotelRow[], tiers: string[]): number {
+  const active = rows.filter(r => r.is_active === '1' && tiers.includes(r.tier));
+  if (active.length === 0) return 0;
+  const sum = active.reduce((s, r) => s + (parseFloat(r.per_night_price_from) || 0), 0);
+  return Math.round(sum / active.length);
+}
+
+const hotelRows = readCsv<HotelRow>('hotel_properties.csv');
+const hotelNightlyRates: ClientHotelRates = {
+  budget:  avgRate(hotelRows, ['budget'])  || 40,
+  comfort: avgRate(hotelRows, ['standard']) || 80,
+  premium: avgRate(hotelRows, ['premium', 'luxury']) || 140,
+};
+---
+
+<BaseLayout
+  title="Plan Your Itinerary — Afghan Tours"
+  description="Build a personalised Afghan itinerary in seconds. Select your attractions, group size and preferences and receive an estimated day-by-day plan and pricing."
+>
+
+  <!-- Page hero -->
+  <section class="relative py-20 bg-[#1e3a5f] overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-br from-[#1e3a5f] via-[#1e3a5f] to-[#162d4a] opacity-95"></div>
+    <div class="relative max-w-4xl mx-auto px-4 sm:px-6 text-center text-white">
+      <p class="text-xs font-semibold uppercase tracking-widest text-[#b88a2a] mb-3">Itinerary Builder</p>
+      <h1 class="font-display text-4xl sm:text-5xl font-bold mb-4 leading-tight">
+        Plan Your Afghan Journey
+      </h1>
+      <p class="text-white/70 text-lg max-w-2xl mx-auto leading-relaxed">
+        Select the destinations and attractions you want to visit. Our engine will
+        sequence your route, calculate travel days, and provide an estimated price —
+        all in your browser, instantly.
+      </p>
+    </div>
+  </section>
+
+  <!-- Builder -->
+  <ItineraryBuilder
+    attractions={attractions}
+    routeMatrix={routeMatrix}
+    locations={locations}
+    hotelNightlyRates={hotelNightlyRates}
+  />
+
+  <!-- Note -->
+  <section class="py-10 bg-[#f6f7fb]">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 text-center">
+      <p class="text-xs text-[rgba(15,23,42,0.5)] leading-relaxed">
+        Prices are <strong>estimates</strong> based on standard route rates and accommodation averages.
+        Final pricing is confirmed on enquiry. For complex multi-region itineraries or
+        expedition-style travel, a custom quote may be required.
+      </p>
+    </div>
+  </section>
+
+</BaseLayout>
