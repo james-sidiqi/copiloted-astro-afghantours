@@ -41,6 +41,14 @@ const contactEmail = siteConfig.email;
 <!-- Embedded data for the client engine -->
 <script type="application/json" id="itinerary-engine-data" set:html={engineData}></script>
 
+<!-- Contact config accessible to the client script via data attributes -->
+<div
+  id="itinerary-contact-config"
+  data-whatsapp={whatsappUrl}
+  data-email={contactEmail}
+  hidden
+></div>
+
 <section class="py-16 bg-white">
   <div class="max-w-5xl mx-auto px-4 sm:px-6">
 
@@ -172,6 +180,11 @@ const contactEmail = siteConfig.email;
   // ── Load embedded data ──────────────────────────────────────────────────────
   const dataEl = document.getElementById('itinerary-engine-data') as HTMLScriptElement | null;
   const engineData: ClientData | null = dataEl ? JSON.parse(dataEl.textContent ?? '{}') : null;
+
+  // ── Load contact config from data attributes (single source: siteConfig) ────
+  const contactConfig = document.getElementById('itinerary-contact-config') as HTMLElement | null;
+  const WHATSAPP_URL = contactConfig?.dataset.whatsapp ?? 'https://wa.me/0093780123456';
+  const CONTACT_EMAIL = contactConfig?.dataset.email ?? 'info@afghantours.com';
 
   // ── DOM refs ────────────────────────────────────────────────────────────────
   const form = document.getElementById('itinerary-form') as HTMLFormElement;
@@ -305,7 +318,7 @@ const contactEmail = siteConfig.email;
           </p>
           <div class="flex flex-col sm:flex-row gap-3 justify-center">
             <a
-              href="https://wa.me/0093780123456"
+              href="${WHATSAPP_URL}"
               target="_blank"
               rel="noopener noreferrer"
               class="inline-flex items-center justify-center gap-2 px-8 py-3 rounded-full bg-[#25d366] hover:bg-[#1da851] text-white font-semibold text-sm transition-colors duration-150"
@@ -314,7 +327,7 @@ const contactEmail = siteConfig.email;
               WhatsApp Us
             </a>
             <a
-              href="mailto:info@afghantours.com"
+              href="mailto:${CONTACT_EMAIL}"
               class="inline-flex items-center justify-center gap-2 px-8 py-3 rounded-full border border-white/30 hover:bg-white/10 text-white font-semibold text-sm transition-colors duration-150"
             >
               Email Us
@@ -345,7 +358,7 @@ const contactEmail = siteConfig.email;
         </p>
         <div class="flex flex-col sm:flex-row gap-3 justify-center">
           <a
-            href="https://wa.me/0093780123456"
+            href="${WHATSAPP_URL}"
             target="_blank"
             rel="noopener noreferrer"
             class="inline-flex items-center justify-center gap-2 px-8 py-3 rounded-full bg-[#25d366] hover:bg-[#1da851] text-white font-semibold text-sm transition-colors duration-150"
@@ -354,7 +367,7 @@ const contactEmail = siteConfig.email;
             WhatsApp Us
           </a>
           <a
-            href="mailto:info@afghantours.com"
+            href="mailto:${CONTACT_EMAIL}"
             class="inline-flex items-center justify-center gap-2 px-8 py-3 rounded-full border border-[#b88a2a] text-[#b88a2a] hover:bg-[#b88a2a] hover:text-white font-semibold text-sm transition-colors duration-150"
           >
             Email Us

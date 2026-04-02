@@ -45,7 +45,10 @@ interface HotelRow {
 
 function avgRate(rows: HotelRow[], tiers: string[]): number {
   const active = rows.filter(r => r.is_active === '1' && tiers.includes(r.tier));
-  if (active.length === 0) return 0;
+  if (active.length === 0) {
+    console.warn(`[plan.astro] No active hotel rows found for tiers: ${tiers.join(', ')}. Falling back to hardcoded defaults.`);
+    return 0;
+  }
   const sum = active.reduce((s, r) => s + (parseFloat(r.per_night_price_from) || 0), 0);
   return Math.round(sum / active.length);
 }

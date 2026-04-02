@@ -469,6 +469,8 @@ const DEFAULT_VEHICLE_DAILY_RATE: Record<VehicleType, number> = {
   coaster: 300,
 };
 
+const DEFAULT_FALLBACK_VEHICLE_RATE = 120; // prado rate as safe default
+
 const DEFAULT_HOTEL_NIGHTLY_RATE: ClientHotelRates = {
   budget: 40,
   comfort: 80,
@@ -499,7 +501,7 @@ function calculatePricing(
   const hotelNights = Math.max(0, totalDays - 1);
   const pax = Math.max(1, groupSize);
 
-  const vehicleRate = DEFAULT_VEHICLE_DAILY_RATE[vehicleType] ?? DEFAULT_VEHICLE_DAILY_RATE['prado'];
+  const vehicleRate = DEFAULT_VEHICLE_DAILY_RATE[vehicleType] ?? DEFAULT_FALLBACK_VEHICLE_RATE;
   const hotelRate = hotelNightlyRates[hotelTier] ?? DEFAULT_HOTEL_NIGHTLY_RATE[hotelTier] ?? 80;
 
   const vehicleCost = vehicleRate * totalDays;
