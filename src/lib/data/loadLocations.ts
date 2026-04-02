@@ -14,5 +14,8 @@ export function loadLocations(): Location[] {
       slug: r.slug,
       isActive: true,
       sortOrder: parseInt(r.sort_order, 10) || 0,
+      isHub: r.is_hub === '1',
+      isSecondary: r.is_secondary === '1',
+      hasAirport: r.has_airport === '1',
     }));
 }

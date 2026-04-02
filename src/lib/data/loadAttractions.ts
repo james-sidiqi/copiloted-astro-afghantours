@@ -31,6 +31,7 @@ export function loadAttractions(): Attraction[] {
       imagePath: r.image_path,
       svgPath: r.svg_path,
       priority: parseInt(r.priority, 10) || 0,
+      locationCode: r.location_code,
       isActive: true,
     }));
 }

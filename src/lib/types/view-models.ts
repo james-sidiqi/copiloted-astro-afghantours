@@ -16,6 +16,7 @@ export interface Attraction {
   svgPath: string;
   priority: number;
   isActive: boolean;
+  locationCode: string;
 }
 
 export interface ItineraryDay {
@@ -59,6 +60,7 @@ export interface Tour {
   heroImagePath: string;
   imageSlide1: string;
   imageSlide2: string;
+  imageSlide3: string;
   priceFrom: number;
   durationDays: number;
   groupSize: string;
@@ -119,6 +121,9 @@ export interface Location {
   slug: string;
   isActive: boolean;
   sortOrder: number;
+  isHub: boolean;
+  isSecondary: boolean;
+  hasAirport: boolean;
 }
 
 export interface Dish {

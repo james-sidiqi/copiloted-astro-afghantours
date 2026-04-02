@@ -77,46 +77,99 @@ import { siteConfig } from '@lib/config';
         <div class="bg-white rounded-2xl shadow-[0_2px_20px_rgba(0,0,0,0.08)] p-8">
           <h2 class="font-display text-xl font-bold text-[#1e3a5f] mb-6">Send Us a Message</h2>
           <form action="#" method="post" class="space-y-5">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              <div>
+                <label for="name" class="block text-sm font-semibold text-[#1e3a5f] mb-1.5">Your Name <span class="text-red-500">*</span></label>
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  required
+                  placeholder="John Smith"
+                  class="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm text-[#0f172a] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#1f4aa8]/40 focus:border-[#1f4aa8] transition-all"
+                />
+              </div>
+              <div>
+                <label for="email" class="block text-sm font-semibold text-[#1e3a5f] mb-1.5">Email Address <span class="text-red-500">*</span></label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  required
+                  placeholder="john@example.com"
+                  class="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm text-[#0f172a] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#1f4aa8]/40 focus:border-[#1f4aa8] transition-all"
+                />
+              </div>
+            </div>
             <div>
-              <label for="name" class="block text-sm font-semibold text-[#1e3a5f] mb-1.5">Your Name</label>
+              <label for="whatsapp" class="block text-sm font-semibold text-[#1e3a5f] mb-1.5">WhatsApp Number</label>
+              <input
+                type="tel"
+                id="whatsapp"
+                name="whatsapp"
+                placeholder="+1 234 567 8900"
+                class="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm text-[#0f172a] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#1f4aa8]/40 focus:border-[#1f4aa8] transition-all"
+              />
+            </div>
+            <div>
+              <label for="destination" class="block text-sm font-semibold text-[#1e3a5f] mb-1.5">Destination Interest</label>
               <input
                 type="text"
-                id="name"
-                name="name"
-                required
-                placeholder="John Smith"
+                id="destination"
+                name="destination"
+                placeholder="e.g. Bamyan, Herat, Full Afghanistan circuit…"
                 class="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm text-[#0f172a] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#1f4aa8]/40 focus:border-[#1f4aa8] transition-all"
               />
             </div>
-            <div>
-              <label for="email" class="block text-sm font-semibold text-[#1e3a5f] mb-1.5">Email Address</label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                required
-                placeholder="john@example.com"
-                class="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm text-[#0f172a] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#1f4aa8]/40 focus:border-[#1f4aa8] transition-all"
-              />
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              <div>
+                <label for="dates" class="block text-sm font-semibold text-[#1e3a5f] mb-1.5">Preferred Travel Dates</label>
+                <input
+                  type="text"
+                  id="dates"
+                  name="dates"
+                  placeholder="e.g. April 2025, flexible"
+                  class="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm text-[#0f172a] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#1f4aa8]/40 focus:border-[#1f4aa8] transition-all"
+                />
+              </div>
+              <div>
+                <label for="group-size" class="block text-sm font-semibold text-[#1e3a5f] mb-1.5">Group Size</label>
+                <select
+                  id="group-size"
+                  name="group_size"
+                  class="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm text-[#0f172a] focus:outline-none focus:ring-2 focus:ring-[#1f4aa8]/40 focus:border-[#1f4aa8] transition-all bg-white"
+                >
+                  <option value="">Select group size…</option>
+                  <option value="1">1 (Solo)</option>
+                  <option value="2">2</option>
+                  <option value="3-5">3–5</option>
+                  <option value="6-10">6–10</option>
+                  <option value="10+">10+</option>
+                </select>
+              </div>
             </div>
             <div>
-              <label for="subject" class="block text-sm font-semibold text-[#1e3a5f] mb-1.5">Subject</label>
-              <input
-                type="text"
-                id="subject"
-                name="subject"
-                placeholder="Tour enquiry, custom itinerary, etc."
-                class="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm text-[#0f172a] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#1f4aa8]/40 focus:border-[#1f4aa8] transition-all"
-              />
+              <label for="tier" class="block text-sm font-semibold text-[#1e3a5f] mb-1.5">Preferred Tier <span class="font-normal text-[rgba(15,23,42,0.45)]">(optional)</span></label>
+              <select
+                id="tier"
+                name="tier"
+                class="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm text-[#0f172a] focus:outline-none focus:ring-2 focus:ring-[#1f4aa8]/40 focus:border-[#1f4aa8] transition-all bg-white"
+              >
+                <option value="">No preference</option>
+                <option value="budget">Budget</option>
+                <option value="standard">Standard</option>
+                <option value="premium">Premium</option>
+                <option value="luxury">Luxury</option>
+              </select>
             </div>
             <div>
-              <label for="message" class="block text-sm font-semibold text-[#1e3a5f] mb-1.5">Message</label>
+              <label for="message" class="block text-sm font-semibold text-[#1e3a5f] mb-1.5">Message <span class="text-red-500">*</span></label>
               <textarea
                 id="message"
                 name="message"
                 required
-                rows="5"
-                placeholder="Tell us about your travel interests, preferred dates, group size..."
+                rows="4"
+                placeholder="Tell us about your interests, any specific sites you want to visit, or any questions about travel in Afghanistan…"
                 class="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm text-[#0f172a] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#1f4aa8]/40 focus:border-[#1f4aa8] transition-all resize-y"
               ></textarea>
             </div>

@@ -18,6 +18,7 @@ export interface AttractionRow {
   svg_path: string;
   priority: string;
   is_active: string;
+  location_code: string;
 }
 
 export interface TourRow {
@@ -29,6 +30,7 @@ export interface TourRow {
   hero_image_path: string;
   image_path_slide1: string;
   image_path_slide2: string;
+  image_path_slide3?: string;
   price_from: string;
   duration_days: string;
   group_size: string;
@@ -127,6 +129,9 @@ export interface LocationRow {
   slug: string;
   is_active: string;
   sort_order: string;
+  is_hub: string;
+  is_secondary: string;
+  has_airport: string;
 }
 
 export interface DishRow {
@@ -157,10 +162,10 @@ export interface FaqRow {
 }
 
 export interface HotelPropertyRow {
-  Hotel_id: string;
+  hotel_id: string;
   hotel_slug: string;
   hotel_name: string;
-  destinations_code: string;
+  destination_code: string;
   tier: string;
   star_rating: string;
   per_night_price_from: string;

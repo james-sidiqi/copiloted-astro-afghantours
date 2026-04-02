@@ -5,6 +5,7 @@ import SectionHeader from '@components/ui/SectionHeader.astro';
 import AttractionCard from '@components/travel/AttractionCard.astro';
 import ItineraryTimeline from '@components/travel/ItineraryTimeline.astro';
 import TourMap from '@components/travel/TourMap.astro';
+import TourImageBento from '@components/travel/TourImageBento.astro';
 import type { Tour, MapStop } from '@lib/types/view-models';
 import { buildSiteData } from '@lib/data/buildRelations';
 
@@ -43,6 +44,14 @@ for (const day of tour.itinerary) {
     });
   }
 }
+
+// Collect bento images: hero + slides, deduplicated
+const bentoImages = [
+  tour.heroImagePath,
+  tour.imageSlide1,
+  tour.imageSlide2,
+  tour.imageSlide3,
+].filter(Boolean).filter((v, i, arr) => arr.indexOf(v) === i);
 ---
 
 <BaseLayout title={`${tour.name} – Afghan Tours`} description={tour.summary}>
@@ -83,6 +92,13 @@ for (const day of tour.itinerary) {
       )}
     </div>
   </div>
+
+  <!-- Photo Gallery Bento -->
+  {bentoImages.length >= 2 && (
+    <section class="max-w-6xl mx-auto px-4 sm:px-6 pt-10">
+      <TourImageBento images={bentoImages} tourName={tour.name} />
+    </section>
+  )}
 
   <div class="max-w-6xl mx-auto px-4 sm:px-6 py-16">
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">

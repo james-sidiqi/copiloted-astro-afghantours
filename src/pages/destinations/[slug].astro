@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '@layouts/BaseLayout.astro';
+import Hero from '@components/site/Hero.astro';
 import SectionHeader from '@components/ui/SectionHeader.astro';
 import AttractionCard from '@components/travel/AttractionCard.astro';
 import TourCard from '@components/travel/TourCard.astro';
@@ -21,52 +22,257 @@ interface Props {
 }
 const { destination, data } = Astro.props;
 
-const destNameLower = destination.name.toLowerCase();
-const relatedAttractions = data.attractions.filter(
-  a => a.isActive && a.provinceCode === destination.parentCode
-);
-const relatedTours = data.tours.filter(
-  t => t.isActive && t.provinces.some(p => p.toLowerCase() === destNameLower)
-);
+// Province for this hub (provides rich text content)
+const hubProvince = data.provinces.find(p => p.provinceCode === destination.parentCode);
+
+// Hotels at this hub, sorted by tier (luxury first)
+const tierOrder: Record<string, number> = { luxury: 0, premium: 1, standard: 2, budget: 3 };
+const relatedHotels = data.hotels
+  .filter(h => h.isActive && h.destinationsCode === destination.locationCode)
+  .sort((a, b) => (tierOrder[a.tier] ?? 4) - (tierOrder[b.tier] ?? 4));
+
+// Attractions staged from this hub
+const relatedAttractions = data.attractions
+  .filter(a => a.isActive && a.locationCode === destination.locationCode)
+  .sort((a, b) => b.priority - a.priority);
+
+// Tours that visit this hub (match by hub name or province name)
+const hubNameLower = destination.name.toLowerCase();
+const provinceName = hubProvince?.provinceName.toLowerCase() ?? '';
+const relatedTours = data.tours
+  .filter(t => t.isActive && t.provinces.some(p => {
+    const pl = p.toLowerCase();
+    return pl === hubNameLower || pl === provinceName;
+  }))
+  .slice(0, 6);
+
+// Tier badge styles
+const tierBadge: Record<string, string> = {
+  budget:   'bg-gray-100 text-gray-700',
+  standard: 'bg-blue-50 text-blue-700',
+  premium:  'bg-amber-50 text-amber-800',
+  luxury:   'bg-purple-50 text-purple-800',
+};
+const tierLabel: Record<string, string> = {
+  budget: 'Budget', standard: 'Standard', premium: 'Premium', luxury: 'Luxury',
+};
 ---
 
-<BaseLayout title={`${destination.name} – Afghan Tours`} description={`Explore ${destination.name}, Afghanistan.`}>
-  <!-- Hero block -->
-  <div class="bg-[#1e3a5f] py-20 text-white text-center px-4">
-    <p class="text-xs font-semibold uppercase tracking-widest text-[#b88a2a] mb-3">Destination</p>
-    <h1 class="font-display text-4xl sm:text-5xl font-bold">{destination.name}</h1>
+<BaseLayout
+  title={`${destination.name} – Afghan Tours`}
+  description={hubProvince?.shortBlurb ?? `Explore ${destination.name} with AfghanTours.`}
+>
+  <!-- 1. Hero -->
+  <Hero
+    title={destination.name}
+    subtitle={hubProvince?.shortBlurb || undefined}
+    imagePath={`/assets/images/hubs/${destination.slug}.webp`}
+    ctaText="Plan a Visit"
+    ctaHref="/contact"
+  />
+
+  <!-- 2. Quick Facts Bar -->
+  <div class="bg-[#1e3a5f] text-white py-4">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 flex flex-wrap gap-6 justify-center sm:justify-start text-sm font-medium">
+      {destination.isHub && (
+        <span class="flex items-center gap-1.5">
+          <svg class="w-4 h-4 text-[#b88a2a]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-2 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+          </svg>
+          Primary Operational Hub
+        </span>
+      )}
+      <span class="flex items-center gap-1.5">
+        <svg class="w-4 h-4 text-[#b88a2a]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+        </svg>
+        {destination.hasAirport ? 'Airport Available' : 'Road Access Only'}
+      </span>
+      {relatedHotels.length > 0 && (
+        <span class="flex items-center gap-1.5 text-white/70">
+          <svg class="w-4 h-4 text-[#b88a2a]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+          </svg>
+          {relatedHotels.length} {relatedHotels.length === 1 ? 'Property' : 'Properties'}
+        </span>
+      )}
+      {hubProvince && (
+        <span class="flex items-center gap-1.5 text-white/70">
+          Province: {hubProvince.provinceName}
+        </span>
+      )}
+    </div>
   </div>
 
-  <div class="max-w-6xl mx-auto px-4 sm:px-6 py-16 space-y-16">
-    <!-- Related Attractions -->
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 py-16 space-y-20">
+
+    <!-- 3. Overview / Operational Role -->
+    {hubProvince?.fullBlurb && (
+      <section>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
+          <div class="lg:col-span-2">
+            <SectionHeader
+              eyebrow={destination.isHub ? 'Operational Hub' : 'Overview'}
+              title={`${destination.name} – Overview`}
+            />
+            <p class="mt-5 text-[rgba(15,23,42,0.75)] leading-relaxed text-base">{hubProvince.fullBlurb}</p>
+          </div>
+          {destination.isHub && (
+            <div class="bg-[#f6f7fb] rounded-2xl p-6 border border-[#1e3a5f]/8 space-y-4 h-fit">
+              <h4 class="font-semibold text-[#1e3a5f] text-sm uppercase tracking-wider">How We Use This Hub</h4>
+              <ul class="space-y-3 text-sm text-[rgba(15,23,42,0.75)]">
+                <li class="flex items-start gap-2.5">
+                  <svg class="w-4 h-4 text-[#b88a2a] shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                  <span>Overnight staging base for multi-day tours</span>
+                </li>
+                <li class="flex items-start gap-2.5">
+                  <svg class="w-4 h-4 text-[#b88a2a] shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                  <span>Vetted accommodation and transport network</span>
+                </li>
+                <li class="flex items-start gap-2.5">
+                  <svg class="w-4 h-4 text-[#b88a2a] shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                  <span>Day-trip staging point for nearby attractions</span>
+                </li>
+                {destination.hasAirport && (
+                  <li class="flex items-start gap-2.5">
+                    <svg class="w-4 h-4 text-[#b88a2a] shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                    <span>Domestic flight connections available</span>
+                  </li>
+                )}
+              </ul>
+            </div>
+          )}
+        </div>
+      </section>
+    )}
+
+    <!-- 4. Transport Access -->
+    <section>
+      <SectionHeader eyebrow="Getting Here" title="Transport & Access" />
+      <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-5">
+        <div class="bg-white rounded-2xl shadow-sm p-5 flex gap-4">
+          <div class="w-10 h-10 rounded-xl bg-[#1e3a5f] flex items-center justify-center shrink-0">
+            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+            </svg>
+          </div>
+          <div>
+            <h4 class="font-semibold text-[#1e3a5f] mb-1 text-sm">
+              {destination.hasAirport ? 'Domestic Flights' : 'Road Access'}
+            </h4>
+            <p class="text-xs text-[rgba(15,23,42,0.65)] leading-relaxed">
+              {destination.hasAirport
+                ? `${destination.name} has a domestic airport. Flights operate seasonally and subject to availability. AfghanTours coordinates all air logistics as part of tour planning.`
+                : `${destination.name} is primarily road-based. All transfers use 4WD vehicles. Road conditions are assessed prior to each departure and routes adjusted accordingly.`
+              }
+            </p>
+          </div>
+        </div>
+        <div class="bg-white rounded-2xl shadow-sm p-5 flex gap-4">
+          <div class="w-10 h-10 rounded-xl bg-[#1e3a5f] flex items-center justify-center shrink-0">
+            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/>
+            </svg>
+          </div>
+          <div>
+            <h4 class="font-semibold text-[#1e3a5f] mb-1 text-sm">Ground Transfers</h4>
+            <p class="text-xs text-[rgba(15,23,42,0.65)] leading-relaxed">
+              All ground transport uses 4WD vehicles (Toyota Land Cruiser Prado and similar). Vehicle selection is matched to route terrain and group size.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. Accommodation Profile -->
+    {relatedHotels.length > 0 && (
+      <section>
+        <SectionHeader eyebrow="Where to Stay" title={`Accommodation in ${destination.name}`} />
+        <p class="mt-3 text-sm text-[rgba(15,23,42,0.6)] mb-8">
+          AfghanTours uses a vetted selection of properties. Exact allocation depends on group size and tour tier. Budget, Standard, Premium, and Luxury options are available.
+        </p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {relatedHotels.map(hotel => (
+            <article class="bg-white rounded-[14px] shadow-[0_2px_16px_0_rgba(0,0,0,0.08)] overflow-hidden flex flex-col">
+              <div class="aspect-[16/9] bg-gray-100 overflow-hidden">
+                <img
+                  src={hotel.imagePaths[0] || '/assets/images/placeholders/default-hotel.webp'}
+                  alt={hotel.hotelName}
+                  class="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                  loading="lazy"
+                  onerror="this.onerror=null;this.src='/assets/images/placeholders/default-hotel.webp'"
+                />
+              </div>
+              <div class="p-5 flex flex-col gap-2 flex-1">
+                <div class="flex items-center justify-between gap-2">
+                  <span class={`text-xs font-semibold px-2.5 py-0.5 rounded-full ${tierBadge[hotel.tier] ?? 'bg-gray-100 text-gray-700'}`}>
+                    {tierLabel[hotel.tier] ?? hotel.tier}
+                  </span>
+                  {hotel.starRating > 0 && (
+                    <span class="text-xs text-amber-400">{'★'.repeat(Math.floor(hotel.starRating))}</span>
+                  )}
+                </div>
+                <h4 class="font-display text-base font-semibold text-[#1e3a5f] leading-snug">{hotel.hotelName}</h4>
+                {hotel.description && (
+                  <p class="text-xs text-[rgba(15,23,42,0.65)] leading-relaxed line-clamp-3 flex-1">{hotel.description}</p>
+                )}
+                {hotel.perNightPriceFrom > 0 && (
+                  <p class="text-xs font-semibold text-[#1f4aa8] mt-auto pt-2 border-t border-gray-100">
+                    From ${hotel.perNightPriceFrom} / night
+                  </p>
+                )}
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <!-- 6. Nearby Attractions -->
     {relatedAttractions.length > 0 && (
       <section>
-        <div class="mb-8">
-          <SectionHeader eyebrow="Explore" title={`Attractions Near ${destination.name}`} />
-        </div>
+        <SectionHeader
+          eyebrow="Explore Nearby"
+          title={`Attractions from ${destination.name}`}
+        />
+        <p class="mt-3 text-sm text-[rgba(15,23,42,0.6)] mb-8">
+          These sites are accessible as day trips or staged expeditions from {destination.name}.
+        </p>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {relatedAttractions.map(a => <AttractionCard attraction={a} />)}
+          {relatedAttractions.slice(0, 9).map(attraction => <AttractionCard attraction={attraction} />)}
         </div>
       </section>
     )}
 
-    <!-- Related Tours -->
+    <!-- 7. Related Tours -->
     {relatedTours.length > 0 && (
       <section>
-        <div class="mb-8">
-          <SectionHeader eyebrow="Tours" title={`Tours to ${destination.name}`} />
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {relatedTours.map(t => <TourCard tour={t} />)}
+        <SectionHeader
+          eyebrow="Tours"
+          title={`Tours Through ${destination.name}`}
+        />
+        <div class="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {relatedTours.map(tour => <TourCard tour={tour} />)}
         </div>
       </section>
     )}
 
-    {relatedAttractions.length === 0 && relatedTours.length === 0 && (
-      <div class="text-center py-12 text-gray-500">
+    {relatedAttractions.length === 0 && relatedTours.length === 0 && relatedHotels.length === 0 && (
+      <div class="text-center py-16 text-gray-500">
         <p class="text-lg font-medium">Content coming soon for {destination.name}.</p>
         <a href="/contact" class="mt-4 inline-block text-[#1f4aa8] underline text-sm">Contact us for information</a>
       </div>
     )}
   </div>
+
+  <!-- CTA -->
+  <section class="py-16 bg-[#1e3a5f]">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 text-center text-white">
+      <h2 class="font-display text-3xl font-bold mb-4">Plan a Trip Through {destination.name}</h2>
+      <p class="text-white/80 mb-8">Our team handles all logistics, permits, transport, and accommodation.</p>
+      <a href="/contact" class="inline-block px-8 py-3.5 rounded-full bg-[#b88a2a] hover:bg-[#a07820] text-white font-semibold shadow-lg transition-all duration-200">
+        Enquire Now
+      </a>
+    </div>
+  </section>
 </BaseLayout>

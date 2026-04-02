@@ -20,6 +20,7 @@ export function loadTours(): Omit<Tour, 'itinerary' | 'inclusions' | 'dates' | '
       heroImagePath: r.hero_image_path,
       imageSlide1: r.image_path_slide1,
       imageSlide2: r.image_path_slide2,
+      imageSlide3: r.image_path_slide3 || '',
       // Use the first occurrence of duplicated columns
       priceFrom: parseFloat(r.price_from) || 0,
       durationDays: parseInt(r.duration_days, 10) || 0,

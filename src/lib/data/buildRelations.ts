@@ -92,10 +92,10 @@ function loadHotels(): HotelProperty[] {
   return rows
     .filter((r) => r.is_active === '1')
     .map((r) => ({
-      hotelId: r.Hotel_id,
+      hotelId: r.hotel_id,
       hotelSlug: r.hotel_slug,
       hotelName: r.hotel_name,
-      destinationsCode: r.destinations_code,
+      destinationsCode: r.destination_code,
       tier: r.tier,
       starRating: parseFloat(r.star_rating) || 0,
       perNightPriceFrom: parseFloat(r.per_night_price_from) || 0,
