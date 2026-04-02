@@ -1,4 +1,4 @@
-Hotel_id,hotel_slug,hotel_name,destinations_code,tier,star_rating,per_night_price_from,description,image_path_property_1,image_path_property_2,image_path_property_3,is_active
+hotel_id,hotel_slug,hotel_name,destination_code,tier,star_rating,per_night_price_from,description,image_path_property_1,image_path_property_2,image_path_property_3,is_active
 htk,taj_kabul,Taj Hotel,KBLC,premium,5,80,A premium city-center hotel offering elegant suites with modern Afghan decor and high-security standards.,/assets/images/hotels/kabul/taj/taj.webp,/assets/images/hotels/kabul/taj/taj-pool.webp,,1
 hsk,kabul_star,Kabul Star Hotel,KBLC,premium,4,180,Modern 4-star hotel featuring an outdoor pool and wellness center in the heart of Kabul.,/assets/images/hotels/kabul/kabul-star/star.webp,,,1
 hgk,kabul_grand,Kabul Grand Hotel (Serena Hotel),KBLC,luxury,5,180,"The pinnacle of luxury in Kabul featuring exquisite suites, gardens, an outdoor pool, restaurant and cafe in the heart of the city.",/assets/images/hotels/kabul/kabul-grand/grand.webp,/assets/images/hotels/kabul/kabul-grand/grand-hotel-lobby.webp,/assets/images/hotels/kabul/kabul-grand/grand-pool.webp,1

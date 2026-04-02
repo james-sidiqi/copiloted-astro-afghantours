@@ -16,7 +16,6 @@ ADTF,afghanistan-discovery-tour-fall,5,GHZ-001
 ADTF,afghanistan-discovery-tour-fall,6,GHZ-002
 ADTF,afghanistan-discovery-tour-fall,6,GHZ-003
 ADTF,afghanistan-discovery-tour-fall,6,GHZ-004
-ADTF,afghanistan-discovery-tour-fall,6,GHZ-005
 ADTF,afghanistan-discovery-tour-fall,7,KBL-001
 ADTF,afghanistan-discovery-tour-fall,7,KBL-002
 ADTF,afghanistan-discovery-tour-fall,7,KBL-003
@@ -42,7 +41,6 @@ ADTS,afghanistan-discovery-tour-spring,5,GHZ-002
 ADTS,afghanistan-discovery-tour-spring,6,GHZ-001
 ADTS,afghanistan-discovery-tour-spring,6,GHZ-003
 ADTS,afghanistan-discovery-tour-spring,6,GHZ-004
-ADTS,afghanistan-discovery-tour-spring,6,GHZ-005
 ADTS,afghanistan-discovery-tour-spring,7,KBL-015
 ADTS,afghanistan-discovery-tour-spring,7,KBL-009
 ADTS,afghanistan-discovery-tour-spring,7,KBL-005
@@ -153,7 +151,7 @@ SUMC,summer-circuit,2,KBL-001
 SUMC,summer-circuit,2,KBL-002
 SUMC,summer-circuit,2,KBL-003
 SUMC,summer-circuit,3,SAM-001
-SUMC,summer-circuit,3,SAM-
+SUMC,summer-circuit,3,SAM-002
 SUMC,summer-circuit,3,PRW-001
 SUMC,summer-circuit,4,BAL-002
 SUMC,summer-circuit,4,BAL-003
@@ -271,7 +269,6 @@ WNTC,winter-circuit,8,GHZ-001
 WNTC,winter-circuit,9,GHZ-002
 WNTC,winter-circuit,9,GHZ-003
 WNTC,winter-circuit,9,GHZ-004
-WNTC,winter-circuit,9,GHZ-005
 WNTC,winter-circuit,10,KBL-001
 WNTC,winter-circuit,10,KBL-002
 WNTC,winter-circuit,10,KBL-003

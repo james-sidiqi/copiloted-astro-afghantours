@@ -1,7 +1,7 @@
-flight_id,airline,origin,destination,origin_slug,dest_slug,map_image_path,is_active
-FL-KBL-HER,Ariana/Kam Air,Kabul,Herat,kabul,herat,/assets/images/maps/flight_routes/plane_kbl_her.png,1
-FL-HER-KBL,Ariana/Kam Air,Herat,Kabul,herat,kabul,/assets/images/maps/flight_routes/plane_her_kbl.png,1
-FL-KBL-MAZ,Ariana/Kam Air,Kabul,Mazar-e-Sharif,kabul,mazar-e-sharif,/assets/images/maps/flight_routes/plane_kbl_maz.png,1
-FL-MAZ-KBL,Ariana/Kam Air,Mazar-e-Sharif,Kabul,mazar-e-sharif,kabul,/assets/images/maps/flight_routes/plan_maz_kbl.png,1
-FL-KBL-KDR,Ariana/Kam Air,Kabul,Kandahar,kabul,kandahar,/assets/images/maps/flight_routes/plane_kbl_kdr.png,1
-FL-KDR-KBL,Ariana/Kam Air,Kandahar,Kabul,kandahar,kabul,/assets/images/maps/flight_routes/plane_kdr_kbl.png,1
+flight_id,airline,origin,destination,origin_code,destination_code,origin_slug,destination_slug,map_image_path,is_active,cost_usd
+FL-KBL-HER,Ariana/Kam Air,Kabul,Herat,KBLC,HERC,kabul-city,herat-city,/assets/images/maps/flight_routes/plane_kbl_her.png,1,90
+FL-HER-KBL,Ariana/Kam Air,Herat,Kabul,HERC,KBLC,herat-city,kabul-city,/assets/images/maps/flight_routes/plane_her_kbl.png,1,90
+FL-KBL-MAZ,Ariana/Kam Air,Kabul,Mazar-e-Sharif,KBLC,MAZC,kabul-city,mazar-e-sharif-city,/assets/images/maps/flight_routes/plane_kbl_maz.png,1,90
+FL-MAZ-KBL,Ariana/Kam Air,Mazar-e-Sharif,Kabul,MAZC,KBLC,mazar-e-sharif-city,kabul-city,/assets/images/maps/flight_routes/plan_maz_kbl.png,1,90
+FL-KBL-KDR,Ariana/Kam Air,Kabul,Kandahar,KBLC,KDRC,kabul-city,kandahar-city,/assets/images/maps/flight_routes/plane_kbl_kdr.png,1,90
+FL-KDR-KBL,Ariana/Kam Air,Kandahar,Kabul,KDRC,KBLC,kandahar-city,kabul-city,/assets/images/maps/flight_routes/plane_kdr_kbl.png,1,90
