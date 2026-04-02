@@ -14,7 +14,7 @@ const count = valid.length;
 {count >= 2 && (
   <div class={`bento bento-${count}`}>
     {valid.map((src, i) => (
-      <div class={`bento-cell bento-cell-${i + 1}`}>
+      <div class={`bento-cell bento-cell-${i + 1} overflow-hidden group`}>
         <img
           src={src}
           alt={`${tourName} – photo ${i + 1}`}
