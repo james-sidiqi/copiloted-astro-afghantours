@@ -1,0 +1,29 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import Hero from '@components/site/Hero.astro';
+import SectionHeader from '@components/ui/SectionHeader.astro';
+---
+
+<BaseLayout title="Visa & Entry – Afghan Tours" description="Current visa and entry guidance for Afghanistan travel.">
+  <Hero
+    title="Visa & Entry"
+    subtitle="Always confirm latest requirements with your nearest Afghan mission before travel"
+    imagePath="/assets/images/heroes/hero-terms.webp"
+    ctaText="Contact Planning Team"
+    ctaHref="/contact"
+  />
+
+  <section class="py-14 bg-white">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6">
+      <SectionHeader eyebrow="Travel Guidance" title="Before You Apply" />
+      <ul class="mt-5 space-y-3 text-sm text-[rgba(15,23,42,0.75)] list-disc pl-5">
+        <li>Requirements vary by nationality and point of entry.</li>
+        <li>Carry printed invitation and itinerary documents where required.</li>
+        <li>Allow additional processing time for route and security clearances.</li>
+      </ul>
+      <p class="mt-6 text-sm text-[rgba(15,23,42,0.7)]">
+        For route-specific support and up-to-date operational guidance, please <a href="/contact" class="text-[#1f4aa8] underline">contact Afghan Tours</a>.
+      </p>
+    </div>
+  </section>
+</BaseLayout>
