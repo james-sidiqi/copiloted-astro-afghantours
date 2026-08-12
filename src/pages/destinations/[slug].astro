@@ -3,13 +3,16 @@ import BaseLayout from '@layouts/BaseLayout.astro';
 import SectionHeader from '@components/ui/SectionHeader.astro';
 import AttractionCard from '@components/travel/AttractionCard.astro';
 import TourCard from '@components/travel/TourCard.astro';
+import DishCard from '@components/travel/DishCard.astro';
+import HotelCard from '@components/travel/HotelCard.astro';
+import TransportCard from '@components/travel/TransportCard.astro';
 import type { Location, SiteData } from '@lib/types/view-models';
 import { buildSiteData } from '@lib/data/buildRelations';
 
 export async function getStaticPaths() {
   const data = buildSiteData();
-  const destinations = data.locations.filter(l => l.type === 'destination' && l.isActive);
-  return destinations.map(dest => ({
+  const destinations = data.locations.filter((l) => l.type === 'destination' && l.isActive);
+  return destinations.map((dest) => ({
     params: { slug: dest.slug },
     props: { destination: dest, data },
   }));
@@ -19,54 +22,155 @@ interface Props {
   destination: Location;
   data: SiteData;
 }
-const { destination, data } = Astro.props;
 
-const destNameLower = destination.name.toLowerCase();
-const relatedAttractions = data.attractions.filter(
-  a => a.isActive && a.provinceCode === destination.parentCode
+const { destination, data } = Astro.props;
+const province = data.provinces.find((p) => p.provinceCode === destination.parentCode);
+const hubAccessCodes = new Set(
+  data.hubAccess
+    .filter((link) => link.baseLocationCode === destination.locationCode && link.isActive)
+    .map((link) => link.attractionCode)
 );
-const relatedTours = data.tours.filter(
-  t => t.isActive && t.provinces.some(p => p.toLowerCase() === destNameLower)
+
+const relatedAttractions = data.attractions.filter((a) => {
+  if (!a.isActive) return false;
+  if (hubAccessCodes.has(a.attractionCode)) return true;
+  const source = (a.attractionCode || '').toUpperCase().split('-')[0];
+  return a.provinceCode === destination.parentCode && source === destination.parentCode;
+});
+
+const attractionCodes = new Set(relatedAttractions.map((a) => a.attractionCode));
+const relatedTours = data.tours.filter((tour) => {
+  if (!tour.isActive) return false;
+  const usesAsPrimaryHub = tour.primaryLocationSlug === destination.slug;
+  const usesHubAttractions = tour.itinerary.some((day) =>
+    day.attractions.some((a) => attractionCodes.has(a.attractionCode))
+  );
+  const usesLocationName = tour.itinerary.some(
+    (day) => day.location.toLowerCase() === destination.name.toLowerCase()
+  );
+  return usesAsPrimaryHub || usesHubAttractions || usesLocationName;
+});
+
+const relatedHotels = data.hotels.filter(
+  (hotel) => hotel.isActive && hotel.destinationsCode === destination.locationCode
 );
+const relatedDishes = data.dishes.filter(
+  (dish) =>
+    dish.isActive &&
+    (dish.destinationCode === destination.locationCode || (!dish.destinationCode && dish.provinceCode === destination.parentCode))
+);
+
+const transportTerms = new Set(
+  relatedTours
+    .flatMap((tour) => tour.transportNote.toLowerCase().split(/[^a-z0-9]+/))
+    .filter(Boolean)
+);
+const relatedTransports = data.transports.filter((transport) => {
+  if (!transport.isActive) return false;
+  if (transport.routeGroupId === 'ALL_LOCATIONS') return true;
+  return (
+    transportTerms.has(transport.vehicleType.toLowerCase()) ||
+    transportTerms.has(transport.transportSlug.toLowerCase()) ||
+    transportTerms.has(transport.transportName.toLowerCase())
+  );
+});
+
+const atAGlance = [
+  { label: 'Linked Attractions', value: relatedAttractions.length },
+  { label: 'Linked Hotels', value: relatedHotels.length },
+  { label: 'Food & Culture', value: relatedDishes.length },
+  { label: 'Transport Options', value: relatedTransports.length },
+  { label: 'Linked Tours', value: relatedTours.length },
+];
 ---
 
 <BaseLayout title={`${destination.name} – Afghan Tours`} description={`Explore ${destination.name}, Afghanistan.`}>
-  <!-- Hero block -->
-  <div class="bg-[#1e3a5f] py-20 text-white text-center px-4">
-    <p class="text-xs font-semibold uppercase tracking-widest text-[#b88a2a] mb-3">Destination</p>
-    <h1 class="font-display text-4xl sm:text-5xl font-bold">{destination.name}</h1>
+  <div class="bg-[#1e3a5f] py-16 text-white text-center px-4">
+    <p class="text-xs font-semibold uppercase tracking-widest text-[#b88a2a] mb-3">Operational Hub</p>
+    <h1 class="font-display text-3xl sm:text-4xl lg:text-5xl font-bold">{destination.name}</h1>
+    <div class="mt-4 text-sm sm:text-base text-white/85 space-y-1">
+      <p><span class="font-semibold text-white">Hub:</span> {destination.name}</p>
+      {province && <p><span class="font-semibold text-white">Province:</span> {province.provinceName} Province</p>}
+    </div>
   </div>
 
-  <div class="max-w-6xl mx-auto px-4 sm:px-6 py-16 space-y-16">
-    <!-- Related Attractions -->
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 py-12 space-y-14">
+    <section class="bg-white rounded-2xl border border-[#1e3a5f]/10 p-5 sm:p-6">
+      <SectionHeader eyebrow="At a Glance" title={`${destination.name} Hub Connections`} />
+      <div class="mt-5 grid grid-cols-2 md:grid-cols-5 gap-3">
+        {atAGlance.map((item) => (
+          <div class="rounded-xl bg-[#f6f7fb] px-4 py-3 text-center">
+            <p class="text-2xl font-display font-semibold text-[#1e3a5f]">{item.value}</p>
+            <p class="text-xs text-[rgba(15,23,42,0.6)]">{item.label}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
     {relatedAttractions.length > 0 && (
       <section>
         <div class="mb-8">
-          <SectionHeader eyebrow="Explore" title={`Attractions Near ${destination.name}`} />
+          <SectionHeader eyebrow="Explore" title={`Attractions near ${destination.name}`} />
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {relatedAttractions.map(a => <AttractionCard attraction={a} />)}
+          {relatedAttractions.map((a) => <AttractionCard attraction={a} />)}
         </div>
       </section>
     )}
 
-    <!-- Related Tours -->
+    {relatedHotels.length > 0 && (
+      <section>
+        <div class="mb-8">
+          <SectionHeader eyebrow="Stay" title={`Hotels in ${destination.name}`} />
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {relatedHotels.map((hotel) => <HotelCard hotel={hotel} />)}
+        </div>
+      </section>
+    )}
+
+    {relatedDishes.length > 0 && (
+      <section>
+        <div class="mb-8">
+          <SectionHeader eyebrow="Food & Culture" title={`Local tastes around ${destination.name}`} />
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {relatedDishes.map((dish) => <DishCard dish={dish} />)}
+        </div>
+      </section>
+    )}
+
+    {relatedTransports.length > 0 && (
+      <section>
+        <div class="mb-8">
+          <SectionHeader eyebrow="Transport" title={`Operational transport for ${destination.name}`} />
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {relatedTransports.map((transport) => <TransportCard transport={transport} />)}
+        </div>
+      </section>
+    )}
+
     {relatedTours.length > 0 && (
       <section>
         <div class="mb-8">
-          <SectionHeader eyebrow="Tours" title={`Tours to ${destination.name}`} />
+          <SectionHeader eyebrow="Tours" title={`Tours using ${destination.name} as a hub`} />
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {relatedTours.map(t => <TourCard tour={t} />)}
+          {relatedTours.map((tour) => <TourCard tour={tour} />)}
         </div>
       </section>
     )}
 
-    {relatedAttractions.length === 0 && relatedTours.length === 0 && (
-      <div class="text-center py-12 text-gray-500">
-        <p class="text-lg font-medium">Content coming soon for {destination.name}.</p>
-        <a href="/contact" class="mt-4 inline-block text-[#1f4aa8] underline text-sm">Contact us for information</a>
-      </div>
-    )}
+    {relatedAttractions.length === 0 &&
+      relatedHotels.length === 0 &&
+      relatedDishes.length === 0 &&
+      relatedTransports.length === 0 &&
+      relatedTours.length === 0 && (
+        <div class="text-center py-12 text-gray-500">
+          <p class="text-base font-medium">No linked content is currently published for {destination.name}.</p>
+          <a href="/contact" class="mt-4 inline-block text-[#1f4aa8] underline text-sm">Contact us for trip planning</a>
+        </div>
+      )}
   </div>
 </BaseLayout>

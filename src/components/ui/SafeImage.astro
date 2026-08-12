@@ -15,7 +15,9 @@ interface Props {
 }
 
 const { src, fallback, alt, class: className = '', loading = 'lazy', width, height } = Astro.props;
-const effectiveSrc = src || fallback;
+const normalizedSrc = (src ?? '').trim();
+const normalizedFallback = (fallback ?? '').trim();
+const effectiveSrc = normalizedSrc || normalizedFallback;
 ---
 
 <img
@@ -25,5 +27,5 @@ const effectiveSrc = src || fallback;
   loading={loading}
   width={width}
   height={height}
-  onerror={`this.onerror=null;this.src='${fallback}'`}
+  onerror={`if(this.dataset.fallbackApplied==='1'){this.style.display='none';return;}this.dataset.fallbackApplied='1';this.src='${normalizedFallback}'`}
 />

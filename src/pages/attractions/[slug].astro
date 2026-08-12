@@ -1,0 +1,61 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import Hero from '@components/site/Hero.astro';
+import SectionHeader from '@components/ui/SectionHeader.astro';
+import SafeImage from '@components/ui/SafeImage.astro';
+import type { Attraction } from '@lib/types/view-models';
+import { buildSiteData } from '@lib/data/buildRelations';
+
+export async function getStaticPaths() {
+  const data = buildSiteData();
+  return data.attractions.filter((attraction) => attraction.isActive).map((attraction) => ({
+    params: { slug: attraction.slug },
+    props: { attraction },
+  }));
+}
+
+interface Props {
+  attraction: Attraction;
+}
+const { attraction } = Astro.props;
+---
+
+<BaseLayout title={`${attraction.name} – Afghan Tours`} description={attraction.descShort || `Explore ${attraction.name}`}>
+  <Hero
+    title={attraction.name}
+    subtitle={attraction.descShort || undefined}
+    imagePath={attraction.imagePath || attraction.thumbnailPath || '/assets/images/placeholders/default-attraction.webp'}
+    ctaText="See Tours"
+    ctaHref="/tours"
+  />
+
+  <section class="py-14 bg-white">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 grid grid-cols-1 lg:grid-cols-[minmax(0,1.5fr)_minmax(260px,0.8fr)] gap-10">
+      <div>
+        <SectionHeader eyebrow={attraction.category || 'Attraction'} title={attraction.name} />
+        {attraction.descLong && (
+          <p class="mt-4 text-[rgba(15,23,42,0.75)] leading-relaxed">{attraction.descLong}</p>
+        )}
+      </div>
+      <aside class="bg-[#f6f7fb] rounded-2xl p-5 border border-[#1e3a5f]/10">
+        <div class="aspect-[4/3] rounded-xl overflow-hidden bg-gray-100 mb-4">
+          <SafeImage
+            src={attraction.thumbnailPath || attraction.imagePath}
+            fallback="/assets/images/placeholders/default-attraction.webp"
+            alt={attraction.name}
+            class="w-full h-full object-cover"
+            loading="lazy"
+          />
+        </div>
+        <dl class="space-y-2 text-sm text-[rgba(15,23,42,0.72)]">
+          {attraction.province && (
+            <div><dt class="inline font-semibold text-[#1e3a5f]">Province:</dt> <dd class="inline">{attraction.province} Province</dd></div>
+          )}
+          {attraction.category && (
+            <div><dt class="inline font-semibold text-[#1e3a5f]">Category:</dt> <dd class="inline">{attraction.category}</dd></div>
+          )}
+        </dl>
+      </aside>
+    </div>
+  </section>
+</BaseLayout>

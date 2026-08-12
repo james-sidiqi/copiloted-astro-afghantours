@@ -1,104 +1,277 @@
 ---
-import type { ItineraryDay } from '@lib/types/view-models';
+import SafeImage from '@components/ui/SafeImage.astro';
+import type {
+  Dish,
+  HotelProperty,
+  ItineraryDay,
+  Location,
+  Province,
+  TransportOption,
+} from '@lib/types/view-models';
+
+interface LinkedItem {
+  key: string;
+  type: string;
+  label: string;
+  href?: string;
+  description?: string;
+  context?: string;
+  imagePath?: string;
+}
 
 interface Props {
   days: ItineraryDay[];
+  hubs: Location[];
+  provinces: Province[];
+  hotels: HotelProperty[];
+  dishes: Dish[];
+  transports: TransportOption[];
+  tourTransportNote?: string;
 }
-const { days } = Astro.props;
+
+const { days, hubs, provinces, hotels, dishes, transports, tourTransportNote = '' } = Astro.props;
+
+const provinceByCode = new Map(provinces.map((p) => [p.provinceCode, p]));
+const hubByCode = new Map(hubs.map((h) => [h.locationCode, h]));
+const transportWords = new Set(tourTransportNote.toLowerCase().split(/[^a-z0-9]+/).filter(Boolean));
+
+const fallbackByType: Record<string, string> = {
+  attraction: '/assets/images/placeholders/default-attraction.webp',
+  hub: '/assets/images/placeholders/default-region.webp',
+  province: '/assets/images/placeholders/default-region.webp',
+  hotel: '/assets/images/placeholders/default-hotel.webp',
+  dish: '/assets/images/placeholders/default-food.webp',
+  transport: '/assets/images/placeholders/default-card.webp',
+};
+
+const dayItems = days.map((day) => {
+  const attractions: LinkedItem[] = day.attractions.map((attraction) => ({
+    key: `attraction-${day.dayNumber}-${attraction.attractionCode}`,
+    type: 'attraction',
+    label: attraction.name,
+    href: `/attractions/${attraction.slug}`,
+    description: attraction.descShort,
+    context: attraction.province ? `${attraction.province} Province` : undefined,
+    imagePath: attraction.thumbnailPath || attraction.imagePath,
+  }));
+
+  const hubCodes = new Set(
+    day.attractions.map((a) => a.locationCode).filter((code): code is string => Boolean(code))
+  );
+  const locationHub = hubs.find((hub) => hub.name.toLowerCase() === day.location.toLowerCase());
+  if (locationHub) hubCodes.add(locationHub.locationCode);
+
+  const dayHubs: LinkedItem[] = Array.from(hubCodes)
+    .map((code) => hubByCode.get(code))
+    .filter((hub): hub is Location => Boolean(hub))
+    .map((hub) => {
+      const province = provinceByCode.get(hub.parentCode);
+      return {
+        key: `hub-${day.dayNumber}-${hub.locationCode}`,
+        type: 'hub',
+        label: hub.name,
+        href: `/destinations/${hub.slug}`,
+        context: province ? `${province.provinceName} Province` : undefined,
+        imagePath: province?.squareImagePath || province?.coverImagePath,
+      };
+    });
+
+  const provinceCodes = new Set(day.attractions.map((a) => a.provinceCode).filter(Boolean));
+  if (locationHub?.parentCode) provinceCodes.add(locationHub.parentCode);
+  const dayProvinces: LinkedItem[] = Array.from(provinceCodes)
+    .map((code) => provinceByCode.get(code))
+    .filter((province): province is Province => Boolean(province))
+    .map((province) => ({
+      key: `province-${day.dayNumber}-${province.provinceCode}`,
+      type: 'province',
+      label: `${province.provinceName} Province`,
+      href: `/provinces/${province.provinceSlug}`,
+      description: province.shortBlurb,
+      imagePath: province.squareImagePath || province.coverImagePath,
+    }));
+
+  const dayHotels: LinkedItem[] = Array.from(hubCodes)
+    .flatMap((hubCode) => hotels.filter((hotel) => hotel.destinationsCode === hubCode))
+    .filter((hotel, idx, arr) => arr.findIndex((h) => h.hotelId === hotel.hotelId) === idx)
+    .map((hotel) => ({
+      key: `hotel-${day.dayNumber}-${hotel.hotelId}`,
+      type: 'hotel',
+      label: hotel.hotelName,
+      description: hotel.description,
+      context: `${hotel.tier} · $${hotel.perNightPriceFrom.toLocaleString()}/night`,
+      imagePath: hotel.imagePaths.find(Boolean),
+    }));
+
+  const dayDishes: LinkedItem[] = Array.from(hubCodes)
+    .flatMap((hubCode) => dishes.filter((dish) => dish.destinationCode === hubCode))
+    .filter((dish, idx, arr) => arr.findIndex((d) => d.dishCode === dish.dishCode) === idx)
+    .map((dish) => ({
+      key: `dish-${day.dayNumber}-${dish.dishCode}`,
+      type: 'dish',
+      label: dish.name,
+      href: `/food-culture/${dish.slug}`,
+      description: dish.descShort,
+      context: dish.category || dish.mealType,
+      imagePath: dish.imagePath,
+    }));
+
+  const dayTransports: LinkedItem[] = transports
+    .filter((transport) => {
+      if (transport.routeGroupId === 'ALL_LOCATIONS') return true;
+      return (
+        transportWords.has(transport.vehicleType.toLowerCase()) ||
+        transportWords.has(transport.transportSlug.toLowerCase())
+      );
+    })
+    .slice(0, 4)
+    .map((transport) => ({
+      key: `transport-${day.dayNumber}-${transport.transportId}`,
+      type: 'transport',
+      label: transport.transportName,
+      description: transport.logicNotes,
+      context: `${transport.minPax}–${transport.maxPax} travellers`,
+    }));
+
+  const ordered = [attractions, dayHubs, dayProvinces, dayHotels, dayDishes, dayTransports].flat();
+  const defaultItem = ordered[0];
+
+  return {
+    day,
+    groups: [
+      { label: 'Attractions', items: attractions },
+      { label: 'Hubs', items: dayHubs },
+      { label: 'Provinces', items: dayProvinces },
+      { label: 'Hotels', items: dayHotels },
+      { label: 'Food & Culture', items: dayDishes },
+      { label: 'Transport', items: dayTransports },
+    ],
+    defaultItemKey: defaultItem?.key ?? '',
+    hasItems: ordered.length > 0,
+  };
+});
 ---
 
 <ol class="relative border-l-2 border-[#1f4aa8]/20 ml-4 space-y-0">
-  {days.map((day) => (
+  {dayItems.map(({ day, groups, defaultItemKey, hasItems }) => (
     <li class="relative pb-10 last:pb-0 pl-8">
-      <!-- Timeline dot -->
       <span class="absolute -left-[13px] top-1 flex items-center justify-center w-6 h-6 rounded-full bg-[#1f4aa8] text-white text-xs font-bold ring-4 ring-[#f6f7fb]">
         {day.dayNumber}
       </span>
 
-      <div class="bg-white rounded-[14px] shadow-[0_2px_16px_0_rgba(0,0,0,0.06)] p-5">
-        <!-- Day header -->
-        <div class="flex flex-wrap items-start gap-2 mb-3">
-          <span class="text-xs font-semibold uppercase tracking-wider text-[#b88a2a]">
-            Day {day.dayNumber}
-          </span>
-          {day.location && (
-            <span class="text-xs text-[rgba(15,23,42,0.5)] flex items-center gap-1">
-              <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
-                <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
-              </svg>
-              {day.location}
-            </span>
-          )}
-        </div>
+      <section class="bg-white rounded-[14px] shadow-[0_2px_16px_0_rgba(0,0,0,0.06)] p-4 sm:p-5 js-itinerary-day" data-default-key={defaultItemKey}>
+        <div class="grid grid-cols-1 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] gap-6">
+          <div>
+            <div class="flex flex-wrap items-start gap-2 mb-3">
+              <span class="text-xs font-semibold uppercase tracking-wider text-[#b88a2a]">Day {day.dayNumber}</span>
+              {day.location && (
+                <span class="text-xs text-[rgba(15,23,42,0.5)]">{day.location}</span>
+              )}
+            </div>
 
-        <h4 class="font-display text-base font-semibold text-[#1e3a5f] leading-snug mb-2">
-          {day.title}
-        </h4>
+            <h4 class="font-display text-sm sm:text-base font-semibold text-[#1e3a5f] leading-snug mb-2">
+              {day.title || `Day ${day.dayNumber} Highlights`}
+            </h4>
 
-        {day.description && (
-          <p class="text-sm text-[rgba(15,23,42,0.7)] leading-relaxed mb-3">
-            {day.description}
-          </p>
-        )}
+            {day.description && (
+              <p class="text-sm text-[rgba(15,23,42,0.72)] leading-relaxed mb-3">{day.description}</p>
+            )}
 
-        <!-- Flight info -->
-        {day.flightId && (
-          <div class="flex items-center gap-2 mt-2 text-xs text-[#1f4aa8] font-medium bg-[#1f4aa8]/5 rounded-lg px-3 py-2">
-            <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
-            </svg>
-            Flight: {day.flightId}
-          </div>
-        )}
+            {day.flightId && (
+              <div class="text-xs text-[#1f4aa8] font-medium bg-[#1f4aa8]/5 rounded-lg px-3 py-2 mb-3">
+                Flight: {day.flightId}
+              </div>
+            )}
 
-        <!-- Drive time notes -->
-        {day.driveTimeNotes && (
-          <p class="mt-2 text-xs text-[rgba(15,23,42,0.5)] italic flex items-center gap-1.5">
-            <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
-            </svg>
-            {day.driveTimeNotes}
-          </p>
-        )}
+            {day.driveTimeNotes && (
+              <p class="text-xs text-[rgba(15,23,42,0.5)] italic mb-4">{day.driveTimeNotes}</p>
+            )}
 
-        <!-- Related attractions -->
-        {day.attractions && day.attractions.length > 0 && (
-          <div class="mt-4 pt-4 border-t border-gray-100">
-            <p class="text-xs font-semibold uppercase tracking-wider text-[rgba(15,23,42,0.4)] mb-3">
-              Stops on this day
-            </p>
-            <div class="flex flex-wrap gap-3">
-              {day.attractions.map((attraction) => (
-                <a
-                  href={`/attractions/${attraction.slug}`}
-                  class="group flex items-center gap-2.5 bg-[#f6f7fb] hover:bg-[#1f4aa8]/5 rounded-xl px-3 py-2 transition-colors duration-150 no-underline max-w-[calc(50%-6px)]"
-                >
-                  {attraction.thumbnailPath && (
-                    <img
-                      src={attraction.thumbnailPath}
-                      alt={attraction.name}
-                      width="40"
-                      height="40"
-                      class="w-10 h-10 rounded-lg object-cover shrink-0 bg-gray-200"
-                      loading="lazy"
-                      onerror="this.alt='';this.style.display='none'"
-                    />
-                  )}
-                  <div class="min-w-0">
-                    <p class="text-xs font-semibold text-[#1e3a5f] group-hover:text-[#1f4aa8] leading-tight truncate transition-colors duration-150">
-                      {attraction.name}
-                    </p>
-                    <p class="text-[10px] text-[rgba(15,23,42,0.45)] truncate">
-                      {attraction.category}
-                    </p>
+            <div class="space-y-3">
+              {groups
+                .filter((group) => group.items.length > 0)
+                .map((group) => (
+                  <div>
+                    <p class="text-[11px] font-semibold uppercase tracking-[0.13em] text-[rgba(15,23,42,0.45)] mb-2">{group.label}</p>
+                    <div class="flex flex-wrap gap-2.5">
+                      {group.items.map((item) => (
+                        <button
+                          type="button"
+                          class="js-preview-trigger text-sm text-[#8a651e] hover:text-[#1f4aa8] underline underline-offset-2 decoration-[#b88a2a] hover:decoration-[#1f4aa8] transition-colors"
+                          data-preview-key={item.key}
+                        >
+                          {item.label} →
+                        </button>
+                      ))}
+                    </div>
                   </div>
-                </a>
-              ))}
+                ))}
             </div>
           </div>
-        )}
-      </div>
+
+          {hasItems && (
+            <aside class="lg:sticky lg:top-24 self-start">
+              <div class="space-y-3">
+                {groups.flatMap((group) =>
+                  group.items.map((item) => (
+                    <article
+                      class="js-preview-card hidden rounded-xl border border-[#1e3a5f]/10 bg-[#f8fafc] overflow-hidden"
+                      data-preview-key={item.key}
+                    >
+                      <div class="aspect-[16/10] bg-gray-100">
+                        <SafeImage
+                          src={item.imagePath}
+                          fallback={fallbackByType[item.type] ?? '/assets/images/placeholders/default-card.webp'}
+                          alt={item.label}
+                          class="w-full h-full object-cover"
+                          loading="lazy"
+                        />
+                      </div>
+                      <div class="p-4">
+                        <p class="text-[11px] font-semibold uppercase tracking-[0.13em] text-[#b88a2a]">{item.type}</p>
+                        <h5 class="font-display text-base font-semibold text-[#1e3a5f] mt-1">{item.label}</h5>
+                        {item.context && <p class="text-xs text-[rgba(15,23,42,0.55)] mt-1">{item.context}</p>}
+                        {item.description && <p class="text-sm text-[rgba(15,23,42,0.7)] mt-2 line-clamp-3">{item.description}</p>}
+                        {item.href && (
+                          <a href={item.href} class="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-[#1f4aa8] hover:text-[#16397f]">
+                            Open full page <span aria-hidden="true">→</span>
+                          </a>
+                        )}
+                      </div>
+                    </article>
+                  ))
+                )}
+              </div>
+            </aside>
+          )}
+        </div>
+      </section>
     </li>
   ))}
 </ol>
+
+<script>
+  document.querySelectorAll<HTMLElement>('.js-itinerary-day').forEach((dayEl) => {
+    const cards = Array.from(dayEl.querySelectorAll<HTMLElement>('.js-preview-card'));
+    const buttons = Array.from(dayEl.querySelectorAll<HTMLButtonElement>('.js-preview-trigger'));
+    if (!cards.length) return;
+
+    const activate = (key: string) => {
+      cards.forEach((card) => card.classList.toggle('hidden', card.dataset.previewKey !== key));
+      buttons.forEach((button) => {
+        const active = button.dataset.previewKey === key;
+        button.classList.toggle('text-[#1f4aa8]', active);
+        button.classList.toggle('font-semibold', active);
+      });
+    };
+
+    const initialKey = dayEl.dataset.defaultKey || cards[0]?.dataset.previewKey || '';
+    if (initialKey) activate(initialKey);
+
+    buttons.forEach((button) => {
+      button.addEventListener('click', () => {
+        const key = button.dataset.previewKey || '';
+        if (key) activate(key);
+      });
+    });
+  });
+</script>

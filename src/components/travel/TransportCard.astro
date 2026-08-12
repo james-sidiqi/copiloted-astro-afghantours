@@ -1,0 +1,33 @@
+---
+import SafeImage from '@components/ui/SafeImage.astro';
+
+interface Props {
+  transport: import('@lib/types/view-models').TransportOption;
+}
+const { transport } = Astro.props;
+---
+
+<article class="group bg-white rounded-[14px] shadow-[0_2px_16px_0_rgba(0,0,0,0.08)] hover:shadow-[0_10px_30px_rgba(15,23,42,0.08)] transition-shadow duration-300 overflow-hidden flex flex-col">
+  <div class="block overflow-hidden aspect-[16/10] bg-gray-100 shrink-0">
+    <SafeImage
+      src=""
+      fallback="/assets/images/placeholders/default-card.webp"
+      alt={transport.transportName}
+      class="w-full h-full object-cover"
+      loading="lazy"
+    />
+  </div>
+  <div class="flex flex-col flex-1 p-5 gap-2">
+    <div class="flex flex-wrap gap-1.5">
+      {transport.tier && (
+        <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-[#b88a2a]/15 text-[#8a651e]">{transport.tier}</span>
+      )}
+      {transport.vehicleType && (
+        <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-[#1f4aa8]/10 text-[#1f4aa8]">{transport.vehicleType}</span>
+      )}
+    </div>
+    <h3 class="font-display text-base font-semibold text-[#1e3a5f] leading-snug">{transport.transportName}</h3>
+    <p class="text-sm text-[rgba(15,23,42,0.7)] leading-relaxed flex-1">{transport.logicNotes || 'Transport option available for applicable routes.'}</p>
+    <p class="text-xs text-[rgba(15,23,42,0.55)]">Capacity: {transport.minPax}–{transport.maxPax} travellers</p>
+  </div>
+</article>

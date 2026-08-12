@@ -18,6 +18,9 @@ export interface AttractionRow {
   svg_path: string;
   priority: string;
   is_active: string;
+  location_code: string;
+  entry_fee_afn?: string;
+  entry_fee_notes?: string;
 }
 
 export interface TourRow {
@@ -31,22 +34,18 @@ export interface TourRow {
   image_path_slide2: string;
   price_from: string;
   duration_days: string;
-  group_size: string;
-  travel_style: string;
-  physical_activity_level: string;
-  regions: string;
-  provinces: string;
-  accommodation_note: string;
-  transport_note: string;
-  'price_from.1': string;
-  'duration_days.1': string;
   min_group_size: string;
   max_group_size: string;
-  'travel_style.1': string;
-  activity_level: string;
+  group_size_display: string;
+  group_size?: string;
+  travel_style: string;
+  physical_activity_level?: string;
+  regions: string;
+  provinces: string;
   primary_location_slug: string;
-  'accommodation_note.1': string;
-  'transport_note.1': string;
+  accommodation_note: string;
+  transport_note: string;
+  activity_level: string;
   season: string;
   is_featured: string;
   is_active: string;
@@ -127,6 +126,9 @@ export interface LocationRow {
   slug: string;
   is_active: string;
   sort_order: string;
+  is_hub: string;
+  is_secondary: string;
+  has_airport: string;
 }
 
 export interface DishRow {
@@ -157,10 +159,12 @@ export interface FaqRow {
 }
 
 export interface HotelPropertyRow {
-  Hotel_id: string;
+  hotel_id?: string;
+  Hotel_id?: string;
   hotel_slug: string;
   hotel_name: string;
-  destinations_code: string;
+  destination_code?: string;
+  destinations_code?: string;
   tier: string;
   star_rating: string;
   per_night_price_from: string;
@@ -204,4 +208,29 @@ export interface RouteMatrixRow {
   armored_allowed: string;
   armored_months: string;
   notes: string;
+}
+
+export interface GroundTransportRow {
+  transport_id: string;
+  transport_name: string;
+  transport_slug: string;
+  tier: string;
+  vehicle_type: string;
+  min_pax: string;
+  max_pax: string;
+  route_group_id: string;
+  logic_notes: string;
+  is_active: string;
+}
+
+export interface HubAttractionAccessRow {
+  base_location_code: string;
+  attraction_code: string;
+  transport_mode: string;
+  nominal_minutes: string;
+  planning_minutes: string;
+  access_type: string;
+  road_condition: string;
+  notes: string;
+  is_active: string;
 }
