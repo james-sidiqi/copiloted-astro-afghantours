@@ -23,6 +23,7 @@ const effectiveSrc = src || fallback;
   alt={alt}
   class={className}
   loading={loading}
+  decoding="async"
   width={width}
   height={height}
   onerror={`this.onerror=null;this.src='${fallback}'`}
