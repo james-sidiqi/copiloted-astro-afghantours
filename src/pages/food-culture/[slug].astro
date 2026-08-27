@@ -3,10 +3,10 @@ import BaseLayout from '@layouts/BaseLayout.astro';
 import SectionHeader from '@components/ui/SectionHeader.astro';
 import SafeImage from '@components/ui/SafeImage.astro';
 import type { Dish } from '@lib/types/view-models';
-import { buildSiteData } from '@lib/data/buildRelations';
+import { getSiteData } from '@lib/data/site-data';
 
 export async function getStaticPaths() {
-  const data = buildSiteData();
+  const data = getSiteData();
   return data.dishes.filter(d => d.isActive).map(d => ({
     params: { slug: d.slug },
     props: { dish: d },
@@ -43,7 +43,7 @@ const seasonRange = (validMonth(dish.seasonStart) && validMonth(dish.seasonEnd))
           <span class="text-xs font-semibold px-3 py-1 rounded-full bg-white/20 text-white">{dish.mealType}</span>
         )}
       </div>
-      <h1 class="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-white">{dish.name}</h1>
+      <h1 class="font-display text-2xl sm:text-3xl lg:text-4xl font-bold text-white">{dish.name}</h1>
     </div>
   </div>
 

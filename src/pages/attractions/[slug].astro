@@ -1,68 +1,61 @@
 ---
 import BaseLayout from '@layouts/BaseLayout.astro';
+import Hero from '@components/site/Hero.astro';
 import SectionHeader from '@components/ui/SectionHeader.astro';
 import SafeImage from '@components/ui/SafeImage.astro';
-import TourCard from '@components/travel/TourCard.astro';
-import AttractionCard from '@components/travel/AttractionCard.astro';
 import type { Attraction } from '@lib/types/view-models';
 import { getSiteData } from '@lib/data/site-data';
 
 export async function getStaticPaths() {
   const data = getSiteData();
-  return data.attractions.filter(a => a.isActive && a.slug).map(attraction => ({ params: { slug: attraction.slug }, props: { attraction } }));
+  return data.attractions.filter((attraction) => attraction.isActive).map((attraction) => ({
+    params: { slug: attraction.slug },
+    props: { attraction },
+  }));
 }
 
-interface Props { attraction: Attraction; }
+interface Props {
+  attraction: Attraction;
+}
 const { attraction } = Astro.props;
-const data = getSiteData();
-const relatedTours = data.tours.filter(t => t.isActive && t.attractions.some(a => a.attractionCode === attraction.attractionCode)).slice(0, 3);
-const nearbyAttractions = data.attractions
-  .filter(a => a.isActive && a.slug && a.attractionCode !== attraction.attractionCode && a.provinceCode === attraction.provinceCode)
-  .sort((a, b) => b.priority - a.priority || a.name.localeCompare(b.name))
-  .slice(0, 3);
 ---
 
-<BaseLayout title={`${attraction.name} – Afghan Tours`} description={attraction.descShort || `Visit ${attraction.name} in ${attraction.province}, Afghanistan.`} ogImage={attraction.imagePath || attraction.thumbnailPath || undefined}>
-  <div class="relative w-full h-[45vh] min-h-[280px] bg-[#1e3a5f] overflow-hidden">
-    <SafeImage src={attraction.imagePath || attraction.thumbnailPath} fallback="/assets/images/placeholders/default-attraction.webp" alt={attraction.name} class="w-full h-full object-cover object-center" loading="eager" />
-    <div class="absolute inset-0 bg-gradient-to-t from-[#0f172a]/75 to-transparent" />
-    <div class="absolute bottom-0 left-0 right-0 max-w-6xl mx-auto px-4 sm:px-6 pb-8">
-      <div class="flex flex-wrap gap-2 mb-3">
-        {attraction.category && <span class="text-xs font-semibold px-3 py-1 rounded-full bg-[#b88a2a] text-white">{attraction.category}</span>}
-        {attraction.province && <span class="text-xs font-semibold px-3 py-1 rounded-full bg-white/20 text-white">{attraction.province}</span>}
-      </div>
-      <h1 class="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-white">{attraction.name}</h1>
-    </div>
-  </div>
+<BaseLayout title={`${attraction.name} – Afghan Tours`} description={attraction.descShort || `Explore ${attraction.name}`}>
+  <Hero
+    title={attraction.name}
+    subtitle={attraction.descShort || undefined}
+    imagePath={attraction.imagePath || attraction.thumbnailPath || '/assets/images/placeholders/default-attraction.webp'}
+    ctaText="See Tours"
+    ctaHref="/tours"
+  />
 
-  <div class="max-w-6xl mx-auto px-4 sm:px-6 py-16">
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
-      <div class="lg:col-span-2 space-y-12">
-        <section>
-          <SectionHeader eyebrow="Overview" title="About This Place" />
-          {(attraction.descLong || attraction.descShort) ? (
-            <div class="mt-4 space-y-4 text-[rgba(15,23,42,0.75)] leading-relaxed">
-              {(attraction.descLong || attraction.descShort).split(/\n+/).filter(Boolean).map(para => <p>{para}</p>)}
-            </div>
-          ) : <p class="mt-4 text-[rgba(15,23,42,0.55)]">Contact us for current access and itinerary information.</p>}
-          {attraction.tags.length > 0 && <div class="mt-6 flex flex-wrap gap-2">{attraction.tags.map(tag => <span class="text-xs font-medium px-2.5 py-1 rounded-full bg-white text-[#1f4aa8] shadow-sm">#{tag}</span>)}</div>}
-        </section>
-
-        {relatedTours.length > 0 && <section><div class="mb-6"><SectionHeader eyebrow="Itineraries" title="Tours That Visit Here" /></div><div class="grid grid-cols-1 sm:grid-cols-2 gap-6">{relatedTours.map(tour => <TourCard tour={tour} />)}</div></section>}
-        {nearbyAttractions.length > 0 && <section><div class="mb-6"><SectionHeader eyebrow="Nearby" title={`More in ${attraction.province}`} /></div><div class="grid grid-cols-1 sm:grid-cols-2 gap-6">{nearbyAttractions.map(item => <AttractionCard attraction={item} />)}</div></section>}
+  <section class="py-14 bg-white">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 grid grid-cols-1 lg:grid-cols-[minmax(0,1.5fr)_minmax(260px,0.8fr)] gap-10">
+      <div>
+        <SectionHeader eyebrow={attraction.category || 'Attraction'} title={attraction.name} />
+        {attraction.descLong && (
+          <p class="mt-4 text-[rgba(15,23,42,0.75)] leading-relaxed">{attraction.descLong}</p>
+        )}
       </div>
-      <aside>
-        <div class="bg-white rounded-2xl shadow-[0_2px_20px_rgba(0,0,0,0.08)] p-6 sticky top-6">
-          <h3 class="font-semibold text-[#1e3a5f] mb-4 text-sm uppercase tracking-wider">Details</h3>
-          <ul class="space-y-3 text-sm text-[rgba(15,23,42,0.75)]">
-            {attraction.province && <li class="flex justify-between gap-4"><span class="font-medium text-[#1e3a5f]">Province</span><span class="text-right">{attraction.province}</span></li>}
-            {attraction.region && <li class="flex justify-between gap-4"><span class="font-medium text-[#1e3a5f]">Region</span><span class="text-right">{attraction.region}</span></li>}
-            {attraction.category && <li class="flex justify-between gap-4"><span class="font-medium text-[#1e3a5f]">Category</span><span class="text-right">{attraction.category}</span></li>}
-          </ul>
-          <a href="/contact" class="mt-6 block w-full text-center py-3 rounded-full bg-[#b88a2a] hover:bg-[#a07820] text-white font-semibold transition-all duration-200 shadow-md">Enquire About This Site</a>
-          <a href="/tours" class="mt-3 block w-full text-center py-3 rounded-full border-2 border-[#1e3a5f] text-[#1e3a5f] font-semibold hover:bg-[#1e3a5f] hover:text-white transition-all duration-200">Browse Tours</a>
+      <aside class="bg-[#f6f7fb] rounded-2xl p-5 border border-[#1e3a5f]/10">
+        <div class="aspect-[4/3] rounded-xl overflow-hidden bg-gray-100 mb-4">
+          <SafeImage
+            src={attraction.thumbnailPath || attraction.imagePath}
+            fallback="/assets/images/placeholders/default-attraction.webp"
+            alt={attraction.name}
+            class="w-full h-full object-cover"
+            loading="lazy"
+          />
         </div>
+        <dl class="space-y-2 text-sm text-[rgba(15,23,42,0.72)]">
+          {attraction.province && (
+            <div><dt class="inline font-semibold text-[#1e3a5f]">Province:</dt> <dd class="inline">{attraction.province} Province</dd></div>
+          )}
+          {attraction.category && (
+            <div><dt class="inline font-semibold text-[#1e3a5f]">Category:</dt> <dd class="inline">{attraction.category}</dd></div>
+          )}
+        </dl>
       </aside>
     </div>
-  </div>
+  </section>
 </BaseLayout>

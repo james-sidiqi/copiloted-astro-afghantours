@@ -1,0 +1,35 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import Hero from '@components/site/Hero.astro';
+import SectionHeader from '@components/ui/SectionHeader.astro';
+import HotelCard from '@components/travel/HotelCard.astro';
+import { getSiteData } from '@lib/data/site-data';
+
+const data = getSiteData();
+const hotels = data.hotels.filter((hotel) => hotel.isActive);
+---
+
+<BaseLayout title="Hotels – Afghan Tours" description="Hotel options across Afghan travel hubs.">
+  <Hero
+    title="Hotels"
+    subtitle="Operationally vetted stays by destination hub"
+    imagePath="/assets/images/heroes/hero-hotels.webp"
+    ctaText="Contact Us"
+    ctaHref="/contact"
+  />
+
+  <section class="py-16 bg-[#f6f7fb]">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <div class="mb-8">
+        <SectionHeader
+          eyebrow="Stay"
+          title="Hotels by Hub"
+          subtitle="Hotel cards use safe image fallback logic to avoid broken placeholders."
+        />
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {hotels.map((hotel) => <HotelCard hotel={hotel} />)}
+      </div>
+    </div>
+  </section>
+</BaseLayout>

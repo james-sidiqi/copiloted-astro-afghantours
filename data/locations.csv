@@ -39,14 +39,14 @@ TKH,Takhar,province,NORTH,takhar,1,100,0,0,0
 URZ,Uruzgan,province,SOUTH,uruzgan,1,100,0,0,0
 WRD,Wardak,province,CENTRAL,wardak,1,100,0,0,0
 ZBL,Zabul,province,SOUTH,zabul,1,100,0,0,0
-KBLC,Kabul,destination,KBL,kabul-city,1,10,1,0,1
-JBDC,Jalalabad,destination,NGH,jalalabad-city,1,11,1,0,0
-KDRC,Kandahar,destination,KDR,kandahar-city,1,12,1,0,1
-GHZC,Ghazni,destination,GHZ,ghazni-city,1,13,1,0,0
-BMYC,Bamyan,destination,BMY,bamyan-city,1,14,1,0,0
-MAZC,Mazar-e-Sharif,destination,BAL,mazar-e-sharif-city,1,15,1,0,1
-FAIC,Faizabad,destination,BDK,faizabad-city,1,16,1,0,0
-HERC,Herat,destination,HER,herat-city,1,17,1,0,1
+KBLC,Kabul City,destination,KBL,kabul-city,1,10,1,0,1
+JBDC,Jalalabad City,destination,NGH,jalalabad-city,1,11,1,0,0
+KDRC,Kandahar City,destination,KDR,kandahar-city,1,12,1,0,1
+GHZC,Ghazni City,destination,GHZ,ghazni-city,1,13,1,0,0
+BMYC,Bamyan City,destination,BMY,bamyan-city,1,14,1,0,0
+MAZC,Mazar-e-Sharif,destination,BAL,mazar-e-sharif,1,15,1,0,1
+FAIC,Faizabad,destination,BDK,faizabad,1,16,1,0,0
+HERC,Herat City,destination,HER,herat-city,1,17,1,0,1
 LSGC,Lashkar Gah,destination,HLM,lashkar-gah,1,1,0,1,0
 ZRNC,Zaranj,destination,NIM,zaranj,1,1,0,1,0
 FRHC,Farah City,destination,FRH,farah-city,1,1,0,1,0

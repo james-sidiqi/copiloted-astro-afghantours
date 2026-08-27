@@ -14,6 +14,7 @@ export interface Attraction {
   thumbnailPath: string;
   imagePath: string;
   svgPath: string;
+  locationCode?: string;
   priority: number;
   isActive: boolean;
 }
@@ -66,6 +67,7 @@ export interface Tour {
   activityLevel: string;
   regions: string[];
   provinces: string[];
+  primaryLocationSlug: string;
   accommodationNote: string;
   transportNote: string;
   season: string;
@@ -119,6 +121,9 @@ export interface Location {
   slug: string;
   isActive: boolean;
   sortOrder: number;
+  isHub: boolean;
+  isSecondary: boolean;
+  hasAirport: boolean;
 }
 
 export interface Dish {
@@ -172,6 +177,31 @@ export interface HotelProperty {
   isActive: boolean;
 }
 
+export interface TransportOption {
+  transportId: string;
+  transportName: string;
+  transportSlug: string;
+  tier: string;
+  vehicleType: string;
+  minPax: number;
+  maxPax: number;
+  routeGroupId: string;
+  logicNotes: string;
+  isActive: boolean;
+}
+
+export interface HubAttractionAccess {
+  baseLocationCode: string;
+  attractionCode: string;
+  transportMode: string;
+  nominalMinutes: number;
+  planningMinutes: number;
+  accessType: string;
+  roadCondition: string;
+  notes: string;
+  isActive: boolean;
+}
+
 export interface MapStop {
   stopNumber: number;
   dayNumber: number;
@@ -194,4 +224,6 @@ export interface SiteData {
   dishes: Dish[];
   faqs: Faq[];
   hotels: HotelProperty[];
+  transports: TransportOption[];
+  hubAccess: HubAttractionAccess[];
 }

@@ -5,19 +5,22 @@ import SectionHeader from '@components/ui/SectionHeader.astro';
 import AttractionCard from '@components/travel/AttractionCard.astro';
 import ItineraryTimeline from '@components/travel/ItineraryTimeline.astro';
 import TourMap from '@components/travel/TourMap.astro';
-import type { Tour, MapStop } from '@lib/types/view-models';
-import { buildSiteData } from '@lib/data/buildRelations';
+import type { Tour, MapStop, SiteData } from '@lib/types/view-models';
+import { getSiteData } from '@lib/data/site-data';
 
 export async function getStaticPaths() {
-  const data = buildSiteData();
+  const data = getSiteData();
   return data.tours.filter(t => t.isActive).map(tour => ({
     params: { slug: tour.slug },
-    props: { tour },
+    props: { tour, data },
   }));
 }
 
-interface Props { tour: Tour; }
-const { tour } = Astro.props;
+interface Props {
+  tour: Tour;
+  data: SiteData;
+}
+const { tour, data } = Astro.props;
 
 // Build ordered map stops from itinerary days (deduplicated by attraction code)
 const seenCodes = new Set<string>();
@@ -129,7 +132,15 @@ for (const day of tour.itinerary) {
                 <TourMap stops={mapStops} tourName={tour.name} />
               </div>
             )}
-            <ItineraryTimeline days={tour.itinerary} />
+            <ItineraryTimeline
+              days={tour.itinerary}
+              hubs={data.locations.filter((location) => location.type === 'destination' && location.isActive)}
+              provinces={data.provinces}
+              hotels={data.hotels.filter((hotel) => hotel.isActive)}
+              dishes={data.dishes.filter((dish) => dish.isActive)}
+              transports={data.transports.filter((transport) => transport.isActive)}
+              tourTransportNote={tour.transportNote}
+            />
           </section>
         )}
 
@@ -171,7 +182,7 @@ for (const day of tour.itinerary) {
         <!-- Price & Book CTA -->
         <div class="bg-white rounded-2xl shadow-[0_2px_20px_rgba(0,0,0,0.08)] p-6 sticky top-6">
           <p class="text-xs font-semibold uppercase tracking-wider text-[#b88a2a] mb-1">Price Per Person</p>
-          <p class="font-display text-3xl font-bold text-[#1e3a5f] mb-4">From ${tour.priceFrom.toLocaleString()}</p>
+          <p class="font-display text-2xl sm:text-3xl font-bold text-[#1e3a5f] mb-4">From ${tour.priceFrom.toLocaleString()}</p>
           <a href="/contact" class="block w-full text-center py-3 rounded-full bg-[#b88a2a] hover:bg-[#a07820] text-white font-semibold transition-all duration-200 shadow-md mb-3">
             Book This Tour
           </a>

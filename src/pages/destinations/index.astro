@@ -1,0 +1,49 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import Hero from '@components/site/Hero.astro';
+import SectionHeader from '@components/ui/SectionHeader.astro';
+import HubCard from '@components/travel/HubCard.astro';
+import { getSiteData } from '@lib/data/site-data';
+
+const data = getSiteData();
+const hubs = data.locations
+  .filter((l) => l.type === 'destination' && l.isActive && l.isHub)
+  .sort((a, b) => a.sortOrder - b.sortOrder);
+
+const provinceByCode = new Map(data.provinces.map((p) => [p.provinceCode, p]));
+---
+
+<BaseLayout title="Destinations – Afghan Tours" description="Explore Afghan operational hubs and their surrounding provinces.">
+  <Hero
+    title="Destinations"
+    subtitle="Operational city hubs across Afghanistan"
+    imagePath="/assets/images/heroes/hero-destinations.webp"
+    ctaText="Browse Tours"
+    ctaHref="/tours"
+  />
+
+  <section class="py-16 bg-[#f6f7fb]">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <div class="mb-8">
+        <SectionHeader
+          eyebrow="City Hubs"
+          title="Travel Hubs & Provinces"
+          subtitle="Each hub is shown with its correct province to keep hub and province models distinct."
+        />
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {hubs.map((hub) => {
+          const province = provinceByCode.get(hub.parentCode);
+          return (
+            <HubCard
+              hub={hub}
+              provinceName={province ? `${province.provinceName} Province` : hub.parentCode}
+              imagePath={province?.squareImagePath || province?.coverImagePath || ''}
+            />
+          );
+        })}
+      </div>
+    </div>
+  </section>
+</BaseLayout>

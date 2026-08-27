@@ -3,9 +3,9 @@ import BaseLayout from '@layouts/BaseLayout.astro';
 import Hero from '@components/site/Hero.astro';
 import SectionHeader from '@components/ui/SectionHeader.astro';
 import FaqAccordion from '@components/travel/FaqAccordion.astro';
-import { buildSiteData } from '@lib/data/buildRelations';
+import { getSiteData } from '@lib/data/site-data';
 
-const data = buildSiteData();
+const data = getSiteData();
 const safetyFaqs = data.faqs.filter(f => f.isActive && f.pageAssignment.toLowerCase().includes('safety'));
 
 const pillars = [
@@ -93,7 +93,7 @@ const pillars = [
   <!-- CTA -->
   <section class="py-16 bg-[#1e3a5f]">
     <div class="max-w-3xl mx-auto px-4 sm:px-6 text-center text-white">
-      <h2 class="font-display text-3xl font-bold mb-4">Ready to Start?</h2>
+      <h2 class="font-display text-2xl sm:text-3xl font-bold mb-4">Ready to Start?</h2>
       <p class="text-white/80 mb-8">Have questions about safety? We'll be happy to discuss your concerns in detail.</p>
       <a href="/contact" class="inline-block px-8 py-3.5 rounded-full bg-[#b88a2a] hover:bg-[#a07820] text-white font-semibold shadow-lg transition-all duration-200">
         Contact Us

@@ -3,9 +3,9 @@ import BaseLayout from '@layouts/BaseLayout.astro';
 import Hero from '@components/site/Hero.astro';
 import SectionHeader from '@components/ui/SectionHeader.astro';
 import RegionCard from '@components/travel/RegionCard.astro';
-import { buildSiteData } from '@lib/data/buildRelations';
+import { getSiteData } from '@lib/data/site-data';
 
-const data = buildSiteData();
+const data = getSiteData();
 const regions = data.regions.filter(r => r.isActive).sort((a, b) => a.sortOrder - b.sortOrder);
 ---
 

@@ -6,23 +6,30 @@ import AttractionCard from '@components/travel/AttractionCard.astro';
 import { getSiteData } from '@lib/data/site-data';
 
 const data = getSiteData();
-const attractions = data.attractions
-  .filter(a => a.isActive)
-  .sort((a, b) => b.priority - a.priority || a.name.localeCompare(b.name));
+const attractions = data.attractions.filter((attraction) => attraction.isActive);
 ---
 
-<BaseLayout title="Attractions – Afghan Tours" description="Explore Afghanistan's iconic attractions, landscapes, historic sites, and cultural highlights.">
-  <Hero title="Attractions of Afghanistan" subtitle="Landscapes, history, and culture across every region of the country" imagePath="/assets/images/heroes/hero-destinations.webp" ctaText="Plan Your Trip" ctaHref="/contact" />
-  <section class="py-20 bg-[#f6f7fb]">
+<BaseLayout title="Attractions – Afghan Tours" description="Browse Afghanistan's key attractions by region and province.">
+  <Hero
+    title="Attractions"
+    subtitle="Ancient cities, mountain landscapes, mosques, forts, and living heritage"
+    imagePath="/assets/images/heroes/hero-destinations.webp"
+    ctaText="Plan a Tour"
+    ctaHref="/tours"
+  />
+
+  <section class="py-16 bg-[#f6f7fb]">
     <div class="max-w-6xl mx-auto px-4 sm:px-6">
-      <div class="mb-10"><SectionHeader eyebrow="Highlights" title="Places Worth the Journey" subtitle="Explore the places featured across our guided itineraries." /></div>
-      {attractions.length > 0 ? (
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-          {attractions.map(attraction => <AttractionCard attraction={attraction} />)}
-        </div>
-      ) : (
-        <div class="text-center py-20 text-gray-500"><p class="text-lg font-medium">Attractions coming soon.</p></div>
-      )}
+      <div class="mb-8">
+        <SectionHeader
+          eyebrow="Explore"
+          title="Afghanistan Attractions"
+          subtitle="All attractions use verified data links and safe image fallbacks."
+        />
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {attractions.map((attraction) => <AttractionCard attraction={attraction} />)}
+      </div>
     </div>
   </section>
 </BaseLayout>

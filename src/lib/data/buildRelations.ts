@@ -8,6 +8,7 @@ import type {
   InclusionDay,
   TourDate,
   HotelProperty,
+  HubAttractionAccess,
   Faq,
 } from '../types/view-models.js';
 import type {
@@ -17,6 +18,7 @@ import type {
   TourAttractionMapRow,
   FaqRow,
   HotelPropertyRow,
+  HubAttractionAccessRow,
 } from '../types/data.js';
 import { readCsv } from './readCsv.js';
 import { loadAttractions } from './loadAttractions.js';
@@ -25,6 +27,8 @@ import { loadProvinces } from './loadProvinces.js';
 import { loadRegions } from './loadRegions.js';
 import { loadLocations } from './loadLocations.js';
 import { loadDishes } from './loadDishes.js';
+import { loadGroundTransport } from './loadGroundTransport.js';
+import { cleanText, normalizeAssetPath } from './normalize.js';
 
 function splitCodes(raw: string): string[] {
   if (!raw) return [];
@@ -36,11 +40,11 @@ function loadItinerary(): ItineraryDay[] {
   return rows.map((r) => ({
     tourCode: r.tour_code,
     dayNumber: parseInt(r.day_number, 10) || 0,
-    title: r.title,
-    location: r.location,
-    description: r.description,
-    flightId: r.flight_id,
-    driveTimeNotes: r.drive_time_notes,
+    title: cleanText(r.title),
+    location: cleanText(r.location),
+    description: cleanText(r.description),
+    flightId: cleanText(r.flight_id),
+    driveTimeNotes: cleanText(r.drive_time_notes),
     attractionCodes: splitCodes(r.attraction_codes),
     attractions: [], // enriched later in buildSiteData()
   }));
@@ -51,11 +55,11 @@ function loadInclusions(): InclusionDay[] {
   return rows.map((r) => ({
     tourCode: r.tour_code,
     dayNumber: parseInt(r.day_number, 10) || 0,
-    title: r.title,
-    location: r.location,
-    description: r.description,
-    flightId: r.flight_id,
-    driveTimeNotes: r.drive_time_notes,
+    title: cleanText(r.title),
+    location: cleanText(r.location),
+    description: cleanText(r.description),
+    flightId: cleanText(r.flight_id),
+    driveTimeNotes: cleanText(r.drive_time_notes),
     attractionCodes: splitCodes(r.attraction_codes),
   }));
 }
@@ -67,8 +71,8 @@ function loadTourDates(): TourDate[] {
     tourSlug: r.tour_slug,
     dateStart: r.date_start,
     dateEnd: r.date_end,
-    status: r.status,
-    notes: r.notes,
+    status: cleanText(r.status),
+    notes: cleanText(r.notes),
   }));
 }
 
@@ -78,11 +82,11 @@ function loadFaqs(): Faq[] {
     .filter((r) => r.is_active === '1')
     .map((r) => ({
       faqId: r.faq_id,
-      pageAssignment: r.page_assignment,
-      category: r.category,
-      tourSlug: r.tour_slug,
-      question: r.question,
-      answer: r.answer,
+      pageAssignment: cleanText(r.page_assignment),
+      category: cleanText(r.category),
+      tourSlug: cleanText(r.tour_slug),
+      question: cleanText(r.question),
+      answer: cleanText(r.answer),
       isActive: true,
     }));
 }
@@ -92,15 +96,34 @@ function loadHotels(): HotelProperty[] {
   return rows
     .filter((r) => r.is_active === '1')
     .map((r) => ({
-      hotelId: r.Hotel_id,
-      hotelSlug: r.hotel_slug,
-      hotelName: r.hotel_name,
-      destinationsCode: r.destinations_code,
-      tier: r.tier,
+      hotelId: cleanText(r.hotel_id || r.Hotel_id || ''),
+      hotelSlug: cleanText(r.hotel_slug),
+      hotelName: cleanText(r.hotel_name),
+      destinationsCode: cleanText(r.destination_code || r.destinations_code || ''),
+      tier: cleanText(r.tier),
       starRating: parseFloat(r.star_rating) || 0,
       perNightPriceFrom: parseFloat(r.per_night_price_from) || 0,
-      description: r.description,
-      imagePaths: [r.image_path_property_1, r.image_path_property_2, r.image_path_property_3].filter(Boolean),
+      description: cleanText(r.description),
+      imagePaths: [r.image_path_property_1, r.image_path_property_2, r.image_path_property_3]
+        .map((path) => normalizeAssetPath(path))
+        .filter(Boolean),
+      isActive: true,
+    }));
+}
+
+function loadHubAccess(): HubAttractionAccess[] {
+  const rows = readCsv<HubAttractionAccessRow>('hub_to_attraction_access.csv');
+  return rows
+    .filter((r) => r.is_active === '1')
+    .map((r) => ({
+      baseLocationCode: cleanText(r.base_location_code),
+      attractionCode: cleanText(r.attraction_code),
+      transportMode: cleanText(r.transport_mode),
+      nominalMinutes: parseInt(r.nominal_minutes, 10) || 0,
+      planningMinutes: parseInt(r.planning_minutes, 10) || 0,
+      accessType: cleanText(r.access_type),
+      roadCondition: cleanText(r.road_condition),
+      notes: cleanText(r.notes),
       isActive: true,
     }));
 }
@@ -115,6 +138,8 @@ export function buildSiteData(): SiteData {
   const dishes = loadDishes();
   const faqs = loadFaqs();
   const hotels = loadHotels();
+  const transports = loadGroundTransport();
+  const hubAccess = loadHubAccess();
 
   const itineraryRows = loadItinerary();
   const inclusionRows = loadInclusions();
@@ -230,5 +255,5 @@ export function buildSiteData(): SiteData {
     return { ...base, provinces: regionProvinces, attractions: regionAttractions };
   });
 
-  return { tours, attractions, provinces, regions, locations, dishes, faqs, hotels };
+  return { tours, attractions, provinces, regions, locations, dishes, faqs, hotels, transports, hubAccess };
 }

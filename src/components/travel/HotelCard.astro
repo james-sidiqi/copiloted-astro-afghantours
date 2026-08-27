@@ -1,0 +1,29 @@
+---
+import SafeImage from '@components/ui/SafeImage.astro';
+
+interface Props {
+  hotel: import('@lib/types/view-models').HotelProperty;
+}
+const { hotel } = Astro.props;
+const imagePath = hotel.imagePaths.find(Boolean) || '';
+---
+
+<article class="group bg-white rounded-[14px] shadow-[0_2px_16px_0_rgba(0,0,0,0.08)] hover:shadow-[0_10px_30px_rgba(15,23,42,0.08)] transition-shadow duration-300 overflow-hidden flex flex-col">
+  <div class="block overflow-hidden aspect-[4/3] bg-gray-100 shrink-0">
+    <SafeImage
+      src={imagePath}
+      fallback="/assets/images/placeholders/default-hotel.webp"
+      alt={hotel.hotelName}
+      class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+      loading="lazy"
+    />
+  </div>
+  <div class="flex flex-col flex-1 p-5 gap-2">
+    <span class="self-start text-xs font-semibold px-2.5 py-0.5 rounded-full bg-[#1f4aa8]/10 text-[#1f4aa8]">
+      {hotel.tier || 'Hotel'}
+    </span>
+    <h3 class="font-display text-base font-semibold text-[#1e3a5f] leading-snug">{hotel.hotelName}</h3>
+    {hotel.description && <p class="text-sm text-[rgba(15,23,42,0.7)] leading-relaxed line-clamp-3 flex-1">{hotel.description}</p>}
+    <p class="text-sm font-semibold text-[#1f4aa8]">From ${hotel.perNightPriceFrom.toLocaleString()} / night</p>
+  </div>
+</article>
