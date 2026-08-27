@@ -5,10 +5,10 @@ import SectionHeader from '@components/ui/SectionHeader.astro';
 import AttractionCard from '@components/travel/AttractionCard.astro';
 import TourCard from '@components/travel/TourCard.astro';
 import type { Province } from '@lib/types/view-models';
-import { buildSiteData } from '@lib/data/buildRelations';
+import { getSiteData } from '@lib/data/site-data';
 
 export async function getStaticPaths() {
-  const data = buildSiteData();
+  const data = getSiteData();
   return data.provinces.map(p => ({
     params: { slug: p.provinceSlug },
     props: { province: p },

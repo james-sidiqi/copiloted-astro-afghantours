@@ -6,11 +6,18 @@ import WhatsAppButton from '@components/site/WhatsAppButton.astro';
 interface Props {
   title?: string;
   description?: string;
+  ogImage?: string;
+  noindex?: boolean;
 }
 const {
   title = 'Afghan Tours',
   description = 'Experience Afghanistan with expert-guided tours.',
+  ogImage = '/assets/images/heroes/hero-home.webp',
+  noindex = false,
 } = Astro.props;
+
+const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site).toString() : Astro.url.pathname;
+const socialImage = Astro.site && ogImage.startsWith('/') ? new URL(ogImage, Astro.site).toString() : ogImage;
 ---
 <!doctype html>
 <html lang="en">
@@ -19,9 +26,21 @@ const {
   <meta name="viewport" content="width=device-width" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" /></noscript>
   <title>{title}</title>
   <meta name="description" content={description} />
+  {noindex && <meta name="robots" content="noindex,nofollow" />}
+  <link rel="canonical" href={canonical} />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:image" content={socialImage} />
+  <meta property="og:site_name" content="Afghan Tours" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={title} />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image" content={socialImage} />
 </head>
 <body class="bg-[#f6f7fb] text-[#0f172a] font-sans min-h-screen">
   <Header />
