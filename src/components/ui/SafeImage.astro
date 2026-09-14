@@ -25,6 +25,7 @@ const effectiveSrc = normalizedSrc || normalizedFallback;
   alt={alt}
   class={className}
   loading={loading}
+  decoding="async"
   width={width}
   height={height}
   onerror={`if(this.dataset.fallbackApplied==='1'){this.style.display='none';return;}this.dataset.fallbackApplied='1';this.src='${normalizedFallback}'`}

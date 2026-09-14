@@ -3,9 +3,9 @@ import BaseLayout from '@layouts/BaseLayout.astro';
 import Hero from '@components/site/Hero.astro';
 import SectionHeader from '@components/ui/SectionHeader.astro';
 import TourCard from '@components/travel/TourCard.astro';
-import { buildSiteData } from '@lib/data/buildRelations';
+import { getSiteData } from '@lib/data/site-data';
 
-const data = buildSiteData();
+const data = getSiteData();
 const tours = data.tours.filter(t => t.isActive);
 ---
 

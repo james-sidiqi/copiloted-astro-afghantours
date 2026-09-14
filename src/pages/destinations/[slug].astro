@@ -7,12 +7,12 @@ import DishCard from '@components/travel/DishCard.astro';
 import HotelCard from '@components/travel/HotelCard.astro';
 import TransportCard from '@components/travel/TransportCard.astro';
 import type { Location, SiteData } from '@lib/types/view-models';
-import { buildSiteData } from '@lib/data/buildRelations';
+import { getSiteData } from '@lib/data/site-data';
 
 export async function getStaticPaths() {
-  const data = buildSiteData();
-  const destinations = data.locations.filter((l) => l.type === 'destination' && l.isActive);
-  return destinations.map((dest) => ({
+  const data = getSiteData();
+  const destinations = data.locations.filter(l => l.type === 'destination' && l.isActive);
+  return destinations.map(dest => ({
     params: { slug: dest.slug },
     props: { destination: dest, data },
   }));

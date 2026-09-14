@@ -3,9 +3,9 @@ import BaseLayout from '@layouts/BaseLayout.astro';
 import Hero from '@components/site/Hero.astro';
 import SectionHeader from '@components/ui/SectionHeader.astro';
 import DishCard from '@components/travel/DishCard.astro';
-import { buildSiteData } from '@lib/data/buildRelations';
+import { getSiteData } from '@lib/data/site-data';
 
-const data = buildSiteData();
+const data = getSiteData();
 const dishes = data.dishes.filter(d => d.isActive);
 const categories = [...new Set(dishes.map(d => d.category).filter(Boolean))].sort();
 ---

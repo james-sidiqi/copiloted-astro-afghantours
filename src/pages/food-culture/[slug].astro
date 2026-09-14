@@ -3,10 +3,10 @@ import BaseLayout from '@layouts/BaseLayout.astro';
 import SectionHeader from '@components/ui/SectionHeader.astro';
 import SafeImage from '@components/ui/SafeImage.astro';
 import type { Dish } from '@lib/types/view-models';
-import { buildSiteData } from '@lib/data/buildRelations';
+import { getSiteData } from '@lib/data/site-data';
 
 export async function getStaticPaths() {
-  const data = buildSiteData();
+  const data = getSiteData();
   return data.dishes.filter(d => d.isActive).map(d => ({
     params: { slug: d.slug },
     props: { dish: d },

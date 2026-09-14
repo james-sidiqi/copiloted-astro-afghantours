@@ -5,9 +5,9 @@ import SectionHeader from '@components/ui/SectionHeader.astro';
 import TourCard from '@components/travel/TourCard.astro';
 import AttractionCard from '@components/travel/AttractionCard.astro';
 import FaqAccordion from '@components/travel/FaqAccordion.astro';
-import { buildSiteData } from '@lib/data/buildRelations';
+import { getSiteData } from '@lib/data/site-data';
 
-const data = buildSiteData();
+const data = getSiteData();
 const featuredTours = data.tours.filter(t => t.isActive).slice(0, 3);
 const featuredAttractions = data.attractions.filter(a => a.isActive && a.priority >= 5).slice(0, 6);
 const homeFaqs = data.faqs.filter(f => f.isActive && f.pageAssignment === 'home').slice(0, 6);

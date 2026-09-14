@@ -4,10 +4,10 @@ import Hero from '@components/site/Hero.astro';
 import SectionHeader from '@components/ui/SectionHeader.astro';
 import SafeImage from '@components/ui/SafeImage.astro';
 import type { Attraction } from '@lib/types/view-models';
-import { buildSiteData } from '@lib/data/buildRelations';
+import { getSiteData } from '@lib/data/site-data';
 
 export async function getStaticPaths() {
-  const data = buildSiteData();
+  const data = getSiteData();
   return data.attractions.filter((attraction) => attraction.isActive).map((attraction) => ({
     params: { slug: attraction.slug },
     props: { attraction },

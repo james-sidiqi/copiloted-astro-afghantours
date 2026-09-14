@@ -6,10 +6,10 @@ import AttractionCard from '@components/travel/AttractionCard.astro';
 import ItineraryTimeline from '@components/travel/ItineraryTimeline.astro';
 import TourMap from '@components/travel/TourMap.astro';
 import type { Tour, MapStop, SiteData } from '@lib/types/view-models';
-import { buildSiteData } from '@lib/data/buildRelations';
+import { getSiteData } from '@lib/data/site-data';
 
 export async function getStaticPaths() {
-  const data = buildSiteData();
+  const data = getSiteData();
   return data.tours.filter(t => t.isActive).map(tour => ({
     params: { slug: tour.slug },
     props: { tour, data },
