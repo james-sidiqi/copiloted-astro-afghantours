@@ -3,16 +3,32 @@ import BaseLayout from '@layouts/BaseLayout.astro';
 import Hero from '@components/site/Hero.astro';
 import SectionHeader from '@components/ui/SectionHeader.astro';
 import TourCard from '@components/travel/TourCard.astro';
+import { siteConfig } from '@lib/config';
 import { getSiteData } from '@lib/data/site-data';
 
 const data = getSiteData();
-const tours = data.tours.filter(t => t.isActive);
+const tours = data.tours.filter((t) => t.isActive);
+
+const regions = [...new Set(tours.flatMap((t) => t.regions).filter(Boolean))].sort();
+const styles = [...new Set(tours.map((t) => t.travelStyle).filter(Boolean))].sort();
+const seasons = [...new Set(tours.map((t) => t.season).filter(Boolean))].sort();
+const activityLevels = [...new Set(tours.map((t) => t.activityLevel).filter(Boolean))].sort();
+
+const tourPayload = tours.map((t) => ({
+  slug: t.slug,
+  regions: t.regions,
+  travelStyle: t.travelStyle,
+  season: t.season,
+  activityLevel: t.activityLevel,
+  durationDays: t.durationDays,
+  isFeatured: t.isFeatured,
+}));
 ---
 
-<BaseLayout title="Tours – Afghan Tours" description="Explore all of our expert-guided tours to Afghanistan.">
+<BaseLayout title="Tours – Afghan Tours" description="Explore expert-guided tours to Afghanistan. Starting-from prices confirmed after dates, group size, and access.">
   <Hero
     title="Our Tours"
-    subtitle="Discover Afghanistan through our carefully crafted itineraries"
+    subtitle="Operational itineraries across Afghanistan’s hubs — pricing confirmed after dates, group size, and access"
     imagePath="/assets/images/heroes/hero-tours.webp"
     ctaText="Contact Us"
     ctaHref="/contact"
@@ -20,18 +36,69 @@ const tours = data.tours.filter(t => t.isActive);
 
   <section class="py-20 bg-[#f6f7fb]">
     <div class="max-w-6xl mx-auto px-4 sm:px-6">
-      <div class="mb-10">
+      <div class="mb-8">
         <SectionHeader
           eyebrow="All Tours"
-          title="Choose Your Adventure"
-          subtitle="From cultural city tours to mountain treks — find the perfect Afghan journey."
+          title="Choose Your Expedition"
+          subtitle="Filter by region, duration, style, season, or activity. Featured prices are Starting from / From — confirmed after planning."
         />
-        <p class="mt-4 text-sm text-[rgba(15,23,42,0.55)]">Filter by region, duration or style coming soon. For custom queries, <a href="/contact" class="text-[#1f4aa8] underline">contact us</a>.</p>
+      </div>
+
+      <!-- CSV-driven filters -->
+      <div id="tour-filters" class="mb-8 bg-white rounded-2xl border border-[#1e3a5f]/10 p-4 sm:p-5 shadow-sm">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+          <label class="block text-xs font-semibold text-[#1e3a5f]">
+            Region
+            <select id="filter-region" class="mt-1 w-full rounded-xl border border-gray-200 px-3 py-2.5 text-sm text-[rgba(15,23,42,0.85)] bg-white">
+              <option value="">All regions</option>
+              {regions.map((r) => <option value={r}>{r}</option>)}
+            </select>
+          </label>
+          <label class="block text-xs font-semibold text-[#1e3a5f]">
+            Duration
+            <select id="filter-duration" class="mt-1 w-full rounded-xl border border-gray-200 px-3 py-2.5 text-sm text-[rgba(15,23,42,0.85)] bg-white">
+              <option value="">Any length</option>
+              <option value="1-4">1–4 days</option>
+              <option value="5-8">5–8 days</option>
+              <option value="9-14">9–14 days</option>
+              <option value="15+">15+ days</option>
+            </select>
+          </label>
+          <label class="block text-xs font-semibold text-[#1e3a5f]">
+            Travel style
+            <select id="filter-style" class="mt-1 w-full rounded-xl border border-gray-200 px-3 py-2.5 text-sm text-[rgba(15,23,42,0.85)] bg-white">
+              <option value="">All styles</option>
+              {styles.map((s) => <option value={s}>{s}</option>)}
+            </select>
+          </label>
+          <label class="block text-xs font-semibold text-[#1e3a5f]">
+            Season
+            <select id="filter-season" class="mt-1 w-full rounded-xl border border-gray-200 px-3 py-2.5 text-sm text-[rgba(15,23,42,0.85)] bg-white">
+              <option value="">Any season</option>
+              {seasons.map((s) => <option value={s}>{s}</option>)}
+            </select>
+          </label>
+          <label class="block text-xs font-semibold text-[#1e3a5f]">
+            Activity
+            <select id="filter-activity" class="mt-1 w-full rounded-xl border border-gray-200 px-3 py-2.5 text-sm text-[rgba(15,23,42,0.85)] bg-white">
+              <option value="">Any level</option>
+              {activityLevels.map((a) => <option value={a}>{a}</option>)}
+            </select>
+          </label>
+        </div>
+        <div class="mt-3 flex flex-wrap items-center justify-between gap-3">
+          <p id="filter-count" class="text-xs text-[rgba(15,23,42,0.55)]">{tours.length} tours</p>
+          <button type="button" id="filter-reset" class="text-xs font-semibold text-[#1f4aa8] hover:underline">Reset filters</button>
+        </div>
       </div>
 
       {tours.length > 0 ? (
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-          {tours.map(tour => <TourCard tour={tour} />)}
+        <div id="tour-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+          {tours.map((tour) => (
+            <div class="tour-card-wrap" data-slug={tour.slug}>
+              <TourCard tour={tour} />
+            </div>
+          ))}
         </div>
       ) : (
         <div class="text-center py-20 text-gray-500">
@@ -39,17 +106,86 @@ const tours = data.tours.filter(t => t.isActive);
           <p class="text-sm mt-2">Please check back soon or <a href="/contact" class="text-[#1f4aa8] underline">contact us</a>.</p>
         </div>
       )}
+
+      <p id="filter-empty" class="hidden text-center py-16 text-[rgba(15,23,42,0.55)]">
+        No tours match these filters. <button type="button" class="text-[#1f4aa8] underline" id="filter-empty-reset">Reset</button>
+        or <a href={siteConfig.customTourPath} class="text-[#1f4aa8] underline">request a custom tour</a>.
+      </p>
     </div>
   </section>
 
-  <!-- CTA -->
   <section class="py-16 bg-[#1e3a5f]">
     <div class="max-w-3xl mx-auto px-4 sm:px-6 text-center text-white">
       <h2 class="font-display text-2xl sm:text-3xl font-bold mb-4">Can't find what you're looking for?</h2>
-      <p class="text-white/80 mb-8">We offer custom tours tailored to your interests, timeline, and group size.</p>
-      <a href="/contact" class="inline-block px-8 py-3.5 rounded-full bg-[#b88a2a] hover:bg-[#a07820] text-white font-semibold shadow-lg transition-all duration-200">
+      <p class="text-white/80 mb-8">We plan custom expeditions around your dates, group size, and access realities.</p>
+      <a href={siteConfig.customTourPath} class="inline-block px-8 py-3.5 rounded-full bg-[#b88a2a] hover:bg-[#a07820] text-white font-semibold shadow-lg transition-all duration-200">
         Request a Custom Tour
       </a>
     </div>
   </section>
 </BaseLayout>
+
+<script define:vars={{ tourPayload }}>
+  const cards = Array.from(document.querySelectorAll('.tour-card-wrap'));
+  const bySlug = Object.fromEntries(tourPayload.map((t) => [t.slug, t]));
+  const regionEl = document.getElementById('filter-region');
+  const durationEl = document.getElementById('filter-duration');
+  const styleEl = document.getElementById('filter-style');
+  const seasonEl = document.getElementById('filter-season');
+  const activityEl = document.getElementById('filter-activity');
+  const countEl = document.getElementById('filter-count');
+  const emptyEl = document.getElementById('filter-empty');
+  const gridEl = document.getElementById('tour-grid');
+
+  function durationMatch(days, bucket) {
+    if (!bucket) return true;
+    if (bucket === '1-4') return days >= 1 && days <= 4;
+    if (bucket === '5-8') return days >= 5 && days <= 8;
+    if (bucket === '9-14') return days >= 9 && days <= 14;
+    if (bucket === '15+') return days >= 15;
+    return true;
+  }
+
+  function applyFilters() {
+    const region = regionEl?.value || '';
+    const duration = durationEl?.value || '';
+    const style = styleEl?.value || '';
+    const season = seasonEl?.value || '';
+    const activity = activityEl?.value || '';
+    let visible = 0;
+
+    cards.forEach((card) => {
+      const slug = card.getAttribute('data-slug') || '';
+      const tour = bySlug[slug];
+      if (!tour) {
+        card.classList.add('hidden');
+        return;
+      }
+      const okRegion = !region || tour.regions.includes(region);
+      const okDuration = durationMatch(tour.durationDays, duration);
+      const okStyle = !style || tour.travelStyle === style;
+      const okSeason = !season || tour.season === season;
+      const okActivity = !activity || tour.activityLevel === activity;
+      const show = okRegion && okDuration && okStyle && okSeason && okActivity;
+      card.classList.toggle('hidden', !show);
+      if (show) visible += 1;
+    });
+
+    if (countEl) countEl.textContent = `${visible} tour${visible === 1 ? '' : 's'}`;
+    emptyEl?.classList.toggle('hidden', visible !== 0);
+    gridEl?.classList.toggle('hidden', visible === 0);
+  }
+
+  function resetFilters() {
+    [regionEl, durationEl, styleEl, seasonEl, activityEl].forEach((el) => {
+      if (el) el.value = '';
+    });
+    applyFilters();
+  }
+
+  [regionEl, durationEl, styleEl, seasonEl, activityEl].forEach((el) => {
+    el?.addEventListener('change', applyFilters);
+  });
+  document.getElementById('filter-reset')?.addEventListener('click', resetFilters);
+  document.getElementById('filter-empty-reset')?.addEventListener('click', resetFilters);
+</script>

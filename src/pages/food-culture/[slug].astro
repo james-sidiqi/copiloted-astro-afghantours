@@ -2,29 +2,41 @@
 import BaseLayout from '@layouts/BaseLayout.astro';
 import SectionHeader from '@components/ui/SectionHeader.astro';
 import SafeImage from '@components/ui/SafeImage.astro';
-import type { Dish } from '@lib/types/view-models';
+import RelatedToursSection from '@components/travel/RelatedToursSection.astro';
+import type { Dish, SiteData } from '@lib/types/view-models';
 import { getSiteData } from '@lib/data/site-data';
 
 export async function getStaticPaths() {
   const data = getSiteData();
   return data.dishes.filter(d => d.isActive).map(d => ({
     params: { slug: d.slug },
-    props: { dish: d },
+    props: { dish: d, data },
   }));
 }
 
-interface Props { dish: Dish; }
-const { dish } = Astro.props;
+interface Props { dish: Dish; data: SiteData; }
+const { dish, data } = Astro.props;
 
 const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 const validMonth = (n: number) => n >= 1 && n <= 12;
 const seasonRange = (validMonth(dish.seasonStart) && validMonth(dish.seasonEnd))
   ? `${months[dish.seasonStart - 1]} – ${months[dish.seasonEnd - 1]}`
   : null;
+
+const relatedTours = data.tours.filter((tour) => {
+  if (!tour.isActive) return false;
+  if (dish.destinationCode) {
+    const hub = data.locations.find((l) => l.locationCode === dish.destinationCode);
+    if (hub && tour.primaryLocationSlug === hub.slug) return true;
+  }
+  if (dish.provinceCode && tour.provinces.some((p) => p.toUpperCase().startsWith(dish.provinceCode) || p.toLowerCase().includes(dish.provinceCode.toLowerCase()))) {
+    return true;
+  }
+  return tour.regions.some((r) => r && dish.regionCode && r.toLowerCase().includes(dish.regionCode.toLowerCase().replace(/_/g, ' ')));
+}).slice(0, 6);
 ---
 
 <BaseLayout title={`${dish.name} – Afghan Tours`} description={dish.descShort || `${dish.name}: Afghan cuisine`}>
-  <!-- Header image -->
   <div class="relative w-full h-[45vh] min-h-[280px] bg-[#1e3a5f] overflow-hidden">
     <SafeImage
       src={dish.imagePath}
@@ -49,7 +61,6 @@ const seasonRange = (validMonth(dish.seasonStart) && validMonth(dish.seasonEnd))
 
   <div class="max-w-4xl mx-auto px-4 sm:px-6 py-16">
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
-      <!-- Main content -->
       <div class="lg:col-span-2 space-y-8">
         <section>
           <SectionHeader eyebrow="About" title={dish.name} />
@@ -59,7 +70,6 @@ const seasonRange = (validMonth(dish.seasonStart) && validMonth(dish.seasonEnd))
         </section>
       </div>
 
-      <!-- Sidebar details -->
       <aside>
         <div class="bg-white rounded-2xl shadow-[0_2px_20px_rgba(0,0,0,0.08)] p-6">
           <h3 class="font-semibold text-[#1e3a5f] mb-4 text-sm uppercase tracking-wider">Details</h3>
@@ -90,14 +100,19 @@ const seasonRange = (validMonth(dish.seasonStart) && validMonth(dish.seasonEnd))
             )}
           </ul>
         </div>
-
-        <div class="mt-4 bg-[#1e3a5f] rounded-2xl p-5 text-white text-center">
-          <p class="font-semibold mb-2 text-sm">Taste This on a Tour</p>
-          <a href="/tours" class="block w-full text-center py-2.5 rounded-full bg-[#b88a2a] hover:bg-[#a07820] text-white font-semibold text-sm transition-all duration-200 mt-3">
-            Browse Tours
-          </a>
-        </div>
       </aside>
     </div>
   </div>
+
+  <section class="pb-16 bg-[#f6f7fb]">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 pt-4">
+      <RelatedToursSection
+        tours={relatedTours}
+        title={`Tours to taste ${dish.name}`}
+        eyebrow="Food & Culture"
+        contextLabel={dish.name}
+        emptyHint="No published tours currently highlight this dish. Request a custom cultural itinerary."
+      />
+    </div>
+  </section>
 </BaseLayout>
