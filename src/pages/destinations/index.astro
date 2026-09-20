@@ -4,6 +4,7 @@ import Hero from '@components/site/Hero.astro';
 import SectionHeader from '@components/ui/SectionHeader.astro';
 import HubCard from '@components/travel/HubCard.astro';
 import { getSiteData } from '@lib/data/site-data';
+import { resolveHubAsset } from '@lib/getAssetUrl';
 
 const data = getSiteData();
 const hubs = data.locations
@@ -39,7 +40,7 @@ const provinceByCode = new Map(data.provinces.map((p) => [p.provinceCode, p]));
             <HubCard
               hub={hub}
               provinceName={province ? `${province.provinceName} Province` : hub.parentCode}
-              imagePath={province?.squareImagePath || province?.coverImagePath || ''}
+              imagePath={resolveHubAsset(hub.slug, province?.squareImagePath || province?.coverImagePath || '', 'thumb') || province?.squareImagePath || province?.coverImagePath || ''}
             />
           );
         })}

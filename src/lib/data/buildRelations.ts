@@ -29,6 +29,7 @@ import { loadLocations } from './loadLocations.js';
 import { loadDishes } from './loadDishes.js';
 import { loadGroundTransport } from './loadGroundTransport.js';
 import { cleanText, normalizeAssetPath } from './normalize.js';
+import { getAssetUrl } from '../getAssetUrl.js';
 
 function splitCodes(raw: string): string[] {
   if (!raw) return [];
@@ -105,7 +106,12 @@ function loadHotels(): HotelProperty[] {
       perNightPriceFrom: parseFloat(r.per_night_price_from) || 0,
       description: cleanText(r.description),
       imagePaths: [r.image_path_property_1, r.image_path_property_2, r.image_path_property_3]
-        .map((path) => normalizeAssetPath(path))
+        .map((path, index) =>
+          getAssetUrl(normalizeAssetPath(path), {
+            entity: 'hotel',
+            kind: index === 0 ? 'hero' : 'image',
+          }),
+        )
         .filter(Boolean),
       isActive: true,
     }));
