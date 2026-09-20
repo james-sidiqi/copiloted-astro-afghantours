@@ -2,39 +2,45 @@
 import BaseLayout from '@layouts/BaseLayout.astro';
 import Hero from '@components/site/Hero.astro';
 import SectionHeader from '@components/ui/SectionHeader.astro';
+import { siteConfig } from '@lib/config';
 ---
 
-<BaseLayout title="About Afghan Tours" description="Learn about Afghan Tours – a licensed Afghan tour operator led by experienced locals and international partners.">
+<BaseLayout title="About Afghan Tours" description="James Tourist & Travel Agency operates Afghan Tours — an American-led, Kabul-based expedition operator.">
   <Hero
     title="About Afghan Tours"
-    subtitle="A passionate team dedicated to sharing the real Afghanistan with the world"
+    subtitle="American-led. Kabul-based. Operationally grounded."
     imagePath="/assets/images/heroes/hero-about.webp"
     ctaText="Contact Us"
     ctaHref="/contact"
   />
 
-  <!-- Who We Are -->
   <section class="py-20 bg-white">
     <div class="max-w-4xl mx-auto px-4 sm:px-6">
       <div class="mb-8">
         <SectionHeader eyebrow="Our Story" title="Who We Are" />
       </div>
       <div class="prose prose-lg max-w-none text-[rgba(15,23,42,0.75)] leading-relaxed space-y-5">
-        <p>Afghan Tours is a licensed Afghan tour operator committed to responsible, safe, and authentic travel experiences in Afghanistan. We believe that travel has the power to transform perspectives — both for visitors and for the communities they encounter.</p>
-        <p>Our team combines deep local knowledge with international standards of safety and service. We have spent years building trusted networks of guides, drivers, hosts, and partners across all regions of Afghanistan, allowing us to offer itineraries that go far beyond what a standard tour operator could provide.</p>
-        <p>We operate with full transparency about the realities of travelling in Afghanistan. Our guests are well-informed, well-prepared, and — most importantly — genuinely welcomed by the Afghan people who are proud to share their extraordinary land with the world.</p>
+        <p>
+          <strong>{siteConfig.name}</strong> is the public brand of
+          <strong> {siteConfig.legalName}</strong>, a licensed Afghan tour operator
+          (License {siteConfig.license}) based in Kabul and American-led.
+        </p>
+        <p>
+          We plan calm, logistics-aware expeditions across Afghanistan’s operational hubs. We do not invent access, and we do not call Afghanistan safe — your safety is planned, not promised. Routes can change.
+        </p>
+        <p>
+          Every booked tour includes a Letter of Invitation (LOI). We do not issue visas. 4WD is standard; armored vehicles are available as a premium on request, not as the default.
+        </p>
       </div>
     </div>
   </section>
 
-  <!-- Meet the Team -->
   <section class="py-20 bg-[#f6f7fb]">
     <div class="max-w-4xl mx-auto px-4 sm:px-6">
       <div class="mb-12 text-center">
         <SectionHeader eyebrow="The Team" title="Meet the People Behind Afghan Tours" centered />
       </div>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <!-- James Sidiqi -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-3xl mx-auto">
         <div class="bg-white rounded-2xl shadow-sm p-6 text-center flex flex-col items-center gap-4">
           <img
             src="/assets/images/about/president.webp"
@@ -43,17 +49,14 @@ import SectionHeader from '@components/ui/SectionHeader.astro';
             loading="lazy"
             onerror="this.onerror=null;this.style.display='none';this.nextElementSibling.style.display='flex'"
           />
-          <div class="w-20 h-20 rounded-full bg-gradient-to-br from-[#1e3a5f] to-[#1f4aa8] flex items-center justify-center text-white font-display text-2xl font-bold" style="display:none">
-            JS
-          </div>
+          <div class="w-20 h-20 rounded-full bg-gradient-to-br from-[#1e3a5f] to-[#1f4aa8] flex items-center justify-center text-white font-display text-2xl font-bold" style="display:none">JS</div>
           <div>
-            <h3 class="font-display text-lg font-bold text-[#1e3a5f]">James (Amir) Sidiqi</h3>
+            <h3 class="font-display text-lg font-bold text-[#1e3a5f]">James “Amir” Sidiqi</h3>
             <p class="text-[#b88a2a] text-sm font-semibold mt-0.5">Operations Lead</p>
           </div>
-          <p class="text-sm text-[rgba(15,23,42,0.7)] leading-relaxed">A US citizen with over 15 years living and working in Kabul, James brings unparalleled on-the-ground expertise and an extraordinary network across Afghanistan's provinces.</p>
+          <p class="text-sm text-[rgba(15,23,42,0.7)] leading-relaxed">American-led operations from Kabul, with deep provincial networks and expedition planning experience.</p>
         </div>
 
-        <!-- Mohammad Rahimi -->
         <div class="bg-white rounded-2xl shadow-sm p-6 text-center flex flex-col items-center gap-4">
           <img
             src="/assets/images/about/vice-president.webp"
@@ -62,32 +65,17 @@ import SectionHeader from '@components/ui/SectionHeader.astro';
             loading="lazy"
             onerror="this.onerror=null;this.style.display='none';this.nextElementSibling.style.display='flex'"
           />
-          <div class="w-20 h-20 rounded-full bg-gradient-to-br from-[#1e3a5f] to-[#1f4aa8] flex items-center justify-center text-white font-display text-2xl font-bold" style="display:none">
-            MR
-          </div>
+          <div class="w-20 h-20 rounded-full bg-gradient-to-br from-[#1e3a5f] to-[#1f4aa8] flex items-center justify-center text-white font-display text-2xl font-bold" style="display:none">MR</div>
           <div>
-            <h3 class="font-display text-lg font-bold text-[#1e3a5f]">Mohammad (Edrees) Rahimi</h3>
-            <p class="text-[#b88a2a] text-sm font-semibold mt-0.5">Local Guide & Operations Expert</p>
+            <h3 class="font-display text-lg font-bold text-[#1e3a5f]">Mohammad “Edrees” Rahimi</h3>
+            <p class="text-[#b88a2a] text-sm font-semibold mt-0.5">Local Guide & Operations</p>
           </div>
-          <p class="text-sm text-[rgba(15,23,42,0.7)] leading-relaxed">Edrees is an experienced guide and logistics expert who has navigated Afghanistan's complex terrain for decades. His knowledge of local customs and languages is invaluable.</p>
-        </div>
-
-        <!-- Ramin Sediqi -->
-        <div class="bg-white rounded-2xl shadow-sm p-6 text-center flex flex-col items-center gap-4">
-          <div class="w-20 h-20 rounded-full bg-gradient-to-br from-[#1e3a5f] to-[#1f4aa8] flex items-center justify-center text-white font-display text-2xl font-bold">
-            RS
-          </div>
-          <div>
-            <h3 class="font-display text-lg font-bold text-[#1e3a5f]">Ramin Sediqi</h3>
-            <p class="text-[#b88a2a] text-sm font-semibold mt-0.5">Cultural Liaison & Logistics</p>
-          </div>
-          <p class="text-sm text-[rgba(15,23,42,0.7)] leading-relaxed">Ramin bridges cultural understanding between our international guests and Afghan communities, ensuring every interaction is respectful, meaningful, and memorable.</p>
+          <p class="text-sm text-[rgba(15,23,42,0.7)] leading-relaxed">Ground logistics, guiding, and local coordination across hubs and routes.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Why Travel With Us -->
   <section class="py-20 bg-white">
     <div class="max-w-4xl mx-auto px-4 sm:px-6">
       <div class="mb-12 text-center">
@@ -95,22 +83,10 @@ import SectionHeader from '@components/ui/SectionHeader.astro';
       </div>
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
         {[
-          {
-            title: 'Licensed & Accountable',
-            desc: 'We operate as a fully licensed Afghan tour company with all required permits and registrations in place.'
-          },
-          {
-            title: 'Deep Local Relationships',
-            desc: 'Decades of relationship-building means we have access to communities, sites, and experiences no other operator can offer.'
-          },
-          {
-            title: 'Safety-First Approach',
-            desc: 'Every itinerary is vetted against current security intelligence. Your wellbeing is always our primary consideration.'
-          },
-          {
-            title: 'Small-Group & Custom Tours',
-            desc: 'We keep groups small to ensure quality, safety, and genuine connection with the places and people you visit.'
-          }
+          { title: 'Licensed & Accountable', desc: `Operated by ${siteConfig.legalName} under license ${siteConfig.license}.` },
+          { title: 'Hub-Based Planning', desc: 'Itineraries built around operational hubs — KBLC, BMYC, MAZC, HERC, KDRC, JBDC, FAIC, GHZC.' },
+          { title: 'Planned, Not Promised', desc: 'Intelligence-aware routing. Conditions change; we adjust. We never call Afghanistan safe.' },
+          { title: 'Small-Group & Custom', desc: 'Published tours plus custom expeditions scoped to your dates, group size, and access.' },
         ].map(item => (
           <div class="flex gap-4 p-5 bg-[#f6f7fb] rounded-xl">
             <div class="w-8 h-8 rounded-full bg-[#1e3a5f] flex items-center justify-center shrink-0 mt-0.5">
@@ -126,7 +102,6 @@ import SectionHeader from '@components/ui/SectionHeader.astro';
     </div>
   </section>
 
-  <!-- Licensing & Credentials -->
   <section class="py-16 bg-white">
     <div class="max-w-4xl mx-auto px-4 sm:px-6">
       <div class="mb-8 text-center">
@@ -135,24 +110,23 @@ import SectionHeader from '@components/ui/SectionHeader.astro';
       <div class="flex flex-col sm:flex-row items-center gap-8 justify-center">
         <img
           src="/assets/images/about/jtt-license.webp"
-          alt="Afghan Tours License & Certification"
+          alt={`${siteConfig.legalName} license`}
           class="w-full sm:w-64 rounded-xl shadow-md object-contain"
           loading="lazy"
         />
         <div class="max-w-sm text-center sm:text-left">
           <p class="text-[rgba(15,23,42,0.75)] leading-relaxed text-sm">
-            Afghan Tours operates under a full tourism license in compliance with Afghan regulations, giving our guests the assurance of a legitimate, accountable, and professional operation.
+            {siteConfig.legalName} operates under tourism license <strong>{siteConfig.license}</strong>. Public brand: {siteConfig.name}. Office: {siteConfig.office.address}.
           </p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- CTA -->
   <section class="py-16 bg-[#1e3a5f]">
     <div class="max-w-3xl mx-auto px-4 sm:px-6 text-center text-white">
       <h2 class="font-display text-2xl sm:text-3xl font-bold mb-4">Ready to Travel With Us?</h2>
-      <p class="text-white/80 mb-8">Get in touch and let's start planning your Afghan adventure.</p>
+      <p class="text-white/80 mb-8">Get in touch and let’s start planning your expedition.</p>
       <a href="/contact" class="inline-block px-8 py-3.5 rounded-full bg-[#b88a2a] hover:bg-[#a07820] text-white font-semibold shadow-lg transition-all duration-200">
         Contact Us
       </a>

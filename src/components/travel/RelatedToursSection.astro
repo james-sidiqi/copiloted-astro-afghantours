@@ -1,0 +1,59 @@
+---
+import SectionHeader from '@components/ui/SectionHeader.astro';
+import TourCard from '@components/travel/TourCard.astro';
+import { siteConfig } from '@lib/config';
+import type { Tour } from '@lib/types/view-models';
+
+interface Props {
+  tours: Tour[];
+  title?: string;
+  eyebrow?: string;
+  emptyHint?: string;
+  contextLabel?: string;
+}
+
+const {
+  tours,
+  title = 'Related Tours',
+  eyebrow = 'Plan a Trip',
+  emptyHint = 'No linked tours are published for this page yet.',
+  contextLabel = '',
+} = Astro.props;
+
+const customHref = contextLabel
+  ? `${siteConfig.customTourPath}&interest=${encodeURIComponent(contextLabel)}`
+  : siteConfig.customTourPath;
+---
+
+<section class="space-y-8">
+  {tours.length > 0 ? (
+    <div>
+      <div class="mb-8">
+        <SectionHeader eyebrow={eyebrow} title={title} />
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {tours.slice(0, 6).map((tour) => (
+          <TourCard tour={tour} />
+        ))}
+      </div>
+    </div>
+  ) : (
+    <div class="text-center py-6 text-[rgba(15,23,42,0.6)] text-sm">{emptyHint}</div>
+  )}
+
+  <div class="rounded-2xl bg-[#1e3a5f] p-6 sm:p-8 text-white flex flex-col sm:flex-row sm:items-center sm:justify-between gap-5">
+    <div>
+      <p class="text-xs font-semibold uppercase tracking-wider text-[#b88a2a] mb-1">Custom Expedition</p>
+      <h3 class="font-display text-xl font-bold">Need a tailored itinerary?</h3>
+      <p class="mt-2 text-sm text-white/75 max-w-xl">
+        Tell us your dates, group size, and hubs of interest. We confirm pricing after access and logistics are checked. Letter of Invitation issued on every booked tour.
+      </p>
+    </div>
+    <a
+      href={customHref}
+      class="shrink-0 inline-flex items-center justify-center px-6 py-3 rounded-full bg-[#b88a2a] hover:bg-[#a07820] text-white font-semibold text-sm shadow-md transition-colors"
+    >
+      Request a Custom Tour
+    </a>
+  </div>
+</section>

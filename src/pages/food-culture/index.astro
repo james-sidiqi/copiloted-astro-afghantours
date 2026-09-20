@@ -3,18 +3,20 @@ import BaseLayout from '@layouts/BaseLayout.astro';
 import Hero from '@components/site/Hero.astro';
 import SectionHeader from '@components/ui/SectionHeader.astro';
 import DishCard from '@components/travel/DishCard.astro';
+import RelatedToursSection from '@components/travel/RelatedToursSection.astro';
 import { getSiteData } from '@lib/data/site-data';
 
 const data = getSiteData();
 const dishes = data.dishes.filter(d => d.isActive);
 const categories = [...new Set(dishes.map(d => d.category).filter(Boolean))].sort();
+const featuredTours = data.tours.filter((t) => t.isActive && t.isFeatured).slice(0, 6);
 ---
 
-<BaseLayout title="Food & Culture – Afghan Tours" description="Explore the rich culinary traditions and cultural heritage of Afghanistan.">
+<BaseLayout title="Food & Culture – Afghan Tours" description="Explore the culinary traditions and cultural heritage of Afghanistan.">
   <Hero
     title="Food &amp; Culture"
     subtitle="Taste the flavours and traditions of Afghanistan"
-    imagePath="/assets/images/heroes/hero-home.webp"
+    imagePath="/assets/images/placeholders/default-food.webp"
     ctaText="Book a Tour"
     ctaHref="/tours"
   />
@@ -47,6 +49,17 @@ const categories = [...new Set(dishes.map(d => d.category).filter(Boolean))].sor
           <p class="text-lg font-medium">Content coming soon.</p>
         </div>
       )}
+    </div>
+  </section>
+
+  <section class="pb-20 bg-white">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <RelatedToursSection
+        tours={featuredTours}
+        title="Tours with cultural immersion"
+        eyebrow="Plan Around Food & Culture"
+        contextLabel="Food and culture"
+      />
     </div>
   </section>
 </BaseLayout>

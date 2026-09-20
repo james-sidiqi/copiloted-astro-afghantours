@@ -3,21 +3,34 @@ import BaseLayout from '@layouts/BaseLayout.astro';
 import Hero from '@components/site/Hero.astro';
 import SectionHeader from '@components/ui/SectionHeader.astro';
 import SafeImage from '@components/ui/SafeImage.astro';
-import type { Attraction } from '@lib/types/view-models';
+import RelatedToursSection from '@components/travel/RelatedToursSection.astro';
+import type { Attraction, SiteData } from '@lib/types/view-models';
 import { getSiteData } from '@lib/data/site-data';
 
 export async function getStaticPaths() {
   const data = getSiteData();
   return data.attractions.filter((attraction) => attraction.isActive).map((attraction) => ({
     params: { slug: attraction.slug },
-    props: { attraction },
+    props: { attraction, data },
   }));
 }
 
 interface Props {
   attraction: Attraction;
+  data: SiteData;
 }
-const { attraction } = Astro.props;
+const { attraction, data } = Astro.props;
+
+const relatedTours = data.tours.filter((tour) => {
+  if (!tour.isActive) return false;
+  const inItinerary = tour.itinerary.some((day) =>
+    day.attractions.some((a) => a.attractionCode === attraction.attractionCode) ||
+    day.attractionCodes.includes(attraction.attractionCode)
+  );
+  const inHighlights = tour.attractions.some((a) => a.attractionCode === attraction.attractionCode);
+  const provinceMatch = attraction.province && tour.provinces.some((p) => p.toLowerCase() === attraction.province.toLowerCase());
+  return inItinerary || inHighlights || provinceMatch;
+}).slice(0, 6);
 ---
 
 <BaseLayout title={`${attraction.name} – Afghan Tours`} description={attraction.descShort || `Explore ${attraction.name}`}>
@@ -32,7 +45,7 @@ const { attraction } = Astro.props;
   <section class="py-14 bg-white">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 grid grid-cols-1 lg:grid-cols-[minmax(0,1.5fr)_minmax(260px,0.8fr)] gap-10">
       <div>
-        <SectionHeader eyebrow={attraction.category || 'Attraction'} title={attraction.name} />
+        <SectionHeader eyebrow={attraction.category || 'Cultural Experience'} title={attraction.name} />
         {attraction.descLong && (
           <p class="mt-4 text-[rgba(15,23,42,0.75)] leading-relaxed">{attraction.descLong}</p>
         )}
@@ -56,6 +69,18 @@ const { attraction } = Astro.props;
           )}
         </dl>
       </aside>
+    </div>
+  </section>
+
+  <section class="py-12 bg-[#f6f7fb]">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <RelatedToursSection
+        tours={relatedTours}
+        title={`Tours related to ${attraction.name}`}
+        eyebrow="Cultural Experience"
+        contextLabel={attraction.name}
+        emptyHint="No published tours currently list this attraction. Request a custom itinerary."
+      />
     </div>
   </section>
 </BaseLayout>

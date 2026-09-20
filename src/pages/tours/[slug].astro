@@ -2,10 +2,12 @@
 import BaseLayout from '@layouts/BaseLayout.astro';
 import Hero from '@components/site/Hero.astro';
 import SectionHeader from '@components/ui/SectionHeader.astro';
+import SafeImage from '@components/ui/SafeImage.astro';
 import AttractionCard from '@components/travel/AttractionCard.astro';
 import ItineraryTimeline from '@components/travel/ItineraryTimeline.astro';
 import TourMap from '@components/travel/TourMap.astro';
 import type { Tour, MapStop, SiteData } from '@lib/types/view-models';
+import { siteConfig } from '@lib/config';
 import { getSiteData } from '@lib/data/site-data';
 
 export async function getStaticPaths() {
@@ -22,7 +24,6 @@ interface Props {
 }
 const { tour, data } = Astro.props;
 
-// Build ordered map stops from itinerary days (deduplicated by attraction code)
 const seenCodes = new Set<string>();
 const mapStops: MapStop[] = [];
 let stopNumber = 0;
@@ -46,16 +47,27 @@ for (const day of tour.itinerary) {
     });
   }
 }
+
+const presentDays = new Set(tour.itinerary.map((d) => d.dayNumber));
+const missingDays = Array.from({ length: tour.durationDays }, (_, i) => i + 1).filter(
+  (d) => !presentDays.has(d)
+);
+const extraDays = tour.itinerary
+  .map((d) => d.dayNumber)
+  .filter((d) => d > tour.durationDays);
+const overnightHubs = [...new Set(tour.itinerary.map((d) => d.location).filter(Boolean))];
+const gallery = [tour.heroImagePath || tour.thumbnailImagePath, tour.imageSlide1, tour.imageSlide2]
+  .filter((p, i, arr) => Boolean(p) && arr.indexOf(p) === i) as string[];
+
+const enquireHref = `/contact/?type=tour&interest=${encodeURIComponent(tour.slug)}`;
 ---
 
 <BaseLayout title={`${tour.name} – Afghan Tours`} description={tour.summary}>
-  <!-- Hero -->
   <Hero
     title={tour.name}
     imagePath={tour.heroImagePath || tour.thumbnailImagePath || '/assets/images/heroes/hero-tour.webp'}
   />
 
-  <!-- Overview bar -->
   <div class="bg-[#1e3a5f] text-white py-4">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 flex flex-wrap gap-6 justify-center sm:justify-start text-sm font-medium">
       <span class="flex items-center gap-1.5">
@@ -89,9 +101,7 @@ for (const day of tour.itinerary) {
 
   <div class="max-w-6xl mx-auto px-4 sm:px-6 py-16">
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
-      <!-- Main content -->
       <div class="lg:col-span-2 space-y-14">
-        <!-- Overview -->
         <section>
           <SectionHeader eyebrow="Overview" title="About This Tour" />
           <p class="mt-4 text-[rgba(15,23,42,0.75)] leading-relaxed text-base">{tour.summary}</p>
@@ -119,10 +129,56 @@ for (const day of tour.itinerary) {
               <span class="text-[rgba(15,23,42,0.7)]">{tour.travelStyle}</span>
             </div>
           )}
+
+          <p class="mt-5 text-sm text-[rgba(15,23,42,0.65)] leading-relaxed bg-[#f6f7fb] rounded-xl p-4 border border-[#1e3a5f]/10">
+            Your safety is planned, not promised. Routes can change based on access and conditions. 4WD is standard; armored vehicles are available as a premium on request — not included by default. Letter of Invitation (LOI) is issued on every booked tour. We do not issue visas.
+          </p>
         </section>
 
-        <!-- Itinerary -->
-        {tour.itinerary.length > 0 && (
+        {overnightHubs.length > 0 && (
+          <section>
+            <SectionHeader eyebrow="Route Snapshot" title="Overnight Hubs" />
+            <div class="mt-4 flex flex-wrap gap-2">
+              {overnightHubs.map((hub) => (
+                <span class="text-xs font-semibold px-3 py-1.5 rounded-full bg-white border border-[#1e3a5f]/15 text-[#1e3a5f] shadow-sm">{hub}</span>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {gallery.length > 1 && (
+          <section>
+            <SectionHeader eyebrow="Gallery" title="Tour Images" />
+            <div class="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-3">
+              {gallery.map((src, i) => (
+                <div class="aspect-[4/3] rounded-xl overflow-hidden bg-gray-100">
+                  <SafeImage
+                    src={src}
+                    fallback="/assets/images/placeholders/default-tour.webp"
+                    alt={`${tour.name} image ${i + 1}`}
+                    class="w-full h-full object-cover"
+                    loading="lazy"
+                  />
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {missingDays.length > 0 && (
+          <div class="rounded-xl border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-900" role="status">
+            <strong>FLAG — Incomplete itinerary data:</strong> days {missingDays.join(', ')} are missing from CSV for
+            <code class="mx-1">{tour.slug}</code>. Content not invented.
+          </div>
+        )}
+        {extraDays.length > 0 && (
+          <div class="rounded-xl border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-900" role="status">
+            <strong>FLAG — Duration mismatch:</strong> itinerary includes day(s) {extraDays.join(', ')} beyond listed duration ({tour.durationDays} days) for
+            <code class="mx-1">{tour.slug}</code>.
+          </div>
+        )}
+
+        {tour.itinerary.length > 0 ? (
           <section>
             <div class="mb-6">
               <SectionHeader eyebrow="Day by Day" title="Tour Itinerary" />
@@ -142,9 +198,12 @@ for (const day of tour.itinerary) {
               tourTransportNote={tour.transportNote}
             />
           </section>
+        ) : (
+          <div class="rounded-xl border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-900" role="status">
+            <strong>FLAG — No itinerary rows</strong> in CSV for <code class="mx-1">{tour.slug}</code>. Day-by-day content not invented.
+          </div>
         )}
 
-        <!-- Inclusions -->
         {tour.inclusions.length > 0 && (
           <section>
             <div class="mb-6">
@@ -164,7 +223,6 @@ for (const day of tour.itinerary) {
           </section>
         )}
 
-        <!-- Related Attractions -->
         {tour.attractions.length > 0 && (
           <section>
             <div class="mb-6">
@@ -177,30 +235,28 @@ for (const day of tour.itinerary) {
         )}
       </div>
 
-      <!-- Sidebar -->
       <aside class="space-y-6">
-        <!-- Price & Book CTA -->
         <div class="bg-white rounded-2xl shadow-[0_2px_20px_rgba(0,0,0,0.08)] p-6 sticky top-6">
-          <p class="text-xs font-semibold uppercase tracking-wider text-[#b88a2a] mb-1">Price Per Person</p>
-          <p class="font-display text-2xl sm:text-3xl font-bold text-[#1e3a5f] mb-4">From ${tour.priceFrom.toLocaleString()}</p>
-          <a href="/contact" class="block w-full text-center py-3 rounded-full bg-[#b88a2a] hover:bg-[#a07820] text-white font-semibold transition-all duration-200 shadow-md mb-3">
-            Book This Tour
+          <p class="text-xs font-semibold uppercase tracking-wider text-[#b88a2a] mb-1">Starting from / From</p>
+          <p class="font-display text-2xl sm:text-3xl font-bold text-[#1e3a5f] mb-1">From ${tour.priceFrom.toLocaleString()}</p>
+          <p class="text-xs text-[rgba(15,23,42,0.55)] mb-4 leading-relaxed">Confirmed after dates, group size, and access are checked.</p>
+          <a href={enquireHref} class="block w-full text-center py-3 rounded-full bg-[#b88a2a] hover:bg-[#a07820] text-white font-semibold transition-all duration-200 shadow-md mb-3">
+            Enquire / Book
           </a>
-          <a href="/contact" class="block w-full text-center py-3 rounded-full border-2 border-[#1e3a5f] text-[#1e3a5f] font-semibold hover:bg-[#1e3a5f] hover:text-white transition-all duration-200">
-            Enquire Now
+          <a href={siteConfig.customTourPath} class="block w-full text-center py-3 rounded-full border-2 border-[#1e3a5f] text-[#1e3a5f] font-semibold hover:bg-[#1e3a5f] hover:text-white transition-all duration-200">
+            Request Custom Variant
           </a>
 
-          <!-- Quick facts -->
           <ul class="mt-6 space-y-3 text-sm text-[rgba(15,23,42,0.75)] border-t border-gray-100 pt-5">
             <li class="flex justify-between"><span class="font-medium text-[#1e3a5f]">Duration</span><span>{tour.durationDays} days</span></li>
             {tour.groupSize && <li class="flex justify-between"><span class="font-medium text-[#1e3a5f]">Group Size</span><span>{tour.groupSize}</span></li>}
             {tour.activityLevel && <li class="flex justify-between"><span class="font-medium text-[#1e3a5f]">Activity Level</span><span>{tour.activityLevel}</span></li>}
             {tour.season && <li class="flex justify-between"><span class="font-medium text-[#1e3a5f]">Best Season</span><span>{tour.season}</span></li>}
             {tour.travelStyle && <li class="flex justify-between"><span class="font-medium text-[#1e3a5f]">Style</span><span>{tour.travelStyle}</span></li>}
+            <li class="flex justify-between"><span class="font-medium text-[#1e3a5f]">Transport</span><span>4WD standard</span></li>
           </ul>
         </div>
 
-        <!-- Accommodation note -->
         {tour.accommodationNote && (
           <div class="bg-white rounded-2xl shadow-sm p-5">
             <h4 class="font-semibold text-[#1e3a5f] mb-2 text-sm">Accommodation</h4>
@@ -208,7 +264,6 @@ for (const day of tour.itinerary) {
           </div>
         )}
 
-        <!-- Transport note -->
         {tour.transportNote && (
           <div class="bg-white rounded-2xl shadow-sm p-5">
             <h4 class="font-semibold text-[#1e3a5f] mb-2 text-sm">Transport</h4>
@@ -216,7 +271,6 @@ for (const day of tour.itinerary) {
           </div>
         )}
 
-        <!-- Upcoming dates -->
         {tour.dates.length > 0 && (
           <div class="bg-white rounded-2xl shadow-sm p-5">
             <h4 class="font-semibold text-[#1e3a5f] mb-3 text-sm">Upcoming Dates</h4>

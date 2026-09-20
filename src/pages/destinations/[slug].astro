@@ -2,10 +2,10 @@
 import BaseLayout from '@layouts/BaseLayout.astro';
 import SectionHeader from '@components/ui/SectionHeader.astro';
 import AttractionCard from '@components/travel/AttractionCard.astro';
-import TourCard from '@components/travel/TourCard.astro';
 import DishCard from '@components/travel/DishCard.astro';
 import HotelCard from '@components/travel/HotelCard.astro';
 import TransportCard from '@components/travel/TransportCard.astro';
+import RelatedToursSection from '@components/travel/RelatedToursSection.astro';
 import type { Location, SiteData } from '@lib/types/view-models';
 import { getSiteData } from '@lib/data/site-data';
 
@@ -151,26 +151,12 @@ const atAGlance = [
       </section>
     )}
 
-    {relatedTours.length > 0 && (
-      <section>
-        <div class="mb-8">
-          <SectionHeader eyebrow="Tours" title={`Tours using ${destination.name} as a hub`} />
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {relatedTours.map((tour) => <TourCard tour={tour} />)}
-        </div>
-      </section>
-    )}
-
-    {relatedAttractions.length === 0 &&
-      relatedHotels.length === 0 &&
-      relatedDishes.length === 0 &&
-      relatedTransports.length === 0 &&
-      relatedTours.length === 0 && (
-        <div class="text-center py-12 text-gray-500">
-          <p class="text-base font-medium">No linked content is currently published for {destination.name}.</p>
-          <a href="/contact" class="mt-4 inline-block text-[#1f4aa8] underline text-sm">Contact us for trip planning</a>
-        </div>
-      )}
+    <RelatedToursSection
+      tours={relatedTours}
+      title={`Tours using ${destination.name} as a hub`}
+      eyebrow="Tours"
+      contextLabel={destination.name}
+      emptyHint={`No linked tours are currently published for ${destination.name}.`}
+    />
   </div>
 </BaseLayout>
