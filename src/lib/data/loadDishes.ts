@@ -2,6 +2,7 @@ import type { DishRow } from '../types/data.js';
 import type { Dish } from '../types/view-models.js';
 import { readCsv } from './readCsv.js';
 import { cleanText, normalizeAssetPath } from './normalize.js';
+import { getAssetUrl } from '../getAssetUrl.js';
 
 export function loadDishes(): Dish[] {
   const rows = readCsv<DishRow>('dishes.csv');
@@ -20,7 +21,7 @@ export function loadDishes(): Dish[] {
       seasonStart: parseInt(r.season_start, 10) || 0,
       seasonEnd: parseInt(r.season_end, 10) || 0,
       descShort: cleanText(r.desc_short),
-      imagePath: normalizeAssetPath(r.image_path),
+      imagePath: getAssetUrl(normalizeAssetPath(r.image_path), { slug: cleanText(r.slug), entity: 'dish', kind: 'hero' }),
       isActive: true,
     }));
 }
