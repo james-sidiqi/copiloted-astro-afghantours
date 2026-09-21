@@ -4,12 +4,15 @@ import Hero from '@components/site/Hero.astro';
 import SectionHeader from '@components/ui/SectionHeader.astro';
 ---
 
-<BaseLayout title="About Afghan Tours" description="Learn about Afghan Tours – a licensed Afghan tour operator led by experienced locals and international partners.">
+<BaseLayout
+  title="About Us – Afghan Tours | Kabul-Based, American-Led"
+  description="Licensed Afghan tour operator based in Kabul. American-led, Afghan-operated through James Tourist & Travel Agency. Built by operators, not brochure writers."
+>
   <Hero
     title="About Afghan Tours"
-    subtitle="A passionate team dedicated to sharing the real Afghanistan with the world"
+    subtitle="We plan from Kabul. We do not parachute in for the season."
     imagePath="/assets/images/heroes/hero-about.webp"
-    ctaText="Contact Us"
+    ctaText="Start Planning"
     ctaHref="/contact"
   />
 
@@ -17,12 +20,12 @@ import SectionHeader from '@components/ui/SectionHeader.astro';
   <section class="py-20 bg-white">
     <div class="max-w-4xl mx-auto px-4 sm:px-6">
       <div class="mb-8">
-        <SectionHeader eyebrow="Our Story" title="Who We Are" />
+        <SectionHeader eyebrow="About" title="Reimagined. Grounded. Kabul-based." />
       </div>
       <div class="prose prose-lg max-w-none text-[rgba(15,23,42,0.75)] leading-relaxed space-y-5">
-        <p>Afghan Tours is a licensed Afghan tour operator committed to responsible, safe, and authentic travel experiences in Afghanistan. We believe that travel has the power to transform perspectives — both for visitors and for the communities they encounter.</p>
-        <p>Our team combines deep local knowledge with international standards of safety and service. We have spent years building trusted networks of guides, drivers, hosts, and partners across all regions of Afghanistan, allowing us to offer itineraries that go far beyond what a standard tour operator could provide.</p>
-        <p>We operate with full transparency about the realities of travelling in Afghanistan. Our guests are well-informed, well-prepared, and — most importantly — genuinely welcomed by the Afghan people who are proud to share their extraordinary land with the world.</p>
+        <p>Afghan Tours is a licensed Afghan tour operator — American-led, Afghan-operated, and based in Kabul. We work through James Tourist &amp; Travel Agency. Human, practical, honest, and locally rooted.</p>
+        <p>We plan routes around current access, timing, permits, hotels, drivers, and conditions. Afghanistan is not a checkbox. It is a conversation.</p>
+        <p>Built by operators, not brochure writers. Guests get clear information, realistic drive times, and coordination from people who live and work here — not a seasonal fly-in model.</p>
       </div>
     </div>
   </section>
@@ -31,7 +34,7 @@ import SectionHeader from '@components/ui/SectionHeader.astro';
   <section class="py-20 bg-[#f6f7fb]">
     <div class="max-w-4xl mx-auto px-4 sm:px-6">
       <div class="mb-12 text-center">
-        <SectionHeader eyebrow="The Team" title="Meet the People Behind Afghan Tours" centered />
+        <SectionHeader eyebrow="The Team" title="Operators on the ground" centered />
       </div>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
         <!-- James Sidiqi -->
@@ -50,7 +53,7 @@ import SectionHeader from '@components/ui/SectionHeader.astro';
             <h3 class="font-display text-lg font-bold text-[#1e3a5f]">James (Amir) Sidiqi</h3>
             <p class="text-[#b88a2a] text-sm font-semibold mt-0.5">Operations Lead</p>
           </div>
-          <p class="text-sm text-[rgba(15,23,42,0.7)] leading-relaxed">A US citizen with over 15 years living and working in Kabul, James brings unparalleled on-the-ground expertise and an extraordinary network across Afghanistan's provinces.</p>
+          <p class="text-sm text-[rgba(15,23,42,0.7)] leading-relaxed">US citizen based in Kabul for 15+ years. Coordinates operations, partner networks, and trip planning across the provinces.</p>
         </div>
 
         <!-- Mohammad Rahimi -->
@@ -67,9 +70,9 @@ import SectionHeader from '@components/ui/SectionHeader.astro';
           </div>
           <div>
             <h3 class="font-display text-lg font-bold text-[#1e3a5f]">Mohammad (Edrees) Rahimi</h3>
-            <p class="text-[#b88a2a] text-sm font-semibold mt-0.5">Local Guide & Operations Expert</p>
+            <p class="text-[#b88a2a] text-sm font-semibold mt-0.5">Local Guide & Operations</p>
           </div>
-          <p class="text-sm text-[rgba(15,23,42,0.7)] leading-relaxed">Edrees is an experienced guide and logistics expert who has navigated Afghanistan's complex terrain for decades. His knowledge of local customs and languages is invaluable.</p>
+          <p class="text-sm text-[rgba(15,23,42,0.7)] leading-relaxed">Guide and logistics lead with deep route knowledge, local customs, and languages across complex terrain.</p>
         </div>
 
         <!-- Ramin Sediqi -->
@@ -81,7 +84,7 @@ import SectionHeader from '@components/ui/SectionHeader.astro';
             <h3 class="font-display text-lg font-bold text-[#1e3a5f]">Ramin Sediqi</h3>
             <p class="text-[#b88a2a] text-sm font-semibold mt-0.5">Cultural Liaison & Logistics</p>
           </div>
-          <p class="text-sm text-[rgba(15,23,42,0.7)] leading-relaxed">Ramin bridges cultural understanding between our international guests and Afghan communities, ensuring every interaction is respectful, meaningful, and memorable.</p>
+          <p class="text-sm text-[rgba(15,23,42,0.7)] leading-relaxed">Bridges guest expectations with Afghan hosts and communities — respectful, clear, and practical on the ground.</p>
         </div>
       </div>
     </div>
@@ -91,25 +94,25 @@ import SectionHeader from '@components/ui/SectionHeader.astro';
   <section class="py-20 bg-white">
     <div class="max-w-4xl mx-auto px-4 sm:px-6">
       <div class="mb-12 text-center">
-        <SectionHeader eyebrow="Our Difference" title="Why Travel With Afghan Tours" centered />
+        <SectionHeader eyebrow="How We Work" title="What you can count on" centered />
       </div>
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
         {[
           {
-            title: 'Licensed & Accountable',
-            desc: 'We operate as a fully licensed Afghan tour company with all required permits and registrations in place.'
+            title: 'Licensed & accountable',
+            desc: 'Licensed Afghan tour operator with the permits and registrations required to operate here.'
           },
           {
-            title: 'Deep Local Relationships',
-            desc: 'Decades of relationship-building means we have access to communities, sites, and experiences no other operator can offer.'
+            title: 'American-led, Afghan-operated',
+            desc: 'Kabul-based team. Local coordination for hotels, drivers, timing, and current access.'
           },
           {
-            title: 'Safety-First Approach',
-            desc: 'Every itinerary is vetted against current security intelligence. Your wellbeing is always our primary consideration.'
+            title: 'Safety planned, not promised',
+            desc: 'Route-aware planning, realistic drive times, and adjustments when conditions change. No risk-free guarantees.'
           },
           {
-            title: 'Small-Group & Custom Tours',
-            desc: 'We keep groups small to ensure quality, safety, and genuine connection with the places and people you visit.'
+            title: 'Packages & custom requests',
+            desc: 'Tour packages when they fit — or a custom journey built around your timing and interests.'
           }
         ].map(item => (
           <div class="flex gap-4 p-5 bg-[#f6f7fb] rounded-xl">
@@ -130,7 +133,7 @@ import SectionHeader from '@components/ui/SectionHeader.astro';
   <section class="py-16 bg-white">
     <div class="max-w-4xl mx-auto px-4 sm:px-6">
       <div class="mb-8 text-center">
-        <SectionHeader eyebrow="Credentials" title="Licensed & Certified" centered />
+        <SectionHeader eyebrow="Credentials" title="Licensed to operate" centered />
       </div>
       <div class="flex flex-col sm:flex-row items-center gap-8 justify-center">
         <img
@@ -141,7 +144,7 @@ import SectionHeader from '@components/ui/SectionHeader.astro';
         />
         <div class="max-w-sm text-center sm:text-left">
           <p class="text-[rgba(15,23,42,0.75)] leading-relaxed text-sm">
-            Afghan Tours operates under a full tourism license in compliance with Afghan regulations, giving our guests the assurance of a legitimate, accountable, and professional operation.
+            Afghan Tours operates under a full tourism license in compliance with Afghan regulations, through James Tourist &amp; Travel Agency. LOI support is available for booked tours. We do not issue visas.
           </p>
         </div>
       </div>
@@ -151,8 +154,8 @@ import SectionHeader from '@components/ui/SectionHeader.astro';
   <!-- CTA -->
   <section class="py-16 bg-[#1e3a5f]">
     <div class="max-w-3xl mx-auto px-4 sm:px-6 text-center text-white">
-      <h2 class="font-display text-2xl sm:text-3xl font-bold mb-4">Ready to Travel With Us?</h2>
-      <p class="text-white/80 mb-8">Get in touch and let's start planning your Afghan adventure.</p>
+      <h2 class="font-display text-2xl sm:text-3xl font-bold mb-4">Start the conversation</h2>
+      <p class="text-white/80 mb-8">Tour packages or a custom request — tell us what you need and we will plan from Kabul.</p>
       <a href="/contact" class="inline-block px-8 py-3.5 rounded-full bg-[#b88a2a] hover:bg-[#a07820] text-white font-semibold shadow-lg transition-all duration-200">
         Contact Us
       </a>
