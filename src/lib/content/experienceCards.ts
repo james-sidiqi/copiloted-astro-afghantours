@@ -97,6 +97,16 @@ const ACTIVITY_DEFS: Array<{
   },
 ];
 
+/** Map card asset folder slug → cultural-experiences content slug when they differ. */
+const CULTURAL_PAGE_SLUG: Record<string, string> = {
+  buzkashi: "buzkashi",
+  "istalif-pottery": "istalif-pottery",
+  "afghan-carpets": "afghan-carpets",
+  "glassblowers-of-herat": "glassblowers-of-herat",
+  "afghan-weddings": "afghan-weddings",
+  // qurut-markets-of-bamyan has assets but no MD page yet — keep tours CTA
+};
+
 export function getCulturalExperienceCards(limit = 6): ExperienceCard[] {
   if (!dirExists("assets/images/cultural-experiences")) return [];
   const cards: ExperienceCard[] = [];
@@ -113,7 +123,9 @@ export function getCulturalExperienceCards(limit = 6): ExperienceCard[] {
       label: def.label,
       blurb: def.blurb,
       imagePath,
-      href: "/tours?type=scheduled",
+      href: CULTURAL_PAGE_SLUG[def.slug]
+        ? `/cultural-experiences/${CULTURAL_PAGE_SLUG[def.slug]}`
+        : "/tours?type=scheduled",
       kind: "cultural",
     });
     if (cards.length >= limit) break;
