@@ -2,15 +2,19 @@
 import BaseLayout from '@layouts/BaseLayout.astro';
 import Hero from '@components/site/Hero.astro';
 import SectionHeader from '@components/ui/SectionHeader.astro';
+import SafeImage from '@components/ui/SafeImage.astro';
 import AttractionCard from '@components/travel/AttractionCard.astro';
 import ItineraryTimeline from '@components/travel/ItineraryTimeline.astro';
 import TourMap from '@components/travel/TourMap.astro';
+import FaqAccordion from '@components/travel/FaqAccordion.astro';
+import RelatedToursSection from '@components/travel/RelatedToursSection.astro';
 import type { Tour, MapStop, SiteData } from '@lib/types/view-models';
 import { getSiteData } from '@lib/data/site-data';
+import { siteConfig } from '@lib/config';
 
 export async function getStaticPaths() {
   const data = getSiteData();
-  return data.tours.filter(t => t.isActive).map(tour => ({
+  return data.tours.filter((t) => t.isActive).map((tour) => ({
     params: { slug: tour.slug },
     props: { tour, data },
   }));
@@ -46,52 +50,172 @@ for (const day of tour.itinerary) {
     });
   }
 }
+
+const primaryDestinations = [
+  ...tour.provinces,
+  ...tour.regions.filter((r) => !tour.provinces.includes(r)),
+].filter(Boolean);
+
+const heroImage =
+  tour.heroImagePath || tour.thumbnailImagePath || '/assets/images/heroes/hero-tour.webp';
+
+const galleryImages = [tour.imageSlide1, tour.imageSlide2, tour.thumbnailImagePath]
+  .filter((path, index, arr) => Boolean(path) && arr.indexOf(path) === index && path !== tour.heroImagePath);
+
+const showPrice = Number.isFinite(tour.priceFrom) && tour.priceFrom > 0;
+
+const inquireMessage = `Hi Afghan Tours — I'm interested in "${tour.name}" (slug: ${tour.slug}, code: ${tour.tourCode}). Could you share availability and next steps?`;
+const whatsappInquireUrl = `${siteConfig.whatsapp.url}?text=${encodeURIComponent(inquireMessage)}`;
+const contactInquireHref = `/contact?tour=${encodeURIComponent(tour.slug)}&tourName=${encodeURIComponent(tour.name)}&tourCode=${encodeURIComponent(tour.tourCode)}`;
+const mailtoInquireHref = `mailto:${siteConfig.email}?subject=${encodeURIComponent(`Enquiry: ${tour.name}`)}&body=${encodeURIComponent(inquireMessage)}`;
+
+// FAQ: tour-specific first, then general tour/logistics FAQs (no invented Q&A)
+const tourFaqs = data.faqs.filter(
+  (f) => f.isActive && f.tourSlug && f.tourSlug === tour.slug,
+);
+const generalTourFaqs = data.faqs.filter((f) => {
+  if (!f.isActive || f.tourSlug) return false;
+  const assignment = f.pageAssignment.toLowerCase();
+  return (
+    assignment.includes('tour') ||
+    assignment.includes('logistics') ||
+    assignment === 'faq' ||
+    assignment.startsWith('faq;')
+  );
+});
+const pageFaqs = [...tourFaqs, ...generalTourFaqs].slice(0, 8);
+
+// Inclusions: only show when rows are not an itinerary clone (same day titles)
+const itineraryTitles = new Set(
+  tour.itinerary.map((d) => `${d.dayNumber}|${d.title.trim().toLowerCase()}`),
+);
+const inclusionLooksLikeItinerary =
+  tour.inclusions.length > 0 &&
+  tour.inclusions.every((item) =>
+    itineraryTitles.has(`${item.dayNumber}|${item.title.trim().toLowerCase()}`),
+  );
+const showInclusions = tour.inclusions.length > 0 && !inclusionLooksLikeItinerary;
+
+const highlightAttractions = tour.attractions.slice(0, 6);
+
+const durationLabel = tour.durationDays
+  ? `${tour.durationDays} ${tour.durationDays === 1 ? 'Day' : 'Days'}`
+  : '';
 ---
 
-<BaseLayout title={`${tour.name} – Afghan Tours`} description={tour.summary}>
-  <!-- Hero -->
+<BaseLayout
+  title={`${tour.name} – Afghan Tours`}
+  description={tour.summary}
+  ogImage={heroImage}
+>
+  <!-- A. Hero -->
   <Hero
     title={tour.name}
-    imagePath={tour.heroImagePath || tour.thumbnailImagePath || '/assets/images/heroes/hero-tour.webp'}
+    subtitle={tour.summary}
+    imagePath={heroImage}
+    ctaText="Inquire About This Tour"
+    ctaHref={whatsappInquireUrl}
   />
 
-  <!-- Overview bar -->
+  <!-- Hero meta strip: duration / destinations / price -->
   <div class="bg-[#1e3a5f] text-white py-4">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 flex flex-wrap gap-6 justify-center sm:justify-start text-sm font-medium">
-      <span class="flex items-center gap-1.5">
-        <svg class="w-4 h-4 text-[#b88a2a]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-        From ${tour.priceFrom.toLocaleString()}
-      </span>
-      <span class="flex items-center gap-1.5">
-        <svg class="w-4 h-4 text-[#b88a2a]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-        {tour.durationDays} {tour.durationDays === 1 ? 'Day' : 'Days'}
-      </span>
-      {tour.groupSize && (
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 flex flex-wrap gap-4 sm:gap-6 justify-center sm:justify-start text-sm font-medium">
+      {durationLabel && (
         <span class="flex items-center gap-1.5">
-          <svg class="w-4 h-4 text-[#b88a2a]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-          Group: {tour.groupSize}
+          <svg class="w-4 h-4 text-[#b88a2a]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+          {durationLabel}
         </span>
       )}
-      {tour.season && (
+      {primaryDestinations.length > 0 && (
         <span class="flex items-center gap-1.5">
-          <svg class="w-4 h-4 text-[#b88a2a]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707M17.657 17.657l-.707-.707M6.343 6.343l-.707-.707M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-          {tour.season}
+          <svg class="w-4 h-4 text-[#b88a2a]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+          {primaryDestinations.slice(0, 4).join(' · ')}
         </span>
       )}
-      {tour.activityLevel && (
+      {showPrice && (
         <span class="flex items-center gap-1.5">
-          <svg class="w-4 h-4 text-[#b88a2a]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-          Activity: {tour.activityLevel}
+          <svg class="w-4 h-4 text-[#b88a2a]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          From ${tour.priceFrom.toLocaleString()}
         </span>
       )}
+      <a
+        href={whatsappInquireUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="ml-auto inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-[#b88a2a] hover:bg-[#a07820] text-white text-xs sm:text-sm font-semibold transition-colors"
+      >
+        Inquire About This Tour
+      </a>
     </div>
   </div>
 
-  <div class="max-w-6xl mx-auto px-4 sm:px-6 py-16">
+  <!-- B. Essential info panel -->
+  <section class="bg-white border-b border-gray-100" aria-label="Essential tour information">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-8">
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+        {durationLabel && (
+          <div class="rounded-2xl bg-[#f6f7fb] p-4 text-center sm:text-left">
+            <div class="mx-auto sm:mx-0 mb-2 w-9 h-9 rounded-xl bg-[#1e3a5f]/10 flex items-center justify-center">
+              <svg class="w-5 h-5 text-[#1e3a5f]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+            </div>
+            <p class="text-[11px] uppercase tracking-wider font-semibold text-[#b88a2a]">Duration</p>
+            <p class="mt-1 text-sm font-semibold text-[#1e3a5f]">{durationLabel}</p>
+          </div>
+        )}
+        {primaryDestinations.length > 0 && (
+          <div class="rounded-2xl bg-[#f6f7fb] p-4 text-center sm:text-left">
+            <div class="mx-auto sm:mx-0 mb-2 w-9 h-9 rounded-xl bg-[#1e3a5f]/10 flex items-center justify-center">
+              <svg class="w-5 h-5 text-[#1e3a5f]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+            </div>
+            <p class="text-[11px] uppercase tracking-wider font-semibold text-[#b88a2a]">Destinations</p>
+            <p class="mt-1 text-sm font-semibold text-[#1e3a5f] leading-snug">{primaryDestinations.slice(0, 3).join(', ')}</p>
+          </div>
+        )}
+        {tour.travelStyle && (
+          <div class="rounded-2xl bg-[#f6f7fb] p-4 text-center sm:text-left">
+            <div class="mx-auto sm:mx-0 mb-2 w-9 h-9 rounded-xl bg-[#1e3a5f]/10 flex items-center justify-center">
+              <svg class="w-5 h-5 text-[#1e3a5f]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </div>
+            <p class="text-[11px] uppercase tracking-wider font-semibold text-[#b88a2a]">Type</p>
+            <p class="mt-1 text-sm font-semibold text-[#1e3a5f]">{tour.travelStyle}</p>
+          </div>
+        )}
+        {tour.groupSize && (
+          <div class="rounded-2xl bg-[#f6f7fb] p-4 text-center sm:text-left">
+            <div class="mx-auto sm:mx-0 mb-2 w-9 h-9 rounded-xl bg-[#1e3a5f]/10 flex items-center justify-center">
+              <svg class="w-5 h-5 text-[#1e3a5f]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+            </div>
+            <p class="text-[11px] uppercase tracking-wider font-semibold text-[#b88a2a]">Group Size</p>
+            <p class="mt-1 text-sm font-semibold text-[#1e3a5f]">{tour.groupSize}</p>
+          </div>
+        )}
+        <div class="rounded-2xl bg-[#f6f7fb] p-4 text-center sm:text-left">
+          <div class="mx-auto sm:mx-0 mb-2 w-9 h-9 rounded-xl bg-[#1e3a5f]/10 flex items-center justify-center">
+            <svg class="w-5 h-5 text-[#1e3a5f]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          </div>
+          <p class="text-[11px] uppercase tracking-wider font-semibold text-[#b88a2a]">{showPrice ? 'From' : 'Quote'}</p>
+          <p class="mt-1 text-sm font-semibold text-[#1e3a5f]">
+            {showPrice ? `$${tour.priceFrom.toLocaleString()}` : 'Request a quote'}
+          </p>
+        </div>
+        {tour.activityLevel && (
+          <div class="rounded-2xl bg-[#f6f7fb] p-4 text-center sm:text-left">
+            <div class="mx-auto sm:mx-0 mb-2 w-9 h-9 rounded-xl bg-[#1e3a5f]/10 flex items-center justify-center">
+              <svg class="w-5 h-5 text-[#1e3a5f]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+            </div>
+            <p class="text-[11px] uppercase tracking-wider font-semibold text-[#b88a2a]">Activity</p>
+            <p class="mt-1 text-sm font-semibold text-[#1e3a5f]">{tour.activityLevel}</p>
+          </div>
+        )}
+      </div>
+    </div>
+  </section>
+
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 py-14 sm:py-16">
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
-      <!-- Main content -->
+      <!-- Main column -->
       <div class="lg:col-span-2 space-y-14">
-        <!-- Overview -->
+        <!-- C. Intro + highlights -->
         <section>
           <SectionHeader eyebrow="Overview" title="About This Tour" />
           <p class="mt-4 text-[rgba(15,23,42,0.75)] leading-relaxed text-base">{tour.summary}</p>
@@ -113,15 +237,44 @@ for (const day of tour.itinerary) {
             </div>
           )}
 
-          {tour.travelStyle && (
+          {tour.season && (
             <div class="mt-3 text-sm">
-              <span class="font-semibold text-[#1e3a5f]">Travel Style: </span>
-              <span class="text-[rgba(15,23,42,0.7)]">{tour.travelStyle}</span>
+              <span class="font-semibold text-[#1e3a5f]">Best season: </span>
+              <span class="text-[rgba(15,23,42,0.7)]">{tour.season}</span>
+            </div>
+          )}
+
+          {galleryImages.length > 0 && (
+            <div class="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {galleryImages.map((src, i) => (
+                <div class="overflow-hidden rounded-2xl bg-gray-100 aspect-[16/10]">
+                  <SafeImage
+                    src={src}
+                    fallback="/assets/images/placeholders/default-tour.webp"
+                    alt={`${tour.name} photo ${i + 1}`}
+                    class="w-full h-full object-cover"
+                    loading="lazy"
+                  />
+                </div>
+              ))}
+            </div>
+          )}
+
+          {highlightAttractions.length > 0 && (
+            <div class="mt-10">
+              <div class="mb-6">
+                <SectionHeader eyebrow="Highlights" title="Featured Attractions" />
+              </div>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                {highlightAttractions.map((a) => (
+                  <AttractionCard attraction={a} />
+                ))}
+              </div>
             </div>
           )}
         </section>
 
-        <!-- Itinerary -->
+        <!-- D. Day-by-day itinerary -->
         {tour.itinerary.length > 0 && (
           <section>
             <div class="mb-6">
@@ -144,19 +297,50 @@ for (const day of tour.itinerary) {
           </section>
         )}
 
-        <!-- Inclusions -->
-        {tour.inclusions.length > 0 && (
+        <!-- E. Accommodation & transportation -->
+        {(tour.accommodationNote || tour.transportNote) && (
+          <section>
+            <div class="mb-6">
+              <SectionHeader eyebrow="On the Ground" title="Accommodation & Transport" />
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {tour.accommodationNote && (
+                <div class="bg-white rounded-2xl shadow-sm p-5 border border-gray-100">
+                  <h3 class="font-semibold text-[#1e3a5f] mb-2 text-sm flex items-center gap-2">
+                    <svg class="w-4 h-4 text-[#b88a2a]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+                    Accommodation
+                  </h3>
+                  <p class="text-sm text-[rgba(15,23,42,0.7)] leading-relaxed">{tour.accommodationNote}</p>
+                </div>
+              )}
+              {tour.transportNote && (
+                <div class="bg-white rounded-2xl shadow-sm p-5 border border-gray-100">
+                  <h3 class="font-semibold text-[#1e3a5f] mb-2 text-sm flex items-center gap-2">
+                    <svg class="w-4 h-4 text-[#b88a2a]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
+                    Transportation
+                  </h3>
+                  <p class="text-sm text-[rgba(15,23,42,0.7)] leading-relaxed">{tour.transportNote}</p>
+                </div>
+              )}
+            </div>
+          </section>
+        )}
+
+        <!-- F. Inclusions (omit when CSV mirrors itinerary; no exclusions dataset) -->
+        {showInclusions && (
           <section>
             <div class="mb-6">
               <SectionHeader eyebrow="What's Included" title="Tour Inclusions" />
             </div>
             <ul class="space-y-3">
-              {tour.inclusions.map(item => (
+              {tour.inclusions.map((item) => (
                 <li class="flex items-start gap-3 bg-white rounded-xl p-4 shadow-sm">
-                  <svg class="w-5 h-5 text-green-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                  <svg class="w-5 h-5 text-green-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
                   <div>
                     <p class="font-semibold text-[#1e3a5f] text-sm">{item.title}</p>
-                    {item.description && <p class="text-xs text-[rgba(15,23,42,0.65)] mt-0.5">{item.description}</p>}
+                    {item.description && (
+                      <p class="text-xs text-[rgba(15,23,42,0.65)] mt-0.5">{item.description}</p>
+                    )}
                   </div>
                 </li>
               ))}
@@ -164,62 +348,99 @@ for (const day of tour.itinerary) {
           </section>
         )}
 
-        <!-- Related Attractions -->
-        {tour.attractions.length > 0 && (
+        <!-- G. Practical travel info (concise; no security guarantees) -->
+        <section>
+          <div class="mb-6">
+            <SectionHeader eyebrow="Before You Go" title="Practical Travel Info" />
+          </div>
+          <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 sm:p-6 space-y-4 text-sm text-[rgba(15,23,42,0.75)] leading-relaxed">
+            <ul class="space-y-3 list-disc pl-5">
+              {tour.season && <li>Typical operating season for this itinerary: <strong class="text-[#1e3a5f]">{tour.season}</strong>.</li>}
+              {tour.activityLevel && <li>Activity level: <strong class="text-[#1e3a5f]">{tour.activityLevel}</strong> — ask us if you need a lighter or more active pace.</li>}
+              {tour.groupSize && <li>Group format: <strong class="text-[#1e3a5f]">{tour.groupSize}</strong>.</li>}
+              <li>Visa and entry steps vary by nationality — see our <a href="/visa-entry" class="text-[#1f4aa8] underline">Visa &amp; Entry</a> page and confirm with your nearest Afghan mission.</li>
+              <li>Operational details are finalized closer to departure based on current conditions. For planning questions, <a href={contactInquireHref} class="text-[#1f4aa8] underline">contact our team</a>.</li>
+            </ul>
+            <p class="text-xs text-[rgba(15,23,42,0.55)]">
+              This page does not provide security or entry guarantees. Always verify official requirements before travel.
+            </p>
+          </div>
+        </section>
+
+        <!-- H. FAQ accordion -->
+        {pageFaqs.length > 0 && (
           <section>
             <div class="mb-6">
-              <SectionHeader eyebrow="Highlights" title="Featured Attractions" />
+              <SectionHeader
+                eyebrow="Questions"
+                title="Frequently Asked Questions"
+                subtitle={tourFaqs.length > 0 ? 'Tour-specific answers plus general planning FAQs from our dataset.' : 'Planning FAQs from our dataset that apply to guided tours.'}
+              />
             </div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              {tour.attractions.slice(0, 4).map(a => <AttractionCard attraction={a} />)}
-            </div>
+            <FaqAccordion faqs={pageFaqs} />
+            <p class="mt-4 text-sm text-[rgba(15,23,42,0.6)]">
+              More answers on our <a href="/faq" class="text-[#1f4aa8] underline">FAQ page</a>.
+            </p>
           </section>
         )}
       </div>
 
       <!-- Sidebar -->
       <aside class="space-y-6">
-        <!-- Price & Book CTA -->
-        <div class="bg-white rounded-2xl shadow-[0_2px_20px_rgba(0,0,0,0.08)] p-6 sticky top-6">
-          <p class="text-xs font-semibold uppercase tracking-wider text-[#b88a2a] mb-1">Price Per Person</p>
-          <p class="font-display text-2xl sm:text-3xl font-bold text-[#1e3a5f] mb-4">From ${tour.priceFrom.toLocaleString()}</p>
-          <a href="/contact" class="block w-full text-center py-3 rounded-full bg-[#b88a2a] hover:bg-[#a07820] text-white font-semibold transition-all duration-200 shadow-md mb-3">
-            Book This Tour
-          </a>
-          <a href="/contact" class="block w-full text-center py-3 rounded-full border-2 border-[#1e3a5f] text-[#1e3a5f] font-semibold hover:bg-[#1e3a5f] hover:text-white transition-all duration-200">
-            Enquire Now
-          </a>
+        <div class="bg-white rounded-2xl shadow-[0_2px_20px_rgba(0,0,0,0.08)] p-6 sticky top-20">
+          <p class="text-xs font-semibold uppercase tracking-wider text-[#b88a2a] mb-1">
+            {showPrice ? 'Price Per Person' : 'Enquiry'}
+          </p>
+          <p class="font-display text-2xl sm:text-3xl font-bold text-[#1e3a5f] mb-4">
+            {showPrice ? `From $${tour.priceFrom.toLocaleString()}` : 'Custom quote'}
+          </p>
 
-          <!-- Quick facts -->
+          <a
+            href={whatsappInquireUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="block w-full text-center py-3 rounded-full bg-[#25d366] hover:bg-[#22c55e] text-white font-semibold transition-all duration-200 shadow-md mb-3"
+          >
+            Inquire on WhatsApp
+          </a>
+          <a
+            href={contactInquireHref}
+            class="block w-full text-center py-3 rounded-full bg-[#b88a2a] hover:bg-[#a07820] text-white font-semibold transition-all duration-200 shadow-md mb-3"
+          >
+            Inquire About This Tour
+          </a>
+          <a
+            href={mailtoInquireHref}
+            class="block w-full text-center py-3 rounded-full border-2 border-[#1e3a5f] text-[#1e3a5f] font-semibold hover:bg-[#1e3a5f] hover:text-white transition-all duration-200"
+          >
+            Email Enquiry
+          </a>
+          <p class="mt-3 text-xs text-center text-[rgba(15,23,42,0.5)]">
+            Prefer a tailored route? Ask about a <strong class="text-[#1e3a5f]">Custom Tour</strong> when you inquire.
+          </p>
+
           <ul class="mt-6 space-y-3 text-sm text-[rgba(15,23,42,0.75)] border-t border-gray-100 pt-5">
-            <li class="flex justify-between"><span class="font-medium text-[#1e3a5f]">Duration</span><span>{tour.durationDays} days</span></li>
-            {tour.groupSize && <li class="flex justify-between"><span class="font-medium text-[#1e3a5f]">Group Size</span><span>{tour.groupSize}</span></li>}
-            {tour.activityLevel && <li class="flex justify-between"><span class="font-medium text-[#1e3a5f]">Activity Level</span><span>{tour.activityLevel}</span></li>}
-            {tour.season && <li class="flex justify-between"><span class="font-medium text-[#1e3a5f]">Best Season</span><span>{tour.season}</span></li>}
-            {tour.travelStyle && <li class="flex justify-between"><span class="font-medium text-[#1e3a5f]">Style</span><span>{tour.travelStyle}</span></li>}
+            {durationLabel && (
+              <li class="flex justify-between gap-3"><span class="font-medium text-[#1e3a5f]">Duration</span><span class="text-right">{durationLabel}</span></li>
+            )}
+            {tour.groupSize && (
+              <li class="flex justify-between gap-3"><span class="font-medium text-[#1e3a5f]">Group Size</span><span class="text-right">{tour.groupSize}</span></li>
+            )}
+            {tour.activityLevel && (
+              <li class="flex justify-between gap-3"><span class="font-medium text-[#1e3a5f]">Activity Level</span><span class="text-right">{tour.activityLevel}</span></li>
+            )}
+            {tour.season && (
+              <li class="flex justify-between gap-3"><span class="font-medium text-[#1e3a5f]">Best Season</span><span class="text-right">{tour.season}</span></li>
+            )}
+            {tour.travelStyle && (
+              <li class="flex justify-between gap-3"><span class="font-medium text-[#1e3a5f]">Style</span><span class="text-right">{tour.travelStyle}</span></li>
+            )}
           </ul>
         </div>
 
-        <!-- Accommodation note -->
-        {tour.accommodationNote && (
-          <div class="bg-white rounded-2xl shadow-sm p-5">
-            <h4 class="font-semibold text-[#1e3a5f] mb-2 text-sm">Accommodation</h4>
-            <p class="text-xs text-[rgba(15,23,42,0.7)] leading-relaxed">{tour.accommodationNote}</p>
-          </div>
-        )}
-
-        <!-- Transport note -->
-        {tour.transportNote && (
-          <div class="bg-white rounded-2xl shadow-sm p-5">
-            <h4 class="font-semibold text-[#1e3a5f] mb-2 text-sm">Transport</h4>
-            <p class="text-xs text-[rgba(15,23,42,0.7)] leading-relaxed">{tour.transportNote}</p>
-          </div>
-        )}
-
-        <!-- Upcoming dates -->
         {tour.dates.length > 0 && (
           <div class="bg-white rounded-2xl shadow-sm p-5">
-            <h4 class="font-semibold text-[#1e3a5f] mb-3 text-sm">Upcoming Dates</h4>
+            <h3 class="font-semibold text-[#1e3a5f] mb-3 text-sm">Upcoming Dates</h3>
             <div class="overflow-x-auto">
               <table class="w-full text-xs">
                 <thead>
@@ -230,7 +451,7 @@ for (const day of tour.itinerary) {
                   </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-50">
-                  {tour.dates.map(d => (
+                  {tour.dates.map((d) => (
                     <tr class="text-[rgba(15,23,42,0.7)]">
                       <td class="py-2">{d.dateStart}</td>
                       <td class="py-2">{d.dateEnd}</td>
@@ -249,4 +470,33 @@ for (const day of tour.itinerary) {
       </aside>
     </div>
   </div>
+
+  <!-- I. Related journeys -->
+  <RelatedToursSection current={tour} allTours={data.tours} limit={3} />
+
+  <!-- J. Final CTA -->
+  <section class="py-16 bg-[#1e3a5f]">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 text-center text-white">
+      <h2 class="font-display text-2xl sm:text-3xl font-bold mb-4">Ready to explore Afghanistan?</h2>
+      <p class="text-white/80 mb-8 leading-relaxed">
+        Tell us about <strong>{tour.name}</strong> — or request a Custom Tour shaped around your dates, interests, and group.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-3 justify-center">
+        <a
+          href={whatsappInquireUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-block px-8 py-3.5 rounded-full bg-[#25d366] hover:bg-[#22c55e] text-white font-semibold shadow-lg transition-all duration-200"
+        >
+          Inquire on WhatsApp
+        </a>
+        <a
+          href={contactInquireHref}
+          class="inline-block px-8 py-3.5 rounded-full bg-[#b88a2a] hover:bg-[#a07820] text-white font-semibold shadow-lg transition-all duration-200"
+        >
+          Inquire About This Tour
+        </a>
+      </div>
+    </div>
+  </section>
 </BaseLayout>
