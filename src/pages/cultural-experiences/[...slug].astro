@@ -1,0 +1,103 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import SectionHeader from '@components/ui/SectionHeader.astro';
+import SafeImage from '@components/ui/SafeImage.astro';
+import ConversionCTA from '@components/travel/ConversionCTA.astro';
+import RelatedScheduledTours from '@components/travel/RelatedScheduledTours.astro';
+import { getCollection } from 'astro:content';
+import { getSiteData } from '@lib/data/site-data';
+import { relatedScheduledByProvinceNames } from '@lib/content/relatedScheduled';
+import { firstExisting } from '@lib/getAssetUrl';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('cultural-experiences');
+  return entries.map((entry) => ({
+    params: { slug: entry.slug },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+const data = getSiteData();
+const relatedTours = relatedScheduledByProvinceNames(data.tours, entry.data.provinces || [], 3, {
+  strict: true,
+});
+
+const hero = firstExisting(
+  `/assets/images/cultural-experiences/${entry.slug}/hero.webp`,
+  `/assets/images/cultural-experiences/${entry.slug}/overview.webp`,
+  `/assets/images/cultural-experiences/${entry.slug}/thumb.webp`,
+  entry.data.hero_image,
+  entry.data.image,
+) || '/assets/images/placeholders/default-card.webp';
+---
+
+<BaseLayout
+  title={`${entry.data.title} – Cultural Experiences – Afghan Tours`}
+  description={entry.data.card_description || entry.data.subtitle || `Cultural experience: ${entry.data.title}`}
+>
+  <div class="relative min-h-[320px] sm:min-h-[400px] flex items-end bg-[#1e3a5f]">
+    <SafeImage
+      src={hero}
+      fallback="/assets/images/placeholders/default-card.webp"
+      alt={entry.data.title}
+      class="absolute inset-0 w-full h-full object-cover opacity-50"
+      loading="eager"
+    />
+    <div class="relative z-10 max-w-6xl mx-auto w-full px-4 sm:px-6 py-12 text-white">
+      <p class="text-xs font-semibold uppercase tracking-widest text-[#b88a2a] mb-3">Cultural Experience</p>
+      <h1 class="font-display text-3xl sm:text-4xl lg:text-5xl font-bold">{entry.data.title}</h1>
+      {entry.data.subtitle && <p class="mt-3 text-white/90 max-w-2xl text-base sm:text-lg">{entry.data.subtitle}</p>}
+      <div class="mt-4 flex flex-wrap gap-3 text-xs sm:text-sm text-white/80">
+        {entry.data.best_season && <span class="rounded-full bg-white/10 px-3 py-1">Season: {entry.data.best_season}</span>}
+        {entry.data.duration && <span class="rounded-full bg-white/10 px-3 py-1">{entry.data.duration}</span>}
+        {(entry.data.provinces || []).slice(0, 4).map((p) => (
+          <span class="rounded-full bg-white/10 px-3 py-1">{p}</span>
+        ))}
+      </div>
+    </div>
+  </div>
+
+  <article class="max-w-3xl mx-auto px-4 sm:px-6 py-12">
+    <div class="prose prose-slate max-w-none prose-headings:font-display prose-headings:text-[#1e3a5f] prose-a:text-[#1f4aa8]">
+      <Content />
+    </div>
+
+    {(entry.data.nearby?.length || entry.data.paired_foods?.length) && (
+      <div class="mt-10 grid sm:grid-cols-2 gap-6">
+        {entry.data.nearby?.length > 0 && (
+          <div class="rounded-2xl border border-[#1e3a5f]/10 p-5">
+            <SectionHeader eyebrow="Context" title="Nearby places" />
+            <ul class="mt-3 space-y-1 text-sm text-[rgba(15,23,42,0.75)]">
+              {entry.data.nearby.map((n) => <li>• {n}</li>)}
+            </ul>
+          </div>
+        )}
+        {entry.data.paired_foods?.length > 0 && (
+          <div class="rounded-2xl border border-[#1e3a5f]/10 p-5">
+            <SectionHeader eyebrow="Food culture" title="Natural pairings" />
+            <ul class="mt-3 space-y-1 text-sm text-[rgba(15,23,42,0.75)]">
+              {entry.data.paired_foods.map((n) => <li>• {n}</li>)}
+            </ul>
+          </div>
+        )}
+      </div>
+    )}
+  </article>
+
+  <RelatedScheduledTours
+    tours={relatedTours}
+    eyebrow="Scheduled Tours"
+    title="Related Scheduled Tours"
+    subtitle="Shown only when province links exist in our tour data — never a forced upsell grid."
+  />
+
+  <ConversionCTA
+    variant="soft"
+    title="Want this on your itinerary?"
+    subtitle="Ask us how this experience can fit a Scheduled Tour departure — or inquire about a Custom Journey planned from Kabul."
+    primaryHref="/tours?type=scheduled"
+    secondaryHref="/contact"
+  />
+</BaseLayout>

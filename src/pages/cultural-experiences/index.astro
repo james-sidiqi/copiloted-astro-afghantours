@@ -1,0 +1,95 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import Hero from '@components/site/Hero.astro';
+import SectionHeader from '@components/ui/SectionHeader.astro';
+import SafeImage from '@components/ui/SafeImage.astro';
+import ConversionCTA from '@components/travel/ConversionCTA.astro';
+import { getCollection } from 'astro:content';
+import { firstExisting } from '@lib/getAssetUrl';
+
+const entries = (await getCollection('cultural-experiences')).sort((a, b) =>
+  a.data.title.localeCompare(b.data.title),
+);
+
+function imageFor(slug: string, hero?: string, image?: string) {
+  return (
+    firstExisting(
+      `/assets/images/cultural-experiences/${slug}/hero.webp`,
+      `/assets/images/cultural-experiences/${slug}/thumb.webp`,
+      `/assets/images/cultural-experiences/${slug}/overview.webp`,
+      hero,
+      image,
+    ) || '/assets/images/placeholders/default-card.webp'
+  );
+}
+---
+
+<BaseLayout
+  title="Cultural Experiences – Afghan Tours"
+  description="Crafts, sports, hospitality, and living traditions travelers may encounter on journeys — then find a related Scheduled Tour or inquire for Custom."
+>
+  <Hero
+    title="Cultural experiences"
+    subtitle="Go beyond monuments — crafts, sport, hospitality, and everyday traditions guests may encounter on Scheduled Tours or Custom Journeys."
+    imagePath="/assets/images/heroes/hero-destinations.webp"
+    ctaText="View Scheduled Tours"
+    ctaHref="/tours?type=scheduled"
+  />
+
+  <section class="py-16 bg-[#f6f7fb]">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <div class="mb-8">
+        <SectionHeader
+          eyebrow="Living Afghanistan"
+          title="Experiences that shape a journey"
+          subtitle="These pages inspire and orient — they are not a catalogue of bookable add-ons. Related Scheduled Tours appear only when province data links them."
+        />
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {entries.map((entry) => {
+          const slug = entry.slug;
+          const img = imageFor(slug, entry.data.hero_image, entry.data.image);
+          return (
+            <a
+              href={`/cultural-experiences/${slug}`}
+              class="group bg-white rounded-[14px] shadow-[0_2px_16px_0_rgba(0,0,0,0.08)] hover:shadow-[0_10px_30px_rgba(15,23,42,0.08)] transition-shadow duration-300 overflow-hidden flex flex-col"
+            >
+              <div class="aspect-[16/10] bg-gray-100 overflow-hidden shrink-0">
+                <SafeImage
+                  src={img}
+                  fallback="/assets/images/placeholders/default-card.webp"
+                  alt={entry.data.title}
+                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  loading="lazy"
+                />
+              </div>
+              <div class="p-5 flex flex-col flex-1 gap-2">
+                {entry.data.experience_type && (
+                  <span class="self-start text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#1f4aa8]/10 text-[#1f4aa8]">
+                    {entry.data.experience_type}
+                  </span>
+                )}
+                <h2 class="font-display text-base font-semibold text-[#1e3a5f] group-hover:text-[#1f4aa8] transition-colors">
+                  {entry.data.title}
+                </h2>
+                {entry.data.card_description && (
+                  <p class="text-sm text-[rgba(15,23,42,0.7)] leading-relaxed line-clamp-3">
+                    {entry.data.card_description}
+                  </p>
+                )}
+              </div>
+            </a>
+          );
+        })}
+      </div>
+    </div>
+  </section>
+
+  <ConversionCTA
+    variant="soft"
+    eyebrow="Next step"
+    title="Inspired? Find a tour that fits"
+    subtitle="Browse Scheduled Tours that touch these regions, or inquire about a Custom Journey planned from Kabul."
+  />
+</BaseLayout>
