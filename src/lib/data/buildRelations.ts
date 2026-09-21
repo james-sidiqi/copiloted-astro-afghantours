@@ -210,13 +210,15 @@ export function buildSiteData(): SiteData {
     arr.push(day);
   }
 
-  // Build dates map: tourCode → TourDate[]
+  // Build dates map: tourSlug → TourDate[]
+  // (CSV date rows use codes like WKND-1; match tours by slug so proposed dates surface.)
   const datesByTour = new Map<string, TourDate[]>();
   for (const date of tourDates) {
-    let arr = datesByTour.get(date.tourCode);
+    const key = date.tourSlug || date.tourCode;
+    let arr = datesByTour.get(key);
     if (!arr) {
       arr = [];
-      datesByTour.set(date.tourCode, arr);
+      datesByTour.set(key, arr);
     }
     arr.push(date);
   }
@@ -232,7 +234,7 @@ export function buildSiteData(): SiteData {
       ...base,
       itinerary: (itineraryByTour.get(base.tourCode) ?? []).sort((a, b) => a.dayNumber - b.dayNumber),
       inclusions: (inclusionsByTour.get(base.tourCode) ?? []).sort((a, b) => a.dayNumber - b.dayNumber),
-      dates: datesByTour.get(base.tourCode) ?? [],
+      dates: datesByTour.get(base.slug) ?? datesByTour.get(base.tourCode) ?? [],
       attractions: tourAttractions,
     };
   });

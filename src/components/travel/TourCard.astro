@@ -50,7 +50,11 @@ const seasonClass = seasonColors[tour.season] ?? 'bg-gray-100 text-gray-700';
     <!-- Meta row -->
     <div class="flex items-center justify-between pt-2 border-t border-gray-100 text-sm">
       <span class="font-semibold text-[#1f4aa8]">
-        From <span class="text-base">${tour.priceFrom.toLocaleString()}</span>
+        {tour.priceFrom > 0 ? (
+          <>From <span class="text-base">${tour.priceFrom.toLocaleString()}</span></>
+        ) : (
+          <span class="text-base">On request</span>
+        )}
       </span>
       <span class="text-[rgba(15,23,42,0.55)] flex items-center gap-1">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
