@@ -3,53 +3,153 @@ import BaseLayout from '@layouts/BaseLayout.astro';
 import Hero from '@components/site/Hero.astro';
 import SectionHeader from '@components/ui/SectionHeader.astro';
 import TourCard from '@components/travel/TourCard.astro';
+import AudienceCard from '@components/travel/AudienceCard.astro';
 import { getSiteData } from '@lib/data/site-data';
+import { getCustomAudiences, isCustomTravelStyle } from '@lib/content/customAudiences';
 
 const data = getSiteData();
 const tours = data.tours.filter(t => t.isActive);
+const scheduledTours = tours.filter(t => !isCustomTravelStyle(t.travelStyle));
+const customPackageTours = tours.filter(t => isCustomTravelStyle(t.travelStyle));
+const customAudiences = getCustomAudiences();
 ---
 
-<BaseLayout title="Tours – Afghan Tours" description="Tour packages from a licensed Kabul-based operator — American-led, Afghan-operated. Practical itineraries around current access and conditions.">
+<BaseLayout title="Tours – Afghan Tours" description="Scheduled tour packages and custom journeys from a licensed Kabul-based operator — American-led, Afghan-operated. Practical itineraries around current access and conditions.">
   <Hero
     title="Our Tours"
-    subtitle="Practical itineraries planned from Kabul around access, timing, and conditions"
+    subtitle="Scheduled packages and inquiry-led custom journeys — planned from Kabul around access, timing, and conditions"
     imagePath="/assets/images/heroes/hero-tours.webp"
-    ctaText="Contact Us"
+    ctaText="Build My Journey"
     ctaHref="/contact"
   />
 
   <section class="py-20 bg-[#f6f7fb]">
     <div class="max-w-6xl mx-auto px-4 sm:px-6">
-      <div class="mb-10">
+      <div class="mb-8">
         <SectionHeader
-          eyebrow="All Tours"
-          title="Tour packages"
-          subtitle="From city routes to highland travel — pick a package or ask for a custom request."
+          eyebrow="Tours"
+          title="Scheduled and custom"
+          subtitle="Filter by offering type. Scheduled tours are set itineraries; custom journeys are inquiry-led around your audience and goals."
         />
-        <p class="mt-4 text-sm text-[rgba(15,23,42,0.55)]">Filter by region, duration or style coming soon. For custom queries, <a href="/contact" class="text-[#1f4aa8] underline">contact us</a>.</p>
       </div>
 
-      {tours.length > 0 ? (
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-          {tours.map(tour => <TourCard tour={tour} />)}
+      <div class="mb-10 flex flex-wrap gap-2" role="tablist" aria-label="Tour type">
+        <button
+          type="button"
+          data-tour-filter="all"
+          class="tour-filter-btn px-4 py-2 rounded-full text-sm font-semibold border-2 border-[#1e3a5f] bg-[#1e3a5f] text-white transition-all duration-150"
+          aria-pressed="true"
+        >
+          All ({tours.length})
+        </button>
+        <button
+          type="button"
+          data-tour-filter="scheduled"
+          class="tour-filter-btn px-4 py-2 rounded-full text-sm font-semibold border-2 border-[#1e3a5f] text-[#1e3a5f] bg-white hover:bg-[#1e3a5f]/5 transition-all duration-150"
+          aria-pressed="false"
+        >
+          Scheduled ({scheduledTours.length})
+        </button>
+        <button
+          type="button"
+          data-tour-filter="custom"
+          class="tour-filter-btn px-4 py-2 rounded-full text-sm font-semibold border-2 border-[#1e3a5f] text-[#1e3a5f] bg-white hover:bg-[#1e3a5f]/5 transition-all duration-150"
+          aria-pressed="false"
+        >
+          Custom ({customPackageTours.length})
+        </button>
+      </div>
+
+      <div data-tour-panel="scheduled" class="tour-panel mb-16">
+        <div class="mb-6">
+          <h2 class="font-display text-xl font-bold text-[#1e3a5f]">Scheduled tours</h2>
+          <p class="mt-1 text-sm text-[rgba(15,23,42,0.65)]">Regularly scheduled / set itineraries (Cultural / Scenic packages from our tour data).</p>
         </div>
-      ) : (
-        <div class="text-center py-20 text-gray-500">
-          <p class="text-lg font-medium">No tours available at this time.</p>
-          <p class="text-sm mt-2">Please check back soon or <a href="/contact" class="text-[#1f4aa8] underline">contact us</a>.</p>
+        {scheduledTours.length > 0 ? (
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+            {scheduledTours.map(tour => <TourCard tour={tour} />)}
+          </div>
+        ) : (
+          <p class="text-center py-12 text-gray-500">No scheduled tours available at this time.</p>
+        )}
+      </div>
+
+      <div data-tour-panel="custom" class="tour-panel">
+        <div class="mb-6">
+          <h2 class="font-display text-xl font-bold text-[#1e3a5f]">Custom journeys</h2>
+          <p class="mt-1 text-sm text-[rgba(15,23,42,0.65)]">
+            Inquiry-led travel for specific audiences. CSV rows marked <em>Custom</em> may still list sample routes — treat them as conversation starters, not fixed products.
+            Prefer an audience card below, or <a href="/contact" class="text-[#1f4aa8] underline">Build My Journey</a>.
+          </p>
         </div>
-      )}
+
+        <div class="mb-10">
+          <h3 class="text-sm font-semibold uppercase tracking-wide text-[rgba(15,23,42,0.55)] mb-4">By audience</h3>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {customAudiences.map(audience => <AudienceCard audience={audience} />)}
+          </div>
+        </div>
+
+        {customPackageTours.length > 0 && (
+          <div>
+            <h3 class="text-sm font-semibold uppercase tracking-wide text-[rgba(15,23,42,0.55)] mb-4">Custom-tagged packages in data</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+              {customPackageTours.map(tour => <TourCard tour={tour} />)}
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   </section>
 
-  <!-- CTA -->
   <section class="py-16 bg-[#1e3a5f]">
     <div class="max-w-3xl mx-auto px-4 sm:px-6 text-center text-white">
-      <h2 class="font-display text-2xl sm:text-3xl font-bold mb-4">Can't find what you're looking for?</h2>
-      <p class="text-white/80 mb-8">We offer custom tours tailored to your interests, timeline, and group size.</p>
+      <h2 class="font-display text-2xl sm:text-3xl font-bold mb-4">Need something that is not on the calendar?</h2>
+      <p class="text-white/80 mb-8">Custom journeys are inquiry-led — diaspora, veterans, Peace Corps alumni, business, artists, and media welcome.</p>
       <a href="/contact" class="inline-block px-8 py-3.5 rounded-full bg-[#b88a2a] hover:bg-[#a07820] text-white font-semibold shadow-lg transition-all duration-200">
-        Request a Custom Tour
+        Build My Journey
       </a>
     </div>
   </section>
 </BaseLayout>
+
+<script>
+  (function () {
+    const buttons = Array.from(document.querySelectorAll('[data-tour-filter]'));
+    const panels = Array.from(document.querySelectorAll('[data-tour-panel]'));
+    if (!buttons.length || !panels.length) return;
+
+    function setFilter(filter) {
+      buttons.forEach((btn) => {
+        const active = btn.getAttribute('data-tour-filter') === filter;
+        btn.setAttribute('aria-pressed', active ? 'true' : 'false');
+        btn.classList.toggle('bg-[#1e3a5f]', active);
+        btn.classList.toggle('text-white', active);
+        btn.classList.toggle('bg-white', !active);
+        btn.classList.toggle('text-[#1e3a5f]', !active);
+      });
+      panels.forEach((panel) => {
+        const key = panel.getAttribute('data-tour-panel');
+        const show = filter === 'all' || filter === key;
+        panel.classList.toggle('hidden', !show);
+      });
+      try {
+        const url = new URL(window.location.href);
+        if (filter === 'all') url.searchParams.delete('type');
+        else url.searchParams.set('type', filter);
+        window.history.replaceState({}, '', url.toString());
+      } catch (_) {}
+    }
+
+    buttons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const filter = btn.getAttribute('data-tour-filter') || 'all';
+        setFilter(filter);
+      });
+    });
+
+    const params = new URLSearchParams(window.location.search);
+    const initial = (params.get('type') || 'all').toLowerCase();
+    setFilter(['all', 'scheduled', 'custom'].includes(initial) ? initial : 'all');
+  })();
+</script>
