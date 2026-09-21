@@ -332,7 +332,14 @@ export function getAssetUrl(
     return resolveHubAsset(slug, coded, kind);
   }
   if (entity === "cultural" && slug) {
-    return resolveCategorySlugAsset("cultural-experiences", slug, kind === "thumb" ? "thumb" : "hero") || firstExisting(coded) || coded;
+    const k = kind === "thumb" ? "thumb" : "hero";
+    return (
+      resolveExperienceSlugAsset("culinary", slug, k) ||
+      resolveExperienceSlugAsset("cultural", slug, k) ||
+      resolveCategorySlugAsset("cultural-experiences", slug, k) ||
+      firstExisting(coded) ||
+      coded
+    );
   }
   if (entity === "map" || kind === "map") {
     return resolveMapAsset(coded, slug);
@@ -551,6 +558,42 @@ export function resolveMapAsset(codedPath: string, slug: string = ""): string {
   return firstExisting(...candidates) || remapped || codedPath;
 }
 
+/** Canonical experiences tree: culinary | cultural under public/assets/images/experiences/. */
+export function resolveExperienceSlugAsset(
+  kindFolder: "culinary" | "cultural",
+  slug: string,
+  kind: "hero" | "thumb" = "hero",
+): string {
+  const matched = matchSlugDir(`assets/images/experiences/${kindFolder}`, slug);
+  if (!matched) return "";
+  return pickInDir(`/assets/images/experiences/${kindFolder}/${matched}`, kind);
+}
+
+/** Activity under experiences/activities/<path> with legacy activities/ fallback. */
+export function resolveActivityExperienceAsset(
+  relParts: string[],
+  kind: "hero" | "thumb" = "hero",
+): string {
+  const canon = `/assets/images/experiences/activities/${relParts.join("/")}`;
+  const legacy = `/assets/images/activities/${relParts.join("/")}`;
+  const legacyTypo =
+    relParts.includes("religious")
+      ? `/assets/images/activities/${relParts.map((p) => (p === "religious" ? "religous" : p)).join("/")}`
+      : "";
+  return (
+    firstExisting(
+      `${canon}/${kind}.webp`,
+      `${canon}/01.webp`,
+      `${legacy}/${kind}.webp`,
+      `${legacy}/01.webp`,
+      legacyTypo ? `${legacyTypo}/01.webp` : "",
+    ) ||
+    pickInDir(canon, kind) ||
+    pickInDir(legacy, kind) ||
+    (legacyTypo ? pickInDir(legacyTypo, kind) : "")
+  );
+}
+
 /** Convenience: cultural-experiences / activities / tours by slug folder. */
 export function resolveCategorySlugAsset(
   category: "cultural-experiences" | "activities" | "custom-tours" | "return-journeys" | "featured-tours",
@@ -567,6 +610,16 @@ export function pickExperienceImage(
   category: "cultural-experiences" | "activities",
   slug: string,
 ): string {
+  if (category === "cultural-experiences") {
+    return (
+      resolveExperienceSlugAsset("culinary", slug, "thumb") ||
+      resolveExperienceSlugAsset("cultural", slug, "thumb") ||
+      resolveExperienceSlugAsset("culinary", slug, "hero") ||
+      resolveExperienceSlugAsset("cultural", slug, "hero") ||
+      resolveCategorySlugAsset(category, slug, "thumb") ||
+      resolveCategorySlugAsset(category, slug, "hero")
+    );
+  }
   return resolveCategorySlugAsset(category, slug, "thumb") || resolveCategorySlugAsset(category, slug, "hero");
 }
 
@@ -599,6 +652,8 @@ export function resolveTransportAsset(
   if (v.includes("van")) vehicleCandidates.push("van", "van-old", "van_new".replace("_", "-"));
   if (v.includes("taxi")) vehicleCandidates.push("taxi");
   if (v.includes("bus")) vehicleCandidates.push("bus");
+  if (v.includes("coach")) vehicleCandidates.push("coach", "bus");
+  if (v.includes("coaster")) vehicleCandidates.push("bus", "coaster");
   if (v.includes("sedan")) vehicleCandidates.push("sedan");
   // unique preserve order
   const seen = new Set<string>();

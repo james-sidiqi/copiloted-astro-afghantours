@@ -4,7 +4,7 @@
  */
 import * as fs from "node:fs";
 import * as path from "node:path";
-import { firstExisting, pickExperienceImage } from "../getAssetUrl.js";
+import { firstExisting, pickExperienceImage, resolveActivityExperienceAsset } from "../getAssetUrl.js";
 
 export type ExperienceCard = {
   id: string;
@@ -39,33 +39,51 @@ const ACTIVITY_DEFS: Array<{
   id: string;
   label: string;
   blurb: string;
+  /** Relative parts under experiences/activities/ (and legacy activities/). */
+  activityPath?: string[];
   imageCandidates: string[];
 }> = [
   {
     id: "sightseeing-historical",
     label: "Historical sightseeing",
     blurb: "Forts, mosques, and heritage sites — core to most Cultural / Scenic scheduled packages.",
+    activityPath: ["sightseeing", "historical"],
     imageCandidates: [
+      "/assets/images/experiences/activities/sightseeing/historical/hero.webp",
+      "/assets/images/experiences/activities/sightseeing/historical/gallery/01.webp",
       "/assets/images/activities/sightseeing/historical/01.webp",
-      "/assets/images/activities/sightseeing/historical/02.webp",
     ],
   },
   {
     id: "sightseeing-scenic",
     label: "Scenic day travel",
     blurb: "Highlands, lakes, and mountain roads — planned with realistic drive times from Kabul.",
+    activityPath: ["sightseeing", "scenic"],
     imageCandidates: [
+      "/assets/images/experiences/activities/sightseeing/scenic/hero.webp",
+      "/assets/images/experiences/activities/sightseeing/scenic/gallery/01.webp",
       "/assets/images/activities/sightseeing/scenic/01.webp",
-      "/assets/images/activities/sightseeing/scenic/02.webp",
     ],
   },
   {
     id: "markets",
     label: "Markets & cities",
     blurb: "Bazaars and urban rhythm — how guests actually spend time in hubs between longer drives.",
+    activityPath: ["sightseeing", "markets"],
     imageCandidates: [
+      "/assets/images/experiences/activities/sightseeing/markets/hero.webp",
+      "/assets/images/experiences/activities/sightseeing/markets/gallery/01.webp",
       "/assets/images/activities/sightseeing/markets/01.webp",
-      "/assets/images/activities/sightseeing/markets/02.webp",
+    ],
+  },
+  {
+    id: "birding",
+    label: "Birding",
+    blurb: "Wetlands and highland birding when season and access allow — custom inquiry rather than a fixed catalogue package.",
+    activityPath: ["birding"],
+    imageCandidates: [
+      "/assets/images/experiences/activities/birding/thumb.webp",
+      "/assets/images/experiences/activities/birding/hero.webp",
     ],
   },
   {
@@ -90,9 +108,11 @@ const ACTIVITY_DEFS: Array<{
     id: "fishing",
     label: "Fishing",
     blurb: "River and highland fishing when season and route support it — custom inquiry rather than a catalogue item.",
+    activityPath: ["fishing"],
     imageCandidates: [
+      "/assets/images/experiences/activities/fishing/hero.webp",
+      "/assets/images/experiences/activities/fishing/thumb.webp",
       "/assets/images/activities/fishing/01.webp",
-      "/assets/images/activities/fishing/02.webp",
     ],
   },
 ];
@@ -108,7 +128,7 @@ const CULTURAL_PAGE_SLUG: Record<string, string> = {
 };
 
 export function getCulturalExperienceCards(limit = 6): ExperienceCard[] {
-  if (!dirExists("assets/images/cultural-experiences")) return [];
+  if (!dirExists("assets/images/cultural-experiences") && !dirExists("assets/images/experiences/cultural") && !dirExists("assets/images/experiences/culinary")) return [];
   const cards: ExperienceCard[] = [];
   for (const def of CULTURAL_DEFS) {
     const imagePath =
@@ -134,13 +154,15 @@ export function getCulturalExperienceCards(limit = 6): ExperienceCard[] {
 }
 
 export function getActivityCards(limit = 6): ExperienceCard[] {
-  if (!dirExists("assets/images/activities")) return [];
+  if (!dirExists("assets/images/activities") && !dirExists("assets/images/experiences/activities")) return [];
   const cards: ExperienceCard[] = [];
   for (const def of ACTIVITY_DEFS) {
-    const imagePath = firstExisting(...def.imageCandidates);
+    const imagePath =
+      (def.activityPath ? resolveActivityExperienceAsset(def.activityPath, "thumb") || resolveActivityExperienceAsset(def.activityPath, "hero") : "") ||
+      firstExisting(...def.imageCandidates);
     if (!imagePath) continue;
     const href =
-      def.id === "backcountry-skiing" || def.id === "fishing"
+      def.id === "backcountry-skiing" || def.id === "fishing" || def.id === "birding"
         ? "/contact"
         : "/tours?type=scheduled";
     cards.push({

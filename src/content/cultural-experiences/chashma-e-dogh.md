@@ -1,5 +1,8 @@
 ---
 title: "Chashma-e-Dogh: Kabul’s Spring of Yogurt"
+hero_image: "/assets/images/experiences/culinary/chashma-e-dogh/hero.webp"
+image: "/assets/images/experiences/culinary/chashma-e-dogh/thumb.webp"
+provinces: ["Kabul"]
 ---
 
 Chashma-e-Dogh is one of Kabul's most recognizable food-and-social gathering places. The name points to dogh, the chilled yogurt drink that gives the area its identity.
