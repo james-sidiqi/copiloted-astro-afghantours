@@ -1,7 +1,9 @@
 export const siteConfig = {
   name: 'Afghan Tours',
-  tagline: 'Expert-Guided Tours to Afghanistan',
-  description: "Discover Afghanistan with expert-guided tours to one of the world's most extraordinary destinations.",
+  tagline: 'Come for the history, stay for the hospitality.',
+  positioning: 'Reimagined, Grounded, Kabul-Based.',
+  description:
+    'Licensed Afghan tour operator — American-led, Afghan-operated, and based in Kabul. Practical journeys planned around current access, permits, and conditions.',
   email: 'info@afghantours.com',
   phone: {
     display: '+93-78-012-3456',

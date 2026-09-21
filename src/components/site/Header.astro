@@ -1,43 +1,96 @@
 ---
+import { siteConfig } from '@lib/config';
+
 const navLinks = [
-  { label: 'Home',          href: '/' },
-  { label: 'Tours',         href: '/tours' },
-  { label: 'Destinations',  href: '/destinations' },
-  { label: 'Attractions',   href: '/attractions' },
-  { label: 'Hotels',        href: '/hotels' },
-  { label: 'Regions',       href: '/regions' },
-  { label: 'Food & Culture',href: '/food-culture' },
-  { label: 'Visa & Entry',  href: '/visa-entry' },
-  { label: 'About',         href: '/about' },
-  { label: 'Contact',       href: '/contact' },
+  {
+    label: 'Explore',
+    href: '/destinations',
+    children: [
+      { label: 'Destinations', href: '/destinations' },
+      { label: 'Attractions', href: '/attractions' },
+      { label: 'Regions', href: '/regions' },
+      { label: 'Food & Culture', href: '/food-culture' },
+    ],
+  },
+  { label: 'Tours', href: '/tours' },
+  { label: 'Custom Journeys', href: '/contact' },
+  {
+    label: 'Plan Your Trip',
+    href: '/visa-entry',
+    children: [
+      { label: 'Visa & Entry', href: '/visa-entry' },
+      { label: 'Safety', href: '/safety' },
+      { label: 'Hotels', href: '/hotels' },
+      { label: 'FAQ', href: '/faq' },
+    ],
+  },
+  { label: 'About Us', href: '/about' },
+  { label: 'Contact', href: '/contact' },
 ];
 ---
 
 <header class="sticky top-0 z-50 bg-white shadow-sm">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="flex items-center justify-between h-16">
-      <!-- Logo -->
-      <a href="/" class="flex items-center gap-2 shrink-0">
-        <img
-          src="/assets/images/logo/header-logo.webp"
-          alt="Afghan Tours"
-          class="h-8 w-auto"
-          loading="eager"
-          onerror="this.onerror=null;this.style.display='none';this.nextElementSibling.style.display='inline'"
-        />
-        <span class="font-display text-xl font-bold text-[#1f4aa8] leading-tight" style="display:none">Afghan<span class="text-[#b88a2a]">Tours</span></span>
+    <div class="flex items-center justify-between h-16 gap-4">
+      <!-- Logo + brand line -->
+      <a href="/" class="flex flex-col justify-center shrink-0 min-w-0">
+        <span class="flex items-center gap-2">
+          <img
+            src="/assets/images/logo/header-logo.webp"
+            alt="Afghan Tours"
+            class="h-8 w-auto"
+            loading="eager"
+            onerror="this.onerror=null;this.style.display='none';this.nextElementSibling.style.display='inline'"
+          />
+          <span class="font-display text-xl font-bold text-[#1f4aa8] leading-tight" style="display:none">Afghan<span class="text-[#b88a2a]">Tours</span></span>
+        </span>
+        <span class="hidden sm:block text-[10px] leading-tight text-[rgba(15,23,42,0.55)] mt-0.5 max-w-[220px] truncate">
+          {siteConfig.tagline}
+        </span>
       </a>
 
       <!-- Desktop Nav -->
-      <nav class="hidden md:flex items-center gap-1">
+      <nav class="hidden lg:flex items-center gap-0.5" aria-label="Primary">
         {navLinks.map(link => (
-          <a
-            href={link.href}
-            class="px-3 py-2 rounded-md text-sm font-medium text-[#0f172a] hover:text-[#1f4aa8] hover:bg-primary-50 transition-colors duration-150"
-          >
-            {link.label}
-          </a>
+          link.children ? (
+            <div class="relative group">
+              <a
+                href={link.href}
+                class="px-3 py-2 rounded-md text-sm font-medium text-[#0f172a] hover:text-[#1f4aa8] hover:bg-primary-50 transition-colors duration-150 inline-flex items-center gap-1"
+              >
+                {link.label}
+                <svg class="w-3.5 h-3.5 opacity-60" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                </svg>
+              </a>
+              <div class="invisible opacity-0 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100 transition-opacity duration-150 absolute left-0 top-full pt-1 min-w-[180px]">
+                <div class="rounded-xl border border-gray-100 bg-white shadow-lg py-2">
+                  {link.children.map(child => (
+                    <a
+                      href={child.href}
+                      class="block px-4 py-2 text-sm text-[#0f172a] hover:text-[#1f4aa8] hover:bg-primary-50"
+                    >
+                      {child.label}
+                    </a>
+                  ))}
+                </div>
+              </div>
+            </div>
+          ) : (
+            <a
+              href={link.href}
+              class="px-3 py-2 rounded-md text-sm font-medium text-[#0f172a] hover:text-[#1f4aa8] hover:bg-primary-50 transition-colors duration-150"
+            >
+              {link.label}
+            </a>
+          )
         ))}
+        <a
+          href="/contact"
+          class="ml-2 px-4 py-2 rounded-full bg-[#b88a2a] hover:bg-[#a07820] text-white text-sm font-semibold shadow-sm transition-colors duration-150"
+        >
+          Build My Journey
+        </a>
       </nav>
 
       <!-- Mobile hamburger -->
@@ -46,7 +99,7 @@ const navLinks = [
         aria-label="Toggle navigation menu"
         aria-expanded="false"
         aria-controls="mobile-menu"
-        class="md:hidden p-2 rounded-md text-[#0f172a] hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-[#1f4aa8]"
+        class="lg:hidden p-2 rounded-md text-[#0f172a] hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-[#1f4aa8]"
       >
         <svg id="icon-open" class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
@@ -59,16 +112,32 @@ const navLinks = [
   </div>
 
   <!-- Mobile Menu -->
-  <nav id="mobile-menu" class="hidden md:hidden border-t border-gray-100 bg-white" aria-label="Mobile navigation">
+  <nav id="mobile-menu" class="hidden lg:hidden border-t border-gray-100 bg-white" aria-label="Mobile navigation">
     <div class="px-4 py-2 space-y-1">
       {navLinks.map(link => (
-        <a
-          href={link.href}
-          class="block px-3 py-2 rounded-md text-sm font-medium text-[#0f172a] hover:text-[#1f4aa8] hover:bg-primary-50 transition-colors duration-150"
-        >
-          {link.label}
-        </a>
+        <>
+          <a
+            href={link.href}
+            class="block px-3 py-2 rounded-md text-sm font-medium text-[#0f172a] hover:text-[#1f4aa8] hover:bg-primary-50 transition-colors duration-150"
+          >
+            {link.label}
+          </a>
+          {link.children?.map(child => (
+            <a
+              href={child.href}
+              class="block pl-6 pr-3 py-1.5 rounded-md text-sm text-[rgba(15,23,42,0.75)] hover:text-[#1f4aa8] hover:bg-primary-50"
+            >
+              {child.label}
+            </a>
+          ))}
+        </>
       ))}
+      <a
+        href="/contact"
+        class="block mx-3 mt-2 mb-2 text-center px-4 py-2.5 rounded-full bg-[#b88a2a] hover:bg-[#a07820] text-white text-sm font-semibold"
+      >
+        Build My Journey
+      </a>
     </div>
   </nav>
 </header>
