@@ -1,7 +1,7 @@
 export const siteConfig = {
   name: 'Afghan Tours',
   tagline: 'Come for the history, stay for the hospitality.',
-  positioning: 'Reimagined, Grounded, Kabul-Based.',
+  positioning: 'Grounded, Kabul-Based, American-Led.',
   description:
     'Licensed Afghan tour operator — American-led, Afghan-operated, and based in Kabul. Practical journeys planned around current access, permits, and conditions.',
   email: 'info@afghantours.com',
