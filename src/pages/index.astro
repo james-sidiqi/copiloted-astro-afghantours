@@ -11,10 +11,20 @@ import { getCustomAudiences, isCustomTravelStyle } from '@lib/content/customAudi
 
 const data = getSiteData();
 const scheduledAll = data.tours.filter(t => t.isActive && !isCustomTravelStyle(t.travelStyle));
+const catalogPriority = [
+  'heart-of-the-silk-road',
+  'weekend-in-kabul',
+  'winter-circuit',
+  'summer-circuit',
+  'fall-eastern-afghanistan',
+  'spring-afghanistan-tour',
+  'buzkashi-expedition',
+  'signature-afghan-tour'
+];
 const scheduledTours = [
-  ...scheduledAll.filter(t => t.isFeatured),
-  ...scheduledAll.filter(t => !t.isFeatured),
-].slice(0, 6);
+  ...catalogPriority.map((slug) => scheduledAll.find((t) => t.slug === slug)).filter(Boolean),
+  ...scheduledAll.filter((t) => !catalogPriority.includes(t.slug)),
+].filter((t, i, arr) => arr.findIndex((x) => x!.slug === t!.slug) === i).slice(0, 8) as typeof scheduledAll;
 const customAudiences = getCustomAudiences();
 const featuredAttractions = data.attractions.filter(a => a.isActive && a.priority >= 5).slice(0, 6);
 const homeFaqs = data.faqs.filter(f => f.isActive && f.pageAssignment === 'home').slice(0, 6);
@@ -58,8 +68,8 @@ const homeFaqs = data.faqs.filter(f => f.isActive && f.pageAssignment === 'home'
       <div class="mb-10">
         <SectionHeader
           eyebrow="Scheduled Tours"
-          title="Set itineraries from Kabul"
-          subtitle="Regularly scheduled packages with practical routes, timing, permits, hotels, and drivers considered together."
+          title="Proposed scheduled journeys from Kabul"
+          subtitle="Proposed scheduled journeys for inquiry — set routes and windows we can cost and confirm with you. Custom journeys remain available when you need a different shape."
         />
       </div>
       {scheduledTours.length > 0 ? (

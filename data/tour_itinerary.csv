@@ -22,16 +22,6 @@ BSKI,bamyan-skiing-tour,2,Drive Kabul–Bamyan,Bamyan,Drive from Kabul to Bamyan
 BSKI,bamyan-skiing-tour,3,Ski Bamyan slopes,Bamyan,Depart early morning for the slopes with guides for a day of backcountry skiing.,,Drive times vary; conditions may affect timing.,BMY-005
 BSKI,bamyan-skiing-tour,4,Return to Kabul,Kabul,Drive from Bamyan to Kabul via Parwan or Wardak depending on road conditions. Sightseeing depending on travel times on the way into Kabul.,,Drive times vary; conditions may affect timing.,KBL-006
 BSKI,bamyan-skiing-tour,5,Airport Transfer - Depart from Kabul,Kabul,"Hotel check-out and Airport Drop-off, departing flights from Kabul.",,Short city transfers.,
-BUZE,buzkashi-expedition,1,Arrival & Orientation,Kabul,"Airport pickup, hotel check-in, and a relaxed orientation Sightseeing depending on arrival time.",,Short city transfers.,KBL-013;KBL-007
-BUZE,buzkashi-expedition,2,Sightseeing Kabul,Kabul,A day of sightseeing in Kabul.,,Drive times vary; conditions may affect timing.,KBL-004;KBL-015
-BUZE,buzkashi-expedition,3,Drive Kabul - Mazar-e-Sharif,Mazar-e-Sharif,"Drive from Kabul to Balkh. Sightseeing depending on travel times on the way to Balkh stops to see Salang Pass, Takht-e Rostam & Buddhist Cave Monasteries.",,Drive times vary; conditions may affect timing.,PRW-001;SAM-001;SAM-002
-BUZE,buzkashi-expedition,4,Sightseeing Balkh,Mazar-e-Sharif,A day of sightseeing in Kabul.,,Drive times vary; conditions may affect timing.,BAL-002;BAL-003;BAL-004;BAL-005;BAL-006
-BUZE,buzkashi-expedition,5,Mazar-e-Sharif Buzkashi Match,Mazar-e-Sharif,A day of Buzkashi matches.,,Drive times vary; conditions may affect timing.,BAL-001
-BUZE,buzkashi-expedition,6,Drive Mazar-e-Sharif - Kabul,Kabul,"Drive from Balkh to Kabul. Sightseeing anything missed on first drive, depending on travel times on the way to Balkh stops to see Salang Pass, Takht-e Rostam & Buddhist Cave Monasteries.",,Drive times vary; conditions may affect timing.,
-BUZE,buzkashi-expedition,7,Sightseeing Kabul,Kabul,A day of sightseeing in Kabul.,,Short city transfers.,KBL-009;KBL-001;KBL-002;KBL-003
-BUZE,buzkashi-expedition,8,Kabul Buzkashi Match,Kabul,A day of Buzkashi matches in Kabul.,,Short city transfers.,KBL-016;KBL-017;KBL-014
-BUZE,buzkashi-expedition,9,Sightseeing Kabul,Kabul,A day of sightseeing in Kabul.,,Short city transfers.,KBL-012;KBL-008;KBL-005
-BUZE,buzkashi-expedition,10,Airport Transfer - Depart from Kabul,Kabul,"Hotel check-out and Airport Drop-off, departing flights from Kabul.",,Short city transfers.,
 CAD,central-afghanistan-discovery,1,Arrival & Orientation,Kabul,"Airport pickup, hotel check-in, and a relaxed orientation Sightseeing depending on arrival time.",,Short city transfers.,KBL-002;KBL-015;KBL-003
 CAD,central-afghanistan-discovery,2,Drive Kabul–Panjshir,Kabul,Drive from Kabul to Panjshir via Parwan. Sightseeing on the way in and out of the valley with optional hike in the valley.,,Drive times vary; conditions may affect timing.,KBL-016;PJR-001;PRW-002
 CAD,central-afghanistan-discovery,3,Drive Kabul–Bamyan,Bamyan,Drive from Kabul to Bamyan via Parwan or Wardak depending on road conditions. Sightseeing depending on travel times on the way into Bamyan.,,Drive times vary; conditions may affect timing.,BMY-003;BMY-002;BMY-001
@@ -94,16 +84,6 @@ SCIE,scientific-expeditions,9,TBD,Kabul,Planned touring day with flexible pacing
 SCIE,scientific-expeditions,10,TBD,Kabul,Planned touring day with flexible pacing and local context. Exact routing may adjust based on conditions.,,Drive times vary; conditions may affect timing.,
 SCIE,scientific-expeditions,11,TBD,Kabul,Planned touring day with flexible pacing and local context. Exact routing may adjust based on conditions.,,Drive times vary; conditions may affect timing.,
 SCIE,scientific-expeditions,12,TBD,Kabul,Planned touring day with flexible pacing and local context. Exact routing may adjust based on conditions.,,Drive times vary; conditions may affect timing.,
-SUMC,summer-circuit,1,Arrival & Orientation,Kabul,"Airport pickup, hotel check-in, and a relaxed orientation Sightseeing depending on arrival time.",,Short city transfers.,
-SUMC,summer-circuit,2,Sightseeing Kabul,Kabul,A day of sightseeing in Kabul.,,Short city transfers.,KBL-001;KBL-002;KBL-003
-SUMC,summer-circuit,3,Drive Kabul - Mazar-e-Sharif,Mazar-e-Sharif,"Drive from Kabul to Balkh. Sightseeing depending on travel times on the way to Balkh stops to see Salang Pass, Takht-e Rostam & Buddhist Cave Monasteries.",,Drive times vary; conditions may affect timing.,SAM-001;SAM-002;PRW-001
-SUMC,summer-circuit,4,Sightseeing Balkh,Mazar-e-Sharif,A day of sightseeing in Balkh.,,Short city transfers.,BAL-002;BAL-003;BAL-004;BAL-005;BAL-006
-SUMC,summer-circuit,5,Drive Balkh - Badakhshan,Faizabad,Drive from Balkh to Badakhshan via Kunduz and Takhar.,,Drive times vary; conditions may affect timing.,KDZ-001
-SUMC,summer-circuit,6,Sightseeing Badakhshan,Faizabad,A day of sightseeing in Badakhshan,,Drive times vary; conditions may affect timing.,BDK-001
-SUMC,summer-circuit,7,Drive Badakhshan - Mazar-e-Sharif,Mazar-e-Sharif,Drive from Badakhshan back to Balkh.,,Drive times vary; conditions may affect timing.,BAL-001
-SUMC,summer-circuit,8,Fly Mazar-e-Sharif - Kabul and Sightseeing in Kabul,Kabul,Flight from Mazar-e-Sharif back to Kabul with the remainder of the day of sightseeing in Kabul.,FL-MAZ-KBL,Short city transfers.,KBL-014;KBL-017;KBL-007;KBL-015;KBL-016
-SUMC,summer-circuit,9,Sightseeing Kabul,Kabul,A day of sightseeing in Kabul.,,Short city transfers.,KBL-004;KBL-005;KBL-006
-SUMC,summer-circuit,10,Airport Transfer - Depart from Kabul,Kabul,"Hotel check-out and Airport Drop-off, departing flights from Kabul.",,Short city transfers.,
 TGHT,timurid-grandeur-herat-tour,1,Arrival & Orientation,Kabul,"Airport pickup, hotel check-in, and a relaxed orientation Sightseeing depending on arrival time.",,Short city transfers.,KBL-006;KBL-005
 TGHT,timurid-grandeur-herat-tour,2,Sightseeing Kabul,Kabul,A day of sightseeing in Kabul.,,Short city transfers.,KBL-001;KBL-002;KBL-003
 TGHT,timurid-grandeur-herat-tour,3,Fly Kabul - Herat and Sightseeing in Herat,Herat,Flight from Kabul to Herat with the remainder of the day of sightseeing in Kabul.,FL-KBL-HER,Short city transfers.,HER-003;HER-002;HER-004
@@ -151,18 +131,76 @@ TTWC,trek-the-wakhan-corridor,18,TBD,Kunduz,Planned touring day with flexible pa
 TTWC,trek-the-wakhan-corridor,19,TBD,Takhar,Planned touring day with flexible pacing and local context. Exact routing may adjust based on conditions.,,Drive times vary; conditions may affect timing.,
 TTWC,trek-the-wakhan-corridor,20,TBD,Badakhshan,Planned touring day with flexible pacing and local context. Exact routing may adjust based on conditions.,,Short city transfers.,
 TTWC,trek-the-wakhan-corridor,21,Airport Transfer - Depart from Kabul,Kabul,"Hotel check-out and Airport Drop-off, departing flights from Kabul.",,Short city transfers.,KBL-012;KBL-014
-WKND,weekend-in-kabul,1,Arrival & Orientation,Kabul,"Airport pickup, hotel check-in, and a relaxed orientation Sightseeing depending on arrival time.",,Short city transfers.,KBL-001;KBL-002;KBL-003;KBL-007
-WKND,weekend-in-kabul,2,Sightseeing Kabul,Kabul,A day of sightseeing in Kabul.,,Short city transfers.,KBL-005;KBL-008;KBL-012;KBL-009;KBL-006
-WKND,weekend-in-kabul,3,Airport Transfer - Depart from Kabul,Kabul,"Hotel check-out and Airport Drop-off, departing flights from Kabul.",,Short city transfers.,KBL-006
-WNTC,winter-circuit,1,Arrival & Orientation,Kabul,"Airport pickup, hotel check-in, and a relaxed orientation Sightseeing depending on arrival time.",,Short city transfers.,KBL-001;KBL-002;KBL-003
-WNTC,winter-circuit,2,Drive to Parwan,Kabul,Drive from Kabul for a walk/hike in Istalif with a chance to meet with artisanal potters if interested. Driving back to Kabul via New-Bagram Road to see Bagram Air Field from a safe distance.,,Drive times vary; conditions may affect timing.,PRW-001
-WNTC,winter-circuit,3,Drive to Jalalabad,Jalalabad,Drive from Kabul to Jalalabad for the scenic views and hiking options.,,Drive times vary; conditions may affect timing.,NGH-002;NGH-001
-WNTC,winter-circuit,4,Day hiking in Kunar Valley,Jalalabad,Drive from Jalalabad into the Kunar Valley for some beautiful scenic views and excellent hiking options.,,Drive times vary; conditions may affect timing.,KNR-001
-WNTC,winter-circuit,5,Drive Back to Kabul and Sightseeing in Kabul,Kabul,Drive back to Kabul with the remainder of the day of sightseeing in Kabul.,,Drive times vary; conditions may affect timing.,KBL-014;KBL-017;KBL-007;KBL-015;KBL-016
-WNTC,winter-circuit,6,Drive Kabul–Bamyan,Bamyan,Drive from Kabul to Bamyan via Parwan or Wardak depending on road conditions. Sightseeing depending on travel times on the way into Bamyan.,,Drive times vary; conditions may affect timing.,BMY-003;BMY-002;BMY-001
-WNTC,winter-circuit,7,Band-e-Amir National Park,Bamyan,Depart early morning for a day trip to see Band-e-Amir National Park.,,Drive times vary; conditions may affect timing.,BMY-004
-WNTC,winter-circuit,8,Drive Bamyan-Ghazni,Ghazni,Drive from Bamyan to Ghazni via Wardak. Sightseeing depending on travel times on the way into Ghazni.,,Drive times vary; conditions may affect timing.,WRD-001;GHZ-001
-WNTC,winter-circuit,9,Sightseeing Ghazni,Ghazni,A day of sightseeing in Ghazni.,,Short city transfers.,GHZ-002;GHZ-003;GHZ-004;GHZ-005
-WNTC,winter-circuit,10,Drive Ghazni-Kabul,Kabul,"Drive from Ghazni. Sightseeing in Kabul, depending on travel times.",,Drive times vary; conditions may affect timing.,KBL-001;KBL-002;KBL-003;KBL-006
-WNTC,winter-circuit,11,Sightseeing Kabul,Kabul,A day of sightseeing in Kabul.,,Short city transfers.,KBL-015;KBL-009;KBL-005;KBL-007
-WNTC,winter-circuit,12,Airport Transfer - Depart from Kabul,Kabul,"Hotel check-out and Airport Drop-off, departing flights from Kabul.",,Short city transfers.,
+WKND,weekend-in-kabul,1,Kabul — Arrival & first walks,Kabul,"Arrive Kabul. Airport reception, hotel check-in, and a paced first walk or viewpoint depending on arrival time — enough to feel the city without forcing a full programme.",,Short city transfers.,KBL-003;KBL-007
+WKND,weekend-in-kabul,2,Kabul — Capital layers,Kabul,"A fuller day in Kabul: gardens, museums or old-city fabric, and a market or lunch stop as conditions and guest pace allow. Positioned as a serious short introduction — not a souvenir sprint.",,Short city transfers.,KBL-001;KBL-002;KBL-003;KBL-005
+WKND,weekend-in-kabul,3,Departure,Kabul,"Final morning buffer if timing allows, then hotel check-out and airport transfer for onward flights.",,Short city transfers.,
+WNTC,winter-circuit,1,Kabul — Winter arrival,Kabul,"Arrive into winter Kabul. Soft landing: hotel, orientation, and a short city outing if light and weather allow.",,Short city transfers.,KBL-003
+WNTC,winter-circuit,2,Kabul — City in the cold season,Kabul,"Kabul by winter light — museums, gardens, or neighbourhood walks paced for shorter days and hospitality indoors when needed.",,Short city transfers.,KBL-001;KBL-002;KBL-005
+WNTC,winter-circuit,3,Toward the highlands,Bamyan,Road day into Bamyan country via Parwan or Wardak depending on snow and road reports. Stops only where safe and workable.,,Drive times vary; winter conditions may reshape the day.,BMY-001
+WNTC,winter-circuit,4,Bamyan — Valley in winter,Bamyan,"Buddha niches and valley context in the cold season — quieter roads, sharp air, and site access confirmed locally that morning.",,Short local transfers.,BMY-001;BMY-002
+WNTC,winter-circuit,5,Band-e-Amir — if winter access allows,Bamyan,"Day toward the blue lakes when the road is open. If closed by snow or advisories, the day reshapes around Bamyan valley alternatives — planned, not promised.",,Winter road access checked the day before.,BMY-004
+WNTC,winter-circuit,6,Across the mountains,Samangan,Continue north toward Samangan / Aybak as conditions allow — mountain winter driving with flexible overnight.,,Route by conditions; overnight Aybak or confirmed stop.,SAM-001
+WNTC,winter-circuit,7,Northern shrines & winter towns,Mazar-e-Sharif,Into the Mazar basin: shrine city atmosphere and northern winter hospitality. Exterior arrangements at major sites confirmed locally.,,Drive times vary with weather.,BAL-001
+WNTC,winter-circuit,8,Balkh & return planning,Mazar-e-Sharif,"Balkh’s ancient outline and northern urban fabric, then prepare for return — flight if available, otherwise road contingency.",,Domestic flight checked; road is the fallback.,BAL-002;BAL-001
+WNTC,winter-circuit,9,Return to Kabul & departure window,Kabul,Return to Kabul by air or road and close the circuit. Departure same day or evening buffer by flight timing.,,Flight if available; road contingency noted.,
+SUMC,summer-circuit,1,Kabul — Summer start,Kabul,Arrive Kabul in the long-light season. Orientation and a measured city introduction.,,Short city transfers.,KBL-003
+SUMC,summer-circuit,2,Kabul — City & summer evenings,Kabul,"Kabul highlights with later light — gardens, viewpoints, and hospitality timed for heat.",,Short city transfers.,KBL-001;KBL-002;KBL-003
+SUMC,summer-circuit,3,Into Bamyan high country,Bamyan,Drive into Bamyan’s highland roads — summer is the window for comfortable mountain travel.,,Drive times vary; summer highland routing.,BMY-001
+SUMC,summer-circuit,4,Bamyan — Ancient valley,Bamyan,"Buddha niches, valley folds, and Bamyan’s living town in clear summer weather.",,Short local transfers.,BMY-001;BMY-002;BMY-003
+SUMC,summer-circuit,5,Band-e-Amir — Blue lakes,Bamyan,Full day at Band-e-Amir’s lakes. Female-visitor and access notes checked with the team before the visit; local rules can change.,,Day trip; access confirmed locally.,BMY-004
+SUMC,summer-circuit,6,North across the mountains,Samangan,Continue toward Samangan country — summer highland roads toward the north.,,Route by conditions.,SAM-001
+SUMC,summer-circuit,7,Mazar — Northern light,Mazar-e-Sharif,Mazar-e-Sharif and shrine precincts in summer light; exterior visit arrangements confirmed locally.,,Short city transfers.,BAL-001
+SUMC,summer-circuit,8,Balkh — Ancient north,Mazar-e-Sharif,Balkh’s ruins and northern city fabric — a distinct counterpoint to Bamyan’s high valleys.,,Local transfers.,BAL-002;BAL-003
+SUMC,summer-circuit,9,Return toward Kabul,Kabul,"Domestic flight if available, otherwise road return. Buffer time in Kabul.",,Flight preferred when scheduled; road contingency.,KBL-007
+SUMC,summer-circuit,10,Departure,Kabul,Airport transfer and departure.,,Short city transfers.,
+FEAF,fall-eastern-afghanistan,1,Kabul — Autumn arrival,Kabul,"Arrive Kabul. Briefing on the eastern plan: which valley days are currently workable, and which remain flexible.",,Short city transfers.,KBL-003
+FEAF,fall-eastern-afghanistan,2,Kabul → Jalalabad,Jalalabad,Descend toward Jalalabad / Nangarhar — orchard country and eastern approaches in autumn colour where the road allows.,,Drive times vary with traffic and conditions.,NGH-001
+FEAF,fall-eastern-afghanistan,3,Jalalabad & surrounds,Jalalabad,"Eastern city day: Jalalabad context, nearby sites such as Hadda or river country only if access is confirmed.",,Local movements; site list flexible.,NGH-001;NGH-003
+FEAF,fall-eastern-afghanistan,4,Laghman valleys,Laghman,Condition-based day into Laghman — river valleys and highland edges. Exact stops set from current local advice.,,Flexible eastern day.,LGM-001
+FEAF,fall-eastern-afghanistan,5,Toward Kunar country,Kunar,"Where access and timing allow, a carefully planned look at Kunar river-valley landscapes. This day may shorten, shift, or substitute — honesty over ambition.",,Access checked before confirmation; may be reshaped.,KNR-001
+FEAF,fall-eastern-afghanistan,6,Eastern valleys — flexible,Jalalabad,"Hold day for the strongest workable eastern option: deeper valley time, a cultural stop, or a measured return toward Jalalabad.",,Condition-led; not a fixed checklist.,
+FEAF,fall-eastern-afghanistan,7,Return to Kabul,Kabul,Road return to Kabul with autumn light on the passes. Evening buffer in the capital.,,Drive times vary.,KBL-003
+FEAF,fall-eastern-afghanistan,8,Departure,Kabul,Airport transfer and departure.,,Short city transfers.,
+SPAT,spring-afghanistan-tour,1,Kabul — Spring arrival,Kabul,Arrive as spring opens the highlands. Orientation and a first Kabul walk.,,Short city transfers.,KBL-003
+SPAT,spring-afghanistan-tour,2,Parwan & Panjshir approaches,Parwan,"North toward Parwan / Panjshir country — valley green-up, viewpoints, and history stops as access allows.",,Drive times vary.,PRW-001;PJR-001
+SPAT,spring-afghanistan-tour,3,Toward Bamyan,Bamyan,Cross into Bamyan highland roads as spring snowline retreats.,,Route by spring conditions.,BMY-001
+SPAT,spring-afghanistan-tour,4,Bamyan — Valley & niches,Bamyan,Ancient valley day: Buddha niches and Bamyan town in spring light.,,Local transfers.,BMY-001;BMY-002
+SPAT,spring-afghanistan-tour,5,Band-e-Amir,Bamyan,Blue lakes day when the road is open — classic spring/early-summer window.,,Day trip; weather dependent.,BMY-004
+SPAT,spring-afghanistan-tour,6,Return to Kabul / flight prep,Kabul,Return to Kabul and prepare for the Herat leg — flight timing confirmed against current schedules.,,Road return; flight check for next day.,KBL-002
+SPAT,spring-afghanistan-tour,7,Fly to Herat,Herat,Domestic flight to Herat when available. Afternoon citadel or old-city orientation.,FL-KBL-HER,Flight segment; road not assumed.,HER-002
+SPAT,spring-afghanistan-tour,8,Herat — Timurid city,Herat,"Friday Mosque, minarets/Musalla context, and Herat’s urban fabric — west Afghanistan as its own chapter, not a Bamyan clone.",,Short city transfers.,HER-003;HER-004;HER-001
+SPAT,spring-afghanistan-tour,9,Herat → Kabul,Kabul,Return flight to Kabul (or confirmed alternative). Buffer evening in the capital.,FL-HER-KBL,Flight if available.,KBL-003
+SPAT,spring-afghanistan-tour,10,Departure,Kabul,Airport transfer and departure.,,Short city transfers.,
+BUZE,buzkashi-expedition,1,Kabul — Arrival,Kabul,Arrive Kabul. Briefing: this journey locks to a confirmed match date — day order can shift until the game is verified locally.,,Short city transfers.,KBL-003
+BUZE,buzkashi-expedition,2,Kabul — Context day,Kabul,"City day while match confirmation is tracked with northern contacts. Museums, gardens, and hospitality — not empty waiting.",,Short city transfers.,KBL-001;KBL-002;KBL-005
+BUZE,buzkashi-expedition,3,North toward the plains,Samangan,Drive north via Salang / Samangan country toward the Mazar basin — Buddhist heritage stops if timing allows.,,Drive times vary; winter roads.,SAM-001;PRW-001
+BUZE,buzkashi-expedition,4,Mazar — Shrine city,Mazar-e-Sharif,Mazar-e-Sharif orientation and Blue Mosque exterior arrangements confirmed locally.,,Short city transfers.,BAL-001
+BUZE,buzkashi-expedition,5,Buzkashi match day (confirmed locally),Mazar-e-Sharif,"Match day only when a game is confirmed — venue, timing, and viewing arrangements set with local hosts. If the match moves, this day moves with it.",,Scheduled around confirmed match dates — not a fake fixed event.,BAL-001
+BUZE,buzkashi-expedition,6,Balkh & northern fabric,Mazar-e-Sharif,Ancient Balkh and northern city life — cultural depth beyond the arena.,,Local transfers.,BAL-002;BAL-003
+BUZE,buzkashi-expedition,7,Flexible cultural / second match window,Mazar-e-Sharif,"Hold for a second confirmed game, a training-ground visit, or deeper Balkh/Mazar time — decided from real local information.",,Flexible by match calendar.,
+BUZE,buzkashi-expedition,8,Return to Kabul,Kabul,Road or flight return to Kabul.,,Flight if available; road contingency.,KBL-007
+BUZE,buzkashi-expedition,9,Departure,Kabul,Airport transfer and departure.,,Short city transfers.,
+SIGA,signature-afghan-tour,1,Kabul — Flagship opening,Kabul,"Arrive Kabul. Frame the two-week arc: highlands, north, west, and south — each leg confirmed against current access before it is treated as bookable.",,Short city transfers.,KBL-003
+SIGA,signature-afghan-tour,2,Kabul — Capital depth,Kabul,Fuller Kabul day before the long circuit begins.,,Short city transfers.,KBL-001;KBL-002;KBL-003;KBL-005
+SIGA,signature-afghan-tour,3,Kabul → Bamyan,Bamyan,Into the Hindu Kush toward Bamyan.,,Drive times vary.,BMY-001
+SIGA,signature-afghan-tour,4,Bamyan — Ancient valley,Bamyan,Buddha niches and valley context (UNESCO landscape).,,Local transfers.,BMY-001;BMY-002
+SIGA,signature-afghan-tour,5,Band-e-Amir,Bamyan,Blue lakes day; access and visitor rules checked locally (including female-visitor notes where relevant).,,Day trip.,BMY-004
+SIGA,signature-afghan-tour,6,Bamyan → north,Samangan,Across the mountains toward Samangan / Aybak as conditions allow.,,Route by conditions.,SAM-001
+SIGA,signature-afghan-tour,7,Mazar & Balkh,Mazar-e-Sharif,Northern shrine city and ancient Balkh.,,Local transfers.,BAL-001;BAL-002
+SIGA,signature-afghan-tour,8,North → Herat transit,Herat,Flight (preferred) or confirmed long transit toward Herat — only once the west leg is operationally realistic.,FL-MAZ-HER,Flight options checked; not assumed.,
+SIGA,signature-afghan-tour,9,Herat — Western city,Herat,"Citadel, Friday Mosque, and Timurid urban fabric.",,Short city transfers.,HER-002;HER-003;HER-004
+SIGA,signature-afghan-tour,10,Herat depth / buffer,Herat,Second Herat day or buffer before the south leg — used for sites missed or rest before Kandahar routing.,,Flexible.,HER-001
+SIGA,signature-afghan-tour,11,Herat → Kandahar,Kandahar,South to Kandahar when the route/flight is confirmed. Durrani capital context begins on arrival.,FL-HER-KDH,Segment confirmed before advertising as bookable.,KDR-001
+SIGA,signature-afghan-tour,12,Kandahar — Southern chapter,Kandahar,"Kandahar city and carefully chosen sites — a distinct southern chapter, not a repeat of Bamyan or Herat.",,Local transfers; access confirmed locally.,KDR-001;KDR-004
+SIGA,signature-afghan-tour,13,Return to Kabul,Kabul,Flight return to Kabul when available; road only if explicitly agreed as contingency.,FL-KDH-KBL,Flight preferred.,KBL-003
+SIGA,signature-afghan-tour,14,Departure,Kabul,Airport transfer and departure.,,Short city transfers.,
+HSRA,heart-of-the-silk-road,1,Kabul — Welcome to Afghanistan,Kabul,"Arrive Kabul. Welcome briefing, hotel check-in, and a gentle first orientation to the capital — the journey begins as hospitality, not a rush to the sights.",,Short city transfers.,KBL-003;KBL-007
+HSRA,heart-of-the-silk-road,2,Kabul — The capital’s many histories,Kabul,"Kabul’s layered histories: gardens, museums, and neighbourhood fabric chosen for the season and guest pace. A capital day that sets context for the road ahead.",,Short city transfers.,KBL-001;KBL-002;KBL-003;KBL-005
+HSRA,heart-of-the-silk-road,3,Kabul → Bamyan — Into the Hindu Kush,Bamyan,Drive into the Hindu Kush toward Bamyan. Mountain approaches and valley entry; sightseeing shaped by travel time and road choice (Parwan or Wardak by conditions).,,Drive times vary; conditions may affect timing.,BMY-001
+HSRA,heart-of-the-silk-road,4,Bamyan — The ancient valley,Bamyan,Bamyan’s ancient valley — Buddha niches and the wider UNESCO cultural landscape. Time in town and on the cliffs with a guide who knows what is open today.,,Short local transfers.,BMY-001;BMY-002;BMY-003
+HSRA,heart-of-the-silk-road,5,Band-e-Amir — The blue lakes,Bamyan,"Day visit to Band-e-Amir’s blue lakes. Access and visitor rules — including notes that can affect female visitors — are checked with the team before departure. If the road or site rules block the visit, we reshape the day honestly.",,Day trip; access confirmed locally.,BMY-004
+HSRA,heart-of-the-silk-road,6,Bamyan → Samangan — Across the mountains,Samangan,Across the mountains toward Samangan. Route by conditions; overnight in Aybak or another confirmed stop — not forced through unsafe timing.,,Route by conditions; overnight Aybak or confirmed stop.,SAM-001
+HSRA,heart-of-the-silk-road,7,Samangan → Mazar — Buddhist heritage,Mazar-e-Sharif,"Buddhist heritage around Takht-e Rustam / Samangan if access allows, then continue into the Mazar basin.",,Access-dependent heritage stop.,SAM-001;SAM-002
+HSRA,heart-of-the-silk-road,8,Mazar & Balkh — Northern cities,Mazar-e-Sharif,Northern cities: Mazar-e-Sharif and Balkh. Hazrat Ali (Blue Mosque) exterior arrangements confirmed locally — we do not invent interior access.,,Short city transfers.,BAL-001;BAL-002;BAL-003
+HSRA,heart-of-the-silk-road,9,Return to Kabul,Kabul,Return to Kabul — domestic flight if available; otherwise road contingency with clear timing expectations. Buffer evening in the capital.,,Domestic flight if available; road contingency noted.,KBL-003
+HSRA,heart-of-the-silk-road,10,Departure,Kabul,Hotel check-out and airport transfer for departing flights.,,Short city transfers.,
