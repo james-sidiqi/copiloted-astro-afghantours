@@ -109,6 +109,7 @@ function loadHotels(): HotelProperty[] {
         .map((path, index) =>
           getAssetUrl(normalizeAssetPath(path), {
             entity: 'hotel',
+            slug: cleanText(r.hotel_slug),
             kind: index === 0 ? 'hero' : 'image',
           }),
         )
