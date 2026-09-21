@@ -6,6 +6,8 @@ import TourCard from '@components/travel/TourCard.astro';
 import DishCard from '@components/travel/DishCard.astro';
 import HotelCard from '@components/travel/HotelCard.astro';
 import TransportCard from '@components/travel/TransportCard.astro';
+import ConversionCTA from '@components/travel/ConversionCTA.astro';
+import { isCustomTravelStyle } from '@lib/content/customAudiences';
 import type { Location, SiteData } from '@lib/types/view-models';
 import { getSiteData } from '@lib/data/site-data';
 
@@ -39,7 +41,7 @@ const relatedAttractions = data.attractions.filter((a) => {
 });
 
 const attractionCodes = new Set(relatedAttractions.map((a) => a.attractionCode));
-const relatedTours = data.tours.filter((tour) => {
+const relatedToursAll = data.tours.filter((tour) => {
   if (!tour.isActive) return false;
   const usesAsPrimaryHub = tour.primaryLocationSlug === destination.slug;
   const usesHubAttractions = tour.itinerary.some((day) =>
@@ -50,6 +52,7 @@ const relatedTours = data.tours.filter((tour) => {
   );
   return usesAsPrimaryHub || usesHubAttractions || usesLocationName;
 });
+const relatedTours = relatedToursAll.filter((t) => !isCustomTravelStyle(t.travelStyle));
 
 const relatedHotels = data.hotels.filter(
   (hotel) => hotel.isActive && hotel.destinationsCode === destination.locationCode
@@ -154,7 +157,7 @@ const atAGlance = [
     {relatedTours.length > 0 && (
       <section>
         <div class="mb-8">
-          <SectionHeader eyebrow="Tours" title={`Tours using ${destination.name} as a hub`} />
+          <SectionHeader eyebrow="Scheduled Tours" title={`Scheduled tours using ${destination.name}`} subtitle="Only itineraries linked to this hub in our data — not a forced recommendation list." />
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {relatedTours.map((tour) => <TourCard tour={tour} />)}
@@ -173,4 +176,10 @@ const atAGlance = [
         </div>
       )}
   </div>
+
+  <ConversionCTA
+    variant="soft"
+    title={`Plan time in ${destination.name}`}
+    subtitle="When this hub fits your trip, browse linked Scheduled Tours above — or Build a Custom Journey if you need a different route or timing."
+  />
 </BaseLayout>

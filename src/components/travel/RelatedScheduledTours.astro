@@ -1,0 +1,46 @@
+---
+import SectionHeader from '@components/ui/SectionHeader.astro';
+import TourCard from '@components/travel/TourCard.astro';
+import type { Tour } from '@lib/types/view-models';
+
+interface Props {
+  tours: Tour[];
+  eyebrow?: string;
+  title?: string;
+  subtitle?: string;
+  limit?: number;
+}
+
+const {
+  tours,
+  eyebrow = 'Scheduled Tours',
+  title = 'Journeys that match this context',
+  subtitle = 'Set itineraries from our tour data — not an encyclopedia entry. Inquire if you need a Custom Journey instead.',
+  limit = 3,
+} = Astro.props;
+
+const shown = tours.slice(0, limit);
+---
+
+{shown.length > 0 && (
+  <section class="py-16 bg-white">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <div class="mb-8">
+        <SectionHeader eyebrow={eyebrow} title={title} subtitle={subtitle} />
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+        {shown.map((tour) => (
+          <TourCard tour={tour} />
+        ))}
+      </div>
+      <div class="mt-8 text-center">
+        <a
+          href="/tours?type=scheduled"
+          class="inline-block text-sm font-semibold text-[#1f4aa8] hover:underline"
+        >
+          View all Scheduled Tours →
+        </a>
+      </div>
+    </div>
+  </section>
+)}

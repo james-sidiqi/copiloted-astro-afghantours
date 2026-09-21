@@ -1,16 +1,20 @@
 ---
 import SafeImage from '@components/ui/SafeImage.astro';
+import { resolveTransportAsset } from '@lib/getAssetUrl';
 
 interface Props {
   transport: import('@lib/types/view-models').TransportOption;
 }
 const { transport } = Astro.props;
+const imagePath =
+  resolveTransportAsset(transport.tier, transport.vehicleType, 'thumb') ||
+  resolveTransportAsset(transport.tier, transport.vehicleType, 'hero');
 ---
 
 <article class="group bg-white rounded-[14px] shadow-[0_2px_16px_0_rgba(0,0,0,0.08)] hover:shadow-[0_10px_30px_rgba(15,23,42,0.08)] transition-shadow duration-300 overflow-hidden flex flex-col">
   <div class="block overflow-hidden aspect-[16/10] bg-gray-100 shrink-0">
     <SafeImage
-      src=""
+      src={imagePath}
       fallback="/assets/images/placeholders/default-card.webp"
       alt={transport.transportName}
       class="w-full h-full object-cover"
@@ -27,7 +31,7 @@ const { transport } = Astro.props;
       )}
     </div>
     <h3 class="font-display text-base font-semibold text-[#1e3a5f] leading-snug">{transport.transportName}</h3>
-    <p class="text-sm text-[rgba(15,23,42,0.7)] leading-relaxed flex-1">{transport.logicNotes || 'Transport option available for applicable routes.'}</p>
+    <p class="text-sm text-[rgba(15,23,42,0.7)] leading-relaxed flex-1">{transport.logicNotes || 'Transport option used when routing guests on tours.'}</p>
     <p class="text-xs text-[rgba(15,23,42,0.55)]">Capacity: {transport.minPax}–{transport.maxPax} travellers</p>
   </div>
 </article>

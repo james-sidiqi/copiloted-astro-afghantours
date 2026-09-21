@@ -2,6 +2,7 @@
 import BaseLayout from '@layouts/BaseLayout.astro';
 import Hero from '@components/site/Hero.astro';
 import SectionHeader from '@components/ui/SectionHeader.astro';
+import ConversionCTA from '@components/travel/ConversionCTA.astro';
 ---
 
 <BaseLayout title="Visa & Entry – Afghan Tours" description="Current visa and entry guidance for Afghanistan travel.">
@@ -22,8 +23,14 @@ import SectionHeader from '@components/ui/SectionHeader.astro';
         <li>Allow additional processing time for route and security clearances.</li>
       </ul>
       <p class="mt-6 text-sm text-[rgba(15,23,42,0.7)]">
-        For route-specific support and up-to-date operational guidance, please <a href="/contact" class="text-[#1f4aa8] underline">contact Afghan Tours</a>.
+        We support LOI for booked tours. We do not issue visas. Confirm requirements with your nearest Afghan mission.
       </p>
     </div>
   </section>
+
+  <ConversionCTA
+    variant="soft"
+    title="After entry basics — find a tour"
+    subtitle="Visa guidance is orientation. Next: browse Scheduled Tours, or Build a Custom Journey and ask about LOI support for your booking."
+  />
 </BaseLayout>

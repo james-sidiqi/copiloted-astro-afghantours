@@ -2,6 +2,7 @@
 import SectionHeader from '@components/ui/SectionHeader.astro';
 import TourCard from '@components/travel/TourCard.astro';
 import type { Tour } from '@lib/types/view-models';
+import { isCustomTravelStyle } from '@lib/content/customAudiences';
 
 interface Props {
   current: Tour;
@@ -13,6 +14,10 @@ const { current, allTours, limit = 3 } = Astro.props;
 
 function scoreRelated(candidate: Tour): number {
   if (!candidate.isActive || candidate.slug === current.slug) return -1;
+  // Prefer scheduled peers when current is scheduled
+  if (!isCustomTravelStyle(current.travelStyle) && isCustomTravelStyle(candidate.travelStyle)) {
+    return -1;
+  }
   let score = 0;
   const sharedProvinces = candidate.provinces.filter((p) => current.provinces.includes(p)).length;
   const sharedRegions = candidate.regions.filter((r) => current.regions.includes(r)).length;
@@ -25,6 +30,7 @@ function scoreRelated(candidate: Tour): number {
     if (delta <= 3) score += 1;
   }
   if (candidate.isFeatured) score += 0.5;
+  if (!isCustomTravelStyle(candidate.travelStyle)) score += 0.25;
   return score;
 }
 
@@ -35,11 +41,14 @@ const related = allTours
   .slice(0, limit)
   .map((entry) => entry.tour);
 
+const scheduledPool = allTours.filter(
+  (tour) => tour.isActive && tour.slug !== current.slug && !isCustomTravelStyle(tour.travelStyle),
+);
+
 const fallback =
   related.length > 0
     ? related
-    : allTours
-        .filter((tour) => tour.isActive && tour.slug !== current.slug)
+    : scheduledPool
         .sort((a, b) => Number(b.isFeatured) - Number(a.isFeatured) || a.name.localeCompare(b.name))
         .slice(0, limit);
 ---
@@ -50,8 +59,8 @@ const fallback =
       <div class="mb-8">
         <SectionHeader
           eyebrow="Keep Exploring"
-          title="Related Journeys"
-          subtitle="Other itineraries that share destinations, style, or pace with this tour."
+          title="Related Scheduled Tours"
+          subtitle="Other set itineraries that share destinations, style, or pace — or inquire for a Custom Journey."
         />
       </div>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">

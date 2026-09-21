@@ -3,8 +3,11 @@ import BaseLayout from '@layouts/BaseLayout.astro';
 import Hero from '@components/site/Hero.astro';
 import SectionHeader from '@components/ui/SectionHeader.astro';
 import HubCard from '@components/travel/HubCard.astro';
+import ConversionCTA from '@components/travel/ConversionCTA.astro';
+import ExperienceStrip from '@components/travel/ExperienceStrip.astro';
 import { getSiteData } from '@lib/data/site-data';
 import { resolveHubAsset } from '@lib/getAssetUrl';
+import { getActivityCards } from '@lib/content/experienceCards';
 
 const data = getSiteData();
 const hubs = data.locations
@@ -12,15 +15,16 @@ const hubs = data.locations
   .sort((a, b) => a.sortOrder - b.sortOrder);
 
 const provinceByCode = new Map(data.provinces.map((p) => [p.provinceCode, p]));
+const activityCards = getActivityCards(6);
 ---
 
-<BaseLayout title="Destinations – Afghan Tours" description="Explore Afghan operational hubs and their surrounding provinces.">
+<BaseLayout title="Destinations – Afghan Tours" description="Operational city hubs across Afghanistan — explore places we plan journeys around, then find a Scheduled Tour or inquire for Custom.">
   <Hero
     title="Destinations"
-    subtitle="Operational city hubs across Afghanistan"
+    subtitle="Operational city hubs we plan around — discover the map, then find a tour that fits."
     imagePath="/assets/images/heroes/hero-destinations.webp"
-    ctaText="Browse Tours"
-    ctaHref="/tours"
+    ctaText="View Scheduled Tours"
+    ctaHref="/tours?type=scheduled"
   />
 
   <section class="py-16 bg-[#f6f7fb]">
@@ -28,8 +32,8 @@ const provinceByCode = new Map(data.provinces.map((p) => [p.provinceCode, p]));
       <div class="mb-8">
         <SectionHeader
           eyebrow="City Hubs"
-          title="Travel Hubs & Provinces"
-          subtitle="Each hub is shown with its correct province to keep hub and province models distinct."
+          title="Travel hubs & provinces"
+          subtitle="Each hub is shown with its province. Open a hub to see linked attractions, stays, and tours when our data connects them."
         />
       </div>
 
@@ -47,4 +51,19 @@ const provinceByCode = new Map(data.provinces.map((p) => [p.provinceCode, p]));
       </div>
     </div>
   </section>
+
+  <ExperienceStrip
+    id="activities"
+    cards={activityCards}
+    eyebrow="Along the way"
+    title="Activities that appear on journeys"
+    subtitle="Sightseeing, markets, and seasonal activities from our asset library — not thin activity pages. Seasonal or specialised interests usually mean a Custom Journey inquiry."
+  />
+
+  <ConversionCTA
+    variant="soft"
+    eyebrow="Customer journey"
+    title="Discover → find a tour → inquire"
+    subtitle="Hubs and activities orient you. Next step: browse Scheduled Tours, or Build a Custom Journey if your route is specific."
+  />
 </BaseLayout>
