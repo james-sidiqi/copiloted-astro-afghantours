@@ -111,8 +111,8 @@ import SectionHeader from '@components/ui/SectionHeader.astro';
             desc: 'Route-aware planning, realistic drive times, and adjustments when conditions change. No risk-free guarantees.'
           },
           {
-            title: 'Packages & custom requests',
-            desc: 'Tour packages when they fit — or a custom journey built around your timing and interests.'
+            title: 'Scheduled Tours & Custom Journeys',
+            desc: 'Set itineraries when they fit — or a Custom Journey built around your timing and interests.'
           }
         ].map(item => (
           <div class="flex gap-4 p-5 bg-[#f6f7fb] rounded-xl">
@@ -155,10 +155,15 @@ import SectionHeader from '@components/ui/SectionHeader.astro';
   <section class="py-16 bg-[#1e3a5f]">
     <div class="max-w-3xl mx-auto px-4 sm:px-6 text-center text-white">
       <h2 class="font-display text-2xl sm:text-3xl font-bold mb-4">Start the conversation</h2>
-      <p class="text-white/80 mb-8">Tour packages or a custom request — tell us what you need and we will plan from Kabul.</p>
-      <a href="/contact" class="inline-block px-8 py-3.5 rounded-full bg-[#b88a2a] hover:bg-[#a07820] text-white font-semibold shadow-lg transition-all duration-200">
-        Contact Us
-      </a>
+      <p class="text-white/80 mb-8">Browse Scheduled Tours, or Build a Custom Journey — we plan from Kabul around current access and conditions.</p>
+      <div class="flex flex-col sm:flex-row gap-3 justify-center">
+        <a href="/tours?type=scheduled" class="inline-block px-8 py-3.5 rounded-full bg-[#b88a2a] hover:bg-[#a07820] text-white font-semibold shadow-lg transition-all duration-200">
+          View Scheduled Tours
+        </a>
+        <a href="/contact" class="inline-block px-8 py-3.5 rounded-full border-2 border-white/80 hover:bg-white hover:text-[#1e3a5f] text-white font-semibold transition-all duration-200">
+          Build a Custom Journey
+        </a>
+      </div>
     </div>
   </section>
 </BaseLayout>

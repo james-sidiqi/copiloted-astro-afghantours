@@ -562,3 +562,65 @@ export function resolveCategorySlugAsset(
   return pickInDir(`/assets/images/${category}/${matched}`, kind);
 }
 
+/** Cultural / activities folder hero|thumb (existence-checked). */
+export function pickExperienceImage(
+  category: "cultural-experiences" | "activities",
+  slug: string,
+): string {
+  return resolveCategorySlugAsset(category, slug, "thumb") || resolveCategorySlugAsset(category, slug, "hero");
+}
+
+/**
+ * Map ground-transport tier + vehicle to public/assets/images/transport/<tier>/<vehicle>/.
+ * Existence-checked; does not invent assets.
+ */
+export function resolveTransportAsset(
+  tier: string,
+  vehicleType: string,
+  kind: "hero" | "thumb" = "thumb",
+): string {
+  const t = cleanText(tier).toLowerCase();
+  const v = cleanText(vehicleType).toLowerCase().replace(/_/g, "-");
+  const tierFolder =
+    t === "armored" || t === "luxury"
+      ? "luxury"
+      : t === "premium"
+        ? "premium"
+        : t === "budget"
+          ? "budget"
+          : t === "standard"
+            ? "standard"
+            : t || "standard";
+
+  const vehicleCandidates: string[] = [];
+  if (v) vehicleCandidates.push(v);
+  if (v.includes("armored")) vehicleCandidates.push("armored-suv", "suv");
+  if (v.includes("suv")) vehicleCandidates.push("suv", "suv_4x4".replace("_", "-"));
+  if (v.includes("van")) vehicleCandidates.push("van", "van-old", "van_new".replace("_", "-"));
+  if (v.includes("taxi")) vehicleCandidates.push("taxi");
+  if (v.includes("bus")) vehicleCandidates.push("bus");
+  if (v.includes("sedan")) vehicleCandidates.push("sedan");
+  // unique preserve order
+  const seen = new Set<string>();
+  const vehicles = vehicleCandidates.filter((x) => {
+    if (!x || seen.has(x)) return false;
+    seen.add(x);
+    return true;
+  });
+
+  for (const vehicle of vehicles.length ? vehicles : ["suv", "sedan", "van"]) {
+    const matched = matchSlugDir(`assets/images/transport/${tierFolder}`, vehicle);
+    if (matched) {
+      const hit = pickInDir(`/assets/images/transport/${tierFolder}/${matched}`, kind);
+      if (hit) return hit;
+    }
+    const direct = pickInDir(`/assets/images/transport/${tierFolder}/${vehicle}`, kind);
+    if (direct) return direct;
+  }
+  // Tier folder overview / first vehicle
+  for (const child of listChildDirs(`assets/images/transport/${tierFolder}`)) {
+    const hit = pickInDir(`/assets/images/transport/${tierFolder}/${child}`, kind);
+    if (hit) return hit;
+  }
+  return "";
+}

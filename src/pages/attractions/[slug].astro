@@ -3,8 +3,11 @@ import BaseLayout from '@layouts/BaseLayout.astro';
 import Hero from '@components/site/Hero.astro';
 import SectionHeader from '@components/ui/SectionHeader.astro';
 import SafeImage from '@components/ui/SafeImage.astro';
+import ConversionCTA from '@components/travel/ConversionCTA.astro';
+import RelatedScheduledTours from '@components/travel/RelatedScheduledTours.astro';
 import type { Attraction } from '@lib/types/view-models';
 import { getSiteData } from '@lib/data/site-data';
+import { relatedScheduledByAttractionCode } from '@lib/content/relatedScheduled';
 
 export async function getStaticPaths() {
   const data = getSiteData();
@@ -18,6 +21,13 @@ interface Props {
   attraction: Attraction;
 }
 const { attraction } = Astro.props;
+const data = getSiteData();
+const relatedTours = relatedScheduledByAttractionCode(
+  data.tours,
+  attraction.attractionCode,
+  attraction.province || '',
+  3,
+);
 ---
 
 <BaseLayout title={`${attraction.name} – Afghan Tours`} description={attraction.descShort || `Explore ${attraction.name}`}>
@@ -25,8 +35,6 @@ const { attraction } = Astro.props;
     title={attraction.name}
     subtitle={attraction.descShort || undefined}
     imagePath={attraction.imagePath || attraction.thumbnailPath || '/assets/images/placeholders/default-attraction.webp'}
-    ctaText="See Tours"
-    ctaHref="/tours"
   />
 
   <section class="py-14 bg-white">
@@ -58,4 +66,24 @@ const { attraction } = Astro.props;
       </aside>
     </div>
   </section>
+
+  {relatedTours.length > 0 && (
+    <RelatedScheduledTours
+      tours={relatedTours}
+      title="Scheduled tours that include this place"
+      subtitle="Shown only when itinerary or attraction links exist in our data."
+    />
+  )}
+
+  <ConversionCTA
+    variant="soft"
+    title="Include this on a journey"
+    subtitle={relatedTours.length > 0
+      ? 'Browse the linked Scheduled Tours above, or Build a Custom Journey if you need different timing or a focused visit.'
+      : 'No scheduled itinerary currently lists this site in our data. Build a Custom Journey if you want it on your route — or browse other Scheduled Tours.'}
+    primaryHref={relatedTours.length > 0 ? '/tours?type=scheduled' : '/contact'}
+    primaryLabel={relatedTours.length > 0 ? 'View Scheduled Tours' : 'Build a Custom Journey'}
+    secondaryHref={relatedTours.length > 0 ? '/contact' : '/tours?type=scheduled'}
+    secondaryLabel={relatedTours.length > 0 ? 'Build a Custom Journey' : 'Browse Scheduled Tours'}
+  />
 </BaseLayout>

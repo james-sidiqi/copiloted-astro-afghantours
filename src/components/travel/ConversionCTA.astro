@@ -1,0 +1,84 @@
+---
+/**
+ * Contextual conversion block.
+ * Explore pages: use variant="soft" — light, optional, not a sales pitch.
+ * Hotels/transport/trust pages: use variant="band" — stronger operational credibility → inquire.
+ */
+interface Props {
+  eyebrow?: string;
+  title?: string;
+  subtitle?: string;
+  /** soft = light Explore; band = stronger ops/trust; card = inset middle ground */
+  variant?: 'soft' | 'band' | 'card';
+  primaryHref?: string;
+  primaryLabel?: string;
+  secondaryHref?: string;
+  secondaryLabel?: string;
+  /** Hide secondary (Custom) when not appropriate */
+  showSecondary?: boolean;
+}
+
+const {
+  eyebrow = 'Next step',
+  title = 'Ready to plan?',
+  subtitle = 'Browse Scheduled Tours, or inquire about a Custom Journey planned from Kabul.',
+  variant = 'soft',
+  primaryHref = '/tours?type=scheduled',
+  primaryLabel = 'View Scheduled Tours',
+  secondaryHref = '/contact',
+  secondaryLabel = 'Build a Custom Journey',
+  showSecondary = true,
+} = Astro.props;
+---
+
+{variant === 'band' ? (
+  <section class="py-14 sm:py-16 bg-[#1e3a5f]">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 text-center text-white">
+      <p class="text-xs font-semibold uppercase tracking-widest text-[#b88a2a] mb-3">{eyebrow}</p>
+      <h2 class="font-display text-2xl sm:text-3xl font-bold mb-4">{title}</h2>
+      <p class="text-white/80 mb-8 leading-relaxed text-sm sm:text-base">{subtitle}</p>
+      <div class="flex flex-col sm:flex-row gap-3 justify-center">
+        <a
+          href={primaryHref}
+          class="inline-block px-8 py-3.5 rounded-full bg-[#b88a2a] hover:bg-[#a07820] text-white font-semibold shadow-lg transition-all duration-200"
+        >
+          {primaryLabel}
+        </a>
+        {showSecondary && (
+          <a
+            href={secondaryHref}
+            class="inline-block px-8 py-3.5 rounded-full border-2 border-white/80 hover:bg-white hover:text-[#1e3a5f] text-white font-semibold transition-all duration-200"
+          >
+            {secondaryLabel}
+          </a>
+        )}
+      </div>
+    </div>
+  </section>
+) : (
+  <section class={`py-10 ${variant === 'soft' ? 'bg-white' : ''}`}>
+    <div class="max-w-3xl mx-auto px-4 sm:px-6">
+      <div class={`rounded-2xl p-6 sm:p-8 text-center ${variant === 'card' ? 'bg-[#f6f7fb] border border-[#1e3a5f]/10' : 'border border-gray-100 bg-[#fafbfc]'}`}>
+        <p class="text-xs font-semibold uppercase tracking-widest text-[#b88a2a] mb-2">{eyebrow}</p>
+        <h2 class="font-display text-lg sm:text-xl font-bold text-[#1e3a5f] mb-2">{title}</h2>
+        <p class="text-sm text-[rgba(15,23,42,0.65)] mb-5 leading-relaxed">{subtitle}</p>
+        <div class="flex flex-col sm:flex-row gap-3 justify-center">
+          <a
+            href={primaryHref}
+            class="inline-block px-6 py-2.5 rounded-full bg-[#1e3a5f] hover:bg-[#162d4a] text-white font-semibold text-sm transition-all duration-200"
+          >
+            {primaryLabel}
+          </a>
+          {showSecondary && (
+            <a
+              href={secondaryHref}
+              class="inline-block px-6 py-2.5 rounded-full border border-[#1e3a5f]/40 text-[#1e3a5f] hover:border-[#1e3a5f] hover:bg-[#1e3a5f] hover:text-white font-semibold text-sm transition-all duration-200"
+            >
+              {secondaryLabel}
+            </a>
+          )}
+        </div>
+      </div>
+    </div>
+  </section>
+)}

@@ -2,8 +2,11 @@
 import BaseLayout from '@layouts/BaseLayout.astro';
 import SectionHeader from '@components/ui/SectionHeader.astro';
 import SafeImage from '@components/ui/SafeImage.astro';
+import ConversionCTA from '@components/travel/ConversionCTA.astro';
+import RelatedScheduledTours from '@components/travel/RelatedScheduledTours.astro';
 import type { Dish } from '@lib/types/view-models';
 import { getSiteData } from '@lib/data/site-data';
+import { relatedScheduledByProvinceNames } from '@lib/content/relatedScheduled';
 
 export async function getStaticPaths() {
   const data = getSiteData();
@@ -15,6 +18,12 @@ export async function getStaticPaths() {
 
 interface Props { dish: Dish; }
 const { dish } = Astro.props;
+const data = getSiteData();
+
+const province = data.provinces.find((p) => p.provinceCode === dish.provinceCode);
+const provinceLinked = province
+  ? relatedScheduledByProvinceNames(data.tours, [province.provinceName], 3, { strict: true })
+  : [];
 
 const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 const validMonth = (n: number) => n >= 1 && n <= 12;
@@ -24,7 +33,6 @@ const seasonRange = (validMonth(dish.seasonStart) && validMonth(dish.seasonEnd))
 ---
 
 <BaseLayout title={`${dish.name} – Afghan Tours`} description={dish.descShort || `${dish.name}: Afghan cuisine`}>
-  <!-- Header image -->
   <div class="relative w-full h-[45vh] min-h-[280px] bg-[#1e3a5f] overflow-hidden">
     <SafeImage
       src={dish.imagePath}
@@ -49,17 +57,21 @@ const seasonRange = (validMonth(dish.seasonStart) && validMonth(dish.seasonEnd))
 
   <div class="max-w-4xl mx-auto px-4 sm:px-6 py-16">
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
-      <!-- Main content -->
       <div class="lg:col-span-2 space-y-8">
         <section>
           <SectionHeader eyebrow="About" title={dish.name} />
           {dish.descShort && (
             <p class="mt-4 text-[rgba(15,23,42,0.75)] leading-relaxed text-base">{dish.descShort}</p>
           )}
+          {province && (
+            <p class="mt-4 text-sm text-[rgba(15,23,42,0.6)]">
+              Often associated with <span class="font-medium text-[#1e3a5f]">{province.provinceName}</span>
+              {dish.destinationCode ? ' and nearby hubs' : ''}.
+            </p>
+          )}
         </section>
       </div>
 
-      <!-- Sidebar details -->
       <aside>
         <div class="bg-white rounded-2xl shadow-[0_2px_20px_rgba(0,0,0,0.08)] p-6">
           <h3 class="font-semibold text-[#1e3a5f] mb-4 text-sm uppercase tracking-wider">Details</h3>
@@ -91,13 +103,28 @@ const seasonRange = (validMonth(dish.seasonStart) && validMonth(dish.seasonEnd))
           </ul>
         </div>
 
-        <div class="mt-4 bg-[#1e3a5f] rounded-2xl p-5 text-white text-center">
-          <p class="font-semibold mb-2 text-sm">Taste This on a Tour</p>
-          <a href="/tours" class="block w-full text-center py-2.5 rounded-full bg-[#b88a2a] hover:bg-[#a07820] text-white font-semibold text-sm transition-all duration-200 mt-3">
-            Browse Tours
+        <div class="mt-4 rounded-2xl border border-[#1e3a5f]/10 bg-[#f6f7fb] p-5 text-center">
+          <p class="font-semibold mb-1 text-sm text-[#1e3a5f]">On a journey</p>
+          <p class="text-xs text-[rgba(15,23,42,0.6)] mb-3">Meals are arranged with the itinerary — not ordered à la carte here.</p>
+          <a href="/tours?type=scheduled" class="block w-full text-center py-2.5 rounded-full bg-[#1e3a5f] hover:bg-[#162d4a] text-white font-semibold text-sm transition-all duration-200">
+            Browse Scheduled Tours
           </a>
         </div>
       </aside>
     </div>
   </div>
+
+  {provinceLinked.length > 0 && (
+    <RelatedScheduledTours
+      tours={provinceLinked}
+      title={`Scheduled tours through ${province?.provinceName}`}
+      subtitle={`These set itineraries list ${province?.provinceName} — where this dish is often part of the local table.`}
+    />
+  )}
+
+  <ConversionCTA
+    variant="soft"
+    title="Find a tour that fits"
+    subtitle="Use dishes as orientation. Next: browse Scheduled Tours, or Build a Custom Journey if you have specific food or cultural interests."
+  />
 </BaseLayout>

@@ -3,20 +3,24 @@ import BaseLayout from '@layouts/BaseLayout.astro';
 import Hero from '@components/site/Hero.astro';
 import SectionHeader from '@components/ui/SectionHeader.astro';
 import DishCard from '@components/travel/DishCard.astro';
+import ConversionCTA from '@components/travel/ConversionCTA.astro';
+import ExperienceStrip from '@components/travel/ExperienceStrip.astro';
 import { getSiteData } from '@lib/data/site-data';
+import { getCulturalExperienceCards } from '@lib/content/experienceCards';
 
 const data = getSiteData();
 const dishes = data.dishes.filter(d => d.isActive);
 const categories = [...new Set(dishes.map(d => d.category).filter(Boolean))].sort();
+const culturalCards = getCulturalExperienceCards(6);
 ---
 
-<BaseLayout title="Food & Culture – Afghan Tours" description="Explore the rich culinary traditions and cultural heritage of Afghanistan.">
+<BaseLayout title="Food & Culture – Afghan Tours" description="Food and living culture you may encounter on Afghan Tours journeys — context for choosing a Scheduled Tour or Custom Journey.">
   <Hero
     title="Food &amp; Culture"
-    subtitle="Taste the flavours and traditions of Afghanistan"
+    subtitle="Flavours and traditions that often shape a journey — useful context, not a catalogue of everything Afghan."
     imagePath="/assets/images/heroes/hero-home.webp"
-    ctaText="Book a Tour"
-    ctaHref="/tours"
+    ctaText="Explore Destinations"
+    ctaHref="/destinations"
   />
 
   <section class="py-20 bg-[#f6f7fb]">
@@ -24,8 +28,8 @@ const categories = [...new Set(dishes.map(d => d.category).filter(Boolean))].sor
       <div class="mb-10">
         <SectionHeader
           eyebrow="Cuisine & Culture"
-          title="Afghan Food & Traditions"
-          subtitle="From fragrant rice dishes to seasonal produce — Afghan cuisine reflects the country's diverse landscape and rich history."
+          title="What guests often taste along the way"
+          subtitle="From fragrant rice dishes to seasonal produce — orientation for how meals and hospitality show up on tours. Browse dishes, then find a tour that fits your route."
         />
         {categories.length > 0 && (
           <div class="mt-6 flex flex-wrap gap-2">
@@ -49,4 +53,19 @@ const categories = [...new Set(dishes.map(d => d.category).filter(Boolean))].sor
       )}
     </div>
   </section>
+
+  <ExperienceStrip
+    id="cultural-experiences"
+    cards={culturalCards}
+    eyebrow="Cultural experiences"
+    title="Living culture on the route"
+    subtitle="Scenes from our cultural library — how craft, sport, and hospitality can appear on a journey. Follow through to tours or inquire when something is seasonal or custom."
+  />
+
+  <ConversionCTA
+    variant="soft"
+    eyebrow="When you are ready"
+    title="Find a tour — or build a custom journey"
+    subtitle="Food and culture pages are here to orient you. Next: browse Scheduled Tours that fit your interests, or inquire about a Custom Journey."
+  />
 </BaseLayout>

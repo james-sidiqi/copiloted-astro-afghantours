@@ -3,19 +3,20 @@ import BaseLayout from '@layouts/BaseLayout.astro';
 import Hero from '@components/site/Hero.astro';
 import SectionHeader from '@components/ui/SectionHeader.astro';
 import AttractionCard from '@components/travel/AttractionCard.astro';
+import ConversionCTA from '@components/travel/ConversionCTA.astro';
 import { getSiteData } from '@lib/data/site-data';
 
 const data = getSiteData();
 const attractions = data.attractions.filter((attraction) => attraction.isActive);
 ---
 
-<BaseLayout title="Attractions – Afghan Tours" description="Browse Afghanistan's key attractions by region and province.">
+<BaseLayout title="Attractions – Afghan Tours" description="Key places across Afghanistan — orient yourself, then find a Scheduled Tour that includes them when our data links them.">
   <Hero
     title="Attractions"
-    subtitle="Ancient cities, mountain landscapes, mosques, forts, and living heritage"
+    subtitle="Ancient cities, mountain landscapes, mosques, forts, and living heritage — discover, then find a tour."
     imagePath="/assets/images/heroes/hero-destinations.webp"
-    ctaText="Plan a Tour"
-    ctaHref="/tours"
+    ctaText="Browse Destinations"
+    ctaHref="/destinations"
   />
 
   <section class="py-16 bg-[#f6f7fb]">
@@ -23,8 +24,8 @@ const attractions = data.attractions.filter((attraction) => attraction.isActive)
       <div class="mb-8">
         <SectionHeader
           eyebrow="Explore"
-          title="Afghanistan Attractions"
-          subtitle="All attractions use verified data links and safe image fallbacks."
+          title="Places on the map"
+          subtitle="Open an attraction for context. Related Scheduled Tours appear only when our itinerary data connects them."
         />
       </div>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -32,4 +33,10 @@ const attractions = data.attractions.filter((attraction) => attraction.isActive)
       </div>
     </div>
   </section>
+
+  <ConversionCTA
+    variant="soft"
+    title="From place → tour"
+    subtitle="Attractions are orientation. Next: find a Scheduled Tour that fits, or Build a Custom Journey around specific sites."
+  />
 </BaseLayout>
