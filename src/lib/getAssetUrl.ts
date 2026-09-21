@@ -5,7 +5,8 @@
  *
  * Layout preference (existence-checked):
  *   public/assets/images/{attractions,provinces|province,hubs,cultural-experiences,
- *     food,custom-tours,featured-tours,page-assets,tours}/<slug>/{hero,thumb,gallery}
+ *     food,custom-tours,return-journeys,page-assets,tours}/<slug>/{hero,thumb,gallery}
+ *   (featured-tours optional/legacy if present — not a required source)
  *   public/images/hotels/<city>/<property>/  (CSV often still uses /assets/images/hotels/)
  *   public/assets/maps/{provinces,regions,routes}/
  */
@@ -478,12 +479,14 @@ export function resolveTourAsset(
   kind: AssetKind = "any",
 ): string {
   const prefer: "hero" | "thumb" = kind === "thumb" ? "thumb" : "hero";
+  // Prefer upgraded custom-tours / return-journeys folders; flat tours/*.webp are fallbacks.
+  // featured-tours is optional/legacy if present — not required.
   const bases = [
-    "assets/images/featured-tours",
     "assets/images/custom-tours",
     "assets/images/return-journeys",
     "assets/images/page-assets",
     "assets/images/tours",
+    "assets/images/featured-tours",
   ];
   for (const base of bases) {
     const matched = matchSlugDir(base, slug);

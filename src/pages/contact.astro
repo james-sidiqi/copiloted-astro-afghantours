@@ -10,8 +10,8 @@ const whatsappBaseUrl = siteConfig.whatsapp.url;
 const mailtoBaseHref = `mailto:${siteConfig.email}?subject=${encodeURIComponent('Afghan Tours enquiry')}`;
 ---
 
-<BaseLayout title="Contact – Afghan Tours | Kabul-Based Planning" description="Contact Afghan Tours in Kabul for tour packages, custom journeys, LOI support for booked tours, and practical trip planning. We do not issue visas.">
-  <Hero title="Contact" subtitle="Tour packages, custom requests, or a practical planning conversation — we are based in Kabul." imagePath="/assets/images/heroes/hero-contact.webp" ctaText="Start Planning" ctaHref="#contact-form-anchor" />
+<BaseLayout title="Contact – Afghan Tours | Kabul-Based Planning" description="Contact Afghan Tours in Kabul for scheduled tours, custom journeys, LOI support for booked tours, and practical trip planning. We do not issue visas.">
+  <Hero title="Contact" subtitle="Scheduled tours, custom journeys, or a practical planning conversation — we are based in Kabul." imagePath="/assets/images/heroes/hero-contact.webp" ctaText="Start Planning" ctaHref="#contact-form-anchor" />
   <section class="py-20 bg-[#f6f7fb]">
     <div class="max-w-5xl mx-auto px-4 sm:px-6">
       <div
@@ -53,6 +53,7 @@ const mailtoBaseHref = `mailto:${siteConfig.email}?subject=${encodeURIComponent(
               <input type="hidden" name="tour" id="form-tour-slug" value="" />
               <input type="hidden" name="tourName" id="form-tour-name" value="" />
               <input type="hidden" name="tourCode" id="form-tour-code" value="" />
+              <input type="hidden" name="audience" id="form-audience" value="" />
               <div><label for="name" class="block text-sm font-semibold text-[#1e3a5f] mb-1.5">Your Name</label><input type="text" id="name" name="name" required class="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm" /></div>
               <div><label for="email" class="block text-sm font-semibold text-[#1e3a5f] mb-1.5">Email Address</label><input type="email" id="email" name="email" required class="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm" /></div>
               <div><label for="subject" class="block text-sm font-semibold text-[#1e3a5f] mb-1.5">Subject</label><input type="text" id="subject" name="subject" class="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm" /></div>
@@ -79,11 +80,23 @@ const mailtoBaseHref = `mailto:${siteConfig.email}?subject=${encodeURIComponent(
     const tourSlug = (params.get('tour') || '').trim();
     const tourName = (params.get('tourName') || '').trim();
     const tourCode = (params.get('tourCode') || '').trim();
+    const audienceRaw = (params.get('audience') || '').trim();
+    const audienceLabels = {
+      diaspora: 'Diaspora return journey',
+      veterans: 'Veterans return journey',
+      'peace-corps': 'Peace Corps alumni journey',
+      business: 'Business travel inquiry',
+      artists: 'Artists / creative fieldwork inquiry',
+      media: 'Media / documentary support inquiry',
+    };
+    const audienceKey = audienceRaw.toLowerCase();
+    const audienceLabel = audienceLabels[audienceKey] || (audienceRaw ? ('Custom journey: ' + audienceRaw) : '');
 
-    if (!tourSlug && !tourName && !tourCode) return;
+    if (!tourSlug && !tourName && !tourCode && !audienceLabel) return;
 
-    const displayName = tourName || tourSlug || 'Selected tour';
+    const displayName = tourName || audienceLabel || tourSlug || 'Selected tour';
     const metaParts = [];
+    if (audienceKey) metaParts.push('audience: ' + audienceKey);
     if (tourSlug) metaParts.push('slug: ' + tourSlug);
     if (tourCode) metaParts.push('code: ' + tourCode);
 
@@ -100,6 +113,7 @@ const mailtoBaseHref = `mailto:${siteConfig.email}?subject=${encodeURIComponent(
       'Hi Afghan Tours — I\'m interested in "' +
       displayName +
       '"' +
+      (audienceKey ? ' (audience: ' + audienceKey + ')' : '') +
       (tourSlug || tourCode
         ? ' (slug: ' + (tourSlug || 'n/a') + ', code: ' + (tourCode || 'n/a') + ')'
         : '') +
@@ -140,5 +154,8 @@ const mailtoBaseHref = `mailto:${siteConfig.email}?subject=${encodeURIComponent(
 
     const codeField = document.getElementById('form-tour-code');
     if (codeField && 'value' in codeField) codeField.value = tourCode;
+
+    const audienceField = document.getElementById('form-audience');
+    if (audienceField && 'value' in audienceField) audienceField.value = audienceKey;
   })();
 </script>
