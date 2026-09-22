@@ -1,44 +1,35 @@
 ---
-import { siteConfig } from '@lib/config';
-
 /**
- * Header matched to live afghantours.com visual system (dark bar, brand stack,
- * gold tagline, gold CTA pill) while keeping completion IA:
- * Tours, Custom Requests, Explore, Plan Your Trip, About, Contact + Build My Journey.
- * Explore: Attractions, Regions, Provinces, Cities & Hubs, Food & Culture.
- * Tagline ONLY under site title in header. Brand: Afghan Tours (never JTTA).
- * URLs use repo-correct routes (e.g. /transportation/).
+ * Header matched to live afghantours.com (screenshot inventory):
+ * dark bar, logo + Afghan Tours + gold tagline, Tours|Explore|Plan|Information,
+ * gold “Contact Us” CTA. Desktop single row; mobile two-row (brand / nav scroll).
+ * Not sticky (live screenshots). No hamburger (live). Brand: Afghan Tours only.
+ * Dropdown labels match live; hrefs use repo-correct routes.
  */
-const navLinks = [
-  { label: 'Tours', href: '/tours/' },
-  { label: 'Custom Requests', href: '/custom-requests/' },
-  {
-    label: 'Explore',
-    href: '/destinations/',
-    children: [
-      { label: 'Attractions', href: '/attractions/' },
-      { label: 'Regions', href: '/regions/' },
-      { label: 'Provinces', href: '/provinces/' },
-      { label: 'Cities & Hubs', href: '/hubs/' },
-      { label: 'Food & Culture', href: '/food-culture/' },
-    ],
-  },
-  {
-    label: 'Plan Your Trip',
-    href: '/visa-entry/',
-    children: [
-      { label: 'Visa & Entry', href: '/visa-entry/' },
-      { label: 'Safety', href: '/safety/' },
-      { label: 'Hotels', href: '/hotels/' },
-      { label: 'Transportation', href: '/transportation/' },
-      { label: 'FAQ', href: '/faq/' },
-    ],
-  },
-  { label: 'About', href: '/about/' },
-  { label: 'Contact', href: '/contact/' },
-];
+const tourLinks = [
+  ['All Tours', '/tours/'],
+  ['Featured Tours', '/tours/'],
+  ['Custom Tours', '/custom-requests/'],
+] as const;
 
-const tagline = siteConfig.tagline.replace(/\.$/, '');
+const exploreLinks = [
+  ['Attractions', '/attractions/'],
+  ['Regional Map', '/regions/'],
+  ['Province Directory', '/provinces/'],
+] as const;
+
+const planLinks = [
+  ['Travel Hubs', '/hubs/'],
+  ['Transportation', '/transportation/'],
+  ['Visa & Entry', '/visa-entry/'],
+  ['FAQ', '/faq/'],
+] as const;
+
+const informationLinks = [
+  ['About', '/about/'],
+  ['Safety', '/safety/'],
+  ['Contact', '/contact/'],
+] as const;
 ---
 
 <header class="site-header">
@@ -52,67 +43,67 @@ const tagline = siteConfig.tagline.replace(/\.$/, '');
       />
       <div class="site-brand__copy">
         <strong>Afghan Tours</strong>
-        <span>{tagline}</span>
+        <span>Come for the history, stay for the hospitality</span>
       </div>
     </a>
 
     <nav class="site-nav" aria-label="Main navigation">
-      {navLinks.map((link) => (
-        link.children ? (
-          <div class="site-nav__group">
-            <a class="site-nav__link" href={link.href}>
-              {link.label}
-              <span class="site-nav__chevron" aria-hidden="true">⌄</span>
-            </a>
-            <div class="site-dropdown">
-              {link.children.map((child) => (
-                <a href={child.href}>{child.label}</a>
-              ))}
-            </div>
-          </div>
-        ) : (
-          <a class="site-nav__link" href={link.href}>{link.label}</a>
-        )
-      ))}
-      <a class="site-nav__cta" href="/contact/?flow=custom">Build My Journey</a>
-    </nav>
-
-    <button
-      id="menu-btn"
-      class="site-menu-btn"
-      type="button"
-      aria-label="Toggle navigation menu"
-      aria-expanded="false"
-      aria-controls="mobile-menu"
-    >
-      <svg id="icon-open" class="site-menu-btn__icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-      </svg>
-      <svg id="icon-close" class="site-menu-btn__icon site-menu-btn__icon--hidden" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-      </svg>
-    </button>
-  </div>
-
-  <nav id="mobile-menu" class="site-mobile" hidden aria-label="Mobile navigation">
-    <div class="site-mobile__inner">
-      {navLinks.map((link) => (
-        <>
-          <a class="site-mobile__link" href={link.href}>{link.label}</a>
-          {link.children?.map((child) => (
-            <a class="site-mobile__sublink" href={child.href}>{child.label}</a>
+      <div class="site-nav__group">
+        <a class="site-nav__link" href="/tours/">
+          Tours
+          <span class="site-nav__chevron" aria-hidden="true">⌄</span>
+        </a>
+        <div class="site-dropdown">
+          {tourLinks.map(([label, href]) => (
+            <a href={href}>{label}</a>
           ))}
-        </>
-      ))}
-      <a class="site-nav__cta site-mobile__cta" href="/contact/?flow=custom">Build My Journey</a>
-    </div>
-  </nav>
+        </div>
+      </div>
+
+      <div class="site-nav__group">
+        <a class="site-nav__link" href="/attractions/">
+          Explore
+          <span class="site-nav__chevron" aria-hidden="true">⌄</span>
+        </a>
+        <div class="site-dropdown">
+          {exploreLinks.map(([label, href]) => (
+            <a href={href}>{label}</a>
+          ))}
+        </div>
+      </div>
+
+      <div class="site-nav__group">
+        <a class="site-nav__link" href="/hubs/">
+          Plan
+          <span class="site-nav__chevron" aria-hidden="true">⌄</span>
+        </a>
+        <div class="site-dropdown">
+          {planLinks.map(([label, href]) => (
+            <a href={href}>{label}</a>
+          ))}
+        </div>
+      </div>
+
+      <div class="site-nav__group">
+        <a class="site-nav__link" href="/about/">
+          Information
+          <span class="site-nav__chevron" aria-hidden="true">⌄</span>
+        </a>
+        <div class="site-dropdown">
+          {informationLinks.map(([label, href]) => (
+            <a href={href}>{label}</a>
+          ))}
+        </div>
+      </div>
+
+      <a class="site-nav__cta" href="/contact/">Contact Us</a>
+    </nav>
+  </div>
 </header>
 
 <style>
   .site-header {
-    position: sticky;
-    top: 0;
+    position: relative;
     z-index: 1000;
     width: 100%;
     background: linear-gradient(90deg, #111a16 0%, #101915 58%, #121b17 100%);
@@ -280,81 +271,13 @@ const tagline = siteConfig.tagline.replace(/\.$/, '');
     transform: translateY(-1px);
   }
 
-  .site-menu-btn {
-    display: none;
-    align-items: center;
-    justify-content: center;
-    margin-left: auto;
-    padding: 0.45rem;
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    border-radius: 0.55rem;
-    background: rgba(255, 255, 255, 0.06);
-    color: #fff;
-    cursor: pointer;
-  }
-
-  .site-menu-btn__icon {
-    width: 1.45rem;
-    height: 1.45rem;
-  }
-
-  .site-menu-btn__icon--hidden {
-    display: none;
-  }
-
-  .site-mobile {
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    background: rgba(12, 18, 15, 0.98);
-  }
-
-  .site-mobile[hidden] {
-    display: none;
-  }
-
-  .site-mobile__inner {
-    width: min(1280px, calc(100% - 2rem));
-    margin: 0 auto;
-    padding: 0.65rem 0 1rem;
-    display: grid;
-    gap: 0.15rem;
-  }
-
-  .site-mobile__link,
-  .site-mobile__sublink {
-    display: block;
-    padding: 0.7rem 0.35rem;
-    color: rgba(255, 255, 255, 0.92);
-    text-decoration: none;
-    font-size: 0.92rem;
-    font-weight: 750;
-  }
-
-  .site-mobile__sublink {
-    padding-left: 1.1rem;
-    color: rgba(255, 255, 255, 0.72);
-    font-size: 0.84rem;
-    font-weight: 650;
-  }
-
-  .site-mobile__link:hover,
-  .site-mobile__sublink:hover {
-    color: #e0a62d;
-  }
-
-  .site-mobile__cta {
-    margin-top: 0.55rem;
-    min-height: 44px;
-    width: 100%;
-  }
-
-  @media (max-width: 1180px) {
+  @media (max-width: 1050px) {
     .site-header__inner {
       gap: 1.3rem;
     }
 
     .site-nav {
-      gap: 0.85rem;
-      font-size: 0.8rem;
+      gap: 0.9rem;
     }
 
     .site-brand strong {
@@ -368,23 +291,22 @@ const tagline = siteConfig.tagline.replace(/\.$/, '');
     .site-nav__cta {
       padding-left: 1.1rem;
       padding-right: 1.1rem;
-      min-height: 46px;
     }
   }
 
-  /* More nav items than live → hide desktop nav earlier; use hamburger */
-  @media (max-width: 1050px) {
-    .site-nav {
-      display: none;
-    }
-
-    .site-menu-btn {
-      display: inline-flex;
-    }
-
+  /* Live mobile: two-row brand / scrollable nav — no hamburger */
+  @media (max-width: 860px) {
     .site-header__inner {
-      min-height: 70px;
-      gap: 1rem;
+      width: min(100% - 1.25rem, 1280px);
+      min-height: auto;
+      padding: 0.75rem 0;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0.65rem;
+    }
+
+    .site-brand {
+      justify-content: flex-start;
     }
 
     .site-brand img {
@@ -398,40 +320,42 @@ const tagline = siteConfig.tagline.replace(/\.$/, '');
     .site-brand span {
       font-size: 0.66rem;
     }
+
+    .site-nav {
+      width: 100%;
+      margin: 0;
+      padding-bottom: 0.15rem;
+      gap: 1.05rem;
+      overflow-x: auto;
+      overflow-y: hidden;
+      scrollbar-width: none;
+    }
+
+    .site-nav::-webkit-scrollbar {
+      display: none;
+    }
+
+    .site-nav__link {
+      padding: 0.55rem 0;
+    }
+
+    .site-dropdown {
+      display: none;
+    }
+
+    .site-nav__cta {
+      min-height: 39px;
+      padding: 0.55rem 1rem;
+    }
   }
 
   @media (max-width: 520px) {
     .site-brand span {
       white-space: normal;
-      max-width: 12.5rem;
+    }
+
+    .site-nav {
+      font-size: 0.8rem;
     }
   }
 </style>
-
-<script>
-  const btn = document.getElementById('menu-btn');
-  const menu = document.getElementById('mobile-menu');
-  const iconOpen = document.getElementById('icon-open');
-  const iconClose = document.getElementById('icon-close');
-
-  const setMenuOpen = (open) => {
-    if (!menu || !btn) return;
-    if (open) {
-      menu.removeAttribute('hidden');
-    } else {
-      menu.setAttribute('hidden', '');
-    }
-    btn.setAttribute('aria-expanded', String(open));
-    iconOpen?.classList.toggle('site-menu-btn__icon--hidden', open);
-    iconClose?.classList.toggle('site-menu-btn__icon--hidden', !open);
-  };
-
-  btn?.addEventListener('click', () => {
-    const willOpen = menu?.hasAttribute('hidden');
-    setMenuOpen(Boolean(willOpen));
-  });
-
-  document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape') setMenuOpen(false);
-  });
-</script>
