@@ -1,0 +1,11 @@
+{
+  "remote.autoForwardPorts": true,
+  "remote.autoForwardPortsSource": "hybrid",
+  "remote.portsAttributes": {
+    "4321": {
+      "label": "Astro Preview",
+      "onAutoForward": "notify",
+      "visibility": "public"
+    }
+  }
+}
