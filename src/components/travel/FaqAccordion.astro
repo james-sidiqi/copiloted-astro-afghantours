@@ -1,34 +1,101 @@
 ---
 interface Props {
   faqs: import('@lib/types/view-models').Faq[];
+  /** Show per-FAQ image_path when set (selective; category photos live on the page). */
+  showImages?: boolean;
 }
-const { faqs } = Astro.props;
+
+const { faqs, showImages = true } = Astro.props;
+
+const LINK_LABELS: Record<string, string> = {
+  '/tours': 'Tours',
+  '/contact': 'Contact',
+  '/safety': 'Safety',
+  '/visa-entry': 'Visa & Entry',
+  '/visa': 'Visa & Entry',
+  '/transportation': 'Transportation',
+  '/hotels': 'Hotels',
+  '/food-culture': 'Food & Culture',
+  '/custom-requests': 'Custom Requests',
+};
+
+function linkLabel(href: string): string {
+  const clean = href.replace(/\/$/, '') || '/';
+  return LINK_LABELS[clean] || LINK_LABELS[href] || clean.replace(/^\//, '');
+}
+
+function paragraphs(answer: string): string[] {
+  return answer
+    .split(/\n\n+/)
+    .map((p) => p.trim())
+    .filter(Boolean);
+}
 ---
 
 <div class="space-y-3">
-  {faqs.map(faq => (
-    <details class="group bg-white rounded-[14px] shadow-[0_2px_16px_0_rgba(0,0,0,0.06)] overflow-hidden">
-      <summary class="flex items-center justify-between gap-4 px-6 py-4 cursor-pointer list-none select-none hover:bg-gray-50 transition-colors duration-150">
-        <span class="font-semibold text-[#1e3a5f] text-sm sm:text-base leading-snug">
-          {faq.question}
-        </span>
-        <!-- Chevron icon — rotates when open -->
-        <svg
-          class="w-5 h-5 text-[#b88a2a] shrink-0 transition-transform duration-200 group-open:rotate-180"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          viewBox="0 0 24 24"
-        >
-          <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
-        </svg>
-      </summary>
+  {faqs.map((faq) => {
+    const paras = paragraphs(faq.answer);
+    const links = (faq.relatedLinks || []).filter((href) =>
+      [
+        '/tours',
+        '/contact',
+        '/safety',
+        '/visa-entry',
+        '/visa',
+        '/transportation',
+        '/hotels',
+        '/food-culture',
+        '/custom-requests',
+      ].some((allowed) => href === allowed || href.startsWith(allowed + '/') || href.startsWith(allowed + '?')),
+    );
+    const img = showImages && faq.imagePath ? faq.imagePath : '';
+    return (
+      <details class="group bg-white rounded-[14px] shadow-[0_2px_16px_0_rgba(0,0,0,0.06)] overflow-hidden">
+        <summary class="flex items-center justify-between gap-4 px-6 py-4 cursor-pointer list-none select-none hover:bg-gray-50 transition-colors duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#1f4aa8] focus-visible:outline-offset-[-2px]">
+          <span class="font-semibold text-[#1e3a5f] text-sm sm:text-base leading-snug">
+            {faq.question}
+          </span>
+          <svg
+            class="w-5 h-5 text-[#b88a2a] shrink-0 transition-transform duration-200 group-open:rotate-180"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+          </svg>
+        </summary>
 
-      <div class="px-6 pb-5 pt-1 border-t border-gray-100">
-        <p class="text-sm text-[rgba(15,23,42,0.72)] leading-relaxed">
-          {faq.answer}
-        </p>
-      </div>
-    </details>
-  ))}
+        <div class="px-6 pb-5 pt-1 border-t border-gray-100 space-y-3">
+          {img && (
+            <img
+              src={img}
+              alt=""
+              class="w-full max-h-48 object-cover rounded-xl"
+              loading="lazy"
+              decoding="async"
+            />
+          )}
+          <div class="space-y-3 text-sm text-[rgba(15,23,42,0.72)] leading-relaxed">
+            {paras.map((p) => (
+              <p class="whitespace-pre-line">{p}</p>
+            ))}
+          </div>
+          {links.length > 0 && (
+            <p class="flex flex-wrap gap-2 pt-1">
+              {links.map((href) => (
+                <a
+                  href={href.endsWith('/') || href.includes('?') ? href : href + '/'}
+                  class="inline-flex items-center rounded-full border border-[#1e3a5f]/20 bg-[#f6f7fb] px-3 py-1 text-xs font-semibold text-[#1f4aa8] hover:border-[#b88a2a] hover:text-[#b88a2a] transition-colors"
+                >
+                  {linkLabel(href.replace(/\/$/, '') || href)}
+                </a>
+              ))}
+            </p>
+          )}
+        </div>
+      </details>
+    );
+  })}
 </div>

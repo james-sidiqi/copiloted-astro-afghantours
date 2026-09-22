@@ -490,26 +490,58 @@ const contactEmail = siteConfig.email;
           body: data,
           headers: { Accept: 'application/json' },
         });
-        const result = await response.json().catch(() => ({}));
-        if (!response.ok || result.ok === false) {
-          throw new Error(result.message || 'Unable to send inquiry.');
+        const contentType = (response.headers.get('content-type') || '').toLowerCase();
+        const rawText = await response.text();
+        const trimmed = (rawText || '').trim();
+        const looksJson =
+          contentType.includes('application/json') ||
+          contentType.includes('+json') ||
+          (trimmed.startsWith('{') && trimmed.endsWith('}')) ||
+          (trimmed.startsWith('[') && trimmed.endsWith(']'));
+
+        let result = null;
+        if (looksJson) {
+          try {
+            result = JSON.parse(trimmed);
+          } catch (parseErr) {
+            result = null;
+          }
         }
-        showStatus(
-          'ok',
-          result.message ||
-            'Thank you. Your inquiry was submitted. We will reply using the contact details you provided. (Inquiry ≠ booking.)',
-        );
-        form.querySelectorAll('input:not([type=hidden]):not([name=website]):not([name=company_url]), textarea').forEach((el) => {
-          // Keep values so user can see what was sent / retry if needed — only clear on success soft-disable
-        });
-        if (btnSubmit) {
-          btnSubmit.textContent = 'Sent';
+
+        // Success ONLY when HTTP ok AND JSON body has ok === true.
+        // Static hosts often return 200 HTML / PHP source — never treat that as sent.
+        const success = !!(response.ok && result && result.ok === true);
+        if (success) {
+          showStatus(
+            'ok',
+            result.message ||
+              'Thank you. Your inquiry was submitted. We will reply using the contact details you provided. (Inquiry ≠ booking.)',
+          );
+          if (btnSubmit) {
+            btnSubmit.textContent = 'Sent';
+          }
+          return;
+        }
+
+        const looksHtmlOrPhp =
+          contentType.includes('text/html') ||
+          contentType.includes('text/plain') ||
+          /^\s*<(!DOCTYPE|html|\?php)/i.test(trimmed) ||
+          (!looksJson && trimmed.length > 0);
+
+        if (!result || result.ok !== true) {
+          if (looksHtmlOrPhp || !looksJson) {
+            throw new Error(
+              'Form endpoint did not return JSON success (PHP may be unavailable on this static host). Use WhatsApp or email below, or set PUBLIC_FORM_ENDPOINT to a working form service.',
+            );
+          }
+          throw new Error((result && result.message) || 'Unable to send inquiry.');
         }
       } catch (err) {
         showStatus(
           'err',
           (err && err.message ? err.message : 'Send failed.') +
-            ' Your entered details are still on this page — try again, or use WhatsApp / email below. If this host does not run PHP, set PUBLIC_FORM_ENDPOINT.',
+            ' Your entered details are still on this page — try again, or use WhatsApp / email below.',
         );
         if (btnSubmit) {
           btnSubmit.disabled = false;

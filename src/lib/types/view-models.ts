@@ -151,6 +151,11 @@ export interface Faq {
   question: string;
   answer: string;
   isActive: boolean;
+  sortOrder: number;
+  relatedLinks: string[];
+  imagePath: string;
+  verificationNote: string;
+  sourceRef: string;
 }
 
 export interface HotelRoom {
