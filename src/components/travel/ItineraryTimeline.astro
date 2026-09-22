@@ -152,7 +152,8 @@ const dayItems = days.map((day) => {
     }));
 
   const ordered = [attractions, dayHubs, dayProvinces, dayHotels, dayDishes, dayTransports].flat();
-  const defaultItem = ordered[0];
+  const standardHotel = dayHotels.find((h) => /\bstandard\b/i.test(h.context || ''));
+  const defaultItem = standardHotel || attractions[0] || ordered[0];
 
   return {
     day,

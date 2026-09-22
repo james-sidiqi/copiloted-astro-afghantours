@@ -1,0 +1,107 @@
+---
+/**
+ * Accessible horizontal snap carousel for card grids (tours, destinations, audiences).
+ * Desktop + mobile; keyboard focusable; does not wrap CTA links outside the track.
+ */
+interface Props {
+  ariaLabel: string;
+  class?: string;
+  /** Min card width — default ~280px */
+  itemMin?: string;
+}
+
+const { ariaLabel, class: className = '', itemMin = '17.5rem' } = Astro.props;
+const uid = `carousel-${Math.random().toString(36).slice(2, 9)}`;
+---
+
+<div class:list={['relative', className]} data-carousel-root>
+  <div class="flex items-center justify-end gap-2 mb-3">
+    <button
+      type="button"
+      class="js-carousel-prev inline-flex h-9 w-9 items-center justify-center rounded-full border border-[#1e3a5f]/25 bg-white text-[#1e3a5f] shadow-sm hover:bg-[#1e3a5f] hover:text-white transition-colors disabled:opacity-40"
+      aria-controls={uid}
+      aria-label="Scroll previous"
+    >
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+    </button>
+    <button
+      type="button"
+      class="js-carousel-next inline-flex h-9 w-9 items-center justify-center rounded-full border border-[#1e3a5f]/25 bg-white text-[#1e3a5f] shadow-sm hover:bg-[#1e3a5f] hover:text-white transition-colors disabled:opacity-40"
+      aria-controls={uid}
+      aria-label="Scroll next"
+    >
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+    </button>
+  </div>
+
+  <div
+    id={uid}
+    class="js-carousel-track flex gap-5 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-2 -mx-1 px-1 scrollbar-thin focus:outline-none"
+    style={`--carousel-item-min: ${itemMin};`}
+    tabindex="0"
+    role="region"
+    aria-roledescription="carousel"
+    aria-label={ariaLabel}
+  >
+    <slot />
+  </div>
+</div>
+
+<style>
+  .js-carousel-track > :global(*) {
+    flex: 0 0 auto;
+    width: min(100%, var(--carousel-item-min, 17.5rem));
+    max-width: 22rem;
+    scroll-snap-align: start;
+  }
+  @media (min-width: 768px) {
+    .js-carousel-track > :global(*) {
+      width: min(100%, 20rem);
+    }
+  }
+  .js-carousel-track {
+    scrollbar-width: thin;
+  }
+</style>
+
+<script>
+  function bindCarousels() {
+    document.querySelectorAll<HTMLElement>('[data-carousel-root]').forEach((root) => {
+      if (root.dataset.bound === '1') return;
+      root.dataset.bound = '1';
+      const track = root.querySelector<HTMLElement>('.js-carousel-track');
+      const prev = root.querySelector<HTMLButtonElement>('.js-carousel-prev');
+      const next = root.querySelector<HTMLButtonElement>('.js-carousel-next');
+      if (!track || !prev || !next) return;
+
+      const step = () => Math.max(240, Math.floor(track.clientWidth * 0.85));
+
+      const sync = () => {
+        const max = track.scrollWidth - track.clientWidth - 2;
+        prev.disabled = track.scrollLeft <= 2;
+        next.disabled = track.scrollLeft >= max;
+      };
+
+      prev.addEventListener('click', () => {
+        track.scrollBy({ left: -step(), behavior: 'smooth' });
+      });
+      next.addEventListener('click', () => {
+        track.scrollBy({ left: step(), behavior: 'smooth' });
+      });
+      track.addEventListener('scroll', () => sync(), { passive: true });
+      track.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight') {
+          e.preventDefault();
+          track.scrollBy({ left: step(), behavior: 'smooth' });
+        } else if (e.key === 'ArrowLeft') {
+          e.preventDefault();
+          track.scrollBy({ left: -step(), behavior: 'smooth' });
+        }
+      });
+      window.addEventListener('resize', sync);
+      sync();
+    });
+  }
+  bindCarousels();
+  document.addEventListener('astro:page-load', bindCarousels);
+</script>

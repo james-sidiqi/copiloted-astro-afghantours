@@ -4,6 +4,8 @@ import Hero from '@components/site/Hero.astro';
 import SectionHeader from '@components/ui/SectionHeader.astro';
 import TourCard from '@components/travel/TourCard.astro';
 import AudienceCard from '@components/travel/AudienceCard.astro';
+import HorizontalCarousel from '@components/ui/HorizontalCarousel.astro';
+import PageSection from '@components/ui/PageSection.astro';
 import { getSiteData } from '@lib/data/site-data';
 import { getCustomAudiences, isCustomTravelStyle } from '@lib/content/customAudiences';
 import { orderScheduledTours, isPrimaryScheduledSlug } from '@lib/content/primaryScheduled';
@@ -26,7 +28,7 @@ const customAudiences = getCustomAudiences();
     ctaHref="/custom-requests/"
   />
 
-  <section class="py-20 bg-[#f6f7fb]">
+  <section class="py-16 sm:py-20 bg-[#f6f7fb] border-y border-[#1e3a5f]/08">
     <div class="max-w-6xl mx-auto px-4 sm:px-6">
       <div class="mb-8">
         <SectionHeader
@@ -56,9 +58,9 @@ const customAudiences = getCustomAudiences();
           </p>
         </div>
         {primaryScheduled.length > 0 ? (
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+          <HorizontalCarousel ariaLabel="Primary scheduled tour cards">
             {primaryScheduled.map(tour => <TourCard tour={tour} />)}
-          </div>
+          </HorizontalCarousel>
         ) : (
           <p class="text-center py-12 text-gray-500">Primary scheduled tours coming soon.</p>
         )}
@@ -69,9 +71,9 @@ const customAudiences = getCustomAudiences();
             <p class="mb-6 text-sm text-[rgba(15,23,42,0.65)]">
               Retained when distinct by route or purpose (for example Central Afghanistan Discovery vs Heart of the Silk Road). Linked here without homepage clutter.
             </p>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+            <HorizontalCarousel ariaLabel="More scheduled tour cards">
               {secondaryScheduled.map(tour => <TourCard tour={tour} />)}
-            </div>
+            </HorizontalCarousel>
           </div>
         )}
       </div>
@@ -88,9 +90,9 @@ const customAudiences = getCustomAudiences();
 
         <div class="mb-10">
           <h3 class="text-sm font-semibold uppercase tracking-wide text-[rgba(15,23,42,0.55)] mb-4">By audience</h3>
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <HorizontalCarousel ariaLabel="Custom audience cards">
             {customAudiences.map(audience => <AudienceCard audience={audience} />)}
-          </div>
+          </HorizontalCarousel>
         </div>
 
         {customPackageTours.length > 0 && (

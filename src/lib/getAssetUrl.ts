@@ -41,9 +41,27 @@ export function publicUrlExists(urlPath: string | null | undefined): boolean {
 export function firstExisting(...candidates: Array<string | null | undefined>): string {
   for (const c of candidates) {
     const n = normalizeAssetPath(c);
-    if (n && publicUrlExists(n)) return n;
+    if (n && publicUrlExists(n)) return preferWebpSibling(n);
   }
   return "";
+}
+
+/**
+ * Prefer a same-path .webp sibling when it exists so rendered pages emit WebP.
+ * Does not invent assets; leaves originals on disk.
+ * Favicons, Leaflet vendor PNGs, and remote URLs are left unchanged by callers.
+ */
+export function preferWebpSibling(urlPath: string | null | undefined): string {
+  const n = normalizeAssetPath(urlPath);
+  if (!n) return "";
+  if (/^https?:\/\//i.test(n)) return n;
+  if (/\/vendor\//i.test(n) || n.startsWith("/favicon/")) return n;
+  if (/\.webp$/i.test(n)) return n;
+  if (/\.(jpe?g|png)$/i.test(n)) {
+    const webp = n.replace(/\.(jpe?g|png)$/i, ".webp");
+    if (publicUrlExists(webp)) return webp;
+  }
+  return n;
 }
 
 function listChildDirs(relFromPublic: string): string[] {
@@ -182,12 +200,24 @@ function pickInDir(dirUrl: string, prefer: "hero" | "thumb" | "any" = "any"): st
     .filter((f) => /^(thumb|card)(\.|$)/i.test(f) || /^thumb\./i.test(f))
     .map((f) => `${base}/${f}`);
   const overview = files.filter((f) => /^overview\./i.test(f)).map((f) => `${base}/${f}`);
-  const galleryFirst = firstExisting(
+  const gallerySub = firstExisting(
     `${base}/gallery/01.webp`,
     `${base}/gallery/1.webp`,
     `${base}/gallery/hero.webp`,
     `${base}/gallery/01.jpg`,
   );
+  // Flat gallery files at vehicle/property folder root (e.g. transport/.../gallery-2.webp)
+  const flatGalleryFiles = files
+    .filter((f) => /^gallery[-_]?\d*\.(webp|jpe?g|png)(\.(webp|jpe?g|png))?$/i.test(f))
+    .sort((a, b) => {
+      // Prefer clean .webp over double-extension (.webp.webp)
+      const score = (name: string) => (name.toLowerCase().endsWith(".webp.webp") ? 1 : 0);
+      const sa = score(a) - score(b);
+      if (sa !== 0) return sa;
+      return a.localeCompare(b, undefined, { numeric: true });
+    })
+    .map((f) => `${base}/${f}`);
+  const galleryFirst = gallerySub || firstExisting(...flatGalleryFiles);
 
   if (prefer === "hero") {
     return (
@@ -200,6 +230,70 @@ function pickInDir(dirUrl: string, prefer: "hero" | "thumb" | "any" = "any"): st
     );
   }
   return firstExisting(...heroCanon, ...thumbCanon, ...heroAlts, ...thumbAlts, ...overview, galleryFirst) || "";
+}
+
+/** List existence-checked gallery URLs for a transport vehicle folder (flat + gallery/). */
+export function listTransportGallery(tier: string, vehicleType: string): string[] {
+  const hero = resolveTransportAsset(tier, vehicleType, "hero");
+  // Recover folder from hero path when possible
+  const t = cleanText(tier).toLowerCase();
+  const v = cleanText(vehicleType).toLowerCase().replace(/_/g, "-");
+  const tierFolder =
+    t === "armored" || t === "luxury"
+      ? "luxury"
+      : t === "premium"
+        ? "premium"
+        : t === "budget"
+          ? "budget"
+          : t === "standard"
+            ? "standard"
+            : t || "standard";
+  const vehicleCandidates: string[] = [];
+  if (v) vehicleCandidates.push(v);
+  if (v.includes("suv")) vehicleCandidates.push("suv", "suv-4x4");
+  const seenV = new Set<string>();
+  const vehicles = vehicleCandidates.filter((x) => {
+    if (!x || seenV.has(x)) return false;
+    seenV.add(x);
+    return true;
+  });
+  let base = "";
+  for (const vehicle of vehicles) {
+    const matched = matchSlugDir(`assets/images/transport/${tierFolder}`, vehicle);
+    const folder = matched || vehicle;
+    const rel = `assets/images/transport/${tierFolder}/${folder}`;
+    if (listFiles(rel).length) {
+      base = `/assets/images/transport/${tierFolder}/${folder}`;
+      break;
+    }
+  }
+  if (!base) return hero ? [hero] : [];
+  const files = listFiles(base.replace(/^\//, ""));
+  const urls: string[] = [];
+  const push = (u: string) => {
+    const p = preferWebpSibling(u);
+    if (p && publicUrlExists(p) && !urls.includes(p)) urls.push(p);
+  };
+  if (hero) push(hero);
+  for (const f of files
+    .filter((name) => /^gallery[-_]?\d*\.(webp|jpe?g|png)(\.(webp|jpe?g|png))?$/i.test(name))
+    .sort((a, b) => a.localeCompare(b, undefined, { numeric: true }))) {
+    // Skip double-extension duplicates when clean sibling exists
+    if (/\.webp\.webp$/i.test(f)) {
+      const clean = f.replace(/\.webp\.webp$/i, ".webp");
+      if (files.includes(clean)) continue;
+    }
+    if (/\.web\.webp$/i.test(f)) {
+      const clean = f.replace(/\.web\.webp$/i, ".webp");
+      if (files.includes(clean) || files.includes(f.replace(".web.webp", ".webp"))) continue;
+    }
+    push(`${base}/${f}`);
+  }
+  const subGallery = listFiles(`${base.replace(/^\//, "")}/gallery`);
+  for (const f of subGallery.filter((name) => /\.(webp|jpe?g|png)$/i.test(name)).sort()) {
+    push(`${base}/gallery/${f}`);
+  }
+  return urls;
 }
 
 /** Food CSV slug -> folder name aliases (folder names from Phase 1 sync). */
@@ -313,40 +407,35 @@ export function getAssetUrl(
   const slug = options?.slug ?? "";
   const coded = normalizeAssetPath(codedPath);
 
+  let resolved = "";
   if (entity === "attraction" && slug) {
-    return resolveAttractionAsset(slug, coded, kind);
-  }
-  if (entity === "province" && slug) {
-    return resolveProvinceAsset(slug, coded, kind);
-  }
-  if (entity === "hotel") {
-    return resolveHotelAsset(coded, kind, slug);
-  }
-  if (entity === "dish" && slug) {
-    return resolveDishAsset(slug, coded, kind);
-  }
-  if (entity === "tour" && slug) {
-    return resolveTourAsset(slug, coded, kind);
-  }
-  if (entity === "hub" && slug) {
-    return resolveHubAsset(slug, coded, kind);
-  }
-  if (entity === "cultural" && slug) {
+    resolved = resolveAttractionAsset(slug, coded, kind);
+  } else if (entity === "province" && slug) {
+    resolved = resolveProvinceAsset(slug, coded, kind);
+  } else if (entity === "hotel") {
+    resolved = resolveHotelAsset(coded, kind, slug);
+  } else if (entity === "dish" && slug) {
+    resolved = resolveDishAsset(slug, coded, kind);
+  } else if (entity === "tour" && slug) {
+    resolved = resolveTourAsset(slug, coded, kind);
+  } else if (entity === "hub" && slug) {
+    resolved = resolveHubAsset(slug, coded, kind);
+  } else if (entity === "cultural" && slug) {
     const k = kind === "thumb" ? "thumb" : "hero";
-    return (
+    resolved =
       resolveExperienceSlugAsset("culinary", slug, k) ||
       resolveExperienceSlugAsset("cultural", slug, k) ||
       resolveCategorySlugAsset("cultural-experiences", slug, k) ||
       firstExisting(coded) ||
-      coded
-    );
-  }
-  if (entity === "map" || kind === "map") {
+      coded;
+  } else if (entity === "map" || kind === "map") {
+    // Keep SVG/map assets as-is (not forced to webp)
     return resolveMapAsset(coded, slug);
+  } else {
+    const remapped = remapKnownPrefixes(coded);
+    resolved = firstExisting(remapped, coded) || remapped || coded;
   }
-
-  const remapped = remapKnownPrefixes(coded);
-  return firstExisting(remapped, coded) || remapped || coded;
+  return preferWebpSibling(resolved) || resolved;
 }
 
 function remapKnownPrefixes(urlPath: string): string {

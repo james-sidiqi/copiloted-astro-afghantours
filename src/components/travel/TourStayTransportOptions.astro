@@ -1,0 +1,211 @@
+---
+/**
+ * Tour detail: default-select standard hotel for hub(s); allow hotel + transport upgrades.
+ * Uses only existing hotel/transport data — no invented names or prices.
+ * Selections feed inquiry query params (accommodation / transport).
+ */
+import SafeImage from '@components/ui/SafeImage.astro';
+import type { HotelProperty, TransportOption } from '@lib/types/view-models';
+import { resolveTransportAsset } from '@lib/getAssetUrl';
+
+interface Props {
+  tourSlug: string;
+  tourName: string;
+  tourCode?: string;
+  hubCodes: string[];
+  hotels: HotelProperty[];
+  transports: TransportOption[];
+  inquireBaseHref: string;
+}
+
+const { tourSlug, tourName, tourCode = '', hubCodes, hotels, transports, inquireBaseHref } = Astro.props;
+
+const hubSet = new Set(hubCodes.filter(Boolean));
+const hubHotels = hotels
+  .filter((h) => h.isActive && hubSet.has(h.destinationsCode))
+  .sort((a, b) => {
+    const order = (t: string) => ({ budget: 0, standard: 1, premium: 2, luxury: 3 }[(t || '').toLowerCase()] ?? 9);
+    return order(a.tier) - order(b.tier) || a.hotelName.localeCompare(b.hotelName);
+  });
+
+const standardHotels = hubHotels.filter((h) => (h.tier || '').toLowerCase() === 'standard');
+const defaultHotel = standardHotels[0] || hubHotels.find((h) => (h.tier || '').toLowerCase() === 'budget') || hubHotels[0];
+
+const hotelOptions = hubHotels.length
+  ? hubHotels
+  : hotels.filter((h) => h.isActive && (h.tier || '').toLowerCase() === 'standard').slice(0, 6);
+
+const tierRank = (t: string) =>
+  ({ budget: 0, standard: 1, premium: 2, luxury: 3, armored: 4 }[(t || '').toLowerCase()] ?? 9);
+
+const transportOptions = [...transports]
+  .filter((t) => t.isActive)
+  .sort((a, b) => tierRank(a.tier) - tierRank(b.tier) || a.transportName.localeCompare(b.transportName));
+
+const defaultTransport =
+  transportOptions.find((t) => (t.tier || '').toLowerCase() === 'standard' && /suv/i.test(t.vehicleType || t.transportName)) ||
+  transportOptions.find((t) => (t.tier || '').toLowerCase() === 'standard') ||
+  transportOptions[0];
+
+const formatHotelLabel = (h: HotelProperty) => {
+  const tier = (h.tier || '').trim();
+  const price =
+    Number.isFinite(h.perNightPriceFrom) && h.perNightPriceFrom > 0
+      ? ` · from $${h.perNightPriceFrom.toLocaleString()}/night`
+      : '';
+  return `${h.hotelName}${tier ? ` (${tier})` : ''}${price}`;
+};
+
+const formatTransportLabel = (t: TransportOption) => {
+  const tier = (t.tier || '').trim();
+  return `${t.transportName}${tier ? ` · ${tier}` : ''} (${t.minPax}–${t.maxPax} pax)`;
+};
+
+const hasHotels = hotelOptions.length > 0;
+const hasTransports = transportOptions.length > 0;
+---
+
+{(hasHotels || hasTransports) && (
+  <section class="rounded-2xl border border-[#1e3a5f]/12 bg-white shadow-sm overflow-hidden" data-stay-transport data-inquire-base={inquireBaseHref}>
+    <div class="px-5 py-4 border-b border-[#1e3a5f]/08 bg-[#f7f3ea]/60">
+      <p class="text-xs font-semibold uppercase tracking-[0.12em] text-[#b88a2a]">Stay &amp; transport</p>
+      <h3 class="font-display text-lg font-bold text-[#1e3a5f] mt-1">Defaults for this journey</h3>
+      <p class="text-sm text-[rgba(15,23,42,0.65)] mt-1 leading-relaxed">
+        Standard hotel is selected when a hub property exists in our data. Upgrade hotel or transport below — additional cost confirmed on inquiry. No invented rates.
+      </p>
+    </div>
+
+    <div class="p-5 grid grid-cols-1 lg:grid-cols-2 gap-6">
+      {hasHotels && (
+        <div>
+          <label for={`hotel-${tourSlug}`} class="block text-sm font-semibold text-[#1e3a5f] mb-2">Hotel (hub)</label>
+          <select
+            id={`hotel-${tourSlug}`}
+            class="js-stay-hotel w-full rounded-xl border border-[#1e3a5f]/20 bg-[#f8fafc] px-3 py-2.5 text-sm text-[#0f172a] focus:border-[#1f4aa8]"
+            data-default-tier="standard"
+          >
+            {hotelOptions.map((h) => (
+              <option
+                value={h.hotelSlug || h.hotelId}
+                data-label={formatHotelLabel(h)}
+                data-tier={(h.tier || '').toLowerCase()}
+                selected={defaultHotel ? h.hotelId === defaultHotel.hotelId : false}
+              >
+                {formatHotelLabel(h)}
+                {(h.tier || '').toLowerCase() === 'standard' ? ' — default' : ''}
+                {(h.tier || '').toLowerCase() !== 'standard' && defaultHotel && (defaultHotel.tier || '').toLowerCase() === 'standard' ? ' — upgrade' : ''}
+              </option>
+            ))}
+          </select>
+          {defaultHotel && (
+            <div class="mt-3 flex gap-3 items-start">
+              <div class="w-24 h-16 rounded-lg overflow-hidden bg-gray-100 shrink-0">
+                <SafeImage
+                  src={defaultHotel.imagePaths.find(Boolean)}
+                  fallback="/assets/images/placeholders/default-hotel.webp"
+                  alt={defaultHotel.hotelName}
+                  class="w-full h-full object-cover"
+                  loading="lazy"
+                />
+              </div>
+              <p class="text-xs text-[rgba(15,23,42,0.6)] leading-relaxed">
+                Default: <strong class="text-[#1e3a5f]">{defaultHotel.hotelName}</strong>
+                {defaultHotel.tier ? ` · ${defaultHotel.tier}` : ''}. Choose another listed property to request an upgrade.
+              </p>
+            </div>
+          )}
+          {!defaultHotel && (
+            <p class="mt-2 text-xs text-[rgba(15,23,42,0.55)]">No hub-linked hotels in data for this tour — select from standard catalog entries or leave blank on inquiry.</p>
+          )}
+        </div>
+      )}
+
+      {hasTransports && (
+        <div>
+          <label for={`transport-${tourSlug}`} class="block text-sm font-semibold text-[#1e3a5f] mb-2">Transport</label>
+          <select
+            id={`transport-${tourSlug}`}
+            class="js-stay-transport w-full rounded-xl border border-[#1e3a5f]/20 bg-[#f8fafc] px-3 py-2.5 text-sm text-[#0f172a] focus:border-[#1f4aa8]"
+          >
+            {transportOptions.map((t) => (
+              <option
+                value={t.transportSlug || t.transportId}
+                data-label={formatTransportLabel(t)}
+                data-tier={(t.tier || '').toLowerCase()}
+                selected={defaultTransport ? t.transportId === defaultTransport.transportId : false}
+              >
+                {formatTransportLabel(t)}
+                {(t.tier || '').toLowerCase() === 'standard' ? ' — default' : ' — upgrade'}
+              </option>
+            ))}
+          </select>
+          {defaultTransport && (
+            <div class="mt-3 flex gap-3 items-start">
+              <div class="w-24 h-16 rounded-lg overflow-hidden bg-gray-100 shrink-0">
+                <SafeImage
+                  src={resolveTransportAsset(defaultTransport.tier, defaultTransport.vehicleType, 'hero')}
+                  fallback="/assets/images/placeholders/default-card.webp"
+                  alt={defaultTransport.transportName}
+                  class="w-full h-full object-cover"
+                  loading="lazy"
+                />
+              </div>
+              <p class="text-xs text-[rgba(15,23,42,0.6)] leading-relaxed">
+                Default: <strong class="text-[#1e3a5f]">{defaultTransport.transportName}</strong> (standard tier when available). Premium/luxury options are upgrades at additional cost.
+              </p>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+
+    <div class="px-5 pb-5">
+      <a
+        href={inquireBaseHref}
+        class="js-stay-inquire inline-flex items-center justify-center px-6 py-2.5 rounded-full bg-[#b88a2a] hover:bg-[#a07820] text-white text-sm font-semibold transition-colors"
+      >
+        Inquire with these options
+      </a>
+      <p class="mt-2 text-[11px] text-[rgba(15,23,42,0.5)]">
+        Preferences for {tourName}{tourCode ? ` (${tourCode})` : ''} are appended to your inquiry — not a booking.
+      </p>
+    </div>
+  </section>
+)}
+
+<script>
+  function bindStayTransport() {
+    document.querySelectorAll<HTMLElement>('[data-stay-transport]').forEach((root) => {
+      if (root.dataset.bound === '1') return;
+      root.dataset.bound = '1';
+      const base = root.dataset.inquireBase || '/contact/';
+      const hotel = root.querySelector<HTMLSelectElement>('.js-stay-hotel');
+      const transport = root.querySelector<HTMLSelectElement>('.js-stay-transport');
+      const link = root.querySelector<HTMLAnchorElement>('.js-stay-inquire');
+      if (!link) return;
+
+      const sync = () => {
+        try {
+          const url = new URL(base, window.location.origin);
+          const hotelOpt = hotel?.selectedOptions[0];
+          const transportOpt = transport?.selectedOptions[0];
+          if (hotelOpt) {
+            url.searchParams.set('accommodation', hotelOpt.dataset.label || hotelOpt.textContent || hotelOpt.value);
+          }
+          if (transportOpt) {
+            url.searchParams.set('transport', transportOpt.dataset.label || transportOpt.textContent || transportOpt.value);
+          }
+          link.href = `${url.pathname}${url.search}`;
+        } catch {
+          /* keep base */
+        }
+      };
+
+      hotel?.addEventListener('change', sync);
+      transport?.addEventListener('change', sync);
+      sync();
+    });
+  }
+  bindStayTransport();
+  document.addEventListener('astro:page-load', bindStayTransport);
+</script>
