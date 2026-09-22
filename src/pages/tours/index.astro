@@ -6,10 +6,13 @@ import TourCard from '@components/travel/TourCard.astro';
 import AudienceCard from '@components/travel/AudienceCard.astro';
 import { getSiteData } from '@lib/data/site-data';
 import { getCustomAudiences, isCustomTravelStyle } from '@lib/content/customAudiences';
+import { orderScheduledTours, isPrimaryScheduledSlug } from '@lib/content/primaryScheduled';
 
 const data = getSiteData();
 const tours = data.tours.filter(t => t.isActive);
-const scheduledTours = tours.filter(t => !isCustomTravelStyle(t.travelStyle));
+const scheduledTours = orderScheduledTours(tours.filter(t => !isCustomTravelStyle(t.travelStyle)));
+const primaryScheduled = scheduledTours.filter(t => isPrimaryScheduledSlug(t.slug));
+const secondaryScheduled = scheduledTours.filter(t => !isPrimaryScheduledSlug(t.slug));
 const customPackageTours = tours.filter(t => isCustomTravelStyle(t.travelStyle));
 const customAudiences = getCustomAudiences();
 ---
@@ -19,8 +22,8 @@ const customAudiences = getCustomAudiences();
     title="Our Tours"
     subtitle="Scheduled packages and inquiry-led custom journeys — planned from Kabul around access, timing, and conditions"
     imagePath="/assets/images/heroes/hero-tours.webp"
-    ctaText="Build My Journey"
-    ctaHref="/contact/?flow=custom"
+    ctaText="Start a Custom Request"
+    ctaHref="/custom-requests/"
   />
 
   <section class="py-20 bg-[#f6f7fb]">
@@ -29,57 +32,57 @@ const customAudiences = getCustomAudiences();
         <SectionHeader
           eyebrow="Tours"
           title="Scheduled and custom"
-          subtitle="Filter by offering type. Scheduled tours are set itineraries; custom journeys are inquiry-led around your audience and goals."
+          subtitle="Scheduled tours are proposed set itineraries for inquiry. Custom requests are a planning service — not a fixed 15-day package."
         />
       </div>
 
       <div class="mb-10 flex flex-wrap gap-2" role="tablist" aria-label="Tour type">
-        <button
-          type="button"
-          data-tour-filter="all"
-          class="tour-filter-btn px-4 py-2 rounded-full text-sm font-semibold border-2 border-[#1e3a5f] bg-[#1e3a5f] text-white transition-all duration-150"
-          aria-pressed="true"
-        >
+        <button type="button" data-tour-filter="all" class="tour-filter-btn px-4 py-2 rounded-full text-sm font-semibold border-2 border-[#1e3a5f] bg-[#1e3a5f] text-white transition-all duration-150" aria-pressed="true">
           All ({tours.length})
         </button>
-        <button
-          type="button"
-          data-tour-filter="scheduled"
-          class="tour-filter-btn px-4 py-2 rounded-full text-sm font-semibold border-2 border-[#1e3a5f] text-[#1e3a5f] bg-white hover:bg-[#1e3a5f]/5 transition-all duration-150"
-          aria-pressed="false"
-        >
+        <button type="button" data-tour-filter="scheduled" class="tour-filter-btn px-4 py-2 rounded-full text-sm font-semibold border-2 border-[#1e3a5f] text-[#1e3a5f] bg-white hover:bg-[#1e3a5f]/5 transition-all duration-150" aria-pressed="false">
           Scheduled ({scheduledTours.length})
         </button>
-        <button
-          type="button"
-          data-tour-filter="custom"
-          class="tour-filter-btn px-4 py-2 rounded-full text-sm font-semibold border-2 border-[#1e3a5f] text-[#1e3a5f] bg-white hover:bg-[#1e3a5f]/5 transition-all duration-150"
-          aria-pressed="false"
-        >
-          Custom ({customPackageTours.length})
+        <button type="button" data-tour-filter="custom" class="tour-filter-btn px-4 py-2 rounded-full text-sm font-semibold border-2 border-[#1e3a5f] text-[#1e3a5f] bg-white hover:bg-[#1e3a5f]/5 transition-all duration-150" aria-pressed="false">
+          Custom ({customAudiences.length})
         </button>
       </div>
 
       <div data-tour-panel="scheduled" class="tour-panel mb-16">
         <div class="mb-6">
-          <h2 class="font-display text-xl font-bold text-[#1e3a5f]">Scheduled tours</h2>
-          <p class="mt-1 text-sm text-[rgba(15,23,42,0.65)]">Regularly scheduled / set itineraries (Cultural / Scenic packages from our tour data).</p>
+          <h2 class="font-display text-xl font-bold text-[#1e3a5f]">Primary scheduled tours</h2>
+          <p class="mt-1 text-sm text-[rgba(15,23,42,0.65)]">
+            The core proposed catalog for inquiry. Dates are <strong>proposed ≠ confirmed</strong> until verified with you. Prices show only when operator-verified; otherwise price on request.
+          </p>
         </div>
-        {scheduledTours.length > 0 ? (
+        {primaryScheduled.length > 0 ? (
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-            {scheduledTours.map(tour => <TourCard tour={tour} />)}
+            {primaryScheduled.map(tour => <TourCard tour={tour} />)}
           </div>
         ) : (
-          <p class="text-center py-12 text-gray-500">No scheduled tours available at this time.</p>
+          <p class="text-center py-12 text-gray-500">Primary scheduled tours coming soon.</p>
+        )}
+
+        {secondaryScheduled.length > 0 && (
+          <div class="mt-14">
+            <h3 class="font-display text-lg font-bold text-[#1e3a5f] mb-2">More scheduled routes</h3>
+            <p class="mb-6 text-sm text-[rgba(15,23,42,0.65)]">
+              Retained when distinct by route or purpose (for example Central Afghanistan Discovery vs Heart of the Silk Road). Linked here without homepage clutter.
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+              {secondaryScheduled.map(tour => <TourCard tour={tour} />)}
+            </div>
+          </div>
         )}
       </div>
 
       <div data-tour-panel="custom" class="tour-panel">
         <div class="mb-6">
-          <h2 class="font-display text-xl font-bold text-[#1e3a5f]">Custom journeys</h2>
+          <h2 class="font-display text-xl font-bold text-[#1e3a5f]">Custom requests</h2>
           <p class="mt-1 text-sm text-[rgba(15,23,42,0.65)]">
-            Inquiry-led travel for specific audiences. CSV rows marked <em>Custom</em> may still list sample routes — treat them as conversation starters, not fixed products.
-            Prefer an audience card below, or <a href="/contact/?flow=custom" class="text-[#1f4aa8] underline">Build My Journey</a>.
+            Inquiry-led planning for specific audiences — not a fixed price or day count.
+            Prefer an audience card, or read how planning works on
+            <a href="/custom-requests/" class="text-[#1f4aa8] underline">Custom Requests</a>.
           </p>
         </div>
 
@@ -92,7 +95,10 @@ const customAudiences = getCustomAudiences();
 
         {customPackageTours.length > 0 && (
           <div>
-            <h3 class="text-sm font-semibold uppercase tracking-wide text-[rgba(15,23,42,0.55)] mb-4">Custom-tagged packages in data</h3>
+            <h3 class="text-sm font-semibold uppercase tracking-wide text-[rgba(15,23,42,0.55)] mb-4">Planning-service entries in data</h3>
+            <p class="mb-4 text-sm text-[rgba(15,23,42,0.65)]">
+              Rows tagged Custom are conversation starters for quotation — duration and price are not fixed packages.
+            </p>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
               {customPackageTours.map(tour => <TourCard tour={tour} />)}
             </div>
@@ -105,9 +111,9 @@ const customAudiences = getCustomAudiences();
   <section class="py-16 bg-[#1e3a5f]">
     <div class="max-w-3xl mx-auto px-4 sm:px-6 text-center text-white">
       <h2 class="font-display text-2xl sm:text-3xl font-bold mb-4">Need something that is not on the calendar?</h2>
-      <p class="text-white/80 mb-8">Custom journeys are inquiry-led — diaspora, veterans, Peace Corps alumni, business, artists, and media welcome.</p>
-      <a href="/contact/?flow=custom" class="inline-block px-8 py-3.5 rounded-full bg-[#b88a2a] hover:bg-[#a07820] text-white font-semibold shadow-lg transition-all duration-200">
-        Build My Journey
+      <p class="text-white/80 mb-8">Custom requests are inquiry-led — diaspora, veterans, Peace Corps alumni, business, artists, and media welcome.</p>
+      <a href="/custom-requests/" class="inline-block px-8 py-3.5 rounded-full bg-[#b88a2a] hover:bg-[#a07820] text-white font-semibold shadow-lg transition-all duration-200">
+        Start a Custom Request
       </a>
     </div>
   </section>
