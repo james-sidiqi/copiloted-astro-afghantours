@@ -23,6 +23,10 @@
   RewriteRule ^sample\.html/?$ - [G,L]
   # Live restaurants URL is broken Apache autoindex; zip1 had restaurants routes — do not advertise until rebuilt
   RewriteRule ^restaurants/?$ - [G,L]
+  # Founder alias → founder story
+  RewriteRule ^founder/?$ /story/ [R=301,L]
+  # Empty partnership story alias → founder story
+  RewriteRule ^partnership/?$ /story/ [R=301,L]
   # live province under destinations → dedicated provinces IA (Bamyan)
   RewriteRule ^destinations/bamyan/?$ /provinces/bamyan/ [R=301,L]
   # live province under destinations → dedicated provinces IA (Daykundi)

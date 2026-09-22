@@ -1,0 +1,310 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+
+const collageRoot =
+  '/assets/images/about/story/partnership/james/founder-story/collages';
+
+/**
+ * Locked founder story — James’s approved eleven-slide text.
+ * Structure: 1–3 family concise; 4–7 staying; 8–9 leave/return; 10–11 company + invite.
+ * Final slide: no “Come for the history, stay for the hospitality.”
+ */
+type Slide = {
+  n: number;
+  eyebrow: string;
+  title: string;
+  paragraphs: string[];
+  alt: string;
+  caption: string;
+  preserve?: boolean;
+  dark?: boolean;
+  pullquote?: string;
+  emphasis?: string;
+  statement?: string;
+  cta?: boolean;
+};
+
+const slides: Slide[] = [
+  {
+    n: 1,
+    eyebrow: 'Before I was born',
+    title: 'My family had already built a life in Kabul.',
+    paragraphs: [
+      'My mother came to Afghanistan with the Peace Corps and was assigned to teach English in Kabul.',
+      'My father was Afghan and was also a teacher.',
+      'They met here, married here, and started their family here.',
+      'My sister and brother were born in Afghanistan. The family lived in my father’s home on the outskirts of Kabul with my grandparents, aunts, uncles, their wives, and their children.',
+      'The coup in 1978 upended that life.',
+      'My mother left Afghanistan with my brother and sister. My father followed, and the family eventually settled in the United States.',
+      'I was born later, in Philadelphia.',
+    ],
+    alt: 'Family photographs from Kabul — Before I was born',
+    caption: 'Before I was born',
+    preserve: true,
+  },
+  {
+    n: 2,
+    eyebrow: 'Growing up in the United States',
+    title: 'I grew up somewhere else.',
+    paragraphs: [
+      'I grew up in Pennsylvania and Alaska.',
+      'Afghanistan was always present in our family, but mostly through stories, photographs, food, relatives, and memories that belonged to other people.',
+      'My parents talked about Kabul constantly.',
+      'I knew the stories.',
+      'I didn’t know the place.',
+    ],
+    alt: 'James growing up in the United States',
+    caption: 'Growing up in the United States',
+    preserve: true,
+  },
+  {
+    n: 3,
+    eyebrow: '2004',
+    title: 'Then Afghanistan became real.',
+    paragraphs: [
+      'I first came to Afghanistan as a teenager in 2004.',
+      'Until then, Afghanistan had existed somewhere between my parents’ memories and old photographs.',
+      'Arriving changed that.',
+      'The heat, dust, streets, food, crowds, and relatives I had heard about my entire life were suddenly real.',
+      'I came for a month.',
+      'When I left, Afghanistan was no longer simply something I had inherited from my parents.',
+      'I had experienced it for myself.',
+    ],
+    alt: 'James during his first visit to Afghanistan in 2004',
+    caption: '2004',
+    preserve: true,
+  },
+  {
+    n: 4,
+    eyebrow: 'Before Kabul',
+    title: 'The United States Air Force.',
+    paragraphs: [
+      'Before Afghanistan became my working life, I served in the United States Air Force.',
+      'A few years later, an unexpected phone call brought Afghanistan back into the picture.',
+    ],
+    alt: 'James before Kabul — United States Air Force years',
+    caption: 'Before Kabul',
+    preserve: true,
+  },
+  {
+    n: 5,
+    eyebrow: '2010',
+    title: 'My brother called. I came for a year.',
+    paragraphs: [
+      'My brother had been working in Kabul for about a year when he called and suggested that I come out and see whether I liked it.',
+      'I was in my early twenties.',
+      'I came for work and figured I would give Afghanistan a year.',
+      'Soon after I arrived, my brother moved on to an assignment in another country.',
+    ],
+    pullquote: 'He left. I stayed.',
+    alt: 'James with family in Afghanistan around 2010',
+    caption: '2010',
+    preserve: true,
+  },
+  {
+    n: 6,
+    eyebrow: '2010–2021',
+    title: 'One year became eleven.',
+    paragraphs: [
+      'What followed was not tourism.',
+      'It was work and life.',
+      'My jobs took me around Afghanistan.',
+      'I worked in logistics, contracting, project operations, and other roles supporting international organizations and activities connected to the U.S. Department of Defense and Department of State.',
+      'There were roads, offices, compounds, government departments, staff, vendors, clients, projects, and a great deal of figuring things out when reality on the ground did not match what had been planned on paper.',
+      'I learned Dari.',
+      'I built businesses.',
+      'I managed teams.',
+      'I traveled around the country.',
+      'I worked alongside Afghans and foreigners from all kinds of backgrounds.',
+    ],
+    emphasis: 'And Kabul became home.',
+    alt: 'Collage from James’s years living and working in Afghanistan, 2010–2021',
+    caption: '2010–2021',
+    preserve: true,
+  },
+  {
+    n: 7,
+    eyebrow: '2016',
+    title: 'That is also when Edrees entered the story.',
+    paragraphs: [
+      'Edrees and I became business partners in Kabul in 2016.',
+      'We spent the next several years operating businesses together.',
+      'At the time, neither of us was thinking about tourism.',
+      'That came much later.',
+    ],
+    alt: 'Years of partnership and work in Kabul',
+    caption: '2016',
+    preserve: true,
+  },
+  {
+    n: 8,
+    eyebrow: 'August 2021',
+    title: 'Then I was told to leave.',
+    paragraphs: [
+      'In August 2021, I received a call telling me to evacuate with my family.',
+      'After eleven years in Afghanistan, we left Kabul and returned to the United States.',
+      'I did not know what Afghanistan would look like in the months ahead.',
+      'But one thing felt surprisingly clear.',
+    ],
+    pullquote: 'I knew I would be back.',
+    alt: 'August 2021 evacuation — leaving Kabul with family',
+    caption: 'August 2021',
+    preserve: true,
+    dark: true,
+  },
+  {
+    n: 9,
+    eyebrow: 'January 2022',
+    title: 'Five months later, we came back.',
+    paragraphs: [
+      'My wife, daughter, and I returned to Kabul in January 2022.',
+      'Coming back was bittersweet.',
+      'The government had changed.',
+      'The economy had changed.',
+      'The international community I had known for years had largely disappeared.',
+      'Friends and colleagues had left.',
+      'But Afghanistan had not disappeared.',
+    ],
+    emphasis: 'And for us, Kabul was still home.',
+    alt: 'Back in Kabul, January 2022',
+    caption: 'January 2022',
+    preserve: true,
+  },
+  {
+    n: 10,
+    eyebrow: 'What came next',
+    title: 'AfghanTours is what that life turned into.',
+    paragraphs: [
+      'After I returned, people began contacting me for help arranging visits and travel inside Afghanistan.',
+      'Edrees and I had already spent years working together.',
+      'We knew how to operate here, and we knew the people we wanted around us.',
+      'We brought together former employees and colleagues who had experience working with international visitors and understood the standards they expected.',
+      'In 2023, we established AfghanTours.',
+      'We had the staff.',
+      'We had the relationships.',
+      'We understood the operating environment.',
+      'And, frankly, it sounded like a lot more fun than the work we had been doing.',
+      'I also wanted visitors to have the opportunity to see the Afghanistan that actually exists in front of us, rather than only the Afghanistan they had watched on the news for twenty years.',
+    ],
+    statement: 'The company came later. The life here came first.',
+    alt: 'James with partners after establishing AfghanTours',
+    caption: 'What came next',
+    preserve: true,
+  },
+  {
+    n: 11,
+    eyebrow: 'From Kabul',
+    title: 'I plan journeys from the city I live in.',
+    paragraphs: [
+      'I was born in the United States.',
+      'Afghanistan was my parents’ life before it was mine.',
+      'I came to Kabul for work in 2010. I stayed.',
+      'I left in August 2021.',
+      'I came back in January 2022.',
+      'AfghanTours is what that life eventually turned into, with Edrees and with a team of Afghans whose knowledge of this country is the operating core of every journey we arrange.',
+    ],
+    alt: 'James at his desk in Kabul',
+    caption: 'Kabul',
+    preserve: false,
+    cta: true,
+  },
+];
+---
+
+<BaseLayout
+  title="James’s Journey to Afghanistan | Founder Story | Afghan Tours"
+  description="James Amir Sidiqi’s path from family roots in Kabul to work in Afghanistan from 2010, evacuation in 2021, return in 2022, and AfghanTours."
+  ogImage={`${collageRoot}/founder-slide-11.webp`}
+>
+  <main class="bg-[#fbfaf7] text-[#101b23]">
+    <header class="border-b border-black/10 bg-[#f3eadb]">
+      <div class="max-w-5xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
+        <p class="text-xs font-semibold uppercase tracking-[0.2em] text-[#b88a2a] mb-3">Founder story</p>
+        <h1 class="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-[#1e3a5f] leading-tight max-w-3xl">
+          James’s journey to Afghanistan
+        </h1>
+        <p class="mt-4 text-[rgba(15,23,42,0.7)] max-w-2xl leading-relaxed">
+          Eleven chapters. Photographs carry the story. The words are his.
+        </p>
+      </div>
+    </header>
+
+    {slides.map((slide, idx) => {
+      const img = `${collageRoot}/founder-slide-${slide.n}.webp`;
+      const soft = idx % 2 === 1;
+      const dark = Boolean(slide.dark);
+      const sectionBg = dark ? 'bg-[#101e27] text-[#f5f3ee]' : soft ? 'bg-[#f3eadb]' : 'bg-[#fbfaf7]';
+      const titleColor = dark ? 'text-white' : 'text-[#1e3a5f]';
+      const bodyColor = dark ? 'text-[#d8e0e3]' : 'text-[rgba(15,23,42,0.78)]';
+      const eyebrowColor = dark ? 'text-[#dea428]' : 'text-[#b88a2a]';
+      const captionColor = dark ? 'text-white/55' : 'text-[rgba(15,23,42,0.5)]';
+
+      return (
+        <section
+          id={`slide-${slide.n}`}
+          class={`border-b border-black/10 ${sectionBg}`}
+          aria-labelledby={`slide-${slide.n}-title`}
+        >
+          <div class="max-w-5xl mx-auto px-4 sm:px-6 py-14 sm:py-20">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+              <div class="lg:col-span-5">
+                <p class={`text-xs font-semibold uppercase tracking-[0.2em] ${eyebrowColor} mb-3`}>
+                  {slide.eyebrow}
+                </p>
+                <h2
+                  id={`slide-${slide.n}-title`}
+                  class={`font-display text-2xl sm:text-3xl lg:text-[2.35rem] font-bold leading-tight ${titleColor}`}
+                >
+                  {slide.title}
+                </h2>
+              </div>
+              <div class={`lg:col-span-7 space-y-4 text-base sm:text-[1.05rem] leading-relaxed ${bodyColor}`}>
+                {slide.paragraphs.map((p) => (
+                  <p>{p}</p>
+                ))}
+                {slide.pullquote && (
+                  <blockquote
+                    class={`mt-6 pl-5 border-l-4 border-[#b88a2a] font-display text-2xl sm:text-3xl leading-snug ${dark ? 'text-white' : 'text-[#101b23]'}`}
+                  >
+                    {slide.pullquote}
+                  </blockquote>
+                )}
+                {slide.emphasis && (
+                  <p class={`font-semibold ${dark ? 'text-white' : 'text-[#101b23]'}`}>{slide.emphasis}</p>
+                )}
+                {slide.statement && (
+                  <p class={`mt-6 font-display text-2xl sm:text-3xl leading-snug ${dark ? 'text-white' : 'text-[#101b23]'}`}>
+                    {slide.statement}
+                  </p>
+                )}
+                {slide.cta && (
+                  <div class="pt-6">
+                    <a
+                      href="/contact/"
+                      class="inline-block px-8 py-3.5 rounded-full bg-[#b88a2a] hover:bg-[#a07820] text-white font-semibold shadow-md transition-all duration-200"
+                    >
+                      Plan Your Journey
+                    </a>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <figure class={`mt-10 ${slide.preserve ? 'rounded-2xl border border-black/10 bg-white/50 p-3 sm:p-4' : ''}`}>
+              <img
+                src={img}
+                alt={slide.alt}
+                loading={slide.n === 1 ? 'eager' : 'lazy'}
+                decoding="async"
+                class={`w-full rounded-xl ${slide.preserve ? 'h-auto object-contain max-h-[620px]' : 'aspect-[4/3] object-cover object-center max-h-[560px]'}`}
+              />
+              <figcaption class={`mt-3 text-xs font-semibold tracking-wide ${captionColor}`}>
+                {slide.caption}
+              </figcaption>
+            </figure>
+          </div>
+        </section>
+      );
+    })}
+  </main>
+</BaseLayout>
