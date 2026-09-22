@@ -7,6 +7,7 @@ import ItineraryTimeline from '@components/travel/ItineraryTimeline.astro';
 import TourMap from '@components/travel/TourMap.astro';
 import FaqAccordion from '@components/travel/FaqAccordion.astro';
 import RelatedToursSection from '@components/travel/RelatedToursSection.astro';
+import TourStayTransportOptions from '@components/travel/TourStayTransportOptions.astro';
 import type { Tour, MapStop, SiteData } from '@lib/types/view-models';
 import { getSiteData } from '@lib/data/site-data';
 import { siteConfig } from '@lib/config';
@@ -103,6 +104,18 @@ const contactInquireHref = buildScheduledInquiryHref({
   departure: firstDeparture || undefined,
 });
 const customJourneyHref = buildCustomInquiryHref();
+
+const hubCodesForStay = Array.from(
+  new Set(
+    [
+      ...tour.itinerary.flatMap((day) => day.attractions.map((a) => a.locationCode).filter(Boolean)),
+      ...data.locations
+        .filter((loc) => loc.type === 'destination' && loc.isActive && tour.provinces.some((p) => (loc.name || '').toLowerCase().includes(p.toLowerCase())))
+        .map((loc) => loc.locationCode),
+    ].filter((c): c is string => Boolean(c)),
+  ),
+);
+
 const mailtoInquireHref = `mailto:${siteConfig.email}?subject=${encodeURIComponent(`Enquiry: ${tour.name}`)}&body=${encodeURIComponent(inquireMessage)}`;
 
 // FAQ: tour-specific first, then general tour/logistics FAQs (no invented Q&A)
@@ -265,7 +278,7 @@ const durationLabel = tour.durationDays
   <div class="max-w-6xl mx-auto px-4 sm:px-6 py-14 sm:py-16">
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
       <!-- Main column -->
-      <div class="lg:col-span-2 space-y-14">
+      <div class="lg:col-span-2 space-y-10 [&>section]:rounded-2xl [&>section]:px-4 [&>section]:py-6 sm:[&>section]:px-5 sm:[&>section]:py-7 [&>section:nth-child(odd)]:bg-white [&>section:nth-child(even)]:bg-[#f7f3ea]/55 [&>section]:border [&>section]:border-[#1e3a5f]/06">
         <!-- C. Intro + highlights -->
         <section>
           <SectionHeader eyebrow="Overview" title="About This Tour" />
@@ -380,7 +393,7 @@ const durationLabel = tour.durationDays
             <div class="mb-6">
               <SectionHeader eyebrow="On the Ground" title="Accommodation & Transport" />
             </div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
               {tour.accommodationNote && (
                 <div class="bg-white rounded-2xl shadow-sm p-5 border border-gray-100">
                   <h3 class="font-semibold text-[#1e3a5f] mb-2 text-sm flex items-center gap-2">
@@ -400,6 +413,31 @@ const durationLabel = tour.durationDays
                 </div>
               )}
             </div>
+            <TourStayTransportOptions
+              tourSlug={tour.slug}
+              tourName={tour.name}
+              tourCode={tour.tourCode}
+              hubCodes={hubCodesForStay}
+              hotels={data.hotels.filter((hotel) => hotel.isActive)}
+              transports={data.transports.filter((transport) => transport.isActive)}
+              inquireBaseHref={contactInquireHref}
+            />
+          </section>
+        )}
+        {!(tour.accommodationNote || tour.transportNote) && (
+          <section>
+            <div class="mb-6">
+              <SectionHeader eyebrow="On the Ground" title="Accommodation & Transport" />
+            </div>
+            <TourStayTransportOptions
+              tourSlug={tour.slug}
+              tourName={tour.name}
+              tourCode={tour.tourCode}
+              hubCodes={hubCodesForStay}
+              hotels={data.hotels.filter((hotel) => hotel.isActive)}
+              transports={data.transports.filter((transport) => transport.isActive)}
+              inquireBaseHref={contactInquireHref}
+            />
           </section>
         )}
 

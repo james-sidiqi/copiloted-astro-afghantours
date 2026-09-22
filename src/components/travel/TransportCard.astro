@@ -1,6 +1,6 @@
 ---
 import SafeImage from '@components/ui/SafeImage.astro';
-import { resolveTransportAsset } from '@lib/getAssetUrl';
+import { resolveTransportAsset, listTransportGallery } from '@lib/getAssetUrl';
 
 interface Props {
   transport: import('@lib/types/view-models').TransportOption;
@@ -9,6 +9,7 @@ const { transport } = Astro.props;
 const imagePath =
   resolveTransportAsset(transport.tier, transport.vehicleType, 'hero') ||
   resolveTransportAsset(transport.tier, transport.vehicleType, 'thumb');
+const gallery = listTransportGallery(transport.tier, transport.vehicleType).filter((p) => p && p !== imagePath).slice(0, 3);
 
 const tierLabel = transport.tier
   ? transport.tier.charAt(0).toUpperCase() + transport.tier.slice(1).toLowerCase()
@@ -16,7 +17,7 @@ const tierLabel = transport.tier
 ---
 
 <article class="group bg-white rounded-[14px] shadow-[0_2px_16px_0_rgba(0,0,0,0.08)] hover:shadow-[0_10px_30px_rgba(15,23,42,0.08)] transition-shadow duration-300 overflow-hidden flex flex-col">
-  <div class="block overflow-hidden aspect-[16/10] bg-gray-100 shrink-0">
+  <div class="block overflow-hidden aspect-[16/10] bg-gray-100 shrink-0 relative">
     <SafeImage
       src={imagePath}
       fallback="/assets/images/placeholders/default-card.webp"
@@ -25,6 +26,21 @@ const tierLabel = transport.tier
       loading="lazy"
     />
   </div>
+  {gallery.length > 0 && (
+    <div class="flex gap-1.5 px-3 pt-3" aria-label={`${transport.transportName} gallery`}>
+      {gallery.map((src, i) => (
+        <div class="flex-1 aspect-[4/3] rounded-md overflow-hidden bg-gray-100">
+          <SafeImage
+            src={src}
+            fallback="/assets/images/placeholders/default-card.webp"
+            alt={`${transport.transportName} photo ${i + 2}`}
+            class="w-full h-full object-cover"
+            loading="lazy"
+          />
+        </div>
+      ))}
+    </div>
+  )}
   <div class="flex flex-col flex-1 p-5 gap-2">
     <div class="flex flex-wrap gap-1.5">
       {tierLabel && (

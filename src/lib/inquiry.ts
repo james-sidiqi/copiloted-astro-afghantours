@@ -59,6 +59,8 @@ export function buildScheduledInquiryHref(opts: {
   name: string;
   code?: string;
   departure?: string;
+  accommodation?: string;
+  transport?: string;
 }): string {
   const q = new URLSearchParams();
   q.set('flow', 'scheduled');
@@ -66,6 +68,8 @@ export function buildScheduledInquiryHref(opts: {
   q.set('tourName', opts.name);
   if (opts.code) q.set('tourCode', opts.code);
   if (opts.departure) q.set('departure', opts.departure);
+  if (opts.accommodation) q.set('accommodation', opts.accommodation);
+  if (opts.transport) q.set('transport', opts.transport);
   return `/contact/?${q.toString()}`;
 }
 

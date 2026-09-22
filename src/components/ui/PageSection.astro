@@ -1,0 +1,43 @@
+---
+/**
+ * Lightweight section shell for demo-ready visual distinction between adjacent blocks.
+ * Alternating soft surfaces + optional eyebrow rhythm — no full redesign.
+ */
+interface Props {
+  /** Visual surface variant */
+  tone?: 'white' | 'mist' | 'sand' | 'navy' | 'transparent';
+  /** Extra vertical padding */
+  compact?: boolean;
+  /** Subtle top border / inset card feel */
+  bordered?: boolean;
+  id?: string;
+  class?: string;
+  as?: 'section' | 'div';
+}
+
+const {
+  tone = 'white',
+  compact = false,
+  bordered = false,
+  id,
+  class: className = '',
+  as: Tag = 'section',
+} = Astro.props;
+
+const toneClass: Record<string, string> = {
+  white: 'bg-white',
+  mist: 'bg-[#f6f7fb]',
+  sand: 'bg-[#f7f3ea]',
+  navy: 'bg-[#1e3a5f] text-white',
+  transparent: 'bg-transparent',
+};
+
+const pad = compact ? 'py-12 sm:py-14' : 'py-16 sm:py-20';
+const border = bordered ? 'border-y border-[#1e3a5f]/08' : '';
+---
+
+<Tag id={id} class:list={[toneClass[tone] || toneClass.white, pad, border, className]}>
+  <div class="max-w-6xl mx-auto px-4 sm:px-6">
+    <slot />
+  </div>
+</Tag>
