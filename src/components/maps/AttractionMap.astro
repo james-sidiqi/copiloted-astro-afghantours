@@ -1,0 +1,591 @@
+---
+/**
+ * Attractions Leaflet map — include only on map-related pages (not homepage).
+ * Verified CSV coordinates only. Approximate province-center pins stay hidden unless enabled.
+ * Attraction cards remain usable if the map fails.
+ */
+interface Props {
+  height?: string;
+  initialZoom?: number;
+  showAttractions?: boolean;
+}
+
+const {
+  height = "min(68vh, 560px)",
+  initialZoom = 6,
+  showAttractions = true,
+} = Astro.props;
+---
+
+<link rel="stylesheet" href="/vendor/leaflet/leaflet.css" />
+
+<div class="at-map-shell">
+  <div class="at-map-toolbar" aria-label="Map filters">
+    <strong class="at-map-toolbar__title">Attractions map</strong>
+    <button type="button" id="at-map-country-reset" class="at-map-btn">Afghanistan</button>
+    <label class="at-map-check"><input id="at-toggle-hubs" type="checkbox" checked /> Hubs</label>
+    <label class="at-map-check"><input id="at-toggle-attractions" type="checkbox" checked={showAttractions} /> Attractions</label>
+    <label class="at-map-check"><input id="at-toggle-approx" type="checkbox" /> Approximate pins</label>
+    <select id="at-province-select" class="at-map-select" aria-label="Filter by province">
+      <option value="">All provinces</option>
+    </select>
+    <select id="at-hub-select" class="at-map-select" aria-label="Filter by hub">
+      <option value="">All hubs</option>
+    </select>
+    <select id="at-category-select" class="at-map-select" aria-label="Filter by category">
+      <option value="">All categories</option>
+    </select>
+  </div>
+
+  <p class="at-map-note">
+    Pins use coordinates from <code>attractions_master.csv</code>. Approximate pins (province-center or coarse values) stay off until enabled — they are not survey-grade markers. No invented drive times.
+  </p>
+
+  <div
+    id="at-attraction-map"
+    class="at-attraction-map"
+    role="region"
+    aria-label="Interactive attractions map"
+    data-initial-zoom={initialZoom}
+    data-show-attractions={showAttractions ? "true" : "false"}
+    style={`height:${height};min-height:320px;`}
+  ></div>
+
+  <p id="at-map-fallback" class="at-map-fallback hidden" role="status">
+    Map could not load. Browse the attraction cards below — every place remains available without the map.
+  </p>
+
+  <p class="at-map-attr">
+    © <a href="https://www.openstreetmap.org/copyright" rel="noopener noreferrer" target="_blank">OpenStreetMap</a> contributors · Leaflet
+  </p>
+</div>
+
+<noscript>
+  <p class="at-map-fallback">JavaScript is required for the interactive map. Use the attraction cards below.</p>
+</noscript>
+
+<script>
+  import L from "leaflet";
+
+  const mapEl = document.getElementById("at-attraction-map");
+  const fallbackEl = document.getElementById("at-map-fallback");
+
+  if (mapEl) {
+    const initialZoom = Number(mapEl.dataset.initialZoom || 6);
+    const showAttractionsDefault = mapEl.dataset.showAttractions !== "false";
+
+    L.Icon.Default.mergeOptions({
+      iconUrl: "/vendor/leaflet/marker-icon.png",
+      iconRetinaUrl: "/vendor/leaflet/marker-icon-2x.png",
+      shadowUrl: "/vendor/leaflet/marker-shadow.png",
+    });
+
+    const asNumber = (value) => {
+      const n = Number(value);
+      return Number.isFinite(n) ? n : null;
+    };
+    const normalize = (value) => String(value || "").trim().toLowerCase();
+
+    let selectedProvinceCode = "";
+    let selectedHubCode = "";
+    let selectedCategory = "";
+    let showApproximate = false;
+    let allAttractions = [];
+    let allHubs = [];
+    const provincesByCode = new Map();
+
+    const attractionLayer = L.layerGroup();
+    const hubLayer = L.layerGroup();
+
+    const hubIcon = L.divIcon({
+      className: "at-hub-icon",
+      html: '<span class="at-hub-icon__inner" aria-hidden="true">◆</span>',
+      iconSize: [22, 22],
+      iconAnchor: [11, 11],
+    });
+
+    function popupHtml(attraction) {
+      const image = attraction.card_image || attraction.hero_image || "";
+      const approx = attraction.approximate
+        ? '<span class="at-popup-approx">Approximate location</span>'
+        : "";
+      return `
+        <article class="at-map-popup">
+          ${image ? `<img src="${image}" alt="" loading="lazy" width="240" height="120" />` : ""}
+          <strong>${attraction.name}</strong>
+          <small>${attraction.category || "Attraction"} · ${attraction.province || attraction.province_code || ""}</small>
+          ${approx}
+          <p>${attraction.desc_short || ""}</p>
+          <a href="/attractions/${attraction.slug}/">View attraction</a>
+        </article>
+      `;
+    }
+
+    function hubPopupHtml(hub) {
+      const count = allAttractions.filter((a) => a.location_code === hub.code && !a.approximate).length;
+      return `
+        <article class="at-map-popup at-map-popup--hub">
+          <strong>${hub.name}</strong>
+          <small>${hub.provinceName || "Travel hub"}</small>
+          <p>${count} mapped attraction${count === 1 ? "" : "s"} linked to this hub in data.</p>
+          <button type="button" data-select-hub="${hub.code}">Zoom to hub</button>
+        </article>
+      `;
+    }
+
+    function getLatLng(attraction) {
+      if (!Number.isFinite(attraction.latitude) || !Number.isFinite(attraction.longitude)) return null;
+      return [attraction.latitude, attraction.longitude];
+    }
+
+    function calculateHubPoint(location, attractionsForHub) {
+      const withCoords = attractionsForHub.filter(
+        (a) => Number.isFinite(a.latitude) && Number.isFinite(a.longitude) && !a.approximate,
+      );
+      if (withCoords.length) {
+        const lat = withCoords.reduce((sum, a) => sum + a.latitude, 0) / withCoords.length;
+        const lon = withCoords.reduce((sum, a) => sum + a.longitude, 0) / withCoords.length;
+        return { lat, lon, approximate: false };
+      }
+      const province = provincesByCode.get(location.parent_code);
+      const lat = asNumber(province?.center_lat);
+      const lon = asNumber(province?.center_lon);
+      if (lat === null || lon === null) return null;
+      return { lat, lon, approximate: true };
+    }
+
+    function buildHubs(locations) {
+      return locations
+        .filter((location) => location.is_hub && location.is_active && location.type === "destination")
+        .map((location) => {
+          const attractionsForHub = allAttractions.filter((a) => a.location_code === location.code);
+          const point = calculateHubPoint(location, attractionsForHub);
+          if (!point) return null;
+          const province = provincesByCode.get(location.parent_code);
+          return {
+            code: location.code,
+            name: location.name,
+            slug: location.slug,
+            provinceCode: location.parent_code,
+            provinceName: province?.name || location.parent_code,
+            lat: point.lat,
+            lon: point.lon,
+            approximate: point.approximate,
+          };
+        })
+        .filter(Boolean);
+    }
+
+    function drawAttractions(list) {
+      attractionLayer.clearLayers();
+      list.forEach((attraction) => {
+        const latLng = getLatLng(attraction);
+        if (!latLng) return;
+        const marker = L.circleMarker(latLng, {
+          radius: selectedHubCode && attraction.location_code === selectedHubCode ? 8 : 6,
+          color: attraction.approximate ? "#7a5b2e" : "#0f2f3f",
+          weight: 1,
+          fillColor: attraction.approximate ? "#e8d2a0" : "#d6a84f",
+          fillOpacity: attraction.approximate ? 0.55 : 0.95,
+        });
+        marker.bindPopup(popupHtml(attraction), { maxWidth: 280 });
+        marker.bindTooltip(
+          attraction.approximate ? `${attraction.name} (approx.)` : attraction.name,
+          { direction: "top" },
+        );
+        marker.on("click", () => highlightCard(attraction.slug));
+        marker.addTo(attractionLayer);
+      });
+    }
+
+    function drawHubs(hubs) {
+      hubLayer.clearLayers();
+      hubs.forEach((hub) => {
+        if (hub.approximate && !showApproximate) return;
+        const marker = L.marker([hub.lat, hub.lon], { icon: hubIcon });
+        marker.bindPopup(hubPopupHtml(hub), { maxWidth: 280 });
+        marker.bindTooltip(hub.name, { direction: "top" });
+        marker.on("click", () => selectHub(hub.code));
+        marker.addTo(hubLayer);
+      });
+    }
+
+    function getVisibleAttractions() {
+      return allAttractions.filter((a) => {
+        if (!showApproximate && a.approximate) return false;
+        if (selectedHubCode && a.location_code !== selectedHubCode) return false;
+        if (selectedProvinceCode && a.province_code !== selectedProvinceCode) return false;
+        if (selectedCategory && normalize(a.category) !== normalize(selectedCategory)) return false;
+        return true;
+      });
+    }
+
+    function getVisibleHubs() {
+      if (selectedHubCode) return allHubs.filter((h) => h.code === selectedHubCode);
+      if (selectedProvinceCode) return allHubs.filter((h) => h.provinceCode === selectedProvinceCode);
+      return allHubs;
+    }
+
+    function syncCards() {
+      document.querySelectorAll("[data-attraction-card]").forEach((card) => {
+        if (!selectedProvinceCode && !selectedHubCode && !selectedCategory) {
+          card.hidden = false;
+          return;
+        }
+        let show = true;
+        if (selectedProvinceCode && card.getAttribute("data-province-code") !== selectedProvinceCode) show = false;
+        if (selectedHubCode && card.getAttribute("data-location-code") !== selectedHubCode) show = false;
+        if (selectedCategory && normalize(card.getAttribute("data-category")) !== normalize(selectedCategory)) show = false;
+        card.hidden = !show;
+      });
+      const countEl = document.getElementById("at-card-count");
+      if (countEl) {
+        countEl.textContent = String(document.querySelectorAll("[data-attraction-card]:not([hidden])").length);
+      }
+    }
+
+    function highlightCard(slug) {
+      const card = document.querySelector(`[data-attraction-card][data-slug="${slug}"]`);
+      if (!card || card.hidden) return;
+      card.classList.add("at-card--pulse");
+      card.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      window.setTimeout(() => card.classList.remove("at-card--pulse"), 1200);
+    }
+
+    function refreshLayers() {
+      const attractions = getVisibleAttractions();
+      const hubs = getVisibleHubs();
+      drawAttractions(attractions);
+      drawHubs(hubs);
+      syncCards();
+    }
+
+    function fitToItems(attractions, hubs) {
+      const group = L.featureGroup();
+      attractions.forEach((a) => {
+        const latLng = getLatLng(a);
+        if (latLng) group.addLayer(L.circleMarker(latLng));
+      });
+      hubs.forEach((h) => {
+        if (!h.approximate || showApproximate) group.addLayer(L.marker([h.lat, h.lon]));
+      });
+      if (group.getLayers().length) {
+        map.fitBounds(group.getBounds(), { padding: [36, 36], maxZoom: selectedHubCode ? 10 : 8 });
+      }
+    }
+
+    function selectHub(code) {
+      selectedHubCode = code;
+      const hub = allHubs.find((h) => h.code === code);
+      selectedProvinceCode = hub?.provinceCode || selectedProvinceCode;
+      const hubSelect = document.getElementById("at-hub-select");
+      const provinceSelect = document.getElementById("at-province-select");
+      if (hubSelect) hubSelect.value = selectedHubCode;
+      if (provinceSelect) provinceSelect.value = selectedProvinceCode;
+      refreshLayers();
+      fitToItems(getVisibleAttractions(), getVisibleHubs());
+    }
+
+    function selectProvince(code) {
+      selectedProvinceCode = code;
+      selectedHubCode = "";
+      const hubSelect = document.getElementById("at-hub-select");
+      const provinceSelect = document.getElementById("at-province-select");
+      if (provinceSelect) provinceSelect.value = selectedProvinceCode;
+      if (hubSelect) hubSelect.value = "";
+      refreshLayers();
+      fitToItems(getVisibleAttractions(), getVisibleHubs());
+    }
+
+    function showCountry() {
+      selectedProvinceCode = "";
+      selectedHubCode = "";
+      selectedCategory = "";
+      const hubSelect = document.getElementById("at-hub-select");
+      const provinceSelect = document.getElementById("at-province-select");
+      const categorySelect = document.getElementById("at-category-select");
+      if (provinceSelect) provinceSelect.value = "";
+      if (hubSelect) hubSelect.value = "";
+      if (categorySelect) categorySelect.value = "";
+      refreshLayers();
+      map.setView([33.9391, 67.71], initialZoom);
+    }
+
+    let map;
+    try {
+      map = L.map(mapEl, {
+        scrollWheelZoom: false,
+        preferCanvas: true,
+      }).setView([33.9391, 67.71], initialZoom);
+
+      L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        maxZoom: 18,
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+      }).addTo(map);
+    } catch (err) {
+      console.error(err);
+      fallbackEl?.classList.remove("hidden");
+      mapEl.classList.add("hidden");
+      throw err;
+    }
+
+    Promise.all([
+      fetch("/data/maps/provinces.json").then((r) => {
+        if (!r.ok) throw new Error("provinces");
+        return r.json();
+      }),
+      fetch("/data/maps/attractions.json").then((r) => {
+        if (!r.ok) throw new Error("attractions");
+        return r.json();
+      }),
+      fetch("/data/maps/locations.json").then((r) => {
+        if (!r.ok) throw new Error("locations");
+        return r.json();
+      }),
+    ])
+      .then(([provinces, attractions, locations]) => {
+        provinces.forEach((province) => provincesByCode.set(province.code, province));
+
+        allAttractions = attractions;
+        allHubs = buildHubs(locations);
+
+        const provinceSelect = document.getElementById("at-province-select");
+        provinces
+          .slice()
+          .sort((a, b) => String(a.name).localeCompare(String(b.name)))
+          .forEach((province) => {
+            const option = document.createElement("option");
+            option.value = province.code;
+            option.textContent = province.name;
+            provinceSelect?.appendChild(option);
+          });
+
+        const hubSelect = document.getElementById("at-hub-select");
+        allHubs
+          .slice()
+          .sort((a, b) => String(a.name).localeCompare(String(b.name)))
+          .forEach((hub) => {
+            const option = document.createElement("option");
+            option.value = hub.code;
+            option.textContent = `${hub.name} — ${hub.provinceName}`;
+            hubSelect?.appendChild(option);
+          });
+
+        const categorySelect = document.getElementById("at-category-select");
+        [...new Set(allAttractions.map((a) => a.category).filter(Boolean))]
+          .sort((a, b) => a.localeCompare(b))
+          .forEach((category) => {
+            const option = document.createElement("option");
+            option.value = category;
+            option.textContent = category;
+            categorySelect?.appendChild(option);
+          });
+
+        provinceSelect?.addEventListener("change", (event) => {
+          const value = event.currentTarget.value;
+          value ? selectProvince(value) : showCountry();
+        });
+        hubSelect?.addEventListener("change", (event) => {
+          const value = event.currentTarget.value;
+          if (value) selectHub(value);
+          else if (selectedProvinceCode) selectProvince(selectedProvinceCode);
+          else showCountry();
+        });
+        categorySelect?.addEventListener("change", (event) => {
+          selectedCategory = event.currentTarget.value;
+          refreshLayers();
+          fitToItems(getVisibleAttractions(), getVisibleHubs());
+        });
+
+        document.getElementById("at-map-country-reset")?.addEventListener("click", showCountry);
+        document.getElementById("at-toggle-hubs")?.addEventListener("change", (event) => {
+          event.currentTarget.checked ? hubLayer.addTo(map) : hubLayer.remove();
+        });
+        document.getElementById("at-toggle-attractions")?.addEventListener("change", (event) => {
+          event.currentTarget.checked ? attractionLayer.addTo(map) : attractionLayer.remove();
+        });
+        document.getElementById("at-toggle-approx")?.addEventListener("change", (event) => {
+          showApproximate = Boolean(event.currentTarget.checked);
+          refreshLayers();
+        });
+
+        document.addEventListener("click", (event) => {
+          const button = event.target.closest?.("[data-select-hub]");
+          if (button?.dataset.selectHub) selectHub(button.dataset.selectHub);
+        });
+
+        refreshLayers();
+        hubLayer.addTo(map);
+        if (showAttractionsDefault) attractionLayer.addTo(map);
+        window.setTimeout(() => map.invalidateSize(), 150);
+        window.addEventListener("resize", () => map.invalidateSize());
+      })
+      .catch((err) => {
+        console.error("Attraction map failed to load data", err);
+        fallbackEl?.classList.remove("hidden");
+        mapEl.classList.add("hidden");
+      });
+  }
+</script>
+
+<style>
+  .at-map-shell {
+    border: 1px solid rgba(15, 47, 63, 0.15);
+    border-radius: 18px;
+    overflow: hidden;
+    background: #08141d;
+  }
+
+  .at-map-toolbar {
+    display: flex;
+    gap: 0.65rem;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 0.75rem 1rem;
+    background: #0f2f3f;
+    color: #f8f1df;
+    font-size: 0.9rem;
+  }
+
+  .at-map-toolbar__title {
+    margin-right: 0.25rem;
+  }
+
+  .at-map-check {
+    display: inline-flex;
+    gap: 0.35rem;
+    align-items: center;
+  }
+
+  .at-map-btn,
+  .at-map-select {
+    border: 1px solid rgba(248, 241, 223, 0.3);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.08);
+    color: #f8f1df;
+    padding: 0.35rem 0.7rem;
+    font: inherit;
+    font-weight: 600;
+  }
+
+  .at-map-select option {
+    color: #0f2f3f;
+  }
+
+  .at-map-note {
+    margin: 0;
+    padding: 0.55rem 1rem;
+    font-size: 0.8rem;
+    line-height: 1.4;
+    color: rgba(248, 241, 223, 0.78);
+    background: #132a36;
+  }
+
+  .at-attraction-map {
+    width: 100%;
+    background: #dbe7ea;
+    touch-action: pan-x pan-y;
+  }
+
+  .at-map-attr {
+    margin: 0;
+    padding: 0.45rem 1rem;
+    font-size: 0.72rem;
+    color: rgba(248, 241, 223, 0.65);
+    background: #0b1c26;
+  }
+
+  .at-map-attr a {
+    color: #e8d2a0;
+    text-decoration: underline;
+  }
+
+  .at-map-fallback {
+    margin: 0;
+    padding: 1rem;
+    background: #f8fafc;
+    color: #1e3a5f;
+    font-size: 0.95rem;
+  }
+
+  .hidden {
+    display: none !important;
+  }
+
+  :global(.at-hub-icon) {
+    background: transparent;
+    border: 0;
+  }
+
+  :global(.at-hub-icon__inner) {
+    display: grid;
+    place-items: center;
+    width: 22px;
+    height: 22px;
+    color: #0f2f3f;
+    text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff;
+    font-size: 18px;
+    line-height: 1;
+  }
+
+  :global(.at-map-popup) {
+    width: 240px;
+  }
+
+  :global(.at-map-popup img) {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 0.55rem;
+  }
+
+  :global(.at-map-popup strong) {
+    display: block;
+    color: #0f2f3f;
+    font-size: 1rem;
+    line-height: 1.2;
+  }
+
+  :global(.at-map-popup small),
+  :global(.at-popup-approx) {
+    display: block;
+    margin-top: 0.25rem;
+    color: #54636b;
+  }
+
+  :global(.at-popup-approx) {
+    color: #7a5b2e;
+    font-weight: 700;
+    font-size: 0.75rem;
+  }
+
+  :global(.at-map-popup p) {
+    margin: 0.5rem 0;
+    line-height: 1.35;
+  }
+
+  :global(.at-map-popup a),
+  :global(.at-map-popup button) {
+    display: inline-block;
+    border: 0;
+    background: #0f2f3f;
+    color: #fff;
+    border-radius: 999px;
+    padding: 0.45rem 0.7rem;
+    font-weight: 800;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  :global(.at-card--pulse) {
+    outline: 3px solid #d6a84f;
+    outline-offset: 2px;
+  }
+
+  @media (max-width: 640px) {
+    .at-map-toolbar {
+      font-size: 0.82rem;
+    }
+  }
+</style>

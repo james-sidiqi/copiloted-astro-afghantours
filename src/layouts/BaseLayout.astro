@@ -47,12 +47,28 @@ const socialImage = Astro.site && ogImage.startsWith('/') ? new URL(ogImage, Ast
   <meta name="twitter:description" content={description} />
   <meta name="twitter:image" content={socialImage} />
 </head>
-<body class="bg-[#f6f7fb] text-[#0f172a] font-sans min-h-screen">
+<body class="bg-[#f6f7fb] text-[#0f172a] font-sans min-h-screen pb-24 sm:pb-20">
   <Header />
   <main>
     <slot />
   </main>
   <Footer />
   <WhatsAppButton />
+<style is:global>
+  :focus-visible {
+    outline: 3px solid #1f4aa8;
+    outline-offset: 2px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+</style>
 </body>
 </html>

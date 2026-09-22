@@ -4,13 +4,31 @@ import Hero from '@components/site/Hero.astro';
 import SectionHeader from '@components/ui/SectionHeader.astro';
 import AttractionCard from '@components/travel/AttractionCard.astro';
 import ConversionCTA from '@components/travel/ConversionCTA.astro';
+import AttractionMap from '@components/maps/AttractionMap.astro';
 import { getSiteData } from '@lib/data/site-data';
 
 const data = getSiteData();
 const attractions = data.attractions.filter((attraction) => attraction.isActive);
+
+const provinceCenters = new Map(
+  data.provinces
+    .filter((p) => Number.isFinite(p.centerLat) && Number.isFinite(p.centerLon))
+    .map((p) => [p.provinceCode, [p.centerLat as number, p.centerLon as number]] as const),
+);
+
+function isApproximate(attraction: (typeof attractions)[number]): boolean {
+  const lat = attraction.latitude;
+  const lon = attraction.longitude;
+  if (!Number.isFinite(lat) || !Number.isFinite(lon) || (lat === 0 && lon === 0)) return true;
+  const intish = Math.abs(lat - Math.round(lat)) < 1e-9 && Math.abs(lon - Math.round(lon)) < 1e-9;
+  const center = provinceCenters.get(attraction.provinceCode);
+  const atCenter =
+    !!center && Math.abs(lat - center[0]) < 0.00015 && Math.abs(lon - center[1]) < 0.00015;
+  return intish || atCenter;
+}
 ---
 
-<BaseLayout title="Attractions – Afghan Tours" description="Key places across Afghanistan — orient yourself, then find a Scheduled Tour that includes them when our data links them.">
+<BaseLayout title="Attractions – Afghan Tours" description="Key places across Afghanistan — orient yourself on the map, then find a Scheduled Tour that includes them when our data links them.">
   <Hero
     title="Attractions"
     subtitle="Ancient cities, mountain landscapes, mosques, forts, and living heritage — discover, then find a tour."
@@ -19,17 +37,44 @@ const attractions = data.attractions.filter((attraction) => attraction.isActive)
     ctaHref="/destinations"
   />
 
+  <section class="py-12 bg-white border-b border-[#1e3a5f]/10">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <div class="mb-6">
+        <SectionHeader
+          eyebrow="Map"
+          title="Explore places with verified coordinates"
+          subtitle="Filter by province, hub, or category. Approximate province-center pins stay hidden unless you enable them. Cards below stay usable if the map fails."
+        />
+      </div>
+      <AttractionMap height="min(68vh, 560px)" />
+    </div>
+  </section>
+
   <section class="py-16 bg-[#f6f7fb]">
     <div class="max-w-6xl mx-auto px-4 sm:px-6">
-      <div class="mb-8">
+      <div class="mb-8 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <SectionHeader
           eyebrow="Explore"
           title="Places on the map"
           subtitle="Open an attraction for context. Related Scheduled Tours appear only when our itinerary data connects them."
         />
+        <p class="text-sm text-[rgba(15,23,42,0.6)] shrink-0">
+          Showing <span id="at-card-count">{attractions.length}</span> places
+        </p>
       </div>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {attractions.map((attraction) => <AttractionCard attraction={attraction} />)}
+        {attractions.map((attraction) => (
+          <div
+            data-attraction-card
+            data-slug={attraction.slug}
+            data-province-code={attraction.provinceCode}
+            data-location-code={attraction.locationCode}
+            data-category={attraction.category}
+            data-approximate={isApproximate(attraction) ? "true" : "false"}
+          >
+            <AttractionCard attraction={attraction} />
+          </div>
+        ))}
       </div>
     </div>
   </section>

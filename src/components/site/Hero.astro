@@ -25,20 +25,31 @@ const {
   class="relative w-full min-h-[420px] sm:min-h-[500px] flex items-center justify-center overflow-hidden bg-[#1e3a5f]"
 >
   {videoSrc ? (
-    <video
-      class="absolute inset-0 w-full h-full object-cover object-center"
-      autoplay
-      muted
-      loop
-      playsinline
-      poster={imagePath}
-      aria-hidden="true"
-    >
-      {videoSrc.endsWith('.mp4') && (
-        <source src={videoSrc.replace(/\.mp4$/, '.webm')} type="video/webm" />
+    <>
+      <video
+        class="absolute inset-0 w-full h-full object-cover object-center motion-safe:block motion-reduce:hidden"
+        autoplay
+        muted
+        loop
+        playsinline
+        poster={imagePath}
+        aria-hidden="true"
+      >
+        {videoSrc.endsWith('.mp4') && (
+          <source src={videoSrc.replace(/\.mp4$/, '.webm')} type="video/webm" />
+        )}
+        <source src={videoSrc} type="video/mp4" />
+      </video>
+      {imagePath && (
+        <img
+          src={imagePath}
+          alt=""
+          aria-hidden="true"
+          class="absolute inset-0 w-full h-full object-cover object-center hidden motion-reduce:block"
+          loading="eager"
+        />
       )}
-      <source src={videoSrc} type="video/mp4" />
-    </video>
+    </>
   ) : (
     imagePath && (
       <img
@@ -89,3 +100,12 @@ const {
     ) : null}
   </div>
 </section>
+
+<style>
+  @media (prefers-reduced-motion: reduce) {
+    video[autoplay] {
+      display: none !important;
+    }
+  }
+</style>
+

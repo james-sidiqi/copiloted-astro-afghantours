@@ -43,10 +43,10 @@ function shortLabel(name: string): string {
     <div class="border-b border-[#1e3a5f]/10 bg-[linear-gradient(135deg,#1e3a5f_0%,#244a72_48%,#2c5f8b_100%)] px-6 py-5 text-white sm:px-8">
       <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
         <div>
-          <p class="text-xs font-semibold uppercase tracking-[0.28em] text-[#d9c08a]">Tour Map</p>
+          <p class="text-xs font-semibold uppercase tracking-[0.28em] text-[#d9c08a]">Schematic route map</p>
           <h3 class="mt-2 font-display text-2xl font-semibold leading-tight">Route overview for {tourName}</h3>
           <p class="mt-2 max-w-2xl text-sm text-white/80">
-            Compact day-order path plus stop list — readable on mobile without crossing lines or stacked labels.
+            Schematic day-order connections — not proven roads and not drive-time estimates. Readable on mobile without crossing lines.
           </p>
         </div>
 
@@ -134,10 +134,10 @@ function shortLabel(name: string): string {
             </defs>
 
             <text x={padX} y="28" font-size="13" font-weight="700" fill="#1e3a5f">
-              Compact path (day order)
+              Schematic path (day order)
             </text>
             <text x={padX} y="46" font-size="11" fill="rgba(30,58,95,0.62)">
-              Numbers match the stop list — full names below / beside.
+              Schematic links only · numbers match the stop list · not verified road geometry.
             </text>
 
             {polylinePoints && (

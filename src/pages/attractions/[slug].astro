@@ -48,7 +48,7 @@ const relatedTours = relatedScheduledByAttractionCode(
       <aside class="bg-[#f6f7fb] rounded-2xl p-5 border border-[#1e3a5f]/10">
         <div class="aspect-[4/3] rounded-xl overflow-hidden bg-gray-100 mb-4">
           <SafeImage
-            src={attraction.thumbnailPath || attraction.imagePath}
+            src={attraction.imagePath || attraction.thumbnailPath}
             fallback="/assets/images/placeholders/default-attraction.webp"
             alt={attraction.name}
             class="w-full h-full object-cover"
