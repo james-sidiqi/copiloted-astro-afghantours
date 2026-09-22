@@ -2,11 +2,12 @@
 import { siteConfig } from '@lib/config';
 
 /**
- * Restrained primary nav (WG2):
- * Tours, Custom Requests, Explore, Plan Your Trip, About, Contact + Build My Journey CTA.
- * Explore: Attractions, Regions, Provinces, Cities & Hubs, Food & Culture
- * (Cultural Experiences reachable via Food & Culture — not duplicated here.)
- * Tagline ONLY under site title in header.
+ * Header matched to live afghantours.com visual system (dark bar, brand stack,
+ * gold tagline, gold CTA pill) while keeping completion IA:
+ * Tours, Custom Requests, Explore, Plan Your Trip, About, Contact + Build My Journey.
+ * Explore: Attractions, Regions, Provinces, Cities & Hubs, Food & Culture.
+ * Tagline ONLY under site title in header. Brand: Afghan Tours (never JTTA).
+ * URLs use repo-correct routes (e.g. /transportation/).
  */
 const navLinks = [
   { label: 'Tours', href: '/tours/' },
@@ -36,116 +37,376 @@ const navLinks = [
   { label: 'About', href: '/about/' },
   { label: 'Contact', href: '/contact/' },
 ];
+
+const tagline = siteConfig.tagline.replace(/\.$/, '');
 ---
 
-<header class="sticky top-0 z-50 bg-white shadow-sm">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="flex items-center justify-between h-16 gap-4">
-      <a href="/" class="flex flex-col justify-center shrink-0 min-w-0">
-        <span class="flex items-center gap-2">
-          <img
-            src="/assets/images/logo/header-logo.webp"
-            alt="Afghan Tours"
-            class="h-8 w-auto"
-            loading="eager"
-            onerror="this.onerror=null;this.style.display='none';this.nextElementSibling.style.display='inline'"
-          />
-          <span class="font-display text-xl font-bold text-[#1f4aa8] leading-tight" style="display:none">Afghan<span class="text-[#b88a2a]">Tours</span></span>
-        </span>
-        <span class="hidden sm:block text-[10px] leading-tight text-[rgba(15,23,42,0.55)] mt-0.5 max-w-[220px] truncate">
-          {siteConfig.tagline}
-        </span>
-      </a>
+<header class="site-header">
+  <div class="site-header__inner">
+    <a class="site-brand" href="/" aria-label="AfghanTours home">
+      <img
+        src="/assets/images/logo/header-logo.webp"
+        alt="Afghan Tours"
+        width="58"
+        height="48"
+      />
+      <div class="site-brand__copy">
+        <strong>Afghan Tours</strong>
+        <span>{tagline}</span>
+      </div>
+    </a>
 
-      <nav class="hidden lg:flex items-center gap-0.5" aria-label="Primary">
-        {navLinks.map(link => (
-          link.children ? (
-            <div class="relative group">
-              <a
-                href={link.href}
-                class="px-3 py-2 rounded-md text-sm font-medium text-[#0f172a] hover:text-[#1f4aa8] hover:bg-primary-50 transition-colors duration-150 inline-flex items-center gap-1"
-              >
-                {link.label}
-                <svg class="w-3.5 h-3.5 opacity-60" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
-                </svg>
-              </a>
-              <div class="invisible opacity-0 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100 transition-opacity duration-150 absolute left-0 top-full pt-1 min-w-[180px]">
-                <div class="rounded-xl border border-gray-100 bg-white shadow-lg py-2">
-                  {link.children.map(child => (
-                    <a
-                      href={child.href}
-                      class="block px-4 py-2 text-sm text-[#0f172a] hover:text-[#1f4aa8] hover:bg-primary-50"
-                    >
-                      {child.label}
-                    </a>
-                  ))}
-                </div>
-              </div>
-            </div>
-          ) : (
-            <a
-              href={link.href}
-              class="px-3 py-2 rounded-md text-sm font-medium text-[#0f172a] hover:text-[#1f4aa8] hover:bg-primary-50 transition-colors duration-150"
-            >
+    <nav class="site-nav" aria-label="Main navigation">
+      {navLinks.map((link) => (
+        link.children ? (
+          <div class="site-nav__group">
+            <a class="site-nav__link" href={link.href}>
               {link.label}
+              <span class="site-nav__chevron" aria-hidden="true">⌄</span>
             </a>
-          )
-        ))}
-        <a
-          href="/contact/?flow=custom"
-          class="ml-2 px-4 py-2 rounded-full bg-[#b88a2a] hover:bg-[#a07820] text-white text-sm font-semibold shadow-sm transition-colors duration-150"
-        >
-          Build My Journey
-        </a>
-      </nav>
+            <div class="site-dropdown">
+              {link.children.map((child) => (
+                <a href={child.href}>{child.label}</a>
+              ))}
+            </div>
+          </div>
+        ) : (
+          <a class="site-nav__link" href={link.href}>{link.label}</a>
+        )
+      ))}
+      <a class="site-nav__cta" href="/contact/?flow=custom">Build My Journey</a>
+    </nav>
 
-      <button
-        id="menu-btn"
-        aria-label="Toggle navigation menu"
-        aria-expanded="false"
-        aria-controls="mobile-menu"
-        class="lg:hidden p-2 rounded-md text-[#0f172a] hover:bg-gray-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1f4aa8]"
-      >
-        <svg id="icon-open" class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-        </svg>
-        <svg id="icon-close" class="w-6 h-6 hidden" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-        </svg>
-      </button>
-    </div>
+    <button
+      id="menu-btn"
+      class="site-menu-btn"
+      type="button"
+      aria-label="Toggle navigation menu"
+      aria-expanded="false"
+      aria-controls="mobile-menu"
+    >
+      <svg id="icon-open" class="site-menu-btn__icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+      </svg>
+      <svg id="icon-close" class="site-menu-btn__icon site-menu-btn__icon--hidden" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
   </div>
 
-  <nav id="mobile-menu" class="hidden lg:hidden border-t border-gray-100 bg-white" aria-label="Mobile navigation">
-    <div class="px-4 py-2 space-y-1">
-      {navLinks.map(link => (
+  <nav id="mobile-menu" class="site-mobile" hidden aria-label="Mobile navigation">
+    <div class="site-mobile__inner">
+      {navLinks.map((link) => (
         <>
-          <a
-            href={link.href}
-            class="block px-3 py-2 rounded-md text-sm font-medium text-[#0f172a] hover:text-[#1f4aa8] hover:bg-primary-50 transition-colors duration-150"
-          >
-            {link.label}
-          </a>
-          {link.children?.map(child => (
-            <a
-              href={child.href}
-              class="block pl-6 pr-3 py-1.5 rounded-md text-sm text-[rgba(15,23,42,0.75)] hover:text-[#1f4aa8] hover:bg-primary-50"
-            >
-              {child.label}
-            </a>
+          <a class="site-mobile__link" href={link.href}>{link.label}</a>
+          {link.children?.map((child) => (
+            <a class="site-mobile__sublink" href={child.href}>{child.label}</a>
           ))}
         </>
       ))}
-      <a
-        href="/contact/?flow=custom"
-        class="block mx-3 mt-2 mb-2 text-center px-4 py-2.5 rounded-full bg-[#b88a2a] hover:bg-[#a07820] text-white text-sm font-semibold"
-      >
-        Build My Journey
-      </a>
+      <a class="site-nav__cta site-mobile__cta" href="/contact/?flow=custom">Build My Journey</a>
     </div>
   </nav>
 </header>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    width: 100%;
+    background: linear-gradient(90deg, #111a16 0%, #101915 58%, #121b17 100%);
+    border-top: 1px solid rgba(214, 162, 58, 0.18);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    color: #fff;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+  }
+
+  .site-header__inner {
+    width: min(1280px, calc(100% - 2rem));
+    min-height: 78px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2.5rem;
+  }
+
+  .site-brand {
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    color: #fff;
+    text-decoration: none;
+  }
+
+  .site-brand img {
+    display: block;
+    width: auto;
+    height: 48px;
+    flex: 0 0 auto;
+    object-fit: contain;
+  }
+
+  .site-brand__copy {
+    min-width: 0;
+  }
+
+  .site-brand strong {
+    display: block;
+    margin: 0;
+    color: #fff;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(1.7rem, 2vw, 2.15rem);
+    font-weight: 700;
+    line-height: 0.92;
+    letter-spacing: -0.035em;
+    white-space: nowrap;
+  }
+
+  .site-brand span {
+    display: block;
+    margin-top: 0.3rem;
+    color: #e0a62d;
+    font-size: 0.76rem;
+    font-weight: 800;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  .site-nav {
+    display: flex;
+    align-items: center;
+    gap: 1.35rem;
+    margin-left: auto;
+    font-size: 0.86rem;
+    font-weight: 850;
+  }
+
+  .site-nav a {
+    text-decoration: none;
+  }
+
+  .site-nav__group {
+    position: relative;
+  }
+
+  .site-nav__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.32rem;
+    padding: 1.85rem 0;
+    color: rgba(255, 255, 255, 0.96);
+    white-space: nowrap;
+    transition: color 0.18s ease, opacity 0.18s ease;
+  }
+
+  .site-nav__chevron {
+    position: relative;
+    top: -0.05rem;
+    font-size: 0.82rem;
+    font-weight: 700;
+    opacity: 0.9;
+  }
+
+  .site-nav__link:hover,
+  .site-nav__group:hover > .site-nav__link,
+  .site-nav__group:focus-within > .site-nav__link {
+    color: #e0a62d;
+  }
+
+  .site-dropdown {
+    position: absolute;
+    top: calc(100% - 0.35rem);
+    left: 50%;
+    z-index: 1100;
+    min-width: 225px;
+    padding: 0.55rem;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 0.85rem;
+    background: rgba(15, 24, 20, 0.985);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.32);
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(-50%) translateY(8px);
+    transition: opacity 0.16s ease, transform 0.16s ease;
+  }
+
+  .site-nav__group:hover .site-dropdown,
+  .site-nav__group:focus-within .site-dropdown {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  .site-dropdown a {
+    display: block;
+    padding: 0.78rem 0.88rem;
+    border-radius: 0.6rem;
+    color: rgba(255, 255, 255, 0.84);
+    font-size: 0.83rem;
+    font-weight: 700;
+    white-space: nowrap;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+
+  .site-dropdown a:hover,
+  .site-dropdown a:focus-visible {
+    background: rgba(214, 162, 58, 0.14);
+    color: #e0a62d;
+    outline: none;
+  }
+
+  .site-nav__cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 52px;
+    padding: 0.8rem 1.45rem;
+    border-radius: 999px;
+    background: #dda52f;
+    color: #121713 !important;
+    font-size: 0.85rem;
+    font-weight: 900;
+    white-space: nowrap;
+    transition: background 0.16s ease, color 0.16s ease, transform 0.16s ease;
+  }
+
+  .site-nav__cta:hover {
+    background: #f0bb48;
+    color: #0d120f !important;
+    transform: translateY(-1px);
+  }
+
+  .site-menu-btn {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    margin-left: auto;
+    padding: 0.45rem;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 0.55rem;
+    background: rgba(255, 255, 255, 0.06);
+    color: #fff;
+    cursor: pointer;
+  }
+
+  .site-menu-btn__icon {
+    width: 1.45rem;
+    height: 1.45rem;
+  }
+
+  .site-menu-btn__icon--hidden {
+    display: none;
+  }
+
+  .site-mobile {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(12, 18, 15, 0.98);
+  }
+
+  .site-mobile[hidden] {
+    display: none;
+  }
+
+  .site-mobile__inner {
+    width: min(1280px, calc(100% - 2rem));
+    margin: 0 auto;
+    padding: 0.65rem 0 1rem;
+    display: grid;
+    gap: 0.15rem;
+  }
+
+  .site-mobile__link,
+  .site-mobile__sublink {
+    display: block;
+    padding: 0.7rem 0.35rem;
+    color: rgba(255, 255, 255, 0.92);
+    text-decoration: none;
+    font-size: 0.92rem;
+    font-weight: 750;
+  }
+
+  .site-mobile__sublink {
+    padding-left: 1.1rem;
+    color: rgba(255, 255, 255, 0.72);
+    font-size: 0.84rem;
+    font-weight: 650;
+  }
+
+  .site-mobile__link:hover,
+  .site-mobile__sublink:hover {
+    color: #e0a62d;
+  }
+
+  .site-mobile__cta {
+    margin-top: 0.55rem;
+    min-height: 44px;
+    width: 100%;
+  }
+
+  @media (max-width: 1180px) {
+    .site-header__inner {
+      gap: 1.3rem;
+    }
+
+    .site-nav {
+      gap: 0.85rem;
+      font-size: 0.8rem;
+    }
+
+    .site-brand strong {
+      font-size: 1.65rem;
+    }
+
+    .site-brand span {
+      font-size: 0.67rem;
+    }
+
+    .site-nav__cta {
+      padding-left: 1.1rem;
+      padding-right: 1.1rem;
+      min-height: 46px;
+    }
+  }
+
+  /* More nav items than live → hide desktop nav earlier; use hamburger */
+  @media (max-width: 1050px) {
+    .site-nav {
+      display: none;
+    }
+
+    .site-menu-btn {
+      display: inline-flex;
+    }
+
+    .site-header__inner {
+      min-height: 70px;
+      gap: 1rem;
+    }
+
+    .site-brand img {
+      height: 43px;
+    }
+
+    .site-brand strong {
+      font-size: 1.55rem;
+    }
+
+    .site-brand span {
+      font-size: 0.66rem;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .site-brand span {
+      white-space: normal;
+      max-width: 12.5rem;
+    }
+  }
+</style>
 
 <script>
   const btn = document.getElementById('menu-btn');
@@ -154,14 +415,19 @@ const navLinks = [
   const iconClose = document.getElementById('icon-close');
 
   const setMenuOpen = (open) => {
-    menu?.classList.toggle('hidden', !open);
-    btn?.setAttribute('aria-expanded', String(open));
-    iconOpen?.classList.toggle('hidden', open);
-    iconClose?.classList.toggle('hidden', !open);
+    if (!menu || !btn) return;
+    if (open) {
+      menu.removeAttribute('hidden');
+    } else {
+      menu.setAttribute('hidden', '');
+    }
+    btn.setAttribute('aria-expanded', String(open));
+    iconOpen?.classList.toggle('site-menu-btn__icon--hidden', open);
+    iconClose?.classList.toggle('site-menu-btn__icon--hidden', !open);
   };
 
   btn?.addEventListener('click', () => {
-    const willOpen = menu?.classList.contains('hidden');
+    const willOpen = menu?.hasAttribute('hidden');
     setMenuOpen(Boolean(willOpen));
   });
 
