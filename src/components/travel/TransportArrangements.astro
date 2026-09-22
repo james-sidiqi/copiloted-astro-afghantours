@@ -16,10 +16,10 @@ const transports = data.transports.filter((t) => t.isActive);
 const tierOrder = ['budget', 'standard', 'premium', 'luxury', 'armored'];
 const tierExplain: Record<string, string> = {
   budget: 'Cost-conscious options for suitable corridors and group sizes — allocated by capacity rules in our transport data.',
-  standard: 'Private sedan, van, SUV, Toyota Coaster minibus, or Mercedes/Hino-class coach — matched to group size and corridor routes.',
-  premium: 'Newer or higher-spec vehicles when comfort or longer drives warrant an upgrade.',
-  luxury: 'Specialised vehicles (including armored where listed) — arranged on inquiry when the route and guest profile require them.',
-  armored: 'Armored options when the itinerary and guest profile call for them — confirmed case by case, never assumed.',
+  standard: 'Default for most tours: private sedan, van, SUV, Toyota Coaster minibus, or Mercedes/Hino-class coach — matched to group size and corridor routes.',
+  premium: 'Upgrade from Standard when comfort or longer drives warrant it — Additional cost, confirmed on inquiry.',
+  luxury: 'Specialised vehicles (including armored where listed) — Additional cost on inquiry when the route and guest profile require them.',
+  armored: 'Armored options when the itinerary and guest profile call for them — Additional cost, confirmed case by case, never assumed.',
 };
 
 const byTier = tierOrder
@@ -45,6 +45,11 @@ const roadSamples = [
   },
 ].filter((r) => r.path);
 
+const mountainPath = firstExisting(
+  '/assets/images/page-assets/travel/expedition-grade-mountain-access.webp',
+  '/assets/images/page-assets/trust/mountain-access.webp',
+);
+
 ---
 
 <section class="py-12 bg-white">
@@ -54,7 +59,7 @@ const roadSamples = [
       ground-transport data: tier, vehicle type, passenger capacity, and routing notes.
     </p>
     <p>
-      Prefer a premium vehicle, a larger van, or a specialised option? Add that to your inquiry when you book a
+      Standard is the default for most tours. Prefer a premium vehicle, a larger van, or a specialised option? That is an Additional cost — add it to your inquiry when you book a
       <strong class="text-[#1e3a5f]"> Scheduled Tour</strong> or request a
       <strong class="text-[#1e3a5f]"> Custom Journey</strong>.
     </p>
@@ -114,10 +119,34 @@ const roadSamples = [
   </section>
 )}
 
+
+{mountainPath && (
+  <section class="py-14 bg-[#f6f7fb]">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+      <div class="aspect-[16/10] rounded-2xl overflow-hidden bg-gray-100 shadow-sm">
+        <SafeImage
+          src={mountainPath}
+          fallback="/assets/images/placeholders/default-card.webp"
+          alt="Mountain access vehicles on high-elevation routes"
+          class="w-full h-full object-cover object-center"
+          loading="lazy"
+        />
+      </div>
+      <div>
+        <SectionHeader
+          eyebrow="Mountain access"
+          title="Standard first — upgrades when the route needs them"
+          subtitle="Most itineraries run on Standard vehicles. Premium, luxury, or mountain-capable upgrades are arranged when the corridor and season require them, at Additional cost confirmed in your inquiry — never invented as a package upsell."
+        />
+      </div>
+    </div>
+  </section>
+)}
+
 <ConversionCTA
   variant="band"
   eyebrow="Arrangements"
-  title="Request a vehicle upgrade on inquiry"
+  title="Standard is default — request upgrades on inquiry (Additional cost)"
   subtitle="Tell us group size, preferred tier, and any specialised needs. We confirm what fits your Scheduled Tour dates or Custom Journey — we do not take stand-alone vehicle rentals here."
   primaryHref="/contact"
   primaryLabel="Inquire about transport"

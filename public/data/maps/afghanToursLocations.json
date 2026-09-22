@@ -1,0 +1,488 @@
+[
+  {
+    "code": "AFG",
+    "name": "Afghanistan",
+    "type": "country",
+    "parent_code": "",
+    "slug": "afghanistan",
+    "is_hub": false,
+    "is_active": true
+  },
+  {
+    "code": "CENTRAL",
+    "name": "Central Highlands",
+    "type": "region",
+    "parent_code": "AFG",
+    "slug": "central",
+    "is_hub": false,
+    "is_active": true
+  },
+  {
+    "code": "NORTH",
+    "name": "Northern Afghanistan",
+    "type": "region",
+    "parent_code": "AFG",
+    "slug": "north",
+    "is_hub": false,
+    "is_active": true
+  },
+  {
+    "code": "WEST",
+    "name": "Western Afghanistan",
+    "type": "region",
+    "parent_code": "AFG",
+    "slug": "west",
+    "is_hub": false,
+    "is_active": true
+  },
+  {
+    "code": "SOUTH",
+    "name": "Southern Afghanistan",
+    "type": "region",
+    "parent_code": "AFG",
+    "slug": "south",
+    "is_hub": false,
+    "is_active": true
+  },
+  {
+    "code": "EAST",
+    "name": "Eastern Afghanistan",
+    "type": "region",
+    "parent_code": "AFG",
+    "slug": "east",
+    "is_hub": false,
+    "is_active": true
+  },
+  {
+    "code": "BDK",
+    "name": "Badakhshan",
+    "type": "province",
+    "parent_code": "NORTH",
+    "slug": "badakhshan",
+    "is_hub": false,
+    "is_active": true
+  },
+  {
+    "code": "BDG",
+    "name": "Badghis",
+    "type": "province",
+    "parent_code": "WEST",
+    "slug": "badghis",
+    "is_hub": false,
+    "is_active": true
+  },
+  {
+    "code": "BAG",
+    "name": "Baghlan",
+    "type": "province",
+    "parent_code": "NORTH",
+    "slug": "baghlan",
+    "is_hub": false,
+    "is_active": true
+  },
+  {
+    "code": "BAL",
+    "name": "Balkh",
+    "type": "province",
+    "parent_code": "NORTH",
+    "slug": "balkh",
+    "is_hub": false,
+    "is_active": true
+  },
+  {
+    "code": "BMY",
+    "name": "Bamyan",
+    "type": "province",
+    "parent_code": "CENTRAL",
+    "slug": "bamyan",
+    "is_hub": false,
+    "is_active": true
+  },
+  {
+    "code": "DYK",
+    "name": "Daykundi",
+    "type": "province",
+    "parent_code": "CENTRAL",
+    "slug": "daykundi",
+    "is_hub": false,
+    "is_active": true
+  },
+  {
+    "code": "FRH",
+    "name": "Farah",
+    "type": "province",
+    "parent_code": "WEST",
+    "slug": "farah",
+    "is_hub": false,
+    "is_active": true
+  },
+  {
+    "code": "FRY",
+    "name": "Faryab",
+    "type": "province",
+    "parent_code": "NORTH",
+    "slug": "faryab",
+    "is_hub": false,
+    "is_active": true
+  },
+  {
+    "code": "GHZ",
+    "name": "Ghazni",
+    "type": "province",
+    "parent_code": "CENTRAL",
+    "slug": "ghazni",
+    "is_hub": false,
+    "is_active": true
+  },
+  {
+    "code": "GHO",
+    "name": "Ghor",
+    "type": "province",
+    "parent_code": "WEST",
+    "slug": "ghor",
+    "is_hub": false,
+    "is_active": true
+  },
+  {
+    "code": "HLM",
+    "name": "Helmand",
+    "type": "province",
+    "parent_code": "SOUTH",
+    "slug": "helmand",
+    "is_hub": false,
+    "is_active": true
+  },
+  {
+    "code": "HER",
+    "name": "Herat",
+    "type": "province",
+    "parent_code": "WEST",
+    "slug": "herat",
+    "is_hub": false,
+    "is_active": true
+  },
+  {
+    "code": "JOW",
+    "name": "Jowzjan",
+    "type": "province",
+    "parent_code": "NORTH",
+    "slug": "jowzjan",
+    "is_hub": false,
+    "is_active": true
+  },
+  {
+    "code": "KBL",
+    "name": "Kabul",
+    "type": "province",
+    "parent_code": "CENTRAL",
+    "slug": "kabul",
+    "is_hub": false,
+    "is_active": true
+  },
+  {
+    "code": "KDR",
+    "name": "Kandahar",
+    "type": "province",
+    "parent_code": "SOUTH",
+    "slug": "kandahar",
+    "is_hub": false,
+    "is_active": true
+  },
+  {
+    "code": "KPS",
+    "name": "Kapisa",
+    "type": "province",
+    "parent_code": "CENTRAL",
+    "slug": "kapisa",
+    "is_hub": false,
+    "is_active": true
+  },
+  {
+    "code": "KHT",
+    "name": "Khost",
+    "type": "province",
+    "parent_code": "EAST",
+    "slug": "khost",
+    "is_hub": false,
+    "is_active": true
+  },
+  {
+    "code": "KNR",
+    "name": "Kunar",
+    "type": "province",
+    "parent_code": "EAST",
+    "slug": "kunar",
+    "is_hub": false,
+    "is_active": true
+  },
+  {
+    "code": "KDZ",
+    "name": "Kunduz",
+    "type": "province",
+    "parent_code": "NORTH",
+    "slug": "kunduz",
+    "is_hub": false,
+    "is_active": true
+  },
+  {
+    "code": "LGM",
+    "name": "Laghman",
+    "type": "province",
+    "parent_code": "EAST",
+    "slug": "laghman",
+    "is_hub": false,
+    "is_active": true
+  },
+  {
+    "code": "LGR",
+    "name": "Logar",
+    "type": "province",
+    "parent_code": "CENTRAL",
+    "slug": "logar",
+    "is_hub": false,
+    "is_active": true
+  },
+  {
+    "code": "NGH",
+    "name": "Nangarhar",
+    "type": "province",
+    "parent_code": "EAST",
+    "slug": "nangarhar",
+    "is_hub": false,
+    "is_active": true
+  },
+  {
+    "code": "NIM",
+    "name": "Nimroz",
+    "type": "province",
+    "parent_code": "SOUTH",
+    "slug": "nimroz",
+    "is_hub": false,
+    "is_active": true
+  },
+  {
+    "code": "NRS",
+    "name": "Nuristan",
+    "type": "province",
+    "parent_code": "EAST",
+    "slug": "nuristan",
+    "is_hub": false,
+    "is_active": true
+  },
+  {
+    "code": "PTA",
+    "name": "Paktia",
+    "type": "province",
+    "parent_code": "EAST",
+    "slug": "paktia",
+    "is_hub": false,
+    "is_active": true
+  },
+  {
+    "code": "PTK",
+    "name": "Paktika",
+    "type": "province",
+    "parent_code": "EAST",
+    "slug": "paktika",
+    "is_hub": false,
+    "is_active": true
+  },
+  {
+    "code": "PJR",
+    "name": "Panjshir",
+    "type": "province",
+    "parent_code": "CENTRAL",
+    "slug": "panjshir",
+    "is_hub": false,
+    "is_active": true
+  },
+  {
+    "code": "PRW",
+    "name": "Parwan",
+    "type": "province",
+    "parent_code": "CENTRAL",
+    "slug": "parwan",
+    "is_hub": false,
+    "is_active": true
+  },
+  {
+    "code": "SAM",
+    "name": "Samangan",
+    "type": "province",
+    "parent_code": "NORTH",
+    "slug": "samangan",
+    "is_hub": false,
+    "is_active": true
+  },
+  {
+    "code": "SEP",
+    "name": "Sar-e-Pol",
+    "type": "province",
+    "parent_code": "NORTH",
+    "slug": "sar-e-pol",
+    "is_hub": false,
+    "is_active": true
+  },
+  {
+    "code": "TKH",
+    "name": "Takhar",
+    "type": "province",
+    "parent_code": "NORTH",
+    "slug": "takhar",
+    "is_hub": false,
+    "is_active": true
+  },
+  {
+    "code": "URZ",
+    "name": "Uruzgan",
+    "type": "province",
+    "parent_code": "SOUTH",
+    "slug": "uruzgan",
+    "is_hub": false,
+    "is_active": true
+  },
+  {
+    "code": "WRD",
+    "name": "Wardak",
+    "type": "province",
+    "parent_code": "CENTRAL",
+    "slug": "wardak",
+    "is_hub": false,
+    "is_active": true
+  },
+  {
+    "code": "ZBL",
+    "name": "Zabul",
+    "type": "province",
+    "parent_code": "SOUTH",
+    "slug": "zabul",
+    "is_hub": false,
+    "is_active": true
+  },
+  {
+    "code": "KBLC",
+    "name": "Kabul City",
+    "type": "destination",
+    "parent_code": "KBL",
+    "slug": "kabul-city",
+    "is_hub": true,
+    "is_active": true
+  },
+  {
+    "code": "JBDC",
+    "name": "Jalalabad City",
+    "type": "destination",
+    "parent_code": "NGH",
+    "slug": "jalalabad-city",
+    "is_hub": true,
+    "is_active": true
+  },
+  {
+    "code": "KDRC",
+    "name": "Kandahar City",
+    "type": "destination",
+    "parent_code": "KDR",
+    "slug": "kandahar-city",
+    "is_hub": true,
+    "is_active": true
+  },
+  {
+    "code": "GHZC",
+    "name": "Ghazni City",
+    "type": "destination",
+    "parent_code": "GHZ",
+    "slug": "ghazni-city",
+    "is_hub": true,
+    "is_active": true
+  },
+  {
+    "code": "BMYC",
+    "name": "Bamyan City",
+    "type": "destination",
+    "parent_code": "BMY",
+    "slug": "bamyan-city",
+    "is_hub": true,
+    "is_active": true
+  },
+  {
+    "code": "MAZC",
+    "name": "Mazar-e-Sharif",
+    "type": "destination",
+    "parent_code": "BAL",
+    "slug": "mazar-e-sharif",
+    "is_hub": true,
+    "is_active": true
+  },
+  {
+    "code": "FAIC",
+    "name": "Faizabad",
+    "type": "destination",
+    "parent_code": "BDK",
+    "slug": "faizabad",
+    "is_hub": true,
+    "is_active": true
+  },
+  {
+    "code": "HERC",
+    "name": "Herat City",
+    "type": "destination",
+    "parent_code": "HER",
+    "slug": "herat-city",
+    "is_hub": true,
+    "is_active": true
+  },
+  {
+    "code": "LSGC",
+    "name": "Lashkar Gah",
+    "type": "destination",
+    "parent_code": "HLM",
+    "slug": "lashkar-gah",
+    "is_hub": false,
+    "is_active": true
+  },
+  {
+    "code": "ZRNC",
+    "name": "Zaranj",
+    "type": "destination",
+    "parent_code": "NIM",
+    "slug": "zaranj",
+    "is_hub": false,
+    "is_active": true
+  },
+  {
+    "code": "FRHC",
+    "name": "Farah City",
+    "type": "destination",
+    "parent_code": "FRH",
+    "slug": "farah-city",
+    "is_hub": false,
+    "is_active": true
+  },
+  {
+    "code": "KHTC",
+    "name": "Khost City",
+    "type": "destination",
+    "parent_code": "KHT",
+    "slug": "khost-city",
+    "is_hub": false,
+    "is_active": true
+  },
+  {
+    "code": "PRNC",
+    "name": "Parun",
+    "type": "destination",
+    "parent_code": "NRS",
+    "slug": "parun",
+    "is_hub": false,
+    "is_active": true
+  },
+  {
+    "code": "YKLC",
+    "name": "Yakawlang",
+    "type": "destination",
+    "parent_code": "BMY",
+    "slug": "yakawlang",
+    "is_hub": false,
+    "is_active": true
+  }
+]
