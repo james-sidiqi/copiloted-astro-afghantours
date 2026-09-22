@@ -1,0 +1,531 @@
+---
+/**
+ * Shared inquiry UI — scheduled | custom (multi-step + review) | general.
+ * Submits to PHP /tour-inquiry.php by default, or PUBLIC_FORM_ENDPOINT when set.
+ */
+import { siteConfig, formUsesPhp } from '@lib/config';
+import { BOOKING_SEQUENCE_STEPS, AUDIENCE_LABELS } from '@lib/inquiry';
+import type { InquiryFlow } from '@lib/inquiry';
+
+interface Props {
+  flow?: InquiryFlow;
+}
+
+const { flow: flowProp = 'general' } = Astro.props;
+const formAction = siteConfig.form.endpoint;
+const usesPhp = formUsesPhp();
+const whatsappBaseUrl = siteConfig.whatsapp.url;
+const contactEmail = siteConfig.email;
+---
+
+<div class="inquiry-root space-y-6" data-inquiry-root data-default-flow={flowProp}>
+  <div
+    id="inquiry-context-banner"
+    class="hidden rounded-2xl border border-[#b88a2a]/30 bg-[#b88a2a]/10 px-5 py-4"
+    role="status"
+    aria-live="polite"
+  >
+    <p class="text-sm font-semibold text-[#1e3a5f]">
+      Inquiring about: <span id="inquiry-context-name" class="text-[#b88a2a]"></span>
+    </p>
+    <p id="inquiry-context-meta" class="mt-1 text-xs text-[rgba(15,23,42,0.6)]"></p>
+  </div>
+
+  <div class="rounded-2xl border border-[#1e3a5f]/15 bg-[#1e3a5f]/5 px-5 py-4">
+    <p class="text-sm font-semibold text-[#1e3a5f] mb-2">How booking works</p>
+    <p class="text-xs text-[rgba(15,23,42,0.65)] mb-3">
+      An <strong>inquiry is not a booking</strong>. Typical sequence:
+    </p>
+    <ol class="text-xs text-[rgba(15,23,42,0.7)] space-y-1 list-decimal pl-4">
+      {BOOKING_SEQUENCE_STEPS.map((step) => <li>{step}</li>)}
+    </ol>
+  </div>
+
+  <div
+    id="inquiry-status"
+    class="hidden rounded-xl px-4 py-3 text-sm"
+    role="status"
+    aria-live="polite"
+    data-inquiry-status
+  ></div>
+
+  <form
+    id="inquiry-form"
+    class="space-y-5"
+    method="POST"
+    action={formAction}
+    data-inquiry-form
+    data-uses-php={usesPhp ? '1' : '0'}
+    novalidate
+  >
+    <input type="hidden" name="flow" id="f-flow" value={flowProp} />
+    <input type="hidden" name="tour_slug" id="f-tour-slug" value="" />
+    <input type="hidden" name="tour_name" id="f-tour-name" value="" />
+    <input type="hidden" name="tour_code" id="f-tour-code" value="" />
+    <input type="hidden" name="tour_url" id="f-tour-url" value="" />
+    <input type="hidden" name="source_url" id="f-source-url" value="" />
+    <input type="hidden" name="audience" id="f-audience" value="" />
+    <input type="hidden" name="departure" id="f-departure" value="" />
+    <input type="hidden" name="_response" value="json" />
+    <!-- Honeypot -->
+    <div class="absolute -left-[9999px] h-0 w-0 overflow-hidden" aria-hidden="true">
+      <label>Website <input type="text" name="website" tabindex="-1" autocomplete="off" /></label>
+      <label>Company URL <input type="text" name="company_url" tabindex="-1" autocomplete="off" /></label>
+    </div>
+
+    <!-- Custom flow stepper -->
+    <div id="custom-steps" class="hidden" data-custom-steps>
+      <div class="flex gap-2 text-xs font-semibold mb-4" aria-label="Custom inquiry steps">
+        <span data-step-indicator="1" class="px-3 py-1 rounded-full bg-[#1e3a5f] text-white">1. Basics</span>
+        <span data-step-indicator="2" class="px-3 py-1 rounded-full bg-gray-200 text-[#1e3a5f]">2. Preferences</span>
+        <span data-step-indicator="3" class="px-3 py-1 rounded-full bg-gray-200 text-[#1e3a5f]">3. Review</span>
+      </div>
+    </div>
+
+    <div data-panel="basics" class="space-y-5">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <label for="name" class="block text-sm font-semibold text-[#1e3a5f] mb-1.5">Your name *</label>
+          <input type="text" id="name" name="name" required maxlength="120" autocomplete="name" class="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm" />
+        </div>
+        <div>
+          <label for="country" class="block text-sm font-semibold text-[#1e3a5f] mb-1.5">Country</label>
+          <input type="text" id="country" name="country" maxlength="80" autocomplete="country-name" class="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm" />
+        </div>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <label for="email" class="block text-sm font-semibold text-[#1e3a5f] mb-1.5">Email</label>
+          <input type="email" id="email" name="email" maxlength="160" autocomplete="email" class="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm" />
+        </div>
+        <div>
+          <label for="whatsapp" class="block text-sm font-semibold text-[#1e3a5f] mb-1.5">WhatsApp</label>
+          <input type="text" id="whatsapp" name="whatsapp" maxlength="40" autocomplete="tel" placeholder="Include country code" class="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm" />
+        </div>
+      </div>
+      <p class="text-xs text-[rgba(15,23,42,0.55)]">Provide email or WhatsApp (or both) so we can reply.</p>
+
+      <div id="scheduled-fields" class="hidden space-y-4" data-scheduled-fields>
+        <div>
+          <label for="tour_display" class="block text-sm font-semibold text-[#1e3a5f] mb-1.5">Tour</label>
+          <input type="text" id="tour_display" readonly class="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm bg-gray-50" />
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label for="travel_dates" class="block text-sm font-semibold text-[#1e3a5f] mb-1.5">Preferred dates / departure</label>
+            <input type="text" id="travel_dates" name="travel_dates" maxlength="200" placeholder="Exact dates, month, or season" class="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm" />
+          </div>
+          <div>
+            <label for="flexibility" class="block text-sm font-semibold text-[#1e3a5f] mb-1.5">Date flexibility</label>
+            <input type="text" id="flexibility" name="flexibility" maxlength="120" placeholder="e.g. ±1 week, only weekends" class="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm" />
+          </div>
+        </div>
+        <div>
+          <label for="travelers" class="block text-sm font-semibold text-[#1e3a5f] mb-1.5">Number of travelers</label>
+          <input type="text" id="travelers" name="travelers" maxlength="40" inputmode="numeric" placeholder="e.g. 2" class="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm" />
+        </div>
+      </div>
+
+      <div id="general-message-wrap">
+        <label for="message" class="block text-sm font-semibold text-[#1e3a5f] mb-1.5">Message</label>
+        <textarea id="message" name="message" rows="5" maxlength="4000" class="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm resize-y" placeholder="Tell us what you need — scheduled tour, custom route, or a planning question."></textarea>
+      </div>
+    </div>
+
+    <div data-panel="preferences" class="hidden space-y-5">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <label for="c-travel_dates" class="block text-sm font-semibold text-[#1e3a5f] mb-1.5">Preferred dates</label>
+          <input type="text" id="c-travel_dates" data-sync="travel_dates" maxlength="200" placeholder="Month, season, or range" class="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm" />
+        </div>
+        <div>
+          <label for="c-flexibility" class="block text-sm font-semibold text-[#1e3a5f] mb-1.5">Flexibility</label>
+          <input type="text" id="c-flexibility" data-sync="flexibility" maxlength="120" class="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm" />
+        </div>
+      </div>
+      <div>
+        <label for="c-travelers" class="block text-sm font-semibold text-[#1e3a5f] mb-1.5">Travelers</label>
+        <input type="text" id="c-travelers" data-sync="travelers" maxlength="40" class="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm" />
+      </div>
+      <div>
+        <label for="accommodation" class="block text-sm font-semibold text-[#1e3a5f] mb-1.5">Accommodation preference</label>
+        <input type="text" id="accommodation" name="accommodation" maxlength="200" placeholder="e.g. mid-range hotels, guesthouse" class="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm" />
+      </div>
+      <div>
+        <label for="transport" class="block text-sm font-semibold text-[#1e3a5f] mb-1.5">Transport preference</label>
+        <input type="text" id="transport" name="transport" maxlength="200" placeholder="e.g. private 4WD, domestic flights where useful" class="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm" />
+      </div>
+      <div>
+        <label for="activities" class="block text-sm font-semibold text-[#1e3a5f] mb-1.5">Activities of interest</label>
+        <textarea id="activities" name="activities" rows="3" maxlength="400" class="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm resize-y" placeholder="Hiking, city walking, markets, photography…"></textarea>
+      </div>
+      <div>
+        <label for="cultural_interests" class="block text-sm font-semibold text-[#1e3a5f] mb-1.5">Cultural interests</label>
+        <textarea id="cultural_interests" name="cultural_interests" rows="3" maxlength="400" class="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm resize-y" placeholder="History, food, music, family visits…"></textarea>
+      </div>
+      <div>
+        <label for="notes" class="block text-sm font-semibold text-[#1e3a5f] mb-1.5">Additional notes</label>
+        <textarea id="notes" name="notes" rows="4" maxlength="4000" class="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm resize-y"></textarea>
+      </div>
+    </div>
+
+    <div data-panel="review" class="hidden space-y-4">
+      <p class="text-sm font-semibold text-[#1e3a5f]">Review your inquiry</p>
+      <dl id="review-dl" class="text-sm space-y-2 rounded-xl border border-gray-100 bg-gray-50 p-4 text-[rgba(15,23,42,0.75)]"></dl>
+      <p class="text-xs text-[rgba(15,23,42,0.55)]">Submitting sends this to Afghan Tours for a reply — it does not confirm a booking or deposit.</p>
+    </div>
+
+    <div class="flex flex-col sm:flex-row gap-3" data-inquiry-actions>
+      <button type="button" id="btn-back" class="hidden px-6 py-3 rounded-full border-2 border-[#1e3a5f] text-[#1e3a5f] font-semibold text-sm">Back</button>
+      <button type="button" id="btn-next" class="hidden flex-1 py-3.5 rounded-full bg-[#1e3a5f] hover:bg-[#162b47] text-white font-semibold text-sm shadow-md">Continue</button>
+      <button type="submit" id="btn-submit" class="flex-1 py-3.5 rounded-full bg-[#b88a2a] hover:bg-[#a07820] text-white font-semibold text-sm shadow-md">
+        Send inquiry
+      </button>
+    </div>
+  </form>
+
+  <div class="border-t border-gray-100 pt-5 space-y-3">
+    <p class="text-xs font-semibold uppercase tracking-wider text-[rgba(15,23,42,0.45)]">Or reach us directly</p>
+    <div class="flex flex-col sm:flex-row gap-2">
+      <a
+        id="inquiry-whatsapp-alt"
+        href={whatsappBaseUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="flex-1 text-center py-3 rounded-full bg-green-600 hover:bg-green-700 text-white text-sm font-semibold"
+      >WhatsApp</a>
+      <a
+        id="inquiry-email-alt"
+        href={`mailto:${contactEmail}`}
+        class="flex-1 text-center py-3 rounded-full border-2 border-[#1e3a5f] text-[#1e3a5f] text-sm font-semibold hover:bg-[#1e3a5f] hover:text-white"
+      >Email {contactEmail}</a>
+    </div>
+    <p class="text-[11px] text-[rgba(15,23,42,0.45)] leading-relaxed">
+      WhatsApp number must be operator-verified before cutover marketing (see OPEN-BUSINESS-FACTS).
+      {usesPhp ? (
+        <span> Form posts to <code class="text-[10px]">/tour-inquiry.php</code> — requires PHP on the host. For static-only hosting, set <code class="text-[10px]">PUBLIC_FORM_ENDPOINT</code>.</span>
+      ) : (
+        <span> Form posts to the configured external endpoint.</span>
+      )}
+    </p>
+  </div>
+</div>
+
+<script define:vars={{ whatsappBaseUrl, contactEmail, audienceLabels: AUDIENCE_LABELS }}>
+  (function () {
+    const form = document.getElementById('inquiry-form');
+    const root = document.querySelector('[data-inquiry-root]');
+    if (!form || !root) return;
+
+    const params = new URLSearchParams(window.location.search);
+    const statusEl = document.getElementById('inquiry-status');
+    const btnBack = document.getElementById('btn-back');
+    const btnNext = document.getElementById('btn-next');
+    const btnSubmit = document.getElementById('btn-submit');
+    const customSteps = document.getElementById('custom-steps');
+    const scheduledFields = document.getElementById('scheduled-fields');
+    const generalMsg = document.getElementById('general-message-wrap');
+
+    function resolveFlow() {
+      const explicit = (params.get('flow') || '').trim().toLowerCase();
+      if (explicit === 'scheduled' || explicit === 'custom' || explicit === 'general') return explicit;
+      if (params.get('tour') || params.get('tourName') || params.get('tourCode') || params.get('departure')) return 'scheduled';
+      if (params.get('audience') || params.get('build') === '1' || params.get('custom') === '1') return 'custom';
+      return root.getAttribute('data-default-flow') || 'general';
+    }
+
+    let flow = resolveFlow();
+    let customStep = 1;
+
+    const tourSlug = (params.get('tour') || '').trim();
+    const tourName = (params.get('tourName') || '').trim();
+    const tourCode = (params.get('tourCode') || '').trim();
+    const departure = (params.get('departure') || '').trim();
+    const audienceRaw = (params.get('audience') || '').trim();
+    const audienceKey = audienceRaw.toLowerCase();
+    const audienceLabel = audienceLabels[audienceKey] || (audienceRaw ? 'Custom journey: ' + audienceRaw : '');
+
+    function setVal(id, v) {
+      const el = document.getElementById(id);
+      if (el && 'value' in el) el.value = v || '';
+    }
+
+    setVal('f-flow', flow);
+    setVal('f-tour-slug', tourSlug);
+    setVal('f-tour-name', tourName || audienceLabel);
+    setVal('f-tour-code', tourCode);
+    setVal('f-departure', departure);
+    setVal('f-audience', audienceKey);
+    setVal('f-tour-url', tourSlug ? window.location.origin + '/tours/' + encodeURIComponent(tourSlug) + '/' : '');
+    setVal('f-source-url', window.location.href);
+
+    // Prefill from query
+    ['travel_dates', 'flexibility', 'travelers', 'accommodation', 'transport', 'activities', 'cultural_interests', 'notes', 'message'].forEach((k) => {
+      const v = (params.get(k) || '').trim();
+      if (v) setVal(k === 'travel_dates' && flow === 'scheduled' ? 'travel_dates' : k, v);
+    });
+    if (departure && !params.get('travel_dates')) setVal('travel_dates', departure);
+
+    const displayName = tourName || audienceLabel || (flow === 'custom' ? 'Build My Journey' : tourSlug) || '';
+    if (displayName || tourSlug || audienceKey) {
+      const banner = document.getElementById('inquiry-context-banner');
+      const nameEl = document.getElementById('inquiry-context-name');
+      const metaEl = document.getElementById('inquiry-context-meta');
+      if (banner && nameEl) {
+        nameEl.textContent = displayName || 'Selected inquiry';
+        const meta = [];
+        if (flow) meta.push('flow: ' + flow);
+        if (audienceKey) meta.push('audience: ' + audienceKey);
+        if (tourSlug) meta.push('slug: ' + tourSlug);
+        if (tourCode) meta.push('code: ' + tourCode);
+        if (departure) meta.push('departure: ' + departure);
+        if (metaEl) metaEl.textContent = meta.join(' · ');
+        banner.classList.remove('hidden');
+      }
+      const tourDisplay = document.getElementById('tour_display');
+      if (tourDisplay) tourDisplay.value = displayName || tourSlug;
+    }
+
+    // WhatsApp / email alternatives with context
+    const inquireMessage =
+      "Hi Afghan Tours — I'm interested in \"" +
+      (displayName || 'a trip') +
+      '"' +
+      (audienceKey ? ' (audience: ' + audienceKey + ')' : '') +
+      (tourSlug || tourCode
+        ? ' (slug: ' + (tourSlug || 'n/a') + ', code: ' + (tourCode || 'n/a') + ')'
+        : '') +
+      (departure ? ' for departure ' + departure : '') +
+      '. Could you share availability and next steps?';
+    const subject = 'Enquiry: ' + (displayName || 'Afghan Tours');
+    const waUrl = whatsappBaseUrl + '?text=' + encodeURIComponent(inquireMessage);
+    const mailUrl =
+      'mailto:' +
+      contactEmail +
+      '?subject=' +
+      encodeURIComponent(subject) +
+      '&body=' +
+      encodeURIComponent(inquireMessage);
+
+    const waAlt = document.getElementById('inquiry-whatsapp-alt');
+    const mailAlt = document.getElementById('inquiry-email-alt');
+    if (waAlt) waAlt.setAttribute('href', waUrl);
+    if (mailAlt) mailAlt.setAttribute('href', mailUrl);
+    ['contact-whatsapp-sidebar', 'contact-whatsapp-cta'].forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) el.setAttribute('href', waUrl);
+    });
+    ['contact-mailto-cta', 'contact-email-link'].forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) el.setAttribute('href', mailUrl);
+    });
+
+    if (flow === 'general' && !params.get('message') && displayName) {
+      const msg = document.getElementById('message');
+      if (msg && !msg.value) msg.value = inquireMessage;
+    }
+
+    function showStatus(kind, text) {
+      if (!statusEl) return;
+      statusEl.classList.remove('hidden', 'bg-green-50', 'text-green-800', 'border-green-200', 'bg-red-50', 'text-red-800', 'border-red-200', 'bg-amber-50', 'text-amber-900', 'border-amber-200');
+      statusEl.classList.add('border');
+      if (kind === 'ok') statusEl.classList.add('bg-green-50', 'text-green-800', 'border-green-200');
+      else if (kind === 'err') statusEl.classList.add('bg-red-50', 'text-red-800', 'border-red-200');
+      else statusEl.classList.add('bg-amber-50', 'text-amber-900', 'border-amber-200');
+      statusEl.textContent = text;
+    }
+
+    function syncCustomDupes() {
+      form.querySelectorAll('[data-sync]').forEach((el) => {
+        const name = el.getAttribute('data-sync');
+        let target = form.querySelector('[name="' + name + '"]');
+        if (!target) {
+          target = document.createElement('input');
+          target.type = 'hidden';
+          target.name = name;
+          form.appendChild(target);
+        }
+        target.value = el.value || '';
+      });
+    }
+
+    function applyFlowUI() {
+      if (scheduledFields) scheduledFields.classList.toggle('hidden', flow !== 'scheduled');
+      if (customSteps) customSteps.classList.toggle('hidden', flow !== 'custom');
+      if (generalMsg) generalMsg.classList.toggle('hidden', flow === 'custom');
+      if (flow === 'custom') {
+        customStep = 1;
+        renderCustomStep();
+      } else {
+        form.querySelectorAll('[data-panel]').forEach((p) => {
+          const name = p.getAttribute('data-panel');
+          p.classList.toggle('hidden', name !== 'basics');
+        });
+        if (btnBack) btnBack.classList.add('hidden');
+        if (btnNext) btnNext.classList.add('hidden');
+        if (btnSubmit) btnSubmit.classList.remove('hidden');
+      }
+    }
+
+    function renderCustomStep() {
+      form.querySelectorAll('[data-panel]').forEach((p) => {
+        const name = p.getAttribute('data-panel');
+        const map = { 1: 'basics', 2: 'preferences', 3: 'review' };
+        p.classList.toggle('hidden', name !== map[customStep]);
+      });
+      form.querySelectorAll('[data-step-indicator]').forEach((el) => {
+        const n = Number(el.getAttribute('data-step-indicator'));
+        el.className =
+          'px-3 py-1 rounded-full ' +
+          (n === customStep ? 'bg-[#1e3a5f] text-white' : n < customStep ? 'bg-[#b88a2a]/20 text-[#1e3a5f]' : 'bg-gray-200 text-[#1e3a5f]');
+      });
+      if (btnBack) btnBack.classList.toggle('hidden', customStep === 1);
+      if (btnNext) btnNext.classList.toggle('hidden', customStep === 3);
+      if (btnSubmit) btnSubmit.classList.toggle('hidden', customStep !== 3);
+      if (customStep === 3) buildReview();
+    }
+
+    function buildReview() {
+      syncCustomDupes();
+      const dl = document.getElementById('review-dl');
+      if (!dl) return;
+      const pairs = [
+        ['Name', form.name?.value],
+        ['Email', form.email?.value],
+        ['WhatsApp', form.whatsapp?.value],
+        ['Country', form.country?.value],
+        ['Audience', form.audience?.value],
+        ['Dates', form.travel_dates?.value],
+        ['Flexibility', form.flexibility?.value],
+        ['Travelers', form.travelers?.value],
+        ['Accommodation', form.accommodation?.value],
+        ['Transport', form.transport?.value],
+        ['Activities', form.activities?.value],
+        ['Cultural interests', form.cultural_interests?.value],
+        ['Notes', form.notes?.value],
+      ];
+      dl.innerHTML = pairs
+        .filter(([, v]) => v && String(v).trim())
+        .map(([k, v]) => '<div class="flex gap-2"><dt class="font-semibold text-[#1e3a5f] min-w-[7rem]">' + k + '</dt><dd class="flex-1 whitespace-pre-wrap">' + String(v).replace(/</g, '&lt;') + '</dd></div>')
+        .join('');
+    }
+
+    btnNext?.addEventListener('click', () => {
+      if (flow !== 'custom') return;
+      if (customStep === 1) {
+        const name = (form.name?.value || '').trim();
+        const email = (form.email?.value || '').trim();
+        const wa = (form.whatsapp?.value || '').trim();
+        if (!name) {
+          showStatus('err', 'Please enter your name.');
+          return;
+        }
+        if (!email && !wa) {
+          showStatus('err', 'Please provide an email or WhatsApp number.');
+          return;
+        }
+        statusEl?.classList.add('hidden');
+      }
+      if (customStep === 2) syncCustomDupes();
+      customStep = Math.min(3, customStep + 1);
+      renderCustomStep();
+    });
+
+    btnBack?.addEventListener('click', () => {
+      if (flow !== 'custom') return;
+      customStep = Math.max(1, customStep - 1);
+      renderCustomStep();
+    });
+
+    // Persist query params into URL as user edits (debounced light)
+    let persistTimer;
+    form.addEventListener('change', () => {
+      clearTimeout(persistTimer);
+      persistTimer = setTimeout(() => {
+        const q = new URLSearchParams(window.location.search);
+        q.set('flow', flow);
+        const keys = ['travel_dates', 'flexibility', 'travelers', 'accommodation', 'transport', 'activities', 'cultural_interests', 'notes'];
+        keys.forEach((k) => {
+          const el = form.querySelector('[name="' + k + '"]') || form.querySelector('[data-sync="' + k + '"]');
+          const v = el && 'value' in el ? String(el.value).trim() : '';
+          if (v) q.set(k, v);
+          else q.delete(k);
+        });
+        if (tourSlug) q.set('tour', tourSlug);
+        if (tourName) q.set('tourName', tourName);
+        if (tourCode) q.set('tourCode', tourCode);
+        if (departure) q.set('departure', departure);
+        if (audienceKey) q.set('audience', audienceKey);
+        const next = window.location.pathname + '?' + q.toString();
+        window.history.replaceState({}, '', next);
+      }, 300);
+    });
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      syncCustomDupes();
+
+      const name = (form.name?.value || '').trim();
+      const email = (form.email?.value || '').trim();
+      const wa = (form.whatsapp?.value || '').trim();
+      if (!name) {
+        showStatus('err', 'Please enter your name.');
+        return;
+      }
+      if (!email && !wa) {
+        showStatus('err', 'Please provide an email or WhatsApp number.');
+        return;
+      }
+
+      showStatus('pending', 'Sending your inquiry…');
+      if (btnSubmit) {
+        btnSubmit.disabled = true;
+        btnSubmit.textContent = 'Sending…';
+      }
+
+      const data = new FormData(form);
+      try {
+        const response = await fetch(form.action, {
+          method: 'POST',
+          body: data,
+          headers: { Accept: 'application/json' },
+        });
+        const result = await response.json().catch(() => ({}));
+        if (!response.ok || result.ok === false) {
+          throw new Error(result.message || 'Unable to send inquiry.');
+        }
+        showStatus(
+          'ok',
+          result.message ||
+            'Thank you. Your inquiry was submitted. We will reply using the contact details you provided. (Inquiry ≠ booking.)',
+        );
+        form.querySelectorAll('input:not([type=hidden]):not([name=website]):not([name=company_url]), textarea').forEach((el) => {
+          // Keep values so user can see what was sent / retry if needed — only clear on success soft-disable
+        });
+        if (btnSubmit) {
+          btnSubmit.textContent = 'Sent';
+        }
+      } catch (err) {
+        showStatus(
+          'err',
+          (err && err.message ? err.message : 'Send failed.') +
+            ' Your entered details are still on this page — try again, or use WhatsApp / email below. If this host does not run PHP, set PUBLIC_FORM_ENDPOINT.',
+        );
+        if (btnSubmit) {
+          btnSubmit.disabled = false;
+          btnSubmit.textContent = 'Send inquiry';
+        }
+      }
+    });
+
+    // URL ?status= from non-JS posts
+    const urlStatus = (params.get('status') || '').toLowerCase();
+    if (urlStatus === 'ok' || urlStatus === 'success') {
+      showStatus('ok', 'Thank you. Your inquiry was submitted.');
+    } else if (urlStatus === 'error' || urlStatus === 'fail') {
+      showStatus('err', 'Something went wrong sending the form. Your details should still be visible — try WhatsApp or email.');
+    }
+
+    applyFlowUI();
+  })();
+</script>

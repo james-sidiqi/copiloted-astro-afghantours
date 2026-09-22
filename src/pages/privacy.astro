@@ -1,23 +1,24 @@
 ---
 /**
- * WG1 draft stub — restores /privacy/ route present on live.
- * Full policy text requires operator review; do not invent GDPR/payment claims.
+ * WG2 draft — expands WG1 stub around JTTA operator, inquiry handling, providers.
+ * NO invented retention periods. Mark [OPERATOR DECISION] in OPEN-BUSINESS-FACTS.
  */
 import BaseLayout from '@layouts/BaseLayout.astro';
 import Hero from '@components/site/Hero.astro';
 import SectionHeader from '@components/ui/SectionHeader.astro';
+import { siteConfig } from '@lib/config';
 ---
 
 <BaseLayout
   title="Privacy – Afghan Tours (Draft)"
-  description="Draft privacy notice for Afghan Tours inquiries. Operator review pending before publishing final policy language."
+  description="Draft privacy notice for Afghan Tours / James Tourist & Travel Agency inquiries. Operator review pending."
 >
   <Hero
     title="Privacy"
-    subtitle="Draft pending operator review — this page restores the live URL without inventing final legal claims."
+    subtitle="Draft pending operator review — how we handle inquiry and trip-planning information."
     imagePath="/assets/images/heroes/hero-about.webp"
     ctaText="Contact us"
-    ctaHref="/contact"
+    ctaHref="/contact/"
   />
 
   <section class="py-16 bg-white">
@@ -26,26 +27,53 @@ import SectionHeader from '@components/ui/SectionHeader.astro';
         <SectionHeader eyebrow="Draft" title="Privacy notice (pending review)" />
       </div>
       <div class="rounded-2xl border border-amber-200 bg-amber-50 px-5 py-4 text-sm text-amber-950">
-        <strong>Status:</strong> Draft for URL restoration and cutover planning only.
-        Final wording, retention periods, and lawful-basis language must be confirmed by the operator before treating this as a published policy.
+        <strong>Status:</strong> Draft for continuity and cutover planning.
+        Retention periods, lawful-basis wording, and cookie tooling remain
+        <strong>[OPERATOR DECISION]</strong> — see <code>docs/OPEN-BUSINESS-FACTS.md</code>.
+        Do not treat this page as a counsel-reviewed policy yet.
       </div>
       <div class="prose prose-lg max-w-none text-[rgba(15,23,42,0.75)] leading-relaxed space-y-4">
+        <h2 class="font-display text-xl font-bold text-[#1e3a5f]">Who we are</h2>
         <p>
-          When you inquire with Afghan Tours (operated by James Tourist &amp; Travel Agency), we may receive contact details
-          and trip-planning information you choose to share — for example name, email, WhatsApp number, travel interests, and dates.
+          AfghanTours.com is owned and operated by <strong>{siteConfig.operator}</strong> (JTTA),
+          a licensed Afghanistan travel operator based in Kabul. Brand: Afghan Tours ({siteConfig.email}).
+        </p>
+
+        <h2 class="font-display text-xl font-bold text-[#1e3a5f]">What we collect when you inquire</h2>
+        <p>
+          When you use the website inquiry form, email, or WhatsApp, we may receive information you choose to share, such as:
+          name, email, WhatsApp/phone, country, preferred travel dates and flexibility, number of travelers,
+          tour or audience interest, accommodation/transport preferences, activities and cultural interests, and free-text notes.
         </p>
         <p>
-          We use that information to respond to inquiries and, if you proceed, to plan travel arrangements.
+          Technical delivery of the web form may use PHP <code>mail()</code> on a cPanel host and/or an external form endpoint
+          (<code>PUBLIC_FORM_ENDPOINT</code>). Static-only hosts cannot run PHP — see inquiry docs.
+        </p>
+
+        <h2 class="font-display text-xl font-bold text-[#1e3a5f]">How we use it</h2>
+        <p>
+          We use inquiry information to respond, prepare proposals, and — if you proceed — to plan travel arrangements.
           We do not sell personal information for marketing lists.
         </p>
+
+        <h2 class="font-display text-xl font-bold text-[#1e3a5f]">Providers and sharing</h2>
         <p>
-          Practical coordination with hotels, transport partners, or authorities may require sharing limited details needed to deliver the journey you requested.
-          Exact retention and deletion practices are <strong>to be confirmed</strong> with the operator.
+          Practical coordination with hotels, transport partners, guides, or authorities may require sharing limited details
+          needed to deliver the journey you requested. We share only what is reasonably necessary for that purpose.
+          Exact lists of subprocessors / providers are <strong>[OPERATOR DECISION]</strong>.
         </p>
+
+        <h2 class="font-display text-xl font-bold text-[#1e3a5f]">Retention</h2>
         <p>
-          For privacy questions, email <a href="mailto:info@afghantours.com">info@afghantours.com</a> or use the
+          How long inquiry and booking records are kept is <strong>[OPERATOR DECISION]</strong>.
+          This draft intentionally does not invent a retention window.
+        </p>
+
+        <h2 class="font-display text-xl font-bold text-[#1e3a5f]">Contact about privacy</h2>
+        <p>
+          Email <a href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a> or use the
           <a href="/contact/">Contact</a> page. Prefer WhatsApp only after the operator has verified the published number
-          (see <code>docs/OPEN-BUSINESS-FACTS.md</code>).
+          (see OPEN-BUSINESS-FACTS — do not change the number without evidence).
         </p>
       </div>
     </div>

@@ -1,23 +1,25 @@
 ---
 /**
- * WG1 draft stub — restores /terms/ route present on live.
- * No invented payment, refund, or license claims beyond already-published operator framing.
+ * WG2 draft — expands around JTTA, inquiry vs booking, traveler responsibilities.
+ * NO invented payment %, refund windows. [OPERATOR DECISION] placeholders.
  */
 import BaseLayout from '@layouts/BaseLayout.astro';
 import Hero from '@components/site/Hero.astro';
 import SectionHeader from '@components/ui/SectionHeader.astro';
+import { siteConfig } from '@lib/config';
+import { BOOKING_SEQUENCE_STEPS } from '@lib/inquiry';
 ---
 
 <BaseLayout
   title="Terms – Afghan Tours (Draft)"
-  description="Draft terms placeholder for Afghan Tours. Operator review pending — inquiries are not bookings."
+  description="Draft terms for Afghan Tours inquiries and travel planning. Operator review pending — inquiries are not bookings."
 >
   <Hero
     title="Terms"
-    subtitle="Draft pending operator review — this page restores the live URL without inventing payment or refund rules."
+    subtitle="Draft pending operator review — inquiry process, traveler responsibilities, and booking sequence."
     imagePath="/assets/images/heroes/hero-terms.webp"
     ctaText="Contact us"
-    ctaHref="/contact"
+    ctaHref="/contact/"
   />
 
   <section class="py-16 bg-white">
@@ -26,30 +28,57 @@ import SectionHeader from '@components/ui/SectionHeader.astro';
         <SectionHeader eyebrow="Draft" title="Terms of inquiry & travel (pending review)" />
       </div>
       <div class="rounded-2xl border border-amber-200 bg-amber-50 px-5 py-4 text-sm text-amber-950">
-        <strong>Status:</strong> Draft for URL restoration only.
-        Payment methods, deposit/refund rules, and governing-law language are <em>unresolved business facts</em>
-        and must not be invented here (see <code>docs/OPEN-BUSINESS-FACTS.md</code>).
+        <strong>Status:</strong> Draft for continuity only.
+        Payment methods, deposit percentages, cancellation/refund windows, and governing-law language are
+        <strong>[OPERATOR DECISION]</strong> (see <code>docs/OPEN-BUSINESS-FACTS.md</code>).
+        Do not invent numbers here.
       </div>
       <div class="prose prose-lg max-w-none text-[rgba(15,23,42,0.75)] leading-relaxed space-y-4">
-        <p>
-          Submitting an inquiry on this website does <strong>not</strong> create a confirmed booking.
-          A journey is confirmed only after itinerary, price, and payment terms are agreed in writing with Afghan Tours.
-        </p>
+        <h2 class="font-display text-xl font-bold text-[#1e3a5f]">Operator</h2>
         <p>
           Afghan Tours is a licensed Afghan tour operator — American-led, Afghan-operated, and based in Kabul —
-          working through James Tourist &amp; Travel Agency. We plan around current access, permits, and conditions;
+          working through <strong>{siteConfig.operator}</strong> (JTTA). We plan around current access, permits, and conditions;
           safety is planned, not promised. Itineraries may change when conditions require it.
         </p>
+
+        <h2 class="font-display text-xl font-bold text-[#1e3a5f]">Inquiry is not a booking</h2>
         <p>
-          Travelers remain responsible for valid visas, passports, and entry requirements. Afghan Tours may provide guidance
-          and letters of invitation support where applicable; we do not issue visas.
+          Submitting an inquiry on this website (or via WhatsApp/email) does <strong>not</strong> create a confirmed booking,
+          hold inventory, or obligate either party to travel. A journey is confirmed only after itinerary, price, and payment terms
+          are agreed <strong>in writing</strong> with Afghan Tours.
         </p>
+        <p class="text-sm">Typical sequence:</p>
+        <ol class="list-decimal pl-5 space-y-1 text-sm">
+          {BOOKING_SEQUENCE_STEPS.map((s) => <li>{s}</li>)}
+        </ol>
+
+        <h2 class="font-display text-xl font-bold text-[#1e3a5f]">Traveler responsibilities</h2>
         <p>
-          Detailed payment, cancellation, and refund terms will be stated in the booking confirmation for each journey.
-          Until the operator publishes a final site policy, treat this page as informational only.
+          Travelers remain responsible for valid visas, passports, vaccinations where required, and entry requirements for their nationality.
+          Afghan Tours may provide guidance and letters of invitation support where applicable; <strong>we do not issue visas</strong>.
+          Travelers should follow local laws and guidance from their guide or operations team.
         </p>
+
+        <h2 class="font-display text-xl font-bold text-[#1e3a5f]">Providers</h2>
         <p>
-          Questions: <a href="mailto:info@afghantours.com">info@afghantours.com</a> or
+          Hotels, vehicles, flights, and activity partners are selected for operational fit. Availability and standards can vary;
+          substitutions may be required when conditions change. Specific supplier terms may appear in your written proposal.
+        </p>
+
+        <h2 class="font-display text-xl font-bold text-[#1e3a5f]">Payment, cancellation, refunds</h2>
+        <p>
+          Deposit amounts, payment schedules, cancellation windows, and refund rules are <strong>[OPERATOR DECISION]</strong>
+          and will be stated in the booking confirmation for each journey — not invented on this page.
+        </p>
+
+        <h2 class="font-display text-xl font-bold text-[#1e3a5f]">License / legal identifiers</h2>
+        <p>
+          Any license number used in marketing must match operator documentation.
+          Publishing a specific license string on this site is <strong>[OPERATOR DECISION]</strong> pending re-verification.
+        </p>
+
+        <p>
+          Questions: <a href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a> or
           <a href="/contact/">Contact</a>.
         </p>
       </div>

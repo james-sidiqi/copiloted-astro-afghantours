@@ -11,6 +11,7 @@ import RelatedToursSection from '@components/travel/RelatedToursSection.astro';
 import type { Tour, MapStop, SiteData } from '@lib/types/view-models';
 import { getSiteData } from '@lib/data/site-data';
 import { siteConfig } from '@lib/config';
+import { buildScheduledInquiryHref, buildCustomInquiryHref } from '@lib/inquiry';
 
 export async function getStaticPaths() {
   const data = getSiteData();
@@ -83,9 +84,16 @@ const hasProposedDates = tour.dates.some(
 );
 
 
-const inquireMessage = `Hi Afghan Tours — I'm interested in "${tour.name}" (slug: ${tour.slug}, code: ${tour.tourCode}). Could you share availability and next steps?`;
+const firstDeparture = tour.dates[0]?.dateStart || '';
+const inquireMessage = `Hi Afghan Tours — I'm interested in "${tour.name}" (slug: ${tour.slug}, code: ${tour.tourCode})${firstDeparture ? ` for departure ${firstDeparture}` : ''}. Could you share availability and next steps?`;
 const whatsappInquireUrl = `${siteConfig.whatsapp.url}?text=${encodeURIComponent(inquireMessage)}`;
-const contactInquireHref = `/contact?tour=${encodeURIComponent(tour.slug)}&tourName=${encodeURIComponent(tour.name)}&tourCode=${encodeURIComponent(tour.tourCode)}`;
+const contactInquireHref = buildScheduledInquiryHref({
+  slug: tour.slug,
+  name: tour.name,
+  code: tour.tourCode,
+  departure: firstDeparture || undefined,
+});
+const customJourneyHref = buildCustomInquiryHref();
 const mailtoInquireHref = `mailto:${siteConfig.email}?subject=${encodeURIComponent(`Enquiry: ${tour.name}`)}&body=${encodeURIComponent(inquireMessage)}`;
 
 // FAQ: tour-specific first, then general tour/logistics FAQs (no invented Q&A)
@@ -539,7 +547,7 @@ const durationLabel = tour.durationDays
           Inquire About This Tour
         </a>
         <a
-          href="/contact"
+          href={customJourneyHref}
           class="inline-block px-8 py-3.5 rounded-full border-2 border-white/80 hover:bg-white hover:text-[#1e3a5f] text-white font-semibold transition-all duration-200"
         >
           Build a Custom Journey

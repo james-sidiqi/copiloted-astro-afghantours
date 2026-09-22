@@ -100,7 +100,7 @@ export function getCustomAudiences(): CustomAudience[] {
       label: d.label,
       blurb: d.blurb,
       imagePath,
-      href: `/contact?audience=${encodeURIComponent(d.id)}`,
+      href: `/contact/?flow=custom&audience=${encodeURIComponent(d.id)}`,
       assetNote: d.assetNote,
       objectPosition: d.objectPosition,
     };

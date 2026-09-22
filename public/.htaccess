@@ -1,0 +1,196 @@
+# AfghanTours Apache / cPanel static hosting
+# Production MUST use this public/.htaccess (copied into dist/ on build).
+# PHP inquiry: public/tour-inquiry.php requires PHP execution; static-only hosts need PUBLIC_FORM_ENDPOINT.
+#
+
+# BEGIN AFGHANTOURS-HAND
+# Hand-maintained host rules (preserved across regenerate). Add carefully.
+# END AFGHANTOURS-HAND
+
+# BEGIN AFGHANTOURS-REDIRECT-MAP
+# Auto-generated from docs/redirect-map.csv — do not edit by hand.
+# Regenerate: node scripts/generate-htaccess.mjs
+# Deploy this file with static dist/ on Apache/cPanel. Nginx needs equivalent map.
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  # Align repo alias with live Transportation URL; content reused from getting-around scaffold
+  RewriteRule ^getting-around/?$ /transportation/ [R=301,L]
+  # Live Faizabad hub slug → repo hub slug
+  RewriteRule ^hubs/faizabad-city/?$ /hubs/faizabad/ [R=301,L]
+  # Historical Sample.html not found in zip1 or workspace packages — flag; confirm via cpanel-final / html-handoff when atta
+  RewriteRule ^Sample\.html/?$ - [G,L]
+  # Case variant of Sample.html — same status
+  RewriteRule ^sample\.html/?$ - [G,L]
+  # Live restaurants URL is broken Apache autoindex; zip1 had restaurants routes — do not advertise until rebuilt
+  RewriteRule ^restaurants/?$ - [G,L]
+  # live province under destinations → dedicated provinces IA (Bamyan)
+  RewriteRule ^destinations/bamyan/?$ /provinces/bamyan/ [R=301,L]
+  # live province under destinations → dedicated provinces IA (Daykundi)
+  RewriteRule ^destinations/daykundi/?$ /provinces/daykundi/ [R=301,L]
+  # live province under destinations → dedicated provinces IA (Ghazni)
+  RewriteRule ^destinations/ghazni/?$ /provinces/ghazni/ [R=301,L]
+  # live province under destinations → dedicated provinces IA (Kabul)
+  RewriteRule ^destinations/kabul/?$ /provinces/kabul/ [R=301,L]
+  # live province under destinations → dedicated provinces IA (Kapisa)
+  RewriteRule ^destinations/kapisa/?$ /provinces/kapisa/ [R=301,L]
+  # live province under destinations → dedicated provinces IA (Logar)
+  RewriteRule ^destinations/logar/?$ /provinces/logar/ [R=301,L]
+  # live province under destinations → dedicated provinces IA (Panjshir)
+  RewriteRule ^destinations/panjshir/?$ /provinces/panjshir/ [R=301,L]
+  # live province under destinations → dedicated provinces IA (Parwan)
+  RewriteRule ^destinations/parwan/?$ /provinces/parwan/ [R=301,L]
+  # live province under destinations → dedicated provinces IA (Wardak)
+  RewriteRule ^destinations/wardak/?$ /provinces/wardak/ [R=301,L]
+  # live province under destinations → dedicated provinces IA (Khost)
+  RewriteRule ^destinations/khost/?$ /provinces/khost/ [R=301,L]
+  # live province under destinations → dedicated provinces IA (Kunar)
+  RewriteRule ^destinations/kunar/?$ /provinces/kunar/ [R=301,L]
+  # live province under destinations → dedicated provinces IA (Laghman)
+  RewriteRule ^destinations/laghman/?$ /provinces/laghman/ [R=301,L]
+  # live province under destinations → dedicated provinces IA (Nangarhar)
+  RewriteRule ^destinations/nangarhar/?$ /provinces/nangarhar/ [R=301,L]
+  # live province under destinations → dedicated provinces IA (Nuristan)
+  RewriteRule ^destinations/nuristan/?$ /provinces/nuristan/ [R=301,L]
+  # live province under destinations → dedicated provinces IA (Paktia)
+  RewriteRule ^destinations/paktia/?$ /provinces/paktia/ [R=301,L]
+  # live province under destinations → dedicated provinces IA (Paktika)
+  RewriteRule ^destinations/paktika/?$ /provinces/paktika/ [R=301,L]
+  # live province under destinations → dedicated provinces IA (Badakhshan)
+  RewriteRule ^destinations/badakhshan/?$ /provinces/badakhshan/ [R=301,L]
+  # live province under destinations → dedicated provinces IA (Baghlan)
+  RewriteRule ^destinations/baghlan/?$ /provinces/baghlan/ [R=301,L]
+  # live province under destinations → dedicated provinces IA (Balkh)
+  RewriteRule ^destinations/balkh/?$ /provinces/balkh/ [R=301,L]
+  # live province under destinations → dedicated provinces IA (Faryab)
+  RewriteRule ^destinations/faryab/?$ /provinces/faryab/ [R=301,L]
+  # live province under destinations → dedicated provinces IA (Jowzjan)
+  RewriteRule ^destinations/jowzjan/?$ /provinces/jowzjan/ [R=301,L]
+  # live province under destinations → dedicated provinces IA (Kunduz)
+  RewriteRule ^destinations/kunduz/?$ /provinces/kunduz/ [R=301,L]
+  # live province under destinations → dedicated provinces IA (Samangan)
+  RewriteRule ^destinations/samangan/?$ /provinces/samangan/ [R=301,L]
+  # live province under destinations → dedicated provinces IA (Sar-e-Pol)
+  RewriteRule ^destinations/sar-e-pol/?$ /provinces/sar-e-pol/ [R=301,L]
+  # live province under destinations → dedicated provinces IA (Takhar)
+  RewriteRule ^destinations/takhar/?$ /provinces/takhar/ [R=301,L]
+  # live province under destinations → dedicated provinces IA (Helmand)
+  RewriteRule ^destinations/helmand/?$ /provinces/helmand/ [R=301,L]
+  # live province under destinations → dedicated provinces IA (Kandahar)
+  RewriteRule ^destinations/kandahar/?$ /provinces/kandahar/ [R=301,L]
+  # live province under destinations → dedicated provinces IA (Nimroz)
+  RewriteRule ^destinations/nimroz/?$ /provinces/nimroz/ [R=301,L]
+  # live province under destinations → dedicated provinces IA (Uruzgan)
+  RewriteRule ^destinations/uruzgan/?$ /provinces/uruzgan/ [R=301,L]
+  # live province under destinations → dedicated provinces IA (Zabul)
+  RewriteRule ^destinations/zabul/?$ /provinces/zabul/ [R=301,L]
+  # live province under destinations → dedicated provinces IA (Badghis)
+  RewriteRule ^destinations/badghis/?$ /provinces/badghis/ [R=301,L]
+  # live province under destinations → dedicated provinces IA (Farah)
+  RewriteRule ^destinations/farah/?$ /provinces/farah/ [R=301,L]
+  # live province under destinations → dedicated provinces IA (Ghor)
+  RewriteRule ^destinations/ghor/?$ /provinces/ghor/ [R=301,L]
+  # live province under destinations → dedicated provinces IA (Herat)
+  RewriteRule ^destinations/herat/?$ /provinces/herat/ [R=301,L]
+  # mapped from zip1 food/desserts/firni-pudding.md
+  RewriteRule ^food-culture/desserts/firni-pudding/?$ /food-culture/firni-pudding/ [R=301,L]
+  # mapped from zip1 food/desserts/ghazni-sheer-pira.md (alias ghazni-sheer-pira→sheer-pira)
+  RewriteRule ^food-culture/desserts/ghazni-sheer-pira/?$ /food-culture/sheer-pira/ [R=301,L]
+  # mapped from zip1 food/desserts/gosh-e-fil.md
+  RewriteRule ^food-culture/desserts/gosh-e-fil/?$ /food-culture/gosh-e-fil/ [R=301,L]
+  # mapped from zip1 food/desserts/halwa.md (alias halwa→afghan-halwa)
+  RewriteRule ^food-culture/desserts/halwa/?$ /food-culture/afghan-halwa/ [R=301,L]
+  # mapped from zip1 food/desserts/herat-baklava.md
+  RewriteRule ^food-culture/desserts/herat-baklava/?$ /food-culture/herat-baklava/ [R=301,L]
+  # mapped from zip1 food/desserts/herat-ice-cream.md
+  RewriteRule ^food-culture/desserts/herat-ice-cream/?$ /food-culture/herat-ice-cream/ [R=301,L]
+  # mapped from zip1 food/desserts/jalebi.md (alias jalebi→jalebi-sweet)
+  RewriteRule ^food-culture/desserts/jalebi/?$ /food-culture/jalebi-sweet/ [R=301,L]
+  # mapped from zip1 food/desserts/kandahar-sweets.md
+  RewriteRule ^food-culture/desserts/kandahar-sweets/?$ /food-culture/kandahar-sweets/ [R=301,L]
+  # mapped from zip1 food/desserts/kulcha-cookie.md
+  RewriteRule ^food-culture/desserts/kulcha-cookie/?$ /food-culture/kulcha-cookie/ [R=301,L]
+  # mapped from zip1 food/desserts/saffron-ice-cream.md (alias saffron-ice-cream→herat-ice-cream)
+  RewriteRule ^food-culture/desserts/saffron-ice-cream/?$ /food-culture/herat-ice-cream/ [R=301,L]
+  # mapped from zip1 food/desserts/sheer-pira.md
+  RewriteRule ^food-culture/desserts/sheer-pira/?$ /food-culture/sheer-pira/ [R=301,L]
+  # mapped from zip1 food/desserts/sheer-yakh.md (alias sheer-yakh→sheer-e-yakh)
+  RewriteRule ^food-culture/desserts/sheer-yakh/?$ /food-culture/sheer-e-yakh/ [R=301,L]
+  # fuzzy ash→ash-soup from zip1 — VERIFY before host cutover
+  RewriteRule ^food-culture/dishes/ash/?$ /food-culture/ash-soup/ [R=301,L]
+  # mapped from zip1 food/dishes/aushak.md (alias aushak→aushak-dumplings)
+  RewriteRule ^food-culture/dishes/aushak/?$ /food-culture/aushak-dumplings/ [R=301,L]
+  # fuzzy bolani→bolani-flatbread from zip1 — VERIFY before host cutover
+  RewriteRule ^food-culture/dishes/bolani/?$ /food-culture/bolani-flatbread/ [R=301,L]
+  # mapped from zip1 food/dishes/chapli-kabob.md (alias chapli-kabob→chapli-kebab)
+  RewriteRule ^food-culture/dishes/chapli-kabob/?$ /food-culture/chapli-kebab/ [R=301,L]
+  # mapped from zip1 food/dishes/chicken-kabuli.md (alias chicken-kabuli→chicken-qabili)
+  RewriteRule ^food-culture/dishes/chicken-kabuli/?$ /food-culture/chicken-qabili/ [R=301,L]
+  # mapped from zip1 food/dishes/herat-kabob.md (alias herat-kabob→herati-kebab)
+  RewriteRule ^food-culture/dishes/herat-kabob/?$ /food-culture/herati-kebab/ [R=301,L]
+  # mapped from zip1 food/dishes/kabul-kabob.md (alias kabul-kabob→kabul-kebab)
+  RewriteRule ^food-culture/dishes/kabul-kabob/?$ /food-culture/kabul-kebab/ [R=301,L]
+  # mapped from zip1 food/dishes/kabuli-pulao.md
+  RewriteRule ^food-culture/dishes/kabuli-pulao/?$ /food-culture/kabuli-pulao/ [R=301,L]
+  # mapped from zip1 food/dishes/kandahari-rosh.md (alias kandahari-rosh→kandahar-rosht)
+  RewriteRule ^food-culture/dishes/kandahari-rosh/?$ /food-culture/kandahar-rosht/ [R=301,L]
+  # mapped from zip1 food/dishes/mantu.md (alias mantu→mantu-dumplings)
+  RewriteRule ^food-culture/dishes/mantu/?$ /food-culture/mantu-dumplings/ [R=301,L]
+  # fuzzy naan→afghan-naan from zip1 — VERIFY before host cutover
+  RewriteRule ^food-culture/dishes/naan/?$ /food-culture/afghan-naan/ [R=301,L]
+  # mapped from zip1 food/dishes/qaroot-khurti.md
+  RewriteRule ^food-culture/dishes/qaroot-khurti/?$ /food-culture/qaroot-khurti/ [R=301,L]
+  # mapped from zip1 food/dishes/sambosa-pastry.md
+  RewriteRule ^food-culture/dishes/sambosa-pastry/?$ /food-culture/sambosa-pastry/ [R=301,L]
+  # mapped from zip1 food/dishes/samosa.md (alias samosa→sambosa-pastry)
+  RewriteRule ^food-culture/dishes/samosa/?$ /food-culture/sambosa-pastry/ [R=301,L]
+  # mapped from zip1 food/dishes/sheermal-bread.md
+  RewriteRule ^food-culture/dishes/sheermal-bread/?$ /food-culture/sheermal-bread/ [R=301,L]
+  # mapped from zip1 food/dishes/shorwa-soup.md
+  RewriteRule ^food-culture/dishes/shorwa-soup/?$ /food-culture/shorwa-soup/ [R=301,L]
+  # mapped from zip1 food/dried-fruits/balkh-almonds.md
+  RewriteRule ^food-culture/dried-fruits/balkh-almonds/?$ /food-culture/balkh-almonds/ [R=301,L]
+  # mapped from zip1 food/dried-fruits/dried-fruits.md (alias dried-fruits→afghan-dried-fruits)
+  RewriteRule ^food-culture/dried-fruits/dried-fruits/?$ /food-culture/afghan-dried-fruits/ [R=301,L]
+  # mapped from zip1 food/dried-fruits/herat-raisins.md
+  RewriteRule ^food-culture/dried-fruits/herat-raisins/?$ /food-culture/herat-raisins/ [R=301,L]
+  # mapped from zip1 food/dried-fruits/herat-saffron.md
+  RewriteRule ^food-culture/dried-fruits/herat-saffron/?$ /food-culture/herat-saffron/ [R=301,L]
+  # mapped from zip1 food/dried-fruits/panjshir-walnuts.md
+  RewriteRule ^food-culture/dried-fruits/panjshir-walnuts/?$ /food-culture/panjshir-walnuts/ [R=301,L]
+  # mapped from zip1 food/dried-fruits/samangan-pistachios.md
+  RewriteRule ^food-culture/dried-fruits/samangan-pistachios/?$ /food-culture/samangan-pistachios/ [R=301,L]
+  # mapped from zip1 food/drinks/dogh.md (alias dogh→doogh-yogurt-drink)
+  RewriteRule ^food-culture/drinks/dogh/?$ /food-culture/doogh-yogurt-drink/ [R=301,L]
+  # mapped from zip1 food/drinks/green-tea.md (alias green-tea→afghan-green-tea)
+  RewriteRule ^food-culture/drinks/green-tea/?$ /food-culture/afghan-green-tea/ [R=301,L]
+  # mapped from zip1 food/drinks/saffron-tea-houses-of-herat.md (alias saffron-tea-houses-of-herat→saffron-tea)
+  RewriteRule ^food-culture/drinks/saffron-tea-houses-of-herat/?$ /food-culture/saffron-tea/ [R=301,L]
+  # mapped from zip1 food/drinks/saffron-tea.md
+  RewriteRule ^food-culture/drinks/saffron-tea/?$ /food-culture/saffron-tea/ [R=301,L]
+  # mapped from zip1 food/produce/balkh-melon.md
+  RewriteRule ^food-culture/produce/balkh-melon/?$ /food-culture/balkh-melon/ [R=301,L]
+  # mapped from zip1 food/produce/bamyan-potatoes.md
+  RewriteRule ^food-culture/produce/bamyan-potatoes/?$ /food-culture/bamyan-potatoes/ [R=301,L]
+  # mapped from zip1 food/produce/farah-watermelon.md
+  RewriteRule ^food-culture/produce/farah-watermelon/?$ /food-culture/farah-watermelon/ [R=301,L]
+  # mapped from zip1 food/produce/kandahar-pomegranate.md
+  RewriteRule ^food-culture/produce/kandahar-pomegranate/?$ /food-culture/kandahar-pomegranate/ [R=301,L]
+  # mapped from zip1 food/produce/kandahar-pomegranates.md (alias kandahar-pomegranates→kandahar-pomegranate)
+  RewriteRule ^food-culture/produce/kandahar-pomegranates/?$ /food-culture/kandahar-pomegranate/ [R=301,L]
+  # mapped from zip1 food/produce/kunduz-melon.md
+  RewriteRule ^food-culture/produce/kunduz-melon/?$ /food-culture/kunduz-melon/ [R=301,L]
+  # mapped from zip1 food/produce/wardak-apples.md (alias wardak-apples→wardak-red-apples)
+  RewriteRule ^food-culture/produce/wardak-apples/?$ /food-culture/wardak-red-apples/ [R=301,L]
+  # Regional Map removed from nav if present; maps assets remain under /assets/maps/
+  RewriteRule ^maps/?$ /regions/ [R=301,L]
+  # Legacy flat HTML alias → transportation
+  RewriteRule ^getting-around\.html/?$ /transportation/ [R=301,L]
+  # Legacy flat HTML contact
+  RewriteRule ^contact\.html/?$ /contact/ [R=301,L]
+  # Legacy flat HTML privacy
+  RewriteRule ^privacy\.html/?$ /privacy/ [R=301,L]
+  # Legacy flat HTML terms
+  RewriteRule ^terms\.html/?$ /terms/ [R=301,L]
+</IfModule>
+# END AFGHANTOURS-REDIRECT-MAP
+

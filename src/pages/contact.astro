@@ -2,160 +2,98 @@
 import BaseLayout from '@layouts/BaseLayout.astro';
 import Hero from '@components/site/Hero.astro';
 import SectionHeader from '@components/ui/SectionHeader.astro';
-import { siteConfig } from '@lib/config';
+import InquiryForm from '@components/inquiry/InquiryForm.astro';
+import { siteConfig, formUsesPhp } from '@lib/config';
+import { resolveInquiryFlow } from '@lib/inquiry';
 
-const FORM_ENDPOINT = '';
-const formWorks = Boolean(FORM_ENDPOINT);
 const whatsappBaseUrl = siteConfig.whatsapp.url;
-const mailtoBaseHref = `mailto:${siteConfig.email}?subject=${encodeURIComponent('Afghan Tours enquiry')}`;
+const usesPhp = formUsesPhp();
+
+// Static build: default flow for SSR markup; client JS re-resolves from query.
+const flow = resolveInquiryFlow({});
 ---
 
-<BaseLayout title="Contact – Afghan Tours | Kabul-Based Planning" description="Contact Afghan Tours in Kabul for scheduled tours, custom journeys, LOI support for booked tours, and practical trip planning. We do not issue visas.">
-  <Hero title="Contact" subtitle="Scheduled tours, custom journeys, or a practical planning conversation — we are based in Kabul." imagePath="/assets/images/heroes/hero-contact.webp" ctaText="Start Planning" ctaHref="#contact-form-anchor" />
+<BaseLayout
+  title="Contact – Afghan Tours | Kabul-Based Planning"
+  description="Contact Afghan Tours in Kabul for scheduled tours, custom journeys, LOI support for booked tours, and practical trip planning. We do not issue visas. An inquiry is not a booking."
+>
+  <Hero
+    title="Contact"
+    subtitle="Scheduled tours, Build My Journey, or a practical planning conversation — we are based in Kabul."
+    imagePath="/assets/images/heroes/hero-contact.webp"
+    ctaText="Start an inquiry"
+    ctaHref="#contact-form-anchor"
+  />
   <section class="py-20 bg-[#f6f7fb]">
     <div class="max-w-5xl mx-auto px-4 sm:px-6">
-      <div
-        id="tour-inquiry-banner"
-        class="hidden mb-8 rounded-2xl border border-[#b88a2a]/30 bg-[#b88a2a]/10 px-5 py-4"
-        role="status"
-        aria-live="polite"
-      >
-        <p class="text-sm font-semibold text-[#1e3a5f]">
-          Inquiring about: <span id="tour-inquiry-name" class="text-[#b88a2a]"></span>
-        </p>
-        <p id="tour-inquiry-meta" class="mt-1 text-xs text-[rgba(15,23,42,0.6)]"></p>
-      </div>
-
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
         <div class="space-y-8">
-          <div><SectionHeader eyebrow="Contact" title="Talk through a trip" /><p class="mt-4 text-[rgba(15,23,42,0.75)] leading-relaxed">Questions about routes, timing, custom requests, or a booked-tour LOI — ask. We typically respond within 24 hours. We do not issue visas.</p></div>
+          <div>
+            <SectionHeader eyebrow="Contact" title="Talk through a trip" />
+            <p class="mt-4 text-[rgba(15,23,42,0.75)] leading-relaxed">
+              Questions about routes, timing, custom requests, or a booked-tour LOI — ask.
+              We typically respond within 24 hours. We do not issue visas.
+              <strong class="text-[#1e3a5f]">An inquiry is not a booking.</strong>
+            </p>
+          </div>
           <div class="bg-[#1e3a5f]/5 rounded-2xl p-5 border border-[#1e3a5f]/10">
             <p class="text-sm font-semibold text-[#1e3a5f] mb-2">Trust basics</p>
             <ul class="text-sm text-[rgba(15,23,42,0.7)] space-y-1.5 list-disc pl-4">
               <li>Licensed Afghan tour operator</li>
-              <li>American-led, Afghan-operated · Kabul-based</li>
+              <li>American-led, Afghan-operated · Kabul-based ({siteConfig.operator})</li>
               <li>LOI support for booked tours</li>
               <li>Routes planned around current access, permits, hotels, drivers, and conditions</li>
             </ul>
           </div>
           <div class="space-y-5">
-            <div class="flex items-start gap-4"><div class="w-11 h-11 rounded-xl bg-[#1e3a5f] flex items-center justify-center shrink-0"><svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg></div><div><p class="font-semibold text-[#1e3a5f] text-sm">Email</p><a id="contact-email-link" href={`mailto:${siteConfig.email}`} class="text-[#1f4aa8] hover:underline text-sm">{siteConfig.email}</a><p class="text-xs text-[rgba(15,23,42,0.5)] mt-0.5">We respond within 24 hours</p></div></div>
-            <div class="flex items-start gap-4"><div class="w-11 h-11 rounded-xl bg-[#1e3a5f] flex items-center justify-center shrink-0"><svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg></div><div><p class="font-semibold text-[#1e3a5f] text-sm">Phone</p><a href={siteConfig.phone.url} class="text-[#1f4aa8] hover:underline text-sm">{siteConfig.phone.display}</a></div></div>
-            <div class="flex items-start gap-4"><div class="w-11 h-11 rounded-xl bg-green-600 flex items-center justify-center shrink-0"><span class="text-white font-bold">W</span></div><div><p class="font-semibold text-[#1e3a5f] text-sm">WhatsApp</p><a id="contact-whatsapp-sidebar" href={whatsappBaseUrl} target="_blank" rel="noopener noreferrer" class="text-green-600 hover:underline text-sm">Chat on WhatsApp</a><p class="text-xs text-[rgba(15,23,42,0.5)] mt-0.5">Quickest way to reach us</p></div></div>
+            <div class="flex items-start gap-4">
+              <div class="w-11 h-11 rounded-xl bg-[#1e3a5f] flex items-center justify-center shrink-0">
+                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+              </div>
+              <div>
+                <p class="font-semibold text-[#1e3a5f] text-sm">Email</p>
+                <a id="contact-email-link" href={`mailto:${siteConfig.email}`} class="text-[#1f4aa8] hover:underline text-sm">{siteConfig.email}</a>
+                <p class="text-xs text-[rgba(15,23,42,0.5)] mt-0.5">We respond within 24 hours</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-4">
+              <div class="w-11 h-11 rounded-xl bg-[#1e3a5f] flex items-center justify-center shrink-0">
+                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+              </div>
+              <div>
+                <p class="font-semibold text-[#1e3a5f] text-sm">Phone</p>
+                <a href={siteConfig.phone.url} class="text-[#1f4aa8] hover:underline text-sm">{siteConfig.phone.display}</a>
+                <p class="text-xs text-[rgba(15,23,42,0.5)] mt-0.5">Operator-verify before advertising</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-4">
+              <div class="w-11 h-11 rounded-xl bg-green-600 flex items-center justify-center shrink-0"><span class="text-white font-bold">W</span></div>
+              <div>
+                <p class="font-semibold text-[#1e3a5f] text-sm">WhatsApp</p>
+                <a id="contact-whatsapp-sidebar" href={whatsappBaseUrl} target="_blank" rel="noopener noreferrer" class="text-green-600 hover:underline text-sm">Chat on WhatsApp</a>
+                <p class="text-xs text-[rgba(15,23,42,0.5)] mt-0.5">Number must be operator-verified (OPEN-BUSINESS-FACTS)</p>
+              </div>
+            </div>
           </div>
-          <div class="bg-[#1e3a5f]/5 rounded-2xl p-5 border border-[#1e3a5f]/10"><p class="text-sm font-semibold text-[#1e3a5f] mb-1">Response Time</p><p class="text-sm text-[rgba(15,23,42,0.7)]">We aim to respond to all enquiries within 24 hours. For urgent matters, WhatsApp is the fastest option.</p></div>
+          <div class="bg-white rounded-2xl p-5 border border-gray-100 text-sm text-[rgba(15,23,42,0.7)] space-y-2">
+            <p class="font-semibold text-[#1e3a5f]">Three inquiry paths</p>
+            <ul class="list-disc pl-4 space-y-1">
+              <li><a class="text-[#1f4aa8] underline" href="/contact/?flow=scheduled">Scheduled tour</a> — prefilled tour + departure when linked from a tour page</li>
+              <li><a class="text-[#1f4aa8] underline" href="/contact/?flow=custom">Build My Journey</a> — adaptive custom with review step</li>
+              <li><a class="text-[#1f4aa8] underline" href="/contact/?flow=general">General contact</a></li>
+            </ul>
+            <p class="text-xs text-[rgba(15,23,42,0.5)] pt-1">
+              {usesPhp
+                ? 'Server path: /tour-inquiry.php (PHP host required). Override with PUBLIC_FORM_ENDPOINT for static-only hosts.'
+                : 'Server path: external FORM_ENDPOINT (PUBLIC_FORM_ENDPOINT).'}
+            </p>
+          </div>
         </div>
         <div id="contact-form-anchor" class="bg-white rounded-2xl shadow-[0_2px_20px_rgba(0,0,0,0.08)] p-8">
-          <h2 class="font-display text-xl font-bold text-[#1e3a5f] mb-6">Send Us a Message</h2>
-          {formWorks ? (
-            <form action={FORM_ENDPOINT} method="POST" class="space-y-5" id="contact-form">
-              <input type="hidden" name="_subject" id="form-hidden-subject" value="Afghan Tours website enquiry" />
-              <input type="hidden" name="tour" id="form-tour-slug" value="" />
-              <input type="hidden" name="tourName" id="form-tour-name" value="" />
-              <input type="hidden" name="tourCode" id="form-tour-code" value="" />
-              <input type="hidden" name="audience" id="form-audience" value="" />
-              <div><label for="name" class="block text-sm font-semibold text-[#1e3a5f] mb-1.5">Your Name</label><input type="text" id="name" name="name" required class="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm" /></div>
-              <div><label for="email" class="block text-sm font-semibold text-[#1e3a5f] mb-1.5">Email Address</label><input type="email" id="email" name="email" required class="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm" /></div>
-              <div><label for="subject" class="block text-sm font-semibold text-[#1e3a5f] mb-1.5">Subject</label><input type="text" id="subject" name="subject" class="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm" /></div>
-              <div><label for="message" class="block text-sm font-semibold text-[#1e3a5f] mb-1.5">Message</label><textarea id="message" name="message" required rows="5" class="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm resize-y"></textarea></div>
-              <button type="submit" class="w-full py-3.5 rounded-full bg-[#b88a2a] hover:bg-[#a07820] text-white font-semibold text-sm shadow-md">Send Message</button>
-            </form>
-          ) : (
-            <div class="space-y-5">
-              <p class="text-sm text-[rgba(15,23,42,0.75)] leading-relaxed">For the fastest reply, message us on WhatsApp or email. The web form will be enabled once a form endpoint is configured.</p>
-              <a id="contact-whatsapp-cta" href={whatsappBaseUrl} target="_blank" rel="noopener noreferrer" class="block w-full text-center py-3.5 rounded-full bg-green-600 hover:bg-green-700 text-white font-semibold text-sm shadow-md">Chat on WhatsApp</a>
-              <a id="contact-mailto-cta" href={mailtoBaseHref} class="block w-full text-center py-3.5 rounded-full border-2 border-[#1e3a5f] text-[#1e3a5f] font-semibold text-sm hover:bg-[#1e3a5f] hover:text-white">Email {siteConfig.email}</a>
-              <p class="text-xs text-center text-[rgba(15,23,42,0.5)]">To enable the form later, set FORM_ENDPOINT in src/pages/contact.astro.</p>
-            </div>
-          )}
+          <h2 class="font-display text-xl font-bold text-[#1e3a5f] mb-6">Send an inquiry</h2>
+          <InquiryForm flow={flow} />
         </div>
       </div>
     </div>
   </section>
 </BaseLayout>
-
-<script define:vars={{ whatsappBaseUrl, contactEmail: siteConfig.email }}>
-  (function () {
-    const params = new URLSearchParams(window.location.search);
-    const tourSlug = (params.get('tour') || '').trim();
-    const tourName = (params.get('tourName') || '').trim();
-    const tourCode = (params.get('tourCode') || '').trim();
-    const audienceRaw = (params.get('audience') || '').trim();
-    const audienceLabels = {
-      diaspora: 'Diaspora return journey',
-      veterans: 'Veterans return journey',
-      'peace-corps': 'Peace Corps alumni journey',
-      business: 'Business travel inquiry',
-      artists: 'Artists / creative fieldwork inquiry',
-      media: 'Media / documentary support inquiry',
-    };
-    const audienceKey = audienceRaw.toLowerCase();
-    const audienceLabel = audienceLabels[audienceKey] || (audienceRaw ? ('Custom journey: ' + audienceRaw) : '');
-
-    if (!tourSlug && !tourName && !tourCode && !audienceLabel) return;
-
-    const displayName = tourName || audienceLabel || tourSlug || 'Selected tour';
-    const metaParts = [];
-    if (audienceKey) metaParts.push('audience: ' + audienceKey);
-    if (tourSlug) metaParts.push('slug: ' + tourSlug);
-    if (tourCode) metaParts.push('code: ' + tourCode);
-
-    const banner = document.getElementById('tour-inquiry-banner');
-    const nameEl = document.getElementById('tour-inquiry-name');
-    const metaEl = document.getElementById('tour-inquiry-meta');
-    if (banner && nameEl) {
-      nameEl.textContent = displayName;
-      if (metaEl) metaEl.textContent = metaParts.join(' · ');
-      banner.classList.remove('hidden');
-    }
-
-    const inquireMessage =
-      'Hi Afghan Tours — I\'m interested in "' +
-      displayName +
-      '"' +
-      (audienceKey ? ' (audience: ' + audienceKey + ')' : '') +
-      (tourSlug || tourCode
-        ? ' (slug: ' + (tourSlug || 'n/a') + ', code: ' + (tourCode || 'n/a') + ')'
-        : '') +
-      '. Could you share availability and next steps?';
-    const subject = 'Enquiry: ' + displayName;
-    const whatsappUrl = whatsappBaseUrl + '?text=' + encodeURIComponent(inquireMessage);
-    const mailtoUrl =
-      'mailto:' +
-      contactEmail +
-      '?subject=' +
-      encodeURIComponent(subject) +
-      '&body=' +
-      encodeURIComponent(inquireMessage);
-
-    ['contact-whatsapp-sidebar', 'contact-whatsapp-cta'].forEach((id) => {
-      const el = document.getElementById(id);
-      if (el) el.setAttribute('href', whatsappUrl);
-    });
-    ['contact-mailto-cta', 'contact-email-link'].forEach((id) => {
-      const el = document.getElementById(id);
-      if (el) el.setAttribute('href', mailtoUrl);
-    });
-
-    const subjectInput = document.getElementById('subject');
-    if (subjectInput && 'value' in subjectInput) subjectInput.value = subject;
-
-    const messageInput = document.getElementById('message');
-    if (messageInput && 'value' in messageInput) messageInput.value = inquireMessage;
-
-    const hiddenSubject = document.getElementById('form-hidden-subject');
-    if (hiddenSubject && 'value' in hiddenSubject) hiddenSubject.value = subject;
-
-    const slugField = document.getElementById('form-tour-slug');
-    if (slugField && 'value' in slugField) slugField.value = tourSlug;
-
-    const nameField = document.getElementById('form-tour-name');
-    if (nameField && 'value' in nameField) nameField.value = tourName || displayName;
-
-    const codeField = document.getElementById('form-tour-code');
-    if (codeField && 'value' in codeField) codeField.value = tourCode;
-
-    const audienceField = document.getElementById('form-audience');
-    if (audienceField && 'value' in audienceField) audienceField.value = audienceKey;
-  })();
-</script>
