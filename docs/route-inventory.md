@@ -356,3 +356,17 @@ Total: 247
 ```
 
 **Post-scaffold verified:** `/transportation/`, `/privacy/`, `/terms/` present; build **251** pages.
+
+---
+
+## WG5 delta vs this WG1 inventory (2026-09-22 AFT)
+
+**Tip SHA:** `512038f` · Pages built: **253** (WG1 was **251**).
+
+| Change | Detail |
+|---|---|
+| **+2 routes** | `/custom-requests/` + `/custom-requests/diaspora/` (WG3) |
+| Unchanged | attractions 89 · food-culture 49 · provinces 34 · tours 23 · destinations 15 · cultural-experiences 14 · hubs 9 · regions 6 · WG1 core singles |
+| **No unexpected loss** | All WG1 routes still present; Wakhan region still missing (documented) |
+
+Full release notes: `docs/COMPLETION-CHANGE-REPORT.md`.
