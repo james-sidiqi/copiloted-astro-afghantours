@@ -5,7 +5,7 @@
 **Branch:** `chore/completion-wg1-baseline`  
 **Base tip:** `chore/ready-2026-09-21` @ `57feb46a6490ba78222aa3b312085d06999081f9`  
 **Working tree at branch create:** clean (verified `git fetch` + `git status`; no reset)  
-**This baseline commit:** *(filled after commit)*  
+**This baseline commit:** `6732ae9c11b0e573658ce8e39096ec74591e8850`  
 
 ---
 
