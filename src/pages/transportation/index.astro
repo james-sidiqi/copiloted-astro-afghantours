@@ -1,0 +1,25 @@
+---
+/**
+ * WG1 scaffold: live-aligned /transportation/ reusing Getting Around content.
+ * Preferred canonical vs /getting-around/ — see docs/redirect-map.csv.
+ */
+import BaseLayout from '@layouts/BaseLayout.astro';
+import Hero from '@components/site/Hero.astro';
+import TransportArrangements from '@components/travel/TransportArrangements.astro';
+import { resolveTransportAsset } from '@lib/getAssetUrl';
+---
+
+<BaseLayout
+  title="Transportation – Afghan Tours"
+  description="How Afghan Tours moves guests on tours — vehicle categories, capacity, and when upgrades apply. Inquire for premium or specialised transport."
+>
+  <Hero
+    title="Transportation"
+    subtitle="How we move guests on tours — vehicle categories matched to route, group size, and conditions."
+    imagePath={resolveTransportAsset('standard', 'suv', 'hero') || '/assets/images/heroes/hero-destinations.webp'}
+    ctaText="Inquire about transport"
+    ctaHref="/contact"
+  />
+
+  <TransportArrangements />
+</BaseLayout>
