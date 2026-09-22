@@ -98,7 +98,11 @@ const dayItems = days.map((day) => {
       type: 'hotel',
       label: hotel.hotelName,
       description: hotel.description,
-      context: `${hotel.tier} · $${hotel.perNightPriceFrom.toLocaleString()}/night`,
+      context: (() => {
+        const t = (hotel.tier || '').toLowerCase();
+        const sym = ({ budget: '$', standard: '$$', premium: '$$$', luxury: '$$$$' } as Record<string, string>)[t];
+        return sym ? `${hotel.tier} ${sym}` : (hotel.tier || 'Hotel');
+      })(),
       imagePath: hotel.imagePaths.find(Boolean),
     }));
 

@@ -12,19 +12,19 @@ const hotels = data.hotels.filter((hotel) => hotel.isActive);
 const tierOrder = ['budget', 'standard', 'premium', 'luxury'];
 const tierCopy: Record<string, { title: string; blurb: string }> = {
   budget: {
-    title: 'Budget',
+    title: 'Budget $',
     blurb: 'Simple, functional stays when the route and group allow — selected for location and operational fit, not star marketing.',
   },
   standard: {
-    title: 'Standard',
+    title: 'Standard $$',
     blurb: 'Reliable mid-range properties we commonly use on scheduled itineraries — clean rooms, workable security posture, practical location.',
   },
   premium: {
-    title: 'Premium',
+    title: 'Premium $$$',
     blurb: 'Higher-spec city hotels when the itinerary and guest preference call for more comfort or meeting space.',
   },
   luxury: {
-    title: 'Luxury',
+    title: 'Luxury $$$$',
     blurb: 'Top-tier options in limited hubs — available as an upgrade on inquiry, not a separate hotel-booking marketplace.',
   },
 };

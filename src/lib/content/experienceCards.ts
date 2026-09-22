@@ -82,8 +82,8 @@ const ACTIVITY_DEFS: Array<{
     blurb: "Wetlands and highland birding when season and access allow — custom inquiry rather than a fixed catalogue package.",
     activityPath: ["birding"],
     imageCandidates: [
-      "/assets/images/experiences/activities/birding/thumb.webp",
       "/assets/images/experiences/activities/birding/hero.webp",
+      "/assets/images/experiences/activities/birding/thumb.webp",
     ],
   },
   {
@@ -134,8 +134,8 @@ export function getCulturalExperienceCards(limit = 6): ExperienceCard[] {
     const imagePath =
       pickExperienceImage("cultural-experiences", def.slug) ||
       firstExisting(
-        `/assets/images/cultural-experiences/${def.slug}/thumb.webp`,
         `/assets/images/cultural-experiences/${def.slug}/hero.webp`,
+        `/assets/images/cultural-experiences/${def.slug}/thumb.webp`,
       );
     if (!imagePath) continue;
     cards.push({
@@ -158,7 +158,7 @@ export function getActivityCards(limit = 6): ExperienceCard[] {
   const cards: ExperienceCard[] = [];
   for (const def of ACTIVITY_DEFS) {
     const imagePath =
-      (def.activityPath ? resolveActivityExperienceAsset(def.activityPath, "thumb") || resolveActivityExperienceAsset(def.activityPath, "hero") : "") ||
+      (def.activityPath ? resolveActivityExperienceAsset(def.activityPath, "hero") || resolveActivityExperienceAsset(def.activityPath, "thumb") : "") ||
       firstExisting(...def.imageCandidates);
     if (!imagePath) continue;
     const href =

@@ -11,6 +11,8 @@ export type CustomAudience = {
   imagePath: string;
   href: string;
   assetNote: string;
+  /** Tailwind object-position class for awkward crops (e.g. newspaper scans). */
+  objectPosition?: string;
 };
 
 const AUDIENCE_DEFS: Array<{
@@ -19,6 +21,7 @@ const AUDIENCE_DEFS: Array<{
   blurb: string;
   candidates: string[];
   assetNote: string;
+  objectPosition?: string;
 }> = [
   {
     id: "diaspora",
@@ -48,10 +51,11 @@ const AUDIENCE_DEFS: Array<{
     blurb: "Former Peace Corps volunteers returning with context, care, and on-the-ground planning from Kabul.",
     candidates: [
       "/assets/images/return-journeys/peace-corps/initial-peace-corps-group-article.webp",
-      "/assets/images/return-journeys/peace-corps/peace-corps-kabul-times.webp",
       "/assets/images/return-journeys/peace-corps/peace-corps-logo.webp",
+      "/assets/images/return-journeys/peace-corps/peace-corps-kabul-times.webp",
     ],
     assetNote: "return-journeys/peace-corps/",
+    objectPosition: "object-top",
   },
   {
     id: "business",
@@ -98,6 +102,7 @@ export function getCustomAudiences(): CustomAudience[] {
       imagePath,
       href: `/contact?audience=${encodeURIComponent(d.id)}`,
       assetNote: d.assetNote,
+      objectPosition: d.objectPosition,
     };
   });
 }

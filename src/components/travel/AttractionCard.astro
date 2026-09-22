@@ -11,10 +11,10 @@ const { attraction } = Astro.props;
   <!-- Image -->
   <a href={`/attractions/${attraction.slug}`} class="block overflow-hidden aspect-[4/3] bg-gray-100 shrink-0">
     <SafeImage
-      src={attraction.thumbnailPath}
+      src={attraction.imagePath || attraction.thumbnailPath}
       fallback="/assets/images/placeholders/default-attraction.webp"
       alt={attraction.name}
-      class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+      class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
       loading="lazy"
     />
   </a>

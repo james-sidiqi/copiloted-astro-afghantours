@@ -44,7 +44,7 @@ const activityCards = getActivityCards(6);
             <HubCard
               hub={hub}
               provinceName={province ? `${province.provinceName} Province` : hub.parentCode}
-              imagePath={resolveHubAsset(hub.slug, province?.squareImagePath || province?.coverImagePath || '', 'thumb') || province?.squareImagePath || province?.coverImagePath || ''}
+              imagePath={resolveHubAsset(hub.slug, province?.coverImagePath || province?.squareImagePath || '', 'hero') || province?.coverImagePath || province?.squareImagePath || ''}
             />
           );
         })}

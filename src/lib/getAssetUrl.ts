@@ -612,15 +612,15 @@ export function pickExperienceImage(
 ): string {
   if (category === "cultural-experiences") {
     return (
-      resolveExperienceSlugAsset("culinary", slug, "thumb") ||
-      resolveExperienceSlugAsset("cultural", slug, "thumb") ||
       resolveExperienceSlugAsset("culinary", slug, "hero") ||
       resolveExperienceSlugAsset("cultural", slug, "hero") ||
-      resolveCategorySlugAsset(category, slug, "thumb") ||
-      resolveCategorySlugAsset(category, slug, "hero")
+      resolveCategorySlugAsset(category, slug, "hero") ||
+      resolveExperienceSlugAsset("culinary", slug, "thumb") ||
+      resolveExperienceSlugAsset("cultural", slug, "thumb") ||
+      resolveCategorySlugAsset(category, slug, "thumb")
     );
   }
-  return resolveCategorySlugAsset(category, slug, "thumb") || resolveCategorySlugAsset(category, slug, "hero");
+  return resolveCategorySlugAsset(category, slug, "hero") || resolveCategorySlugAsset(category, slug, "thumb");
 }
 
 /**
