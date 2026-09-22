@@ -77,6 +77,14 @@ function loadTourDates(): TourDate[] {
   }));
 }
 
+function parseRelatedLinks(raw: string | undefined): string[] {
+  if (!raw) return [];
+  return raw
+    .split(/[|,]/)
+    .map((s) => s.trim())
+    .filter((s) => s.startsWith('/') && !s.startsWith('//'));
+}
+
 function loadFaqs(): Faq[] {
   const rows = readCsv<FaqRow>('faq.csv');
   return rows
@@ -89,7 +97,13 @@ function loadFaqs(): Faq[] {
       question: cleanText(r.question),
       answer: cleanText(r.answer),
       isActive: true,
-    }));
+      sortOrder: Number.parseInt(String(r.sort_order || '100'), 10) || 100,
+      relatedLinks: parseRelatedLinks(r.related_links),
+      imagePath: cleanText(r.image_path || ''),
+      verificationNote: cleanText(r.verification_note || ''),
+      sourceRef: cleanText(r.source_ref || ''),
+    }))
+    .sort((a, b) => a.sortOrder - b.sortOrder || a.faqId.localeCompare(b.faqId));
 }
 
 function loadHotels(): HotelProperty[] {

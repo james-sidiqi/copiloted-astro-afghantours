@@ -1,24 +1,160 @@
-faq_id,page_assignment,category,tour_slug,question,answer,is_active
-LDR-01,home,Leadership,,What makes Afghan Tours unique?,"Our leadership includes a US citizen who has lived and worked in Kabul for 15 years, providing an unmatched local network and safety oversight.",1
-PLN-01,home,Planning,,How flexible is the itinerary?,"We are agile. While we have a planned route, we finalize details close to your arrival to account for the most current security and weather data.",1
-VIS-01,faq;logistics,Visa,,How do I obtain an Afghan visa?,"You need a Letter of Invitation (LOI) from us. You then apply at an Afghan consulate in hubs like Dubai, Islamabad, or Istanbul.",1
-VIS-02,faq;logistics,Visas,,What is the 'Maktub' and do I need it?,"A 'Maktub' is an internal provincial permit. While your visa gets you into the country, the Maktub allows you to pass checkpoints between provinces. We handle all Maktub applications.",1
-MON-01,faq;logistics,Money,,Can I use my credit cards?,"No. Afghanistan is a cash-only economy. You must bring clean, post-2013 USD bills to exchange for Afghanis (AFN).",1
-MON-02,faq;logistics,Money,,What should I do with leftover Afghanis?,The Afghani (AFN) is difficult to exchange outside. We recommend spending it on souvenirs or exchanging it back to USD at Sarai Shahzada.,1
-SAF-01,safety,Insurance,,Is high-risk insurance mandatory?,Yes. Standard travel insurance does not cover Afghanistan. You must have specialized 'High-Risk' insurance including Medical Evacuation.,1
-SAF-02,faq;safety,Safety,,What is the 'Low-Profile' travel policy?,"We use unmarked, standard local vehicles (like Toyota Corollas) rather than luxury SUVs to blend in and reduce unwanted attention.",1
-ETQ-01,faq;safety,Etiquette,,Can I travel as a solo woman?,"Yes, but with caveats. Under 2026 regulations, women must be accompanied by a 'Mahram' for long-distance travel. Our lead guide often fulfills this role.",1
-ETQ-02,faq;safety,Etiquette,,Is music or dancing allowed?,"Public performances are restricted. We ask guests to use headphones. In private traditional settings, some local folk music may be experienced discreetly.",1
-ETQ-03,faq;safety,Etiquette,,Can I bring a drone?,Drones are strictly regulated. Bringing one without a Ministry of Defense permit usually results in confiscation. Permit processes take 3 months.,1
-TEC-01,faq;safety,Connectivity,,Are there restrictions on social media?,Some platforms are intermittently blocked. We recommend a VPN. Avoid posting live locations; it is safer to post after leaving a district.,1
-FOD-01,faq;logistics,Food,,Is vegetarian or vegan food available?,"Vegetarianism is uncommon but 'Borani Banjan' and 'Ashak' are staples. Veganism is harder due to yogurt/ghee, but we can coordinate meals.",1
-HEA-01,faq;safety,Health,,What happens in a medical emergency?,Our protocols rely on your mandatory 'High-Risk' insurance for stabilization and rapid medical evacuation to Dubai or Istanbul.,1
-RAM-01,faq;tour-cultural,Etiquette,,Traveling during Ramadan?,Eating or drinking in public during daylight is illegal. We adjust schedules to provide private dining spaces for guests during the day.,1
-LOG-01,tour,Logistics,bamyan-skiing-tour,Do I need to bring my own skis?,"We recommend bringing your own boots and skins for fit, but we can facilitate local equipment rental if arranged in advance.",1
-FIT-01,tour,Fitness,bamyan-skiing-tour,What is the required skiing ability?,This is backcountry skiing at high altitude. You should be a confident intermediate to advanced off-piste skier.,1
-TIM-01,tour,Timing,buzkashi-expedition,When do Buzkashi matches take place?,Matches usually happen on Fridays during the cooler months. We track local schedules in real-time.,1
-ACS-01,tour,Access,timurid-grandeur-herat-tour,Is the Friday Mosque open to tourists?,"Yes, we coordinate visits outside of prayer times to ensure respectful access to the tile-work and courtyards.",1
-PRE-01,tour,Preparation,trek-the-wakhan-corridor,What kind of training do I need?,"This is a high-altitude trek. You should be capable of walking 6-8 hours a day on rugged terrain above 3,000m.",1
-LOG-02,tour,Logistics,trek-the-wakhan-corridor,How do we sleep during the trek?,Accommodation is a mix of high-quality expedition tents and traditional Pamiri 'guest houses'.,1
-PHO-01,tour,Photography,photography-tour,Are there restrictions on what I can film?,We manage permits for professional gear. Military sites and certain government buildings are strictly off-limits.,1
-CUL-01,tour,Culture,kandahar-durrani-empire-tour,Is Kandahar safe for Westerners?,"With our 15-year network and local guides, we manage a safe, respectful, and high-standard visit to the Pashtun heartland.",1
+faq_id,page_assignment,category,tour_slug,question,answer,is_active,sort_order,related_links,image_path,verification_note,source_ref
+LDR-01,home,Leadership,,What makes Afghan Tours unique?,"Our leadership includes a US citizen who has lived and worked in Kabul for many years, combined with Afghan operations staff and local guide networks. That pairing supports practical planning, local coordination, and clear communication with international travelers.
+
+We do not invent safety guarantees — we plan carefully and adjust when conditions require it.",1,10,,,,repo-home;ops-voice
+PLN-01,home,Planning,,How flexible is the itinerary?,"We plan with current conditions in mind. While each journey has a designed route, sequence, overnight points, or transport may be adjusted close to arrival — and during travel — when weather, road access, or local coordination require it.
+
+Flexibility is part of responsible travel in Afghanistan, not a failure of planning.",1,20,/tours|/custom-requests|/contact,,,repo-home;live-faq
+BKG-01,faq,Planning & Booking,,Are your tours fixed or private?,"Most Afghan Tours itineraries are designed for private parties and can be adjusted around dates, interests, comfort level, and practical route conditions.
+
+We also publish Scheduled Tours with proposed departure windows — inquire for current availability rather than assuming a public calendar is bookable until confirmed.",1,10,/tours|/custom-requests|/contact,,,live-faq
+BKG-02,faq,Planning & Booking,,Can you build a fully custom itinerary?,"Yes. Tell us your dates, priorities, preferred comfort level, and places you want to visit. We can build a journey from scratch or modify an existing itinerary.
+
+Custom planning still depends on access, season, and local coordination — we will say so when a request is not practical.",1,20,/custom-requests|/contact|/tours,,,live-faq;zip1-FAQ-025
+BKG-03,faq,Planning & Booking,,How far in advance should I contact you?,"Several weeks or months is ideal, particularly when visa documentation, specialist logistics, seasonal routes, or premium accommodation are involved.
+
+Short-notice requests can still be reviewed, but options may be more limited.",1,30,/contact|/tours,,,live-faq;zip1-FAQ-045
+BKG-04,faq,Planning & Booking,,Do you work with solo travelers and private groups?,"Yes. We plan journeys for solo travelers, couples, families, private groups, professional visitors, and specialist teams.
+
+Solo travelers should still review cultural and logistics notes (including women-traveler guidance) before booking.",1,40,/contact|/custom-requests,,,live-faq
+BKG-05,faq,Planning & Booking,,How do I book a tour with Afghan Tours?,"Start with an inquiry — via the website contact form, WhatsApp, or email. An inquiry is not a booking.
+
+Typical sequence: inquire → we review feasibility → shared itinerary/quote discussion → confirmation steps for a booked trip. Deposit and payment schedules are confirmed in writing for your trip (see Terms for operator policy status).",1,50,/contact|/tours|/custom-requests,,Payment/deposit schedule needs operator confirmation before publishing exact %,zip1-FAQ-035;live-faq
+BKG-06,faq,Planning & Booking,,What is included in a typical Afghan Tours package?,"Inclusions vary by itinerary. They may include airport transfers, accommodation, in-country transportation, guides, logistical support, and selected meals.
+
+Always read the inclusions listed on the specific tour page — do not assume a universal package.",1,60,/tours|/contact,,,zip1-FAQ-037;live-faq
+BKG-07,faq,Planning & Booking,,Can I travel independently in Afghanistan?,"We recommend that international visitors travel with pre-arranged logistics and local support. Independent travel may be possible in limited circumstances but requires significant planning, local knowledge, and realistic risk awareness.
+
+If you prefer more independence within a structured trip, tell us — we can discuss what support level fits.",1,70,/safety|/contact,,,zip1-FAQ-036
+BKG-08,faq,Planning & Booking,,Why choose Afghan Tours instead of arranging a trip myself?,"Afghanistan rewards preparation. We combine local expertise, established relationships, transportation coordination, accommodation management, documentation support where applicable, and on-the-ground assistance.
+
+Itineraries are built around real conditions and practical logistics — not brochure assumptions.",1,80,/tours|/contact,,,zip1-FAQ-046
+VIS-01,faq;logistics,Visas & Documentation,,Do I need a visa to visit Afghanistan?,"Most foreign nationals need an Afghan visa or other authorized entry permission before travel. Requirements and channels vary by nationality and can change.
+
+Many travelers can apply through the official government e-Visa process when available for their nationality; others may still use embassy/consulate channels. Always confirm current requirements with official sources and your nearest Afghan mission — Afghan Tours does not issue visas.",1,10,/visa-entry|/contact,/assets/images/faqs/visa-sample.webp,Confirm current e-Visa eligibility list and any nationality exceptions with ops before marketing as universal,zip1-FAQ-001;james-corrections;live-faq
+VIS-02,faq;logistics,Visas & Documentation,,Is a Letter of Invitation (LOI) always required?,"No. An LOI is not universally required for every nationality or every visa channel. Some travelers complete e-Visa or other applications without an LOI; others still need invitation or supporting tourism documentation.
+
+Where an LOI or supporting letter is required for your nationality and itinerary, Afghan Tours can provide that support for confirmed booked travelers. Final visa decisions remain with the authorities.",1,20,/visa-entry|/contact,,,james-corrections;live-faq;repo-VIS-01-outdated-removed
+VIS-03,faq;logistics,Visas & Documentation,,Can Afghan Tours provide a visa invitation letter?,"Yes — for confirmed booked travelers, when invitation or supporting tourism documentation is required for the visa process.
+
+We do not issue visas, guarantee approvals, or replace official application steps.",1,30,/visa-entry|/contact,,,zip1-FAQ-002;live-faq
+VIS-04,faq;logistics,Visas & Documentation,,Do you arrange provincial permissions / coordination letters?,"Where an itinerary requires provincial registrations, permissions, or local coordination letters (sometimes discussed informally as maktub-style documentation), we handle or coordinate the practical process associated with the confirmed route.
+
+Requirements vary by province and can change. A national visa alone does not always cover every internal movement or checkpoint expectation — we brief confirmed travelers on what applies to their route.",1,40,/visa-entry|/safety|/contact,/assets/images/faqs/visa-sample.webp,Exact provincial letter names/processes vary; ops should confirm wording used with travelers,james-corrections;live-faq;repo-VIS-02-rewritten
+VIS-05,faq,Visas & Documentation,,What documents should I travel with?,"Requirements depend on nationality and itinerary. Typically: passport, visa/entry approval printouts, any invitation or coordination documents we provide, insurance details, and copies stored separately from originals.
+
+We give pre-trip document guidance for confirmed travelers. Passports, visas, insurance, and personal regulatory requirements remain the traveler’s responsibility.",1,50,/visa-entry|/contact,,,live-faq
+VIS-06,faq,Visas & Documentation,,Can Americans travel to Afghanistan?,"US citizens can travel to Afghanistan under current entry rules that apply to their nationality, but travelers should carefully review official travel advisories and understand the risks.
+
+Visa channel, documentation, and insurance planning still apply. Contact us early if you are planning a trip.",1,60,/visa-entry|/safety|/contact,,Keep aligned with current US advisory language; do not soften risk,zip1-FAQ-005
+SAF-02,faq;safety,Safety & Route Planning,,Is Afghanistan safe for tourists?,"Security conditions in Afghanistan vary by region, season, and current events. There is no honest universal “safe/unsafe” label.
+
+Afghan Tours coordinates routes, accommodations, transportation, and local support carefully to reduce unnecessary exposure and keep travel structured. Conditions can still change; itineraries may be adjusted when needed.",1,10,/safety|/contact,,,zip1-FAQ-004;live-faq
+SAF-03,faq;safety,Safety & Route Planning,,How do you plan travel around current conditions?,"Routes are reviewed around road access, timing, weather, seasonal conditions, local coordination, practical overnight points, and the requirements of the itinerary.
+
+Daylight road movement is preferred where practical. Drive times are planned around realistic road conditions, not map distance alone.",1,20,/safety|/transportation,,,live-faq
+SAF-04,faq;safety,Safety & Route Planning,,Can the itinerary change after booking?,"Yes. Weather, road conditions, checkpoints, accommodation availability, or local coordination can require changes to sequence, timing, transport, or stops.
+
+When a destination becomes impractical, we discuss alternatives rather than forcing a route that no longer makes sense.",1,30,/safety|/contact,,,live-faq
+SAF-05,faq;safety,Safety & Route Planning,,What is the low-profile travel approach?,"Where appropriate, we favor practical local vehicles and low-profile movement rather than conspicuous luxury convoys. Vehicle choice still depends on route, group size, terrain, and season.
+
+The goal is workable logistics and reduced unnecessary attention — not theatrical “security theater.”",1,40,/transportation|/safety,/assets/images/faqs/transport.webp,,repo-SAF-02-rewritten
+SAF-06,faq;safety,Safety & Route Planning,,What happens at checkpoints?,"Your guide manages checkpoint communication and will advise when to keep documents ready, when to avoid photography, and how to proceed respectfully.
+
+Follow guide instructions. Do not film or photograph checkpoints, officials, or security infrastructure.",1,50,/safety,,,zip1-faq.md;james-corrections
+SAF-01,faq;safety,Insurance & Health,,Is travel / high-risk insurance mandatory?,"Travel insurance is not a legal entry requirement imposed by Afghan Tours, and we do not present high-risk cover as a government “mandatory” obligation.
+
+We strongly recommend comprehensive travel insurance that includes emergency medical treatment and evacuation appropriate to Afghanistan as a destination. Standard leisure policies often exclude this region — check wording carefully.
+
+We do not name a required insurer, set arbitrary coverage minimums on this page, or guarantee that any policy will pay or that evacuation will always be available.",1,10,/safety|/contact,,"If ops later names preferred brokers/minimums, add only after written confirmation",james-corrections;zip1-FAQ-003;repo-SAF-01-outdated-removed
+HEA-01,faq;safety,Insurance & Health,,What happens in a medical emergency?,"Your guide and operations contacts coordinate the immediate on-ground response based on location and situation. Evacuation and advanced care depend on your insurance, weather, air/road access, and provider networks — none of which we can guarantee in advance.
+
+Carry policy details and emergency contacts. Do not assume a named hospital transfer or guaranteed medevac to Dubai/Istanbul.",1,20,/safety|/contact,,,james-corrections;repo-HEA-01-outdated-removed
+HEA-02,faq,Insurance & Health,,Do I need vaccinations before traveling?,"Consult a travel clinic or medical professional familiar with Afghanistan before you travel. Recommended vaccinations and malaria/other precautions depend on your itinerary and personal health history.
+
+We do not publish a fixed vaccine checklist as medical advice.",1,30,/contact,,,zip1-FAQ-033
+HEA-03,faq,Insurance & Health,,Can I bring prescription medication?,"Carry prescription medications in original packaging with copies of prescriptions when possible. Check current import rules for controlled medicines before travel.
+
+Bring more than you expect to need for delays, and keep a copy of your medication list separate from your bags.",1,40,,,,zip1-FAQ-041
+MON-01,faq;logistics,Money & Payments,,How should I handle money? Can I use cards or ATMs?,"Cash remains important for day-to-day spending in Afghanistan. Card acceptance is limited, and you should not rely on cards as your primary method.
+
+Some ATMs and bank services exist in major cities, but availability, withdrawal limits, and foreign-card reliability vary — treat ATMs as a backup, not a plan.
+
+Many travelers bring US dollars in good condition for exchange into Afghanis (AFN). Bill-year and quality preferences can vary by exchanger; “post-2013 only” is not a universal rule we assert for every counter. We brief confirmed travelers on practical cash handling for their trip.",1,10,/contact,,Confirm current ATM/card realities and any bill-year guidance ops actually gives clients,james-corrections;live-faq;zip1-FAQ-010/011;repo-MON-01-outdated-removed
+MON-02,faq;logistics,Money & Payments,,"What currency is used, and can I exchange money?","The official currency is the Afghani (AFN). Currency exchange is widely available in major cities (for example markets such as Sarai Shahzada in Kabul).
+
+AFN can be difficult to exchange outside Afghanistan — spend leftovers on souvenirs or exchange back before departure when practical.",1,20,,,,zip1-FAQ-010/042;repo-MON-02
+MON-03,faq,Money & Payments,,How do I pay for a tour?,"Payment method and schedule are confirmed in writing for your booking. Do not assume a single universal “cash only for the whole tour fee” rule from older copy.
+
+Day-to-day in-country spending is still largely cash-oriented. Ask during inquiry for the payment path that applies to your trip.",1,30,/contact,,Blocked on operator payment/refund policy text,zip1-faq.md;james-corrections
+HTL-01,faq,Hotels & Upgrades,,What accommodation is included?,"Each itinerary identifies the standard accommodation planned for the journey. Hotel standards vary by city and province.
+
+Many hotels in major cities offer hot water, generators, and basic modern amenities, but standards still vary by property and location.",1,10,/hotels|/tours,/assets/images/faqs/hotels-upgrades.webp,,live-faq;zip1-FAQ-022
+HTL-02,faq,Hotels & Upgrades,,Can I request premium hotels or upgrade only part of my trip?,"Yes. Where suitable options are available, premium upgrades can be requested for all or selected nights at additional cost.
+
+Tell us which hubs matter most and we can quote available upgrades without rebuilding the entire itinerary.",1,20,/hotels|/contact,,,live-faq;zip1-FAQ-038
+HTL-03,faq,Hotels & Upgrades,,Can foreigners stay in hotels in Afghanistan?,"Yes. We work with hotels accustomed to hosting international travelers, journalists, NGO personnel, and business visitors. Registration and ID processes are normal — follow guide/hotel instructions.",1,30,/hotels,,,zip1-FAQ-023
+TRN-01,faq;logistics,Transportation,,Are airport transfers available?,"Yes. Airport pickup, hotel transfers, and departure-day transport can be coordinated for confirmed travelers.",1,10,/transportation|/contact,/assets/images/faqs/transport.webp,,live-faq;zip1-FAQ-014
+TRN-02,faq;logistics,Transportation,,What vehicles do you use?,"Vehicle choice depends on the route, group size, terrain, season, luggage, and comfort requirements. City sedans, SUVs, vans, and higher-clearance 4x4s may be used.
+
+Armored vehicles are not the default; ask if you require a specific vehicle class.",1,20,/transportation,,,live-faq;zip1-FAQ-015
+TRN-03,faq,Transportation,,Do you arrange domestic flights?,"Domestic flights can be incorporated where schedules, weather, availability, and route logic make flying more practical than driving — for example between hubs such as Kabul, Herat, Mazar-e-Sharif, and Kandahar when services operate.",1,30,/transportation|/contact,,,live-faq;zip1-FAQ-044
+TRN-04,faq,Transportation,,How are remote and mountain routes handled?,"Remote routes are planned around road condition, season, daylight, vehicle suitability, fuel, driver familiarity, and realistic travel times.
+
+Expect longer days, possible delays, and itinerary flexibility on mountain and secondary roads.",1,40,/transportation|/safety,,,live-faq;zip1-FAQ-016
+FOD-01,faq;logistics,Food & Culture,,Are meals included? Can you accommodate dietary requirements?,"Meal inclusions vary by itinerary — check the specific tour. Tell us dietary needs in advance; we plan around them where practical, recognizing that options can be more limited outside major cities.
+
+Bottled water is widely available in cities and recommended for international travelers.",1,10,/food-culture|/tours,/assets/images/faqs/breakfast-with-guides.webp,,live-faq;zip1-FAQ-020/021
+FOD-02,faq;logistics,Food & Culture,,Is vegetarian or vegan food available? What about mantu and aushak?,"Vegetarian meals are usually workable in major cities with advance notice. Afghan cuisine centers on dishes such as kabuli palaw, mantu (dumpling, typically meat-filled), and aushak (leek dumplings often served with meat sauce and yogurt).
+
+Aushak is not a guaranteed “always-vegetarian staple.” Ask for meat-free preparation when needed; yogurt and ghee are common, so vegan diets require more careful coordination and may be limited on remote days.",1,20,/food-culture,/assets/images/faqs/busy-market-kabul.webp,,james-corrections;repo-FOD-01-outdated-removed
+CUL-02,faq,Food & Culture,,Can cultural experiences be added to a tour?,"Yes. Markets, crafts, food stops, local traditions, photography interests, and regional experiences can be incorporated where they fit the route and timing.",1,30,/food-culture|/custom-requests,,,live-faq
+TEC-01,faq;safety,Practical Travel,,Is mobile internet available? Can I use an eSIM?,"Mobile data and hotel Wi-Fi are available in many populated areas, but reliability varies. Do not assume continuous connectivity on remote routes.
+
+Local SIMs (e.g. AWCC, Roshan, Salaam) and some international eSIM/roaming options can work; coverage and registration rules change. A VPN can help when platforms are intermittently restricted. Avoid posting live locations while still in a district.",1,10,,,eSIM brand names are examples only; ops may prefer not naming vendors,live-faq;zip1-FAQ-012/013/047;repo-TEC-01
+ETQ-04,faq;safety,Practical Travel,,What should I wear?,"Dress modestly and follow current local guidance. Loose-fitting clothing is strongly recommended. Women should plan for a headscarf in many public settings.
+
+We provide practical clothing advice before arrival based on season and itinerary. Wearing local Afghan clothing is optional, not required.",1,20,,,,live-faq;zip1-FAQ-018/039
+PHO-02,faq;safety,Practical Travel,,What should I know about photography?,"Always ask permission before photographing people. Follow guide instructions near checkpoints, government buildings, officials, military sites, and other sensitive locations — these are often off-limits for photos.
+
+Professional gear may need additional coordination depending on the project.",1,30,/safety|/contact,,,james-corrections;live-faq;zip1-FAQ-009/040
+ETQ-03,faq;safety,Practical Travel,,Can I bring a drone?,"Do not bring or fly a drone without prior authorization. Drone use is highly restricted; unauthorized equipment is commonly confiscated and can create serious problems at entry or checkpoints.
+
+Contact Afghan Tours before packing any drone or specialized aerial gear so we can advise whether authorization is realistic for your dates.",1,40,/contact|/safety,,,james-corrections;zip1-FAQ-008;repo-ETQ-03-rewritten
+ETQ-02,faq;safety,Practical Travel,,"Is music, dancing, or alcohol allowed?","Public performances and alcohol are highly restricted. Use headphones for personal music. In private traditional settings, some discreet cultural experiences may be possible — follow local guidance.
+
+Do not expect legal public access to alcohol.",1,50,,,,repo-ETQ-02;zip1-FAQ-019
+RAM-01,faq,Practical Travel,,What should I know about traveling during Ramadan?,"Eating, drinking, or smoking in public during daylight hours in Ramadan is not appropriate and can be illegal. We adjust schedules to provide private dining spaces for guests when needed.
+
+Tell us if your dates fall in Ramadan so we can plan accordingly.",1,60,,,,repo-RAM-01
+ETQ-01,faq;safety,Etiquette & Women Travelers,,Can women travel to Afghanistan? Do I need a mahram?,"Yes — women travel on our organized itineraries. Rules and expectations around accompaniment (often discussed as mahram for certain long-distance or inter-provincial travel) can apply and can change by locality and enforcement practice.
+
+Important: a tour guide is not a mahram. Do not assume that hiring a guide satisfies family-accompaniment rules. We discuss current requirements honestly during planning and arrange logistics and appropriate local support — without claiming the guide replaces mahram where that role is required.",1,10,/safety|/contact,,Confirm current mahram/enforcement wording with ops for 2026 briefings,james-corrections;zip1-FAQ-006;repo-ETQ-01-outdated-removed
+ETQ-05,faq,Etiquette & Women Travelers,,Are LGBTQ travelers able to visit?,"Afghanistan is a conservative Islamic society with cultural and legal norms that differ significantly from many Western countries. Discretion and cultural sensitivity are essential.
+
+We do not advertise Afghanistan as a destination for open LGBTQ travel. Discuss concerns privately during planning.",1,20,/safety|/contact,,,zip1-FAQ-032
+FIT-02,faq,Fitness & Accessibility,,How physically demanding are the tours?,"Demand varies widely. City-focused trips may involve walking on uneven sidewalks and long vehicle days. Mountain, trekking, and ski itineraries can mean high altitude, long hiking days, cold exposure, and limited medical infrastructure.
+
+We describe fitness expectations on demanding tour pages. Be honest about your fitness and mobility when you inquire.",1,10,/tours|/contact,,,james-corrections
+FIT-03,faq,Fitness & Accessibility,,Are tours accessible for travelers with limited mobility?,"Many sites involve stairs, rough ground, long walking, or vehicles without accessibility adaptations. Wheelchair-accessible itineraries are generally not available as a standard product.
+
+Tell us your needs early. We will say clearly what is and is not realistic rather than overselling accessibility.",1,20,/contact|/tours,,,james-corrections
+MED-01,faq,Specialist Travel,,"Can you support photographers, researchers, journalists, or media teams?","Yes. Specialist planning can include route design, drivers, guides, translators, accommodation, local coordination, and project-specific logistics.
+
+Filming, interviews, or certain equipment may need additional approvals depending on the project. Contact us early with a clear brief.",1,10,/custom-requests|/contact,,,live-faq;zip1-FAQ-007/034
+MED-02,faq,Specialist Travel,,"Do you support business visitors, delegations, veterans, or return visits?","Yes. We can coordinate practical ground support for business visitors and delegations, and we plan veteran or diaspora return visits around former locations, personal objectives, access, current conditions, and the level of privacy required.",1,20,/custom-requests|/contact,,,live-faq
+EXP-01,faq,Specialist Travel,,Can Afghan Tours support mountaineering or technical expeditions?,"Yes — logistics support for mountaineering and trekking (transport, permits/coordination, local support) can be arranged. Technical climbing guides may be available only on a limited basis depending on the expedition.
+
+Contact us before booking if you need advanced mountaineering support.",1,30,/contact|/tours,,,zip1-FAQ-017/029/030
+WX-01,faq,Specialist Travel,,What is the best season to visit? Can I visit Bamyan in winter?,"Spring and autumn are generally the most comfortable seasons for much of the country. Summer heat, winter snow, and Ramadan timing all affect planning.
+
+Bamyan is a primary winter tourism destination for skiing and mountain scenery when conditions allow. Seasonal activities have their own fitness and equipment requirements.",1,40,/tours,,,zip1-FAQ-026/027
+LOG-01,tour,Logistics,bamyan-skiing-tour,Do I need to bring my own skis?,We recommend bringing your own boots and skins for fit. Local equipment rental may be possible if arranged in advance — confirm during booking rather than assuming gear will be waiting.,1,10,,,,repo-tour
+FIT-01,tour,Fitness,bamyan-skiing-tour,What is the required skiing ability?,This is backcountry skiing at high altitude on ungroomed terrain. You should be a confident intermediate to advanced off-piste skier. It is not a beginner resort product.,1,20,,,,repo-tour;zip1-FAQ-028
+TIM-01,tour,Timing,buzkashi-expedition,When do Buzkashi matches take place?,"Matches usually happen on Fridays during the cooler months, but schedules are local and can change. We track opportunities in real time and do not invent fixed “next match” dates on the website.",1,10,,,Match windows still need operator confirmation for marketing calendars,repo-tour
+ACS-01,tour,Access,timurid-grandeur-herat-tour,Is the Friday Mosque open to tourists?,"Yes, visits are typically coordinated outside prayer times to ensure respectful access to the tile-work and courtyards. Access norms can change — follow guide instructions on the day.",1,10,,,,repo-tour
+PRE-01,tour,Preparation,trek-the-wakhan-corridor,What kind of training do I need?,"This is a high-altitude trek. You should be capable of walking 6–8 hours a day on rugged terrain above 3,000 m, with prior multi-day hiking experience strongly recommended.",1,10,,,,repo-tour
+LOG-02,tour,Logistics,trek-the-wakhan-corridor,How do we sleep during the trek?,"Accommodation is a mix of expedition tents and traditional Pamiri guest houses, depending on the section of the route and season.",1,20,,,,repo-tour
+PHO-01,tour,Photography,photography-tour,Are there restrictions on what I can film?,"We help coordinate practical access for photography itineraries. Military sites, checkpoints, and certain government buildings remain strictly off-limits. Always follow guide instructions and obtain consent before photographing people.",1,10,,,,repo-tour;james-corrections
+CUL-01,tour,Culture,kandahar-durrani-empire-tour,Is Kandahar safe for Westerners?,"Kandahar travel requires careful planning, local networks, and realistic expectations. With experienced local guides and current-condition routing, we manage respectful, structured visits — without claiming zero risk.",1,10,,,,repo-tour
+GUI-01,faq,Planning & Booking,,Does Afghan Tours provide guides?,"Yes. We provide local guides, drivers, translators, and logistical support depending on the tour and traveler requirements.",1,90,/tours|/contact,,,zip1-FAQ-024

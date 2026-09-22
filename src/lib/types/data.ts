@@ -156,6 +156,12 @@ export interface FaqRow {
   question: string;
   answer: string;
   is_active: string;
+  /** Optional; ignored by older callers */
+  sort_order?: string;
+  related_links?: string;
+  image_path?: string;
+  verification_note?: string;
+  source_ref?: string;
 }
 
 export interface HotelPropertyRow {

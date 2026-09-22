@@ -6,57 +6,167 @@ import FaqAccordion from '@components/travel/FaqAccordion.astro';
 import { getSiteData } from '@lib/data/site-data';
 
 const data = getSiteData();
-const faqs = data.faqs.filter(f => f.isActive);
-const categories = [...new Set(faqs.map(f => f.category).filter(Boolean))].sort();
+
+/** /faq/ shows page_assignment containing "faq", or empty/global — not home/tour-only rows. */
+function isFaqPageAssignment(pageAssignment: string): boolean {
+  const raw = (pageAssignment || '').trim().toLowerCase();
+  if (!raw || raw === 'global') return true;
+  const parts = raw.split(/[;,]/).map((p) => p.trim()).filter(Boolean);
+  return parts.includes('faq');
+}
+
+const faqs = data.faqs
+  .filter((f) => f.isActive && isFaqPageAssignment(f.pageAssignment))
+  .sort((a, b) => a.sortOrder - b.sortOrder || a.faqId.localeCompare(b.faqId));
+
+/** Booking & travel prep before specialist categories. */
+const CATEGORY_ORDER = [
+  'Planning & Booking',
+  'Visas & Documentation',
+  'Safety & Route Planning',
+  'Insurance & Health',
+  'Money & Payments',
+  'Hotels & Upgrades',
+  'Transportation',
+  'Food & Culture',
+  'Practical Travel',
+  'Etiquette & Women Travelers',
+  'Fitness & Accessibility',
+  'Specialist Travel',
+];
+
+const categorySet = [...new Set(faqs.map((f) => f.category).filter(Boolean))];
+const categories = [
+  ...CATEGORY_ORDER.filter((c) => categorySet.includes(c)),
+  ...categorySet.filter((c) => !CATEGORY_ORDER.includes(c)).sort(),
+];
+
+const CATEGORY_IMAGES: Record<string, string> = {
+  'Visas & Documentation': '/assets/images/faqs/visa-sample.webp',
+  'Hotels & Upgrades': '/assets/images/faqs/hotels-upgrades.webp',
+  Transportation: '/assets/images/faqs/transport.webp',
+  'Food & Culture': '/assets/images/faqs/breakfast-with-guides.webp',
+  'Practical Travel': '/assets/images/faqs/busy-market-kabul.webp',
+};
+
+/** Visa / insurance / payment stay mostly text — no category photo. */
+const TEXT_HEAVY = new Set(['Insurance & Health', 'Money & Payments']);
+
+function slugify(cat: string): string {
+  return cat
+    .toLowerCase()
+    .replace(/&/g, 'and')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
+}
+
+const faqCount = faqs.length;
 ---
 
-<BaseLayout title="Frequently Asked Questions – Afghan Tours" description="Find answers to common questions about touring Afghanistan with Afghan Tours.">
+<BaseLayout
+  title="Frequently Asked Questions – Afghan Tours"
+  description="Practical answers on booking, visas, provincial coordination, money, insurance, safety, food, and travel prep for Afghanistan with Afghan Tours."
+  ogImage="/assets/images/heroes/hero-faq.webp"
+>
   <Hero
     title="Frequently Asked Questions"
-    subtitle="Booking, payment, cancellation, visas, prep, and expectations — plain answers"
+    subtitle="Booking, visas, prep, and expectations — plain answers from a Kabul-based operator"
     imagePath="/assets/images/heroes/hero-faq.webp"
   />
 
-  <section class="py-20 bg-[#f6f7fb]">
+  <!-- Sticky category chips (mobile-friendly horizontal scroll) -->
+  {categories.length > 1 && (
+    <nav
+      class="sticky top-0 z-30 border-b border-[#1e3a5f]/10 bg-[#f6f7fb]/95 backdrop-blur-sm"
+      aria-label="FAQ categories"
+    >
+      <div class="max-w-3xl mx-auto px-4 sm:px-6">
+        <ul class="flex gap-2 overflow-x-auto py-3 scrollbar-thin snap-x">
+          {categories.map((category) => (
+            <li class="shrink-0 snap-start">
+              <a
+                href={`#faq-${slugify(category)}`}
+                class="inline-block whitespace-nowrap rounded-full border border-[#1e3a5f]/20 bg-white px-3.5 py-1.5 text-xs sm:text-sm font-semibold text-[#1e3a5f] hover:border-[#b88a2a] hover:text-[#b88a2a] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#1f4aa8] transition-colors"
+              >
+                {category}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </nav>
+  )}
+
+  <section class="py-16 sm:py-20 bg-[#f6f7fb]">
     <div class="max-w-3xl mx-auto px-4 sm:px-6">
+      <p class="mb-10 text-sm text-[rgba(15,23,42,0.65)]">
+        {faqCount} answers on this page. Tour-specific notes also appear on individual tour pages.
+        Prefer Scheduled Tours or a Custom Journey when you are ready to plan.
+      </p>
+
       {faqs.length > 0 ? (
-        categories.length > 0 ? (
-          <div class="space-y-14">
-            {categories.map(category => {
-              const categoryFaqs = faqs.filter(f => f.category === category);
-              return (
-                <div>
-                  <div class="mb-6">
-                    <SectionHeader eyebrow="Category" title={category} />
-                  </div>
-                  <FaqAccordion faqs={categoryFaqs} />
+        <div class="space-y-14">
+          {categories.map((category) => {
+            const categoryFaqs = faqs
+              .filter((f) => f.category === category)
+              .sort((a, b) => a.sortOrder - b.sortOrder);
+            const catImg = !TEXT_HEAVY.has(category) ? CATEGORY_IMAGES[category] : '';
+            const id = `faq-${slugify(category)}`;
+            return (
+              <section id={id} class="scroll-mt-24">
+                <div class="mb-6">
+                  <SectionHeader eyebrow="Category" title={category} />
                 </div>
-              );
-            })}
-          </div>
-        ) : (
-          <FaqAccordion faqs={faqs} />
-        )
+                {catImg && (
+                  <img
+                    src={catImg}
+                    alt=""
+                    class="mb-6 w-full max-h-44 object-cover rounded-2xl shadow-sm"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                )}
+                <FaqAccordion faqs={categoryFaqs} showImages={false} />
+              </section>
+            );
+          })}
+        </div>
       ) : (
         <div class="text-center py-20 text-gray-500">
           <p class="text-lg font-medium">No FAQs available at this time.</p>
-          <p class="mt-2 text-sm">Please <a href="/contact" class="text-[#1f4aa8] underline">contact us</a> with your question.</p>
+          <p class="mt-2 text-sm">
+            Please <a href="/contact/" class="text-[#1f4aa8] underline">contact us</a> with your question.
+          </p>
         </div>
       )}
     </div>
   </section>
 
-  <!-- Still have questions CTA -->
+  <!-- Contact + Scheduled / Custom pathways -->
   <section class="py-16 bg-[#1e3a5f]">
     <div class="max-w-3xl mx-auto px-4 sm:px-6 text-center text-white">
       <h2 class="font-display text-2xl font-bold mb-3">Still have questions?</h2>
-      <p class="text-white/80 mb-6">Ask about booking, payment, cancellation, visas, or prep — or move on to Scheduled Tours / a Custom Journey inquiry.</p>
-      <div class="flex flex-col sm:flex-row gap-3 justify-center">
-        <a href="/contact" class="inline-block px-8 py-3.5 rounded-full bg-[#b88a2a] hover:bg-[#a07820] text-white font-semibold shadow-lg transition-all duration-200">
+      <p class="text-white/80 mb-6">
+        Ask about booking, payment, cancellation, visas, or prep — or move on to Scheduled Tours / a Custom Journey inquiry.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-3 justify-center flex-wrap">
+        <a
+          href="/contact/"
+          class="inline-block px-8 py-3.5 rounded-full bg-[#b88a2a] hover:bg-[#a07820] text-white font-semibold shadow-lg transition-all duration-200"
+        >
           Contact Us
         </a>
-        <a href="/tours?type=scheduled" class="inline-block px-8 py-3.5 rounded-full border-2 border-white/80 hover:bg-white hover:text-[#1e3a5f] text-white font-semibold transition-all duration-200">
-          View Scheduled Tours
+        <a
+          href="/tours/?type=scheduled"
+          class="inline-block px-8 py-3.5 rounded-full border-2 border-white/80 hover:bg-white hover:text-[#1e3a5f] text-white font-semibold transition-all duration-200"
+        >
+          Scheduled Tours
+        </a>
+        <a
+          href="/custom-requests/"
+          class="inline-block px-8 py-3.5 rounded-full border-2 border-white/50 hover:bg-white/10 text-white font-semibold transition-all duration-200"
+        >
+          Custom Journey
         </a>
       </div>
     </div>
