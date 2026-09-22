@@ -140,6 +140,7 @@ export interface Dish {
   seasonEnd: number;
   descShort: string;
   imagePath: string;
+  tags: string[];
   isActive: boolean;
 }
 

@@ -1,0 +1,61 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import Hero from '@components/site/Hero.astro';
+import SectionHeader from '@components/ui/SectionHeader.astro';
+import ProvinceCard from '@components/travel/ProvinceCard.astro';
+import ConversionCTA from '@components/travel/ConversionCTA.astro';
+import { getSiteData } from '@lib/data/site-data';
+
+const data = getSiteData();
+const provinces = [...data.provinces].sort((a, b) => {
+  const fa = a.isFeatured ? 0 : 1;
+  const fb = b.isFeatured ? 0 : 1;
+  if (fa !== fb) return fa - fb;
+  const ra = a.featureRank || 999;
+  const rb = b.featureRank || 999;
+  if (ra !== rb) return ra - rb;
+  return a.provinceName.localeCompare(b.provinceName);
+});
+---
+
+<BaseLayout
+  title="Provinces of Afghanistan – Afghan Tours"
+  description="Browse Afghanistan’s provinces — cultural highlights, linked attractions, and Scheduled Tours when our data connects them."
+>
+  <Hero
+    title="Provinces"
+    subtitle="Province pages for discovery — open one for highlights, then find a Scheduled Tour or inquire for a Custom Journey."
+    imagePath="/assets/images/heroes/hero-destinations.webp"
+    ctaText="View Scheduled Tours"
+    ctaHref="/tours?type=scheduled"
+  />
+
+  <section class="py-16 bg-[#f6f7fb]">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <div class="mb-10">
+        <SectionHeader
+          eyebrow="Explore"
+          title="All provinces"
+          subtitle="Each province page lists attractions and any Scheduled Tours linked in our data — not a promise that every province is currently bookable."
+        />
+      </div>
+
+      {provinces.length > 0 ? (
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+          {provinces.map((province) => <ProvinceCard province={province} />)}
+        </div>
+      ) : (
+        <div class="text-center py-20 text-gray-500">
+          <p class="text-lg font-medium">No provinces available at this time.</p>
+        </div>
+      )}
+    </div>
+  </section>
+
+  <ConversionCTA
+    variant="soft"
+    eyebrow="Customer journey"
+    title="Discover → find a tour → inquire"
+    subtitle="Province pages orient you. Next: browse Scheduled Tours, or Build a Custom Journey if your route is specific."
+  />
+</BaseLayout>

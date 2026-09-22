@@ -9,6 +9,10 @@ const { transport } = Astro.props;
 const imagePath =
   resolveTransportAsset(transport.tier, transport.vehicleType, 'hero') ||
   resolveTransportAsset(transport.tier, transport.vehicleType, 'thumb');
+
+const tierLabel = transport.tier
+  ? transport.tier.charAt(0).toUpperCase() + transport.tier.slice(1).toLowerCase()
+  : '';
 ---
 
 <article class="group bg-white rounded-[14px] shadow-[0_2px_16px_0_rgba(0,0,0,0.08)] hover:shadow-[0_10px_30px_rgba(15,23,42,0.08)] transition-shadow duration-300 overflow-hidden flex flex-col">
@@ -23,8 +27,8 @@ const imagePath =
   </div>
   <div class="flex flex-col flex-1 p-5 gap-2">
     <div class="flex flex-wrap gap-1.5">
-      {transport.tier && (
-        <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-[#b88a2a]/15 text-[#8a651e]">{transport.tier}</span>
+      {tierLabel && (
+        <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-[#b88a2a]/15 text-[#8a651e]">{tierLabel}</span>
       )}
       {transport.vehicleType && (
         <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-[#1f4aa8]/10 text-[#1f4aa8]">{transport.vehicleType}</span>

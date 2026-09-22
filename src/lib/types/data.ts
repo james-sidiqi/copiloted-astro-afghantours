@@ -145,6 +145,7 @@ export interface DishRow {
   season_end: string;
   desc_short: string;
   image_path: string;
+  tags?: string;
   is_active: string;
 }
 

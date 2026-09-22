@@ -1,49 +1,49 @@
-dish_code,name,slug,region_code,province_code,destination_code,category,meal_type,is_produce,season_start,season_end,desc_short,image_path,is_active
-AF-KBL-PUL,Kabuli Pulao,kabuli-pulao,CENTRAL,KBL,KBLC,Main,Dinner,0,1,12,Afghanistan's national rice dish with lamb carrots and raisins.,/assets/images/food/dishes/kabuli-pulao.jpg,1
-AF-GHZ-PUL,Ghazni Pulao,ghazni-qabili-pulao,CENTRAL,GHZ,GHZC,Main,Dinner,0,1,12,Rich variation of Kabuli pulao known for deep flavor.,/assets/images/food/dishes/ghazni-pulao.jpg,1
-AF-KDR-ROS,Kandahar Rosht,kandahar-rosht,SOUTH,KDR,KDRC,Main,Dinner,0,1,12,Slow cooked lamb traditionally served with naan.,/assets/images/food/dishes/rosht.jpg,1
-AF-BMY-QRU,Qaroot Khurti,qaroot-khurti,CENTRAL,BMY,BMYC,Main,Dinner,0,1,12,Hazaragi yogurt stew with mint and garlic.,/assets/images/food/dishes/qrut.jpg,1
-AF-HER-KOR,Korma e Herati,korma-e-herati,WEST,HER,HERC,Main,Lunch,0,1,12,Herat style herb stew with tender meat.,/assets/images/food/dishes/herat-korma.jpg,1
-AF-KBL-AUS,Aushak Dumplings,aushak-dumplings,CENTRAL,KBL,KBLC,Main,Lunch,0,1,12,Leek dumplings topped with yogurt and meat sauce.,/assets/images/food/dishes/aushak.jpg,1
-AF-MAZ-MAN,Mantu Dumplings,mantu-dumplings,NORTH,BAL,MAZC,Main,Lunch,0,1,12,Steamed dumplings filled with minced meat.,/assets/images/food/dishes/mantu.jpg,1
-AF-KDR-CHP,Chapli Kebab,chapli-kebab,SOUTH,KDR,KDRC,Main,Dinner,0,1,12,Spiced minced beef kebab popular across Afghanistan.,/assets/images/food/dishes/chapli.jpg,1
-AF-HER-KAB,Herati Kebab,herati-kebab,WEST,HER,HERC,Main,Dinner,0,1,12,Grilled lamb kebab seasoned with herbs.,/assets/images/food/dishes/kebab.jpg,1
-AF-KBL-NAN,Afghan Naan,afghan-naan,CENTRAL,KBL,KBLC,Bread,Side,0,1,12,Traditional long flatbread baked in clay ovens.,/assets/images/food/dishes/naan.jpg,1
-AF-BAL-BOL,Bolani Flatbread,bolani-flatbread,NORTH,BAL,MAZC,Bread,Snack,0,1,12,Pan fried flatbread stuffed with potatoes or herbs.,/assets/images/food/dishes/bolani.jpg,1
-AF-HER-SAM,Sambosa,sambosa-pastry,WEST,HER,HERC,Snack,Tea-Time,0,1,12,Fried pastry filled with meat or vegetables.,/assets/images/food/dishes/sambosa.jpg,1
-AF-KBL-SYK,Sheer e Yakh,sheer-e-yakh,CENTRAL,KBL,KBLC,Dessert,Snack,0,5,9,Rose water ice cream topped with clotted cream.,/assets/images/food/dishes/sheer-yakh.jpg,1
-AF-KDR-SPR,Sheer Pira,sheer-pira,SOUTH,KDR,KDRC,Dessert,Tea-Time,0,1,12,Milk fudge flavored with cardamom.,/assets/images/food/dishes/sheer-pira.jpg,1
-AF-HER-GEF,Gosh e Fil,gosh-e-fil,WEST,HER,HERC,Dessert,Tea-Time,0,1,12,Fried elephant ear pastry served with sugar.,/assets/images/food/dishes/gosh-e-fil.jpg,1
-AF-KBL-FIR,Firni,firni-pudding,CENTRAL,KBL,KBLC,Dessert,Tea-Time,0,1,12,Creamy milk pudding flavored with cardamom.,/assets/images/food/dishes/firni.jpg,1
-AF-BAL-HAW,Halwa Afghan,afghan-halwa,NORTH,BAL,MAZC,Dessert,Tea-Time,0,1,12,Traditional sweet made with flour sugar and nuts.,/assets/images/food/dishes/halwa.jpg,1
-AF-KBL-CHA,Afghan Green Tea,afghan-green-tea,CENTRAL,KBL,KBLC,Beverage,Tea-Time,0,1,12,Traditional green tea served after meals.,/assets/images/food/drinks/green-tea.jpg,1
-AF-HER-CHA,Saffron Tea,saffron-tea,WEST,HER,HERC,Beverage,Tea-Time,0,1,12,Tea infused with Herat saffron strands.,/assets/images/food/drinks/saffron-tea.jpg,1
-AF-KDR-CHA,Kandahar Milk Tea,kandahar-milk-tea,SOUTH,KDR,KDRC,Beverage,Tea-Time,0,1,12,Black tea served with milk and sugar.,/assets/images/food/drinks/milk-tea.jpg,1
-AF-BMY-POT,Bamyan Potatoes,bamyan-potatoes,CENTRAL,BMY,BMYC,Produce,Side,1,9,11,Buttery potatoes grown in Bamyan valley.,/assets/images/food/produce/potatoes.jpg,1
-AF-WAR-APP,Wardak Apples,wardak-red-apples,CENTRAL,WRD,KBLC,Produce,Snack,1,9,11,Export quality apples from Wardak orchards.,/assets/images/food/produce/apples.jpg,1
-AF-KDR-POM,Kandahar Pomegranate,kandahar-pomegranate,SOUTH,KDR,KDRC,Produce,Snack,1,9,11,Ruby red pomegranates famous across Afghanistan.,/assets/images/food/produce/pomegranate.jpg,1
-AF-HER-SAF,Herat Saffron,herat-saffron,WEST,HER,HERC,Produce,Spice,1,10,11,Premium saffron grown near Herat.,/assets/images/food/produce/saffron.jpg,1
-AF-BAL-MEL,Balkh Melon,balkh-melon,NORTH,BAL,MAZC,Produce,Snack,1,8,10,Sweet melon grown in Balkh province.,/assets/images/food/produce/melon.jpg,1
-AF-KDZ-MEL,Kunduz Melon,kunduz-melon,NORTH,KDZ,MAZC,Produce,Snack,1,7,9,Northern summer melon with floral aroma.,/assets/images/food/produce/kunduz-melon.jpg,1
-AF-PJR-WAL,Panjshir Walnuts,panjshir-walnuts,CENTRAL,PJR,KBLC,Produce,Snack,1,9,10,Fresh walnuts harvested in Panjshir valley.,/assets/images/food/produce/walnuts.jpg,1
-AF-FRH-WAT,Farah Watermelon,farah-watermelon,WEST,FRH,HERC,Produce,Snack,1,5,8,Large red watermelon grown in Farah.,/assets/images/food/produce/watermelon.jpg,1
-AF-GHO-GRA,Ghor Grapes,ghor-grapes,WEST,GHO,HERC,Produce,Snack,1,8,10,Mountain grapes grown in Ghor.,/assets/images/food/produce/grapes.jpg,1
-AF-JOW-GOR,Jowzjan Gorgak Melon,jowzjan-gorgak,NORTH,JOW,MAZC,Produce,Snack,1,7,9,Small sweet melon grown by Turkmen farmers.,/assets/images/food/produce/gorgak.jpg,1
-AF-KBL-KAB,Kabul Kebab,kabul-kebab,CENTRAL,KBL,KBLC,Main,Dinner,0,1,12,Street grilled kebab served with naan.,/assets/images/food/dishes/kebab.jpg,1
-AF-KBL-QAB,Qabili Chicken,chicken-qabili,CENTRAL,KBL,KBLC,Main,Dinner,0,1,12,Chicken variation of Kabuli pulao.,/assets/images/food/dishes/qabili-chicken.jpg,1
-AF-HER-PIL,Herati Pilaf,herati-pilaf,WEST,HER,HERC,Main,Dinner,0,1,12,Rice dish seasoned with saffron.,/assets/images/food/dishes/herat-pilaf.jpg,1
-AF-KDR-KAB,Kandahar Kebab,kandahar-kebab,SOUTH,KDR,KDRC,Main,Dinner,0,1,12,Lamb kebab cooked over charcoal.,/assets/images/food/dishes/kebab.jpg,1
-AF-KBL-ASH,Ash Soup,ash-soup,CENTRAL,KBL,KBLC,Main,Lunch,0,1,12,Thick noodle soup with herbs.,/assets/images/food/dishes/ash.jpg,1
-AF-KBL-SHO,Shorwa Soup,shorwa-soup,CENTRAL,KBL,KBLC,Main,Lunch,0,1,12,Traditional Afghan meat broth soup.,/assets/images/food/dishes/shorwa.jpg,1
-AF-BAL-YOG,Balkh Yogurt Drink,doogh-yogurt-drink,NORTH,BAL,MAZC,Beverage,Snack,0,1,12,Salted yogurt drink served cold.,/assets/images/food/drinks/doogh.jpg,1
-AF-KBL-LAS,Lassi Drink,lassi-drink,CENTRAL,KBL,KBLC,Beverage,Snack,0,1,12,Yogurt drink popular in summer.,/assets/images/food/drinks/lassi.jpg,1
-AF-HER-ICE,Herat Ice Cream,herat-ice-cream,WEST,HER,HERC,Dessert,Snack,0,5,9,Saffron flavored Afghan ice cream.,/assets/images/food/dishes/ice-cream.jpg,1
-AF-KBL-DRY,Dried Fruits Mix,afghan-dried-fruits,CENTRAL,KBL,KBLC,Snack,Snack,1,1,12,Traditional mix of raisins almonds pistachios.,/assets/images/food/produce/dried-fruits.jpg,1
-AF-KBL-PIS,Pistachios Samangan,samangan-pistachios,NORTH,SAM,MAZC,Produce,Snack,1,8,10,Famous wild pistachios from Samangan.,/assets/images/food/produce/pistachios.jpg,1
-AF-HER-RAI,Herat Raisins,herat-raisins,WEST,HER,HERC,Produce,Snack,1,8,10,Sun dried raisins from Herat vineyards.,/assets/images/food/produce/raisins.jpg,1
-AF-BAL-ALM,Balkh Almonds,balkh-almonds,NORTH,BAL,MAZC,Produce,Snack,1,8,10,Crunchy almonds grown in Balkh province.,/assets/images/food/produce/almonds.jpg,1
-AF-KBL-SHE,Sheermal Bread,sheermal-bread,CENTRAL,KBL,KBLC,Bread,Side,0,1,12,Slightly sweet saffron flavored bread.,/assets/images/food/dishes/sheermal.jpg,1
-AF-KBL-KUL,Kulcha Cookie,kulcha-cookie,CENTRAL,KBL,KBLC,Dessert,Tea-Time,0,1,12,Traditional Afghan tea cookie.,/assets/images/food/dishes/kulcha.jpg,1
-AF-KBL-JAL,Jalebi Sweet,jalebi-sweet,CENTRAL,KBL,KBLC,Dessert,Tea-Time,0,1,12,Deep fried syrup soaked spiral sweet.,/assets/images/food/dishes/jalebi.jpg,1
-AF-HER-BAK,Herat Baklava,herat-baklava,WEST,HER,HERC,Dessert,Tea-Time,0,1,12,Layered pastry with nuts and honey.,/assets/images/food/dishes/baklava.jpg,1
-AF-KDR-SWE,Kandahar Sweets,kandahar-sweets,SOUTH,KDR,KDRC,Dessert,Tea-Time,0,1,12,Regional sweet pastries served with tea.,/assets/images/food/dishes/sweets.jpg,1
+dish_code,name,slug,region_code,province_code,destination_code,category,meal_type,is_produce,season_start,season_end,desc_short,image_path,tags,is_active
+AF-KBL-PUL,Kabuli Pulao,kabuli-pulao,CENTRAL,KBL,KBLC,Main,Dinner,0,1,12,Afghanistan's national rice dish with lamb carrots and raisins.,/assets/images/food/dishes/kabuli-palaw/hero.webp,Kabul,1
+AF-GHZ-PUL,Ghazni Pulao,ghazni-qabili-pulao,CENTRAL,GHZ,GHZC,Main,Dinner,0,1,12,Rich variation of Kabuli pulao known for deep flavor.,/assets/images/food/dishes/kabuli-palaw/hero.webp,Ghazni,1
+AF-KDR-ROS,Rosht,kandahar-rosht,SOUTH,KDR,KDRC,Main,Dinner,0,1,12,Slow-cooked lamb traditionally served with naan — a Kandahar classic.,/assets/images/food/dishes/kandahari-rosh/hero.webp,Kandahar,1
+AF-BMY-QRU,Qaroot Khurti,qaroot-khurti,CENTRAL,BMY,BMYC,Main,Dinner,0,1,12,Hazaragi yogurt stew with mint and garlic.,/assets/images/food/dishes/yoghurt/hero.webp,Bamyan,1
+AF-HER-KOR,Korma,korma-e-herati,WEST,HER,HERC,Main,Lunch,0,1,12,Herat-style herb stew with tender meat.,/assets/images/food/dishes/chiken-korma/hero.webp,Herat,1
+AF-KBL-AUS,Aushak Dumplings,aushak-dumplings,CENTRAL,KBL,KBLC,Main,Lunch,0,1,12,Leek dumplings topped with yogurt and meat sauce.,/assets/images/food/dishes/aushak/hero.webp,Kabul,1
+AF-MAZ-MAN,Mantu Dumplings,mantu-dumplings,NORTH,BAL,MAZC,Main,Lunch,0,1,12,Steamed dumplings filled with minced meat.,/assets/images/food/dishes/mantu/hero.webp,"Balkh, Mazar-e Sharif",1
+AF-KDR-CHP,Chapli Kebab,chapli-kebab,SOUTH,KDR,KDRC,Main,Dinner,0,1,12,Spiced minced beef kebab popular across Afghanistan.,/assets/images/food/dishes/chapli-kabob/hero.webp,Kandahar,1
+AF-HER-KAB,Kebab,herati-kebab,WEST,HER,HERC,Main,Dinner,0,1,12,"Grilled lamb kebab seasoned with herbs, in the Herat style.",/assets/images/food/dishes/herat-kabob/hero.webp,Herat,1
+AF-KBL-NAN,Afghan Naan,afghan-naan,CENTRAL,KBL,KBLC,Bread,Side,0,1,12,Traditional long flatbread baked in clay ovens.,/assets/images/food/dishes/naan/hero.webp,Kabul,1
+AF-BAL-BOL,Bolani Flatbread,bolani-flatbread,NORTH,BAL,MAZC,Bread,Snack,0,1,12,Pan fried flatbread stuffed with potatoes or herbs.,/assets/images/food/dishes/bolani/hero.webp,"Balkh, Mazar-e Sharif",1
+AF-HER-SAM,Sambosa,sambosa-pastry,WEST,HER,HERC,Snack,Tea-Time,0,1,12,Fried pastry filled with meat or vegetables.,/assets/images/food/dishes/samosa/hero.webp,Herat,1
+AF-KBL-SYK,Sheer e Yakh,sheer-e-yakh,CENTRAL,KBL,KBLC,Dessert,Snack,0,5,9,Rose water ice cream topped with clotted cream.,/assets/images/food/sweets/sheer-yakh/hero.webp,Kabul,1
+AF-KDR-SPR,Sheer Pira,sheer-pira,SOUTH,KDR,KDRC,Dessert,Tea-Time,0,1,12,Milk fudge flavored with cardamom.,/assets/images/food/sweets/sheer-pira/hero.webp,Kandahar,1
+AF-HER-GEF,Gosh e Fil,gosh-e-fil,WEST,HER,HERC,Dessert,Tea-Time,0,1,12,Fried elephant ear pastry served with sugar.,/assets/images/food/sweets/gosh-e-fil/hero.webp,Herat,1
+AF-KBL-FIR,Firni,firni-pudding,CENTRAL,KBL,KBLC,Dessert,Tea-Time,0,1,12,Creamy milk pudding flavored with cardamom.,/assets/images/food/sweets/firni/hero.webp,Kabul,1
+AF-BAL-HAW,Halwa Afghan,afghan-halwa,NORTH,BAL,MAZC,Dessert,Tea-Time,0,1,12,Traditional sweet made with flour sugar and nuts.,/assets/images/food/sweets/halwa/hero.webp,"Balkh, Mazar-e Sharif",1
+AF-KBL-CHA,Afghan Green Tea,afghan-green-tea,CENTRAL,KBL,KBLC,Beverage,Tea-Time,0,1,12,Traditional green tea served after meals.,/assets/images/food/drinks/green-tea/hero.webp,Kabul,1
+AF-HER-CHA,Saffron Tea,saffron-tea,WEST,HER,HERC,Beverage,Tea-Time,0,1,12,Tea infused with Herat saffron strands.,/assets/images/food/drinks/saffron-tea/hero.webp,Herat,1
+AF-KDR-CHA,Milk Tea,kandahar-milk-tea,SOUTH,KDR,KDRC,Beverage,Tea-Time,0,1,12,Black tea served with milk and sugar — common in Kandahar and the south.,/assets/images/food/drinks/sheer-chai/thumb.webp,Kandahar,1
+AF-BMY-POT,Potatoes,bamyan-potatoes,CENTRAL,BMY,BMYC,Produce,Side,1,9,11,Buttery potatoes grown in Bamyan valley.,/assets/images/food/produce/potatoes/hero.webp,Bamyan,1
+AF-WAR-APP,Apples,wardak-red-apples,CENTRAL,WRD,KBLC,Produce,Snack,1,9,11,Export-quality apples from Wardak orchards.,/assets/images/food/produce/apples/hero.webp,"Wardak, Kabul",1
+AF-KDR-POM,Pomegranate,kandahar-pomegranate,SOUTH,KDR,KDRC,Produce,Snack,1,9,11,"Ruby-red pomegranates famous across Afghanistan, especially Kandahar.",/assets/images/food/produce/pomegranate/hero.webp,Kandahar,1
+AF-HER-SAF,Saffron,herat-saffron,WEST,HER,HERC,Produce,Spice,1,10,11,Premium saffron grown near Herat.,/assets/images/food/dried-fruit/saffron/hero.webp,Herat,1
+AF-BAL-MEL,Melon,balkh-melon,NORTH,BAL,MAZC,Produce,Snack,1,8,10,Sweet melon grown in Balkh province.,/assets/images/food/produce/honeydew-mellon/hero.webp,"Balkh, Mazar-e Sharif",1
+AF-KDZ-MEL,Melon,kunduz-melon,NORTH,KDZ,MAZC,Produce,Snack,1,7,9,"Northern summer melon with floral aroma, associated with Kunduz.",/assets/images/food/produce/honeydew-mellon/hero.webp,"Kunduz, Mazar-e Sharif",1
+AF-PJR-WAL,Walnuts,panjshir-walnuts,CENTRAL,PJR,KBLC,Produce,Snack,1,9,10,Fresh walnuts harvested in Panjshir valley.,/assets/images/food/dried-fruit/walnuts/hero.webp,"Panjshir, Kabul",1
+AF-FRH-WAT,Watermelon,farah-watermelon,WEST,FRH,HERC,Produce,Snack,1,5,8,Large red watermelon grown in Farah.,/assets/images/food/produce/watermellons/hero.webp,"Farah, Herat",1
+AF-GHO-GRA,Raisins,ghor-grapes,WEST,GHO,HERC,Produce,Snack,1,8,10,"Sun-dried raisins from mountain vineyards in Ghor (image shows raisins, not fresh grapes).",/assets/images/food/dried-fruit/raisins/hero.webp,"Ghor, Herat, Dried fruit",1
+AF-JOW-GOR,Gorgak Melon,jowzjan-gorgak,NORTH,JOW,MAZC,Produce,Snack,1,7,9,Small sweet Gorgak melon grown by Turkmen farmers in Jowzjan.,/assets/images/food/produce/sugar-mellon/hero.webp,"Jowzjan, Mazar-e Sharif, Gorgak, Turkmen",1
+AF-KBL-KAB,Kebab,kabul-kebab,CENTRAL,KBL,KBLC,Main,Dinner,0,1,12,"Street-grilled kebab served with naan, common in Kabul.",/assets/images/food/dishes/kabul-kabob/hero.webp,Kabul,1
+AF-KBL-QAB,Qabili Chicken,chicken-qabili,CENTRAL,KBL,KBLC,Main,Dinner,0,1,12,Chicken variation of Kabuli pulao.,/assets/images/food/dishes/chicken-kabuli/hero.webp,Kabul,1
+AF-HER-PIL,Pilaf,herati-pilaf,WEST,HER,HERC,Main,Dinner,0,1,12,"Rice dish seasoned with saffron, in the Herat style.",/assets/images/food/dishes/kabuli-palaw/hero.webp,Herat,1
+AF-KDR-KAB,Kebab,kandahar-kebab,SOUTH,KDR,KDRC,Main,Dinner,0,1,12,"Lamb kebab cooked over charcoal, associated with Kandahar.",/assets/images/food/dishes/kabob/hero.webp,Kandahar,1
+AF-KBL-ASH,Ash Soup,ash-soup,CENTRAL,KBL,KBLC,Main,Lunch,0,1,12,Thick noodle soup with herbs.,/assets/images/food/dishes/aush/hero.webp,Kabul,1
+AF-KBL-SHO,Shorwa Soup,shorwa-soup,CENTRAL,KBL,KBLC,Main,Lunch,0,1,12,Traditional Afghan meat broth soup.,/assets/images/food/dishes/aush/hero.webp,Kabul,1
+AF-BAL-YOG,Doogh,doogh-yogurt-drink,NORTH,BAL,MAZC,Beverage,Snack,0,1,12,Salted yogurt drink (doogh) served cold — common in the north including Balkh.,/assets/images/food/drinks/dogh/hero.webp,"Balkh, Mazar-e Sharif",1
+AF-KBL-LAS,Lassi Drink,lassi-drink,CENTRAL,KBL,KBLC,Beverage,Snack,0,1,12,Yogurt drink popular in summer.,/assets/images/food/drinks/dogh/hero.webp,Kabul,1
+AF-HER-ICE,Saffron Ice Cream,herat-ice-cream,WEST,HER,HERC,Dessert,Snack,0,5,9,"Saffron-flavored Afghan ice cream, associated with Herat.",/assets/images/food/sweets/saffron-ice-cream/hero.webp,Herat,1
+AF-KBL-DRY,Dried Fruits Mix,afghan-dried-fruits,CENTRAL,KBL,KBLC,Snack,Snack,1,1,12,Traditional mix of raisins almonds pistachios.,/assets/images/food/dried-fruit/hero.webp,Kabul,1
+AF-KBL-PIS,Pistachios,samangan-pistachios,NORTH,SAM,MAZC,Produce,Snack,1,8,10,Famous wild pistachios from Samangan.,/assets/images/food/dried-fruit/pistachios/hero.webp,"Samangan, Mazar-e Sharif",1
+AF-HER-RAI,Raisins,herat-raisins,WEST,HER,HERC,Produce,Snack,1,8,10,Sun-dried raisins from Herat vineyards.,/assets/images/food/dried-fruit/raisins/hero.webp,"Herat, Dried fruit",1
+AF-BAL-ALM,Almonds,balkh-almonds,NORTH,BAL,MAZC,Produce,Snack,1,8,10,Crunchy almonds grown in Balkh province.,/assets/images/food/dried-fruit/almonds/hero.webp,"Balkh, Mazar-e Sharif",1
+AF-KBL-SHE,Sheermal Bread,sheermal-bread,CENTRAL,KBL,KBLC,Bread,Side,0,1,12,Slightly sweet saffron flavored bread.,/assets/images/food/dishes/naan/hero.webp,Kabul,1
+AF-KBL-KUL,Kulcha Cookie,kulcha-cookie,CENTRAL,KBL,KBLC,Dessert,Tea-Time,0,1,12,Traditional Afghan tea cookie.,/assets/images/food/sweets/halwa/hero.webp,Kabul,1
+AF-KBL-JAL,Jalebi Sweet,jalebi-sweet,CENTRAL,KBL,KBLC,Dessert,Tea-Time,0,1,12,Deep fried syrup soaked spiral sweet.,/assets/images/food/sweets/jelabi/hero.webp,Kabul,1
+AF-HER-BAK,Baklava,herat-baklava,WEST,HER,HERC,Dessert,Tea-Time,0,1,12,"Layered pastry with nuts and honey, associated with Herat.",/assets/images/food/sweets/halwa/hero.webp,Herat,1
+AF-KDR-SWE,Sweets,kandahar-sweets,SOUTH,KDR,KDRC,Dessert,Tea-Time,0,1,12,Regional sweet pastries served with tea in Kandahar.,/assets/images/food/sweets/sheer-pira/hero.webp,Kandahar,1

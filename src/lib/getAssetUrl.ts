@@ -233,7 +233,7 @@ const FOOD_ALIASES: Record<string, string[]> = {
   "panjshir-walnuts": ["walnuts"],
   "farah-watermelon": ["watermellons"],
   "ghor-grapes": ["raisins"],
-  "jowzjan-gorgak": ["pistachios"],
+  "jowzjan-gorgak": ["sugar-mellon", "honeydew-mellon"],
   "kabul-kebab": ["kabul-kabob", "kabob"],
   "chicken-qabili": ["chicken-kabuli"],
   "herati-pilaf": ["kabuli-palaw"],
