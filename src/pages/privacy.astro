@@ -1,0 +1,53 @@
+---
+/**
+ * WG1 draft stub — restores /privacy/ route present on live.
+ * Full policy text requires operator review; do not invent GDPR/payment claims.
+ */
+import BaseLayout from '@layouts/BaseLayout.astro';
+import Hero from '@components/site/Hero.astro';
+import SectionHeader from '@components/ui/SectionHeader.astro';
+---
+
+<BaseLayout
+  title="Privacy – Afghan Tours (Draft)"
+  description="Draft privacy notice for Afghan Tours inquiries. Operator review pending before publishing final policy language."
+>
+  <Hero
+    title="Privacy"
+    subtitle="Draft pending operator review — this page restores the live URL without inventing final legal claims."
+    imagePath="/assets/images/heroes/hero-about.webp"
+    ctaText="Contact us"
+    ctaHref="/contact"
+  />
+
+  <section class="py-16 bg-white">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 space-y-8">
+      <div>
+        <SectionHeader eyebrow="Draft" title="Privacy notice (pending review)" />
+      </div>
+      <div class="rounded-2xl border border-amber-200 bg-amber-50 px-5 py-4 text-sm text-amber-950">
+        <strong>Status:</strong> Draft for URL restoration and cutover planning only.
+        Final wording, retention periods, and lawful-basis language must be confirmed by the operator before treating this as a published policy.
+      </div>
+      <div class="prose prose-lg max-w-none text-[rgba(15,23,42,0.75)] leading-relaxed space-y-4">
+        <p>
+          When you inquire with Afghan Tours (operated by James Tourist &amp; Travel Agency), we may receive contact details
+          and trip-planning information you choose to share — for example name, email, WhatsApp number, travel interests, and dates.
+        </p>
+        <p>
+          We use that information to respond to inquiries and, if you proceed, to plan travel arrangements.
+          We do not sell personal information for marketing lists.
+        </p>
+        <p>
+          Practical coordination with hotels, transport partners, or authorities may require sharing limited details needed to deliver the journey you requested.
+          Exact retention and deletion practices are <strong>to be confirmed</strong> with the operator.
+        </p>
+        <p>
+          For privacy questions, email <a href="mailto:info@afghantours.com">info@afghantours.com</a> or use the
+          <a href="/contact/">Contact</a> page. Prefer WhatsApp only after the operator has verified the published number
+          (see <code>docs/OPEN-BUSINESS-FACTS.md</code>).
+        </p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

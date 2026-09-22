@@ -1,0 +1,58 @@
+---
+/**
+ * WG1 draft stub — restores /terms/ route present on live.
+ * No invented payment, refund, or license claims beyond already-published operator framing.
+ */
+import BaseLayout from '@layouts/BaseLayout.astro';
+import Hero from '@components/site/Hero.astro';
+import SectionHeader from '@components/ui/SectionHeader.astro';
+---
+
+<BaseLayout
+  title="Terms – Afghan Tours (Draft)"
+  description="Draft terms placeholder for Afghan Tours. Operator review pending — inquiries are not bookings."
+>
+  <Hero
+    title="Terms"
+    subtitle="Draft pending operator review — this page restores the live URL without inventing payment or refund rules."
+    imagePath="/assets/images/heroes/hero-terms.webp"
+    ctaText="Contact us"
+    ctaHref="/contact"
+  />
+
+  <section class="py-16 bg-white">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 space-y-8">
+      <div>
+        <SectionHeader eyebrow="Draft" title="Terms of inquiry & travel (pending review)" />
+      </div>
+      <div class="rounded-2xl border border-amber-200 bg-amber-50 px-5 py-4 text-sm text-amber-950">
+        <strong>Status:</strong> Draft for URL restoration only.
+        Payment methods, deposit/refund rules, and governing-law language are <em>unresolved business facts</em>
+        and must not be invented here (see <code>docs/OPEN-BUSINESS-FACTS.md</code>).
+      </div>
+      <div class="prose prose-lg max-w-none text-[rgba(15,23,42,0.75)] leading-relaxed space-y-4">
+        <p>
+          Submitting an inquiry on this website does <strong>not</strong> create a confirmed booking.
+          A journey is confirmed only after itinerary, price, and payment terms are agreed in writing with Afghan Tours.
+        </p>
+        <p>
+          Afghan Tours is a licensed Afghan tour operator — American-led, Afghan-operated, and based in Kabul —
+          working through James Tourist &amp; Travel Agency. We plan around current access, permits, and conditions;
+          safety is planned, not promised. Itineraries may change when conditions require it.
+        </p>
+        <p>
+          Travelers remain responsible for valid visas, passports, and entry requirements. Afghan Tours may provide guidance
+          and letters of invitation support where applicable; we do not issue visas.
+        </p>
+        <p>
+          Detailed payment, cancellation, and refund terms will be stated in the booking confirmation for each journey.
+          Until the operator publishes a final site policy, treat this page as informational only.
+        </p>
+        <p>
+          Questions: <a href="mailto:info@afghantours.com">info@afghantours.com</a> or
+          <a href="/contact/">Contact</a>.
+        </p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
