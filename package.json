@@ -6,7 +6,8 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "generate-htaccess": "node scripts/generate-htaccess.mjs"
   },
   "dependencies": {
     "@astrojs/node": "^9.5.5",

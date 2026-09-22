@@ -1,41 +1,46 @@
 ---
 import { siteConfig } from '@lib/config';
 
+/**
+ * Restrained primary nav (WG2):
+ * Tours, Custom Requests, Explore, Plan Your Trip, About, Contact + Build My Journey CTA.
+ * Explore: Attractions, Regions, Provinces, Cities & Hubs, Food & Culture
+ * (Cultural Experiences reachable via Food & Culture — not duplicated here.)
+ * Tagline ONLY under site title in header.
+ */
 const navLinks = [
+  { label: 'Tours', href: '/tours/' },
+  { label: 'Custom Requests', href: '/contact/?flow=custom' },
   {
     label: 'Explore',
-    href: '/destinations',
+    href: '/destinations/',
     children: [
-      { label: 'Destinations', href: '/destinations' },
-      { label: 'Travel Hubs', href: '/hubs' },
-      { label: 'Attractions', href: '/attractions' },
-      { label: 'Regions', href: '/regions' },
-      { label: 'Cultural Experiences', href: '/cultural-experiences' },
-      { label: 'Food & Culture', href: '/food-culture' },
+      { label: 'Attractions', href: '/attractions/' },
+      { label: 'Regions', href: '/regions/' },
+      { label: 'Provinces', href: '/provinces/' },
+      { label: 'Cities & Hubs', href: '/hubs/' },
+      { label: 'Food & Culture', href: '/food-culture/' },
     ],
   },
-  { label: 'Tours', href: '/tours' },
-  { label: 'Custom Journeys', href: '/contact' },
   {
     label: 'Plan Your Trip',
-    href: '/visa-entry',
+    href: '/visa-entry/',
     children: [
-      { label: 'Visa & Entry', href: '/visa-entry' },
-      { label: 'Safety', href: '/safety' },
-      { label: 'Hotels', href: '/hotels' },
-      { label: 'Transportation', href: '/transportation' },
-      { label: 'FAQ', href: '/faq' },
+      { label: 'Visa & Entry', href: '/visa-entry/' },
+      { label: 'Safety', href: '/safety/' },
+      { label: 'Hotels', href: '/hotels/' },
+      { label: 'Transportation', href: '/transportation/' },
+      { label: 'FAQ', href: '/faq/' },
     ],
   },
-  { label: 'About Us', href: '/about' },
-  { label: 'Contact', href: '/contact' },
+  { label: 'About', href: '/about/' },
+  { label: 'Contact', href: '/contact/' },
 ];
 ---
 
 <header class="sticky top-0 z-50 bg-white shadow-sm">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex items-center justify-between h-16 gap-4">
-      <!-- Logo + brand line -->
       <a href="/" class="flex flex-col justify-center shrink-0 min-w-0">
         <span class="flex items-center gap-2">
           <img
@@ -52,7 +57,6 @@ const navLinks = [
         </span>
       </a>
 
-      <!-- Desktop Nav -->
       <nav class="hidden lg:flex items-center gap-0.5" aria-label="Primary">
         {navLinks.map(link => (
           link.children ? (
@@ -89,14 +93,13 @@ const navLinks = [
           )
         ))}
         <a
-          href="/contact"
+          href="/contact/?flow=custom"
           class="ml-2 px-4 py-2 rounded-full bg-[#b88a2a] hover:bg-[#a07820] text-white text-sm font-semibold shadow-sm transition-colors duration-150"
         >
           Build My Journey
         </a>
       </nav>
 
-      <!-- Mobile hamburger -->
       <button
         id="menu-btn"
         aria-label="Toggle navigation menu"
@@ -114,7 +117,6 @@ const navLinks = [
     </div>
   </div>
 
-  <!-- Mobile Menu -->
   <nav id="mobile-menu" class="hidden lg:hidden border-t border-gray-100 bg-white" aria-label="Mobile navigation">
     <div class="px-4 py-2 space-y-1">
       {navLinks.map(link => (
@@ -136,7 +138,7 @@ const navLinks = [
         </>
       ))}
       <a
-        href="/contact"
+        href="/contact/?flow=custom"
         class="block mx-3 mt-2 mb-2 text-center px-4 py-2.5 rounded-full bg-[#b88a2a] hover:bg-[#a07820] text-white text-sm font-semibold"
       >
         Build My Journey

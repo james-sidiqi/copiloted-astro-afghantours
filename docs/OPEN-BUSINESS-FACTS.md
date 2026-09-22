@@ -1,4 +1,4 @@
-# Open business facts — unresolved (WG1)
+# Open business facts — unresolved (WG1 + WG2)
 
 **Date:** 2026-09-22 (Asia/Kabul, AFT)  
 **Rule:** Do not invent prices, dates, testimonials, license numbers, payment/refund rules, or phone numbers to “fill gaps.”
@@ -14,7 +14,8 @@
 
 **Status:** **UNVERIFIED** against an authoritative operator source (SIM ownership, live site confirmation by James, or cpanel/business listing).  
 Comparison doc and live both show the same pattern — that is **not** proof it is the correct production line.  
-**Action:** James confirm or supply the correct WhatsApp/E.164 number before any cutover marketing.
+**Action:** James confirm or supply the correct WhatsApp/E.164 number before any cutover marketing.  
+**Flag:** Do **not** change the published number without evidence. WG2 wired UI to `siteConfig` only.
 
 ---
 
@@ -73,7 +74,8 @@ Options in play:
 | External endpoint (`FORM_ENDPOINT`) | Formspree / similar; works on pure static cPanel |
 | Mailto-only | Works without backend; poor UX / no structured lead store |
 
-**Status:** **UNDECIDED**. Repo form remains disabled until choice + successful test send.  
+**Status:** WG2 wires **dual path** (default `/tour-inquiry.php` + optional `PUBLIC_FORM_ENDPOINT`).  
+Inbox deliverability still **UNPROVEN** until James runs `docs/INQUIRY-TEST-PLAN.md`.  
 Reminder: mailto/PHP presence ≠ proven inbox delivery.
 
 ---
@@ -92,3 +94,28 @@ Reminder: mailto/PHP presence ≠ proven inbox delivery.
 ## 8. License / legal claims
 
 Do not invent or expand license identifiers on stubs. Any license number used in marketing must match operator documentation. zip1 terms mentioned a license string — **re-verify** before publishing on Astro 5 pages.
+
+---
+
+## 9. Privacy / Terms operator decisions (WG2)
+
+Placeholders marked **[OPERATOR DECISION]** on `/privacy/` and `/terms/` drafts — do not invent values:
+
+| Item | Status |
+|---|---|
+| Data retention / deletion window for inquiries | **[OPERATOR DECISION]** |
+| Lawful-basis / cookie tooling language | **[OPERATOR DECISION]** |
+| Named subprocessors / provider list | **[OPERATOR DECISION]** |
+| Deposit % / payment schedule | **[OPERATOR DECISION]** |
+| Cancellation / refund windows | **[OPERATOR DECISION]** |
+| Governing law / venue | **[OPERATOR DECISION]** |
+| License number string for public site | **[OPERATOR DECISION]** — re-verify before publish |
+
+---
+
+## 10. Form dry-run log
+
+| Date (AFT) | Path tested | Result | Notes |
+|---|---|---|---|
+| 2026-09-22 | Local markup + build + `php -l` | lint OK | No production POST; inbox unproven |
+

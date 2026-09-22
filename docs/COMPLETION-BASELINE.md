@@ -144,3 +144,11 @@ All present in CSV + dist:
 5. Nested food redirects QA for UNMAPPED rows; optional Wakhan region content.  
 6. Map strategy: verified JSON + Leaflet **or** accept static maps.  
 7. Do **not** merge zip1 tour template / CSV wholesale without gated review.
+
+---
+
+## WG2 pointer
+
+See **`docs/WG2-REPORT.md`** on branch `chore/completion-wg2-inquiries` for inquiry architecture, `.htaccess` redirects, privacy/terms expansion, and test plan.
+Inquiry wiring + redirects landed in WG2 (not this baseline commit).
+
