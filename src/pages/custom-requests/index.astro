@@ -1,0 +1,93 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import Hero from '@components/site/Hero.astro';
+import SectionHeader from '@components/ui/SectionHeader.astro';
+import AudienceCard from '@components/travel/AudienceCard.astro';
+import { getCustomAudiences } from '@lib/content/customAudiences';
+import { buildCustomInquiryHref } from '@lib/inquiry';
+
+const customAudiences = getCustomAudiences();
+const buildHref = buildCustomInquiryHref();
+---
+
+<BaseLayout
+  title="Custom Requests – Afghan Tours"
+  description="Private planning service for Afghanistan travel — diaspora, veterans, Peace Corps alumni, business, artists, and media. No fixed 15-day package or invented price."
+>
+  <Hero
+    title="Custom Requests"
+    subtitle="A planning service from Kabul — not a fixed itinerary, day count, or brochure price"
+    imagePath="/assets/images/tours/custom-expedition.webp"
+    ctaText="Build My Journey"
+    ctaHref={buildHref}
+  />
+
+  <section class="py-16 bg-white">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6">
+      <SectionHeader
+        eyebrow="How it works"
+        title="We design the journey after we hear yours"
+        subtitle="Custom requests replace fixed packages. You share timing, regions, pace, and purpose. We reply with what is workable under current access — then a written quotation."
+      />
+      <ol class="mt-10 space-y-5 text-sm text-[rgba(15,23,42,0.75)] leading-relaxed list-decimal pl-5">
+        <li><strong class="text-[#1e3a5f]">Tell us the brief</strong> — dates or a flexible window, who is traveling, language needs, and must-see places or family contexts.</li>
+        <li><strong class="text-[#1e3a5f]">Feasibility from Kabul</strong> — routes, lodging, transport, and access reviewed against present conditions — not a promise that every request is possible.</li>
+        <li><strong class="text-[#1e3a5f]">Proposed plan + quotation</strong> — a draft day shape and costs only after scoping. Duration and price are outputs of planning, not inputs from a catalog.</li>
+        <li><strong class="text-[#1e3a5f]">Refine, then confirm</strong> — inquiry is not a booking. Deposit and LOI steps follow written agreement.</li>
+      </ol>
+      <div class="mt-8 rounded-2xl border border-amber-200 bg-amber-50 px-5 py-4 text-sm text-[#1e3a5f] leading-relaxed">
+        <p class="font-semibold text-amber-800 text-xs uppercase tracking-wider mb-1">No fixed 15-day / $3,500 package</p>
+        <p>
+          Earlier catalog rows that showed a 15-day Custom Expedition at a set dollar figure were planning placeholders, not sellable products.
+          Custom travel is quoted after we understand your route and constraints.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-16 bg-[#f6f7fb]">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <div class="mb-10 text-center">
+        <SectionHeader
+          eyebrow="Audiences we plan for"
+          title="Six custom audiences — from the project, not invented"
+          subtitle="Diaspora, veterans, Peace Corps alumni, business travelers, artists, and media. Pattern pages deepen the brief; every path can preselect audience on Build My Journey."
+          centered
+        />
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {customAudiences.map((audience) => <AudienceCard audience={audience} />)}
+      </div>
+      <div class="mt-10 text-center">
+        <a href="/custom-requests/diaspora/" class="text-sm font-semibold text-[#1f4aa8] underline">
+          Read the diaspora planning pattern →
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-16 bg-white">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6">
+      <SectionHeader
+        eyebrow="Also useful"
+        title="Scheduled tours when a set route fits"
+        subtitle="If a proposed circuit matches your timing, start from Tour Packages. You can still request changes — scheduled and custom are complementary."
+      />
+      <div class="mt-8 flex flex-wrap gap-3">
+        <a href="/tours/?type=scheduled" class="inline-block px-6 py-2.5 rounded-full border-2 border-[#1e3a5f] text-[#1e3a5f] text-sm font-semibold hover:bg-[#1e3a5f] hover:text-white transition-all">Tour Packages</a>
+        <a href="/tours/custom-expedition/" class="inline-block px-6 py-2.5 rounded-full border-2 border-[#1e3a5f] text-[#1e3a5f] text-sm font-semibold hover:bg-[#1e3a5f] hover:text-white transition-all">Custom Expedition (planning entry)</a>
+        <a href="/contact/" class="inline-block px-6 py-2.5 rounded-full border-2 border-[#1e3a5f] text-[#1e3a5f] text-sm font-semibold hover:bg-[#1e3a5f] hover:text-white transition-all">Contact</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-16 bg-[#1e3a5f]">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 text-center text-white">
+      <h2 class="font-display text-2xl sm:text-3xl font-bold mb-4">Ready to scope a private journey?</h2>
+      <p class="text-white/80 mb-8">Build My Journey opens the custom inquiry flow. No deposit is requested at inquiry.</p>
+      <a href={buildHref} class="inline-block px-8 py-3.5 rounded-full bg-[#b88a2a] hover:bg-[#a07820] text-white font-semibold shadow-lg transition-all">
+        Build My Journey
+      </a>
+    </div>
+  </section>
+</BaseLayout>

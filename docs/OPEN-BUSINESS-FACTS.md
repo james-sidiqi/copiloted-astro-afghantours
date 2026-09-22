@@ -1,6 +1,6 @@
-# Open business facts — unresolved (WG1 + WG2)
+# Open business facts — unresolved (WG1 + WG2 + WG3)
 
-**Date:** 2026-09-22 (Asia/Kabul, AFT)  
+**Date:** 2026-09-22 (Asia/Kabul, AFT) · WG3 pass  
 **Rule:** Do not invent prices, dates, testimonials, license numbers, payment/refund rules, or phone numbers to “fill gaps.”
 
 ---
@@ -48,13 +48,10 @@ Proposed rows in `data/tour_dates.csv` (if any) remain **proposed / inquiry** �
 
 ## 4. Prices and dates to verify
 
-Several catalog tours intentionally have **empty `price_from`** (on request): e.g. weekend-in-kabul, winter/summer circuit, fall-eastern, spring-afghanistan-tour, signature-afghan-tour, heart-of-the-silk-road, buzkashi-expedition.
+**WG3 note (2026-09-22 AFT):** Primary seven scheduled tours intentionally show **Price on request** / empty `price_from`. Custom Expedition no longer advertises 15-day / $3500 — duration and price are quotation outputs. Softened several legacy `open` placeholder dates to `proposed`. Operator must still verify every public price and every departure before calling it bookable.
 
-Other CSV rows still carry legacy dollar amounts (e.g. central discovery 1250, spring discovery 1890).  
+Several non-primary catalog tours still carry legacy dollar amounts (e.g. central discovery, spring/fall discovery). Proposed dates ≠ confirmed departures.
 
-**Status:** Every displayed price and every departure date must be **operator-verified** before advertising as bookable. Proposed dates ≠ confirmed departures.
-
----
 
 ## 5. Payment / refund terms (policies)
 

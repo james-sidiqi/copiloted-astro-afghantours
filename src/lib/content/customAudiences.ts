@@ -100,7 +100,9 @@ export function getCustomAudiences(): CustomAudience[] {
       label: d.label,
       blurb: d.blurb,
       imagePath,
-      href: `/contact/?flow=custom&audience=${encodeURIComponent(d.id)}`,
+      href: d.id === "diaspora"
+        ? "/custom-requests/diaspora/"
+        : `/contact/?flow=custom&audience=${encodeURIComponent(d.id)}`,
       assetNote: d.assetNote,
       objectPosition: d.objectPosition,
     };

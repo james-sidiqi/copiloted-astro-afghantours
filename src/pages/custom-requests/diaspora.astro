@@ -1,0 +1,120 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import Hero from '@components/site/Hero.astro';
+import SectionHeader from '@components/ui/SectionHeader.astro';
+import SafeImage from '@components/ui/SafeImage.astro';
+import { buildCustomInquiryHref } from '@lib/inquiry';
+
+const buildHref = buildCustomInquiryHref('diaspora');
+
+const familyPhotos = [
+  {
+    src: '/assets/images/return-journeys/diaspora/james-family/brothers/james-dad-and-brother.webp',
+    caption: 'Family history in Afghanistan — personal context for how we listen to return journeys.',
+  },
+  {
+    src: '/assets/images/return-journeys/diaspora/38-family-kabul-54b959f99a.webp',
+    caption: 'Kabul family time — ordinary days matter as much as monuments.',
+  },
+  {
+    src: '/assets/images/return-journeys/diaspora/family-trip-museum.webp',
+    caption: 'Museum visits with relatives — heritage without treating access as guaranteed.',
+  },
+  {
+    src: '/assets/images/return-journeys/diaspora/kid-fountain.webp',
+    caption: 'Traveling with children — we plan pace and rest, not a forced checklist.',
+  },
+];
+---
+
+<BaseLayout
+  title="Diaspora Return Journeys – Custom Requests – Afghan Tours"
+  description="Planning pattern for Afghan diaspora families reconnecting with origins — elders, children, language, pace, and practical support from Kabul. Personal history photos are not access guarantees."
+>
+  <Hero
+    title="Diaspora return journeys"
+    subtitle="Family origins, reconnection, and practical support — planned from Kabul around your people and pace"
+    imagePath="/assets/images/return-journeys/diaspora/afghan-diaspora-heritage.webp"
+    ctaText="Build My Journey"
+    ctaHref={buildHref}
+  />
+
+  <section class="py-14 bg-amber-50 border-b border-amber-100">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 text-sm text-[#1e3a5f] leading-relaxed">
+      <p class="font-semibold text-amber-900 text-xs uppercase tracking-wider mb-2">Personal history ≠ access guarantee</p>
+      <p>
+        Photos of James’s family are shared as <strong>personal history</strong> — how we understand return journeys —
+        not as proof that every village, shrine, or relative visit can be arranged on demand. Final routing follows current conditions and a written plan.
+      </p>
+    </div>
+  </section>
+
+  <section class="py-16 bg-white">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 space-y-10">
+      <SectionHeader
+        eyebrow="Pattern"
+        title="What diaspora journeys usually need"
+        subtitle="Every family is different. These themes help us ask better questions — they are not a fixed package."
+      />
+      <div class="grid gap-6 sm:grid-cols-2">
+        <div class="rounded-2xl border border-gray-100 bg-[#f6f7fb] p-5">
+          <h3 class="font-display font-bold text-[#1e3a5f] mb-2">Family origins &amp; reconnection</h3>
+          <p class="text-sm text-[rgba(15,23,42,0.75)] leading-relaxed">Province or village ties, graves, old neighborhoods, and introductions that matter to your family — scoped honestly against what is reachable now.</p>
+        </div>
+        <div class="rounded-2xl border border-gray-100 bg-[#f6f7fb] p-5">
+          <h3 class="font-display font-bold text-[#1e3a5f] mb-2">Elders and children</h3>
+          <p class="text-sm text-[rgba(15,23,42,0.75)] leading-relaxed">Shorter days, rest windows, and seating that works for grandparents and kids. We do not force museum marathons.</p>
+        </div>
+        <div class="rounded-2xl border border-gray-100 bg-[#f6f7fb] p-5">
+          <h3 class="font-display font-bold text-[#1e3a5f] mb-2">Language</h3>
+          <p class="text-sm text-[rgba(15,23,42,0.75)] leading-relaxed">Dari, Pashto, and English support as needed so elders are not left translating for everyone.</p>
+        </div>
+        <div class="rounded-2xl border border-gray-100 bg-[#f6f7fb] p-5">
+          <h3 class="font-display font-bold text-[#1e3a5f] mb-2">Pace &amp; practical support</h3>
+          <p class="text-sm text-[rgba(15,23,42,0.75)] leading-relaxed">Airport meet, lodging choices, SIM/cash logistics, and flexible buffers when family plans shift.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-16 bg-[#f6f7fb]">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <div class="mb-8">
+        <SectionHeader
+          eyebrow="James family photos"
+          title="Personal history, shared carefully"
+          subtitle="These images belong to James’s family story. They illustrate why return travel is personal — they do not certify access to any site or relative."
+        />
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        {familyPhotos.map((photo) => (
+          <figure class="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100">
+            <div class="aspect-[16/10] bg-gray-100">
+              <SafeImage
+                src={photo.src}
+                fallback="/assets/images/placeholders/default-tour.webp"
+                alt={photo.caption}
+                class="w-full h-full object-cover"
+                loading="lazy"
+              />
+            </div>
+            <figcaption class="p-4 text-sm text-[rgba(15,23,42,0.7)] leading-relaxed">{photo.caption}</figcaption>
+          </figure>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="py-16 bg-[#1e3a5f]">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 text-center text-white">
+      <h2 class="font-display text-2xl sm:text-3xl font-bold mb-4">Build a diaspora journey brief</h2>
+      <p class="text-white/80 mb-8">Build My Journey opens with the diaspora audience preselected. Share family context, pace, and timing — we reply from Kabul.</p>
+      <a href={buildHref} class="inline-block px-8 py-3.5 rounded-full bg-[#b88a2a] hover:bg-[#a07820] text-white font-semibold shadow-lg transition-all">
+        Build My Journey
+      </a>
+      <p class="mt-4 text-sm text-white/60">
+        <a href="/custom-requests/" class="underline">← All custom requests</a>
+      </p>
+    </div>
+  </section>
+</BaseLayout>

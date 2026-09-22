@@ -8,23 +8,12 @@ import AttractionCard from '@components/travel/AttractionCard.astro';
 import FaqAccordion from '@components/travel/FaqAccordion.astro';
 import { getSiteData } from '@lib/data/site-data';
 import { getCustomAudiences, isCustomTravelStyle } from '@lib/content/customAudiences';
+import { orderScheduledTours, PRIMARY_SCHEDULED_SLUGS } from '@lib/content/primaryScheduled';
 
 const data = getSiteData();
 const scheduledAll = data.tours.filter(t => t.isActive && !isCustomTravelStyle(t.travelStyle));
-const catalogPriority = [
-  'heart-of-the-silk-road',
-  'weekend-in-kabul',
-  'winter-circuit',
-  'summer-circuit',
-  'fall-eastern-afghanistan',
-  'spring-afghanistan-tour',
-  'buzkashi-expedition',
-  'signature-afghan-tour'
-];
-const scheduledTours = [
-  ...catalogPriority.map((slug) => scheduledAll.find((t) => t.slug === slug)).filter(Boolean),
-  ...scheduledAll.filter((t) => !catalogPriority.includes(t.slug)),
-].filter((t, i, arr) => arr.findIndex((x) => x!.slug === t!.slug) === i).slice(0, 8) as typeof scheduledAll;
+const scheduledTours = orderScheduledTours(scheduledAll)
+  .filter((t) => PRIMARY_SCHEDULED_SLUGS.includes(t.slug as typeof PRIMARY_SCHEDULED_SLUGS[number]));
 const customAudiences = getCustomAudiences();
 const featuredAttractions = data.attractions.filter(a => a.isActive && a.priority >= 5).slice(0, 6);
 const homeFaqs = data.faqs.filter(f => f.isActive && f.pageAssignment === 'home').slice(0, 6);
@@ -39,10 +28,10 @@ const homeFaqs = data.faqs.filter(f => f.isActive && f.pageAssignment === 'home'
     subtitle="Not the headlines. The hospitality. The history. The highlands."
     imagePath="/assets/images/heroes/hero-home.webp"
     videoSrc="/assets/images/heroes/home/hero.mp4"
-    ctaText="Explore Tours"
-    ctaHref="/tours"
-    secondaryCtaText="Build My Journey"
-    secondaryCtaHref="/contact/?flow=custom"
+    ctaText="Tour Packages"
+    ctaHref="/tours/?type=scheduled"
+    secondaryCtaText="Custom Requests"
+    secondaryCtaHref="/custom-requests/"
   />
 
   <!-- Trust strip -->
@@ -80,7 +69,7 @@ const homeFaqs = data.faqs.filter(f => f.isActive && f.pageAssignment === 'home'
         <p class="text-center text-gray-500 py-12">Tours coming soon.</p>
       )}
       <div class="mt-10 text-center">
-        <a href="/tours?type=scheduled" class="inline-block px-8 py-3 rounded-full border-2 border-[#1e3a5f] text-[#1e3a5f] font-semibold hover:bg-[#1e3a5f] hover:text-white transition-all duration-200">
+        <a href="/tours/?type=scheduled" class="inline-block px-8 py-3 rounded-full border-2 border-[#1e3a5f] text-[#1e3a5f] font-semibold hover:bg-[#1e3a5f] hover:text-white transition-all duration-200">
           View Scheduled Tours
         </a>
       </div>
@@ -104,11 +93,11 @@ const homeFaqs = data.faqs.filter(f => f.isActive && f.pageAssignment === 'home'
         </div>
       ) : null}
       <div class="mt-10 flex flex-col sm:flex-row items-center justify-center gap-3">
-        <a href="/contact/?flow=custom" class="inline-block px-8 py-3.5 rounded-full bg-[#b88a2a] hover:bg-[#a07820] text-white font-semibold shadow-md transition-all duration-200">
-          Build My Journey
+        <a href="/custom-requests/" class="inline-block px-8 py-3.5 rounded-full bg-[#b88a2a] hover:bg-[#a07820] text-white font-semibold shadow-md transition-all duration-200">
+          Start a Custom Request
         </a>
-        <a href="/tours?type=custom" class="inline-block px-8 py-3 rounded-full border-2 border-[#1e3a5f] text-[#1e3a5f] font-semibold hover:bg-[#1e3a5f] hover:text-white transition-all duration-200">
-          Custom packages on Tours
+        <a href="/custom-requests/" class="inline-block px-8 py-3 rounded-full border-2 border-[#1e3a5f] text-[#1e3a5f] font-semibold hover:bg-[#1e3a5f] hover:text-white transition-all duration-200">
+          How custom planning works
         </a>
       </div>
     </div>
@@ -205,11 +194,14 @@ const homeFaqs = data.faqs.filter(f => f.isActive && f.pageAssignment === 'home'
       <h2 class="font-display text-2xl sm:text-3xl font-bold mb-4">Ready to talk through a trip?</h2>
       <p class="text-white/80 text-lg mb-8">Scheduled tours, custom journeys, or a practical planning conversation — we are based in Kabul and happy to start there.</p>
       <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
-        <a href="/tours" class="inline-block px-10 py-4 rounded-full bg-[#b88a2a] hover:bg-[#a07820] text-white font-semibold text-base shadow-lg transition-all duration-200">
-          Explore Tours
+        <a href="/tours/?type=scheduled" class="inline-block px-10 py-4 rounded-full bg-[#b88a2a] hover:bg-[#a07820] text-white font-semibold text-base shadow-lg transition-all duration-200">
+          Tour Packages
         </a>
-        <a href="/contact/" class="inline-block px-10 py-4 rounded-full border-2 border-white/80 text-white font-semibold text-base hover:bg-white/10 transition-all duration-200">
-          Contact AfghanTours
+        <a href="/custom-requests/" class="inline-block px-10 py-4 rounded-full border-2 border-white/80 text-white font-semibold text-base hover:bg-white/10 transition-all duration-200">
+          Custom Requests
+        </a>
+        <a href="/contact/" class="inline-block px-10 py-4 rounded-full border-2 border-white/50 text-white font-semibold text-base hover:bg-white/10 transition-all duration-200">
+          Contact
         </a>
       </div>
     </div>
