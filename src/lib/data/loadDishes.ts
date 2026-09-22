@@ -4,6 +4,14 @@ import { readCsv } from './readCsv.js';
 import { cleanText, normalizeAssetPath } from './normalize.js';
 import { getAssetUrl } from '../getAssetUrl.js';
 
+function parseTags(raw: string | undefined): string[] {
+  if (!raw) return [];
+  return raw
+    .split(',')
+    .map((t) => t.trim().replace(/^#/, ''))
+    .filter(Boolean);
+}
+
 export function loadDishes(): Dish[] {
   const rows = readCsv<DishRow>('dishes.csv');
   return rows
@@ -22,6 +30,7 @@ export function loadDishes(): Dish[] {
       seasonEnd: parseInt(r.season_end, 10) || 0,
       descShort: cleanText(r.desc_short),
       imagePath: getAssetUrl(normalizeAssetPath(r.image_path), { slug: cleanText(r.slug), entity: 'dish', kind: 'hero' }),
+      tags: parseTags(r.tags),
       isActive: true,
     }));
 }

@@ -929,8 +929,8 @@
     "latitude": 31.615,
     "longitude": 65.655,
     "approximate": false,
-    "hero_image": "/assets/images/attractions/kdr002.webp",
-    "card_image": "/assets/images/attractions/kdr002.webp",
+    "hero_image": "/assets/images/attractions/kdr001.webp",
+    "card_image": "/assets/images/attractions/kdr001.webp",
     "priority": 6,
     "is_active": "1"
   },

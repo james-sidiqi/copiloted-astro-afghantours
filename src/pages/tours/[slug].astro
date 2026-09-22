@@ -3,7 +3,6 @@ import BaseLayout from '@layouts/BaseLayout.astro';
 import Hero from '@components/site/Hero.astro';
 import SectionHeader from '@components/ui/SectionHeader.astro';
 import SafeImage from '@components/ui/SafeImage.astro';
-import AttractionCard from '@components/travel/AttractionCard.astro';
 import ItineraryTimeline from '@components/travel/ItineraryTimeline.astro';
 import TourMap from '@components/travel/TourMap.astro';
 import FaqAccordion from '@components/travel/FaqAccordion.astro';
@@ -326,17 +325,10 @@ const durationLabel = tour.durationDays
             </div>
           )}
 
-          {highlightAttractions.length > 0 && (
-            <div class="mt-10">
-              <div class="mb-6">
-                <SectionHeader eyebrow="Highlights" title="Featured Attractions" />
-              </div>
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                {highlightAttractions.map((a) => (
-                  <AttractionCard attraction={a} />
-                ))}
-              </div>
-            </div>
+          {highlightAttractions.length > 0 && tour.itinerary.length > 0 && (
+            <p class="mt-8 text-sm text-[rgba(15,23,42,0.65)]">
+              Attractions for this journey are listed once in the day-by-day itinerary below — select a stop for a preview (image, short description, province/hub, and why it sits on that day). Use <span class="font-medium text-[#1e3a5f]">Full attraction page</span> only when you want the dedicated page.
+            </p>
           )}
         </section>
 

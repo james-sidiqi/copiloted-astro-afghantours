@@ -15,8 +15,13 @@ interface LinkedItem {
   label: string;
   href?: string;
   description?: string;
+  longDescription?: string;
   context?: string;
   imagePath?: string;
+  dayWhy?: string;
+  hubLabel?: string;
+  provinceLabel?: string;
+  category?: string;
 }
 
 interface Props {
@@ -45,15 +50,25 @@ const fallbackByType: Record<string, string> = {
 };
 
 const dayItems = days.map((day) => {
-  const attractions: LinkedItem[] = day.attractions.map((attraction) => ({
-    key: `attraction-${day.dayNumber}-${attraction.attractionCode}`,
-    type: 'attraction',
-    label: attraction.name,
-    href: `/attractions/${attraction.slug}`,
-    description: attraction.descShort,
-    context: attraction.province ? `${attraction.province} Province` : undefined,
-    imagePath: attraction.thumbnailPath || attraction.imagePath,
-  }));
+  const attractions: LinkedItem[] = day.attractions.map((attraction) => {
+    const hub = attraction.locationCode ? hubByCode.get(attraction.locationCode) : undefined;
+    return {
+      key: `attraction-${day.dayNumber}-${attraction.attractionCode}`,
+      type: 'attraction',
+      label: attraction.name,
+      href: `/attractions/${attraction.slug}/`,
+      description: attraction.descShort,
+      longDescription: attraction.descLong,
+      context: attraction.province ? `${attraction.province} Province` : undefined,
+      provinceLabel: attraction.province ? `${attraction.province} Province` : undefined,
+      hubLabel: hub?.name,
+      category: attraction.category,
+      dayWhy: day.title
+        ? `On Day ${day.dayNumber}${day.location ? ` · ${day.location}` : ''}: ${day.title}`
+        : `Included on Day ${day.dayNumber}${day.location ? ` in ${day.location}` : ''}.`,
+      imagePath: attraction.imagePath || attraction.thumbnailPath,
+    };
+  });
 
   const hubCodes = new Set(
     day.attractions.map((a) => a.locationCode).filter((code): code is string => Boolean(code))
@@ -70,7 +85,7 @@ const dayItems = days.map((day) => {
         key: `hub-${day.dayNumber}-${hub.locationCode}`,
         type: 'hub',
         label: hub.name,
-        href: `/destinations/${hub.slug}`,
+        href: `/hubs/${hub.slug}/`,
         context: province ? `${province.provinceName} Province` : undefined,
         imagePath: province?.squareImagePath || province?.coverImagePath,
       };
@@ -85,7 +100,7 @@ const dayItems = days.map((day) => {
       key: `province-${day.dayNumber}-${province.provinceCode}`,
       type: 'province',
       label: `${province.provinceName} Province`,
-      href: `/provinces/${province.provinceSlug}`,
+      href: `/provinces/${province.provinceSlug}/`,
       description: province.shortBlurb,
       imagePath: province.squareImagePath || province.coverImagePath,
     }));
@@ -113,7 +128,7 @@ const dayItems = days.map((day) => {
       key: `dish-${day.dayNumber}-${dish.dishCode}`,
       type: 'dish',
       label: dish.name,
-      href: `/food-culture/${dish.slug}`,
+      href: `/food-culture/${dish.slug}/`,
       description: dish.descShort,
       context: dish.category || dish.mealType,
       imagePath: dish.imagePath,
@@ -238,11 +253,22 @@ const dayItems = days.map((day) => {
                       <div class="p-4">
                         <p class="text-[11px] font-semibold uppercase tracking-[0.13em] text-[#b88a2a]">{item.type}</p>
                         <h5 class="font-display text-base font-semibold text-[#1e3a5f] mt-1">{item.label}</h5>
-                        {item.context && <p class="text-xs text-[rgba(15,23,42,0.55)] mt-1">{item.context}</p>}
-                        {item.description && <p class="text-sm text-[rgba(15,23,42,0.7)] mt-2 line-clamp-3">{item.description}</p>}
+                        {(item.provinceLabel || item.hubLabel || item.category) && (
+                          <p class="text-xs text-[rgba(15,23,42,0.55)] mt-1">
+                            {[item.provinceLabel, item.hubLabel, item.category].filter(Boolean).join(' · ')}
+                          </p>
+                        )}
+                        {!item.provinceLabel && item.context && <p class="text-xs text-[rgba(15,23,42,0.55)] mt-1">{item.context}</p>}
+                        {item.dayWhy && (
+                          <p class="text-xs font-medium text-[#8a651e] mt-2 bg-[#b88a2a]/8 rounded-lg px-2.5 py-1.5">{item.dayWhy}</p>
+                        )}
+                        {item.description && <p class="text-sm text-[rgba(15,23,42,0.7)] mt-2">{item.description}</p>}
+                        {item.longDescription && item.longDescription !== item.description && (
+                          <p class="text-sm text-[rgba(15,23,42,0.65)] mt-2 line-clamp-4">{item.longDescription}</p>
+                        )}
                         {item.href && (
-                          <a href={item.href} class="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-[#1f4aa8] hover:text-[#16397f]">
-                            Open full page <span aria-hidden="true">→</span>
+                          <a href={item.href} class="mt-3 inline-flex items-center gap-1 text-xs font-medium text-[rgba(15,23,42,0.55)] underline underline-offset-2 hover:text-[#1f4aa8]">
+                            {item.type === 'attraction' ? 'Full attraction page' : 'Open full page'} <span aria-hidden="true">→</span>
                           </a>
                         )}
                       </div>

@@ -50,6 +50,9 @@ const seasonRange = (validMonth(dish.seasonStart) && validMonth(dish.seasonEnd))
         {dish.mealType && (
           <span class="text-xs font-semibold px-3 py-1 rounded-full bg-white/20 text-white">{dish.mealType}</span>
         )}
+        {(dish.tags || []).map((tag) => (
+          <span class="text-xs font-semibold px-3 py-1 rounded-full bg-white/15 text-white">{tag}</span>
+        ))}
       </div>
       <h1 class="font-display text-2xl sm:text-3xl lg:text-4xl font-bold text-white">{dish.name}</h1>
     </div>
