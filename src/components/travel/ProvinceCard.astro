@@ -11,10 +11,10 @@ const { province } = Astro.props;
   <!-- Square image -->
   <a href={`/provinces/${province.provinceSlug}`} class="block overflow-hidden aspect-square bg-gray-100 shrink-0">
     <SafeImage
-      src={province.squareImagePath}
+      src={province.coverImagePath || province.squareImagePath}
       fallback="/assets/images/placeholders/default-region.webp"
       alt={province.provinceName}
-      class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+      class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
       loading="lazy"
     />
   </a>

@@ -1,0 +1,61 @@
+---
+import SectionHeader from '@components/ui/SectionHeader.astro';
+import SafeImage from '@components/ui/SafeImage.astro';
+import type { ExperienceCard } from '@lib/content/experienceCards';
+
+interface Props {
+  cards: ExperienceCard[];
+  eyebrow?: string;
+  title?: string;
+  subtitle?: string;
+  id?: string;
+}
+
+const {
+  cards,
+  eyebrow = 'On the journey',
+  title = 'Experiences that shape a trip',
+  subtitle = 'A sample of what guests encounter on Afghan Tours journeys — then choose a Scheduled Tour or inquire for a Custom Journey.',
+  id,
+} = Astro.props;
+---
+
+{cards.length > 0 && (
+  <section id={id} class="py-16 bg-[#f6f7fb]">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <div class="mb-8">
+        <SectionHeader eyebrow={eyebrow} title={title} subtitle={subtitle} />
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {cards.map((card) => (
+          <a
+            href={card.href}
+            class="group bg-white rounded-[14px] shadow-[0_2px_16px_0_rgba(0,0,0,0.08)] hover:shadow-[0_10px_30px_rgba(15,23,42,0.08)] transition-shadow duration-300 overflow-hidden flex flex-col"
+          >
+            <div class="aspect-[16/10] bg-gray-100 overflow-hidden shrink-0">
+              <SafeImage
+                src={card.imagePath}
+                fallback="/assets/images/placeholders/default-card.webp"
+                alt={card.label}
+                class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
+                loading="lazy"
+              />
+            </div>
+            <div class="p-5 flex flex-col flex-1 gap-2">
+              <span class="self-start text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#1f4aa8]/10 text-[#1f4aa8]">
+                {card.kind === 'cultural' ? 'Cultural' : 'Activity'}
+              </span>
+              <h3 class="font-display text-base font-semibold text-[#1e3a5f] group-hover:text-[#1f4aa8] transition-colors">
+                {card.label}
+              </h3>
+              <p class="text-sm text-[rgba(15,23,42,0.7)] leading-relaxed flex-1">{card.blurb}</p>
+              <span class="text-xs font-semibold text-[#b88a2a]">
+                {card.href.startsWith('/contact') ? 'Inquire for a custom option →' : 'Explore related journeys →'}
+              </span>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+)}

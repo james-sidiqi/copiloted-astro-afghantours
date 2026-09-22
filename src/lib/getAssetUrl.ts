@@ -5,7 +5,8 @@
  *
  * Layout preference (existence-checked):
  *   public/assets/images/{attractions,provinces|province,hubs,cultural-experiences,
- *     food,custom-tours,featured-tours,page-assets,tours}/<slug>/{hero,thumb,gallery}
+ *     food,custom-tours,return-journeys,page-assets,tours}/<slug>/{hero,thumb,gallery}
+ *   (featured-tours optional/legacy if present — not a required source)
  *   public/images/hotels/<city>/<property>/  (CSV often still uses /assets/images/hotels/)
  *   public/assets/maps/{provinces,regions,routes}/
  */
@@ -331,7 +332,14 @@ export function getAssetUrl(
     return resolveHubAsset(slug, coded, kind);
   }
   if (entity === "cultural" && slug) {
-    return resolveCategorySlugAsset("cultural-experiences", slug, kind === "thumb" ? "thumb" : "hero") || firstExisting(coded) || coded;
+    const k = kind === "thumb" ? "thumb" : "hero";
+    return (
+      resolveExperienceSlugAsset("culinary", slug, k) ||
+      resolveExperienceSlugAsset("cultural", slug, k) ||
+      resolveCategorySlugAsset("cultural-experiences", slug, k) ||
+      firstExisting(coded) ||
+      coded
+    );
   }
   if (entity === "map" || kind === "map") {
     return resolveMapAsset(coded, slug);
@@ -478,12 +486,14 @@ export function resolveTourAsset(
   kind: AssetKind = "any",
 ): string {
   const prefer: "hero" | "thumb" = kind === "thumb" ? "thumb" : "hero";
+  // Prefer upgraded custom-tours / return-journeys folders; flat tours/*.webp are fallbacks.
+  // featured-tours is optional/legacy if present — not required.
   const bases = [
-    "assets/images/featured-tours",
     "assets/images/custom-tours",
     "assets/images/return-journeys",
     "assets/images/page-assets",
     "assets/images/tours",
+    "assets/images/featured-tours",
   ];
   for (const base of bases) {
     const matched = matchSlugDir(base, slug);
@@ -548,6 +558,42 @@ export function resolveMapAsset(codedPath: string, slug: string = ""): string {
   return firstExisting(...candidates) || remapped || codedPath;
 }
 
+/** Canonical experiences tree: culinary | cultural under public/assets/images/experiences/. */
+export function resolveExperienceSlugAsset(
+  kindFolder: "culinary" | "cultural",
+  slug: string,
+  kind: "hero" | "thumb" = "hero",
+): string {
+  const matched = matchSlugDir(`assets/images/experiences/${kindFolder}`, slug);
+  if (!matched) return "";
+  return pickInDir(`/assets/images/experiences/${kindFolder}/${matched}`, kind);
+}
+
+/** Activity under experiences/activities/<path> with legacy activities/ fallback. */
+export function resolveActivityExperienceAsset(
+  relParts: string[],
+  kind: "hero" | "thumb" = "hero",
+): string {
+  const canon = `/assets/images/experiences/activities/${relParts.join("/")}`;
+  const legacy = `/assets/images/activities/${relParts.join("/")}`;
+  const legacyTypo =
+    relParts.includes("religious")
+      ? `/assets/images/activities/${relParts.map((p) => (p === "religious" ? "religous" : p)).join("/")}`
+      : "";
+  return (
+    firstExisting(
+      `${canon}/${kind}.webp`,
+      `${canon}/01.webp`,
+      `${legacy}/${kind}.webp`,
+      `${legacy}/01.webp`,
+      legacyTypo ? `${legacyTypo}/01.webp` : "",
+    ) ||
+    pickInDir(canon, kind) ||
+    pickInDir(legacy, kind) ||
+    (legacyTypo ? pickInDir(legacyTypo, kind) : "")
+  );
+}
+
 /** Convenience: cultural-experiences / activities / tours by slug folder. */
 export function resolveCategorySlugAsset(
   category: "cultural-experiences" | "activities" | "custom-tours" | "return-journeys" | "featured-tours",
@@ -559,3 +605,77 @@ export function resolveCategorySlugAsset(
   return pickInDir(`/assets/images/${category}/${matched}`, kind);
 }
 
+/** Cultural / activities folder hero|thumb (existence-checked). */
+export function pickExperienceImage(
+  category: "cultural-experiences" | "activities",
+  slug: string,
+): string {
+  if (category === "cultural-experiences") {
+    return (
+      resolveExperienceSlugAsset("culinary", slug, "hero") ||
+      resolveExperienceSlugAsset("cultural", slug, "hero") ||
+      resolveCategorySlugAsset(category, slug, "hero") ||
+      resolveExperienceSlugAsset("culinary", slug, "thumb") ||
+      resolveExperienceSlugAsset("cultural", slug, "thumb") ||
+      resolveCategorySlugAsset(category, slug, "thumb")
+    );
+  }
+  return resolveCategorySlugAsset(category, slug, "hero") || resolveCategorySlugAsset(category, slug, "thumb");
+}
+
+/**
+ * Map ground-transport tier + vehicle to public/assets/images/transport/<tier>/<vehicle>/.
+ * Existence-checked; does not invent assets.
+ */
+export function resolveTransportAsset(
+  tier: string,
+  vehicleType: string,
+  kind: "hero" | "thumb" = "thumb",
+): string {
+  const t = cleanText(tier).toLowerCase();
+  const v = cleanText(vehicleType).toLowerCase().replace(/_/g, "-");
+  const tierFolder =
+    t === "armored" || t === "luxury"
+      ? "luxury"
+      : t === "premium"
+        ? "premium"
+        : t === "budget"
+          ? "budget"
+          : t === "standard"
+            ? "standard"
+            : t || "standard";
+
+  const vehicleCandidates: string[] = [];
+  if (v) vehicleCandidates.push(v);
+  if (v.includes("armored")) vehicleCandidates.push("armored-suv", "suv");
+  if (v.includes("suv")) vehicleCandidates.push("suv", "suv_4x4".replace("_", "-"));
+  if (v.includes("van")) vehicleCandidates.push("van", "van-old", "van_new".replace("_", "-"));
+  if (v.includes("taxi")) vehicleCandidates.push("taxi");
+  if (v.includes("bus")) vehicleCandidates.push("bus");
+  if (v.includes("coach")) vehicleCandidates.push("coach", "bus");
+  if (v.includes("coaster")) vehicleCandidates.push("bus", "coaster");
+  if (v.includes("sedan")) vehicleCandidates.push("sedan");
+  // unique preserve order
+  const seen = new Set<string>();
+  const vehicles = vehicleCandidates.filter((x) => {
+    if (!x || seen.has(x)) return false;
+    seen.add(x);
+    return true;
+  });
+
+  for (const vehicle of vehicles.length ? vehicles : ["suv", "sedan", "van"]) {
+    const matched = matchSlugDir(`assets/images/transport/${tierFolder}`, vehicle);
+    if (matched) {
+      const hit = pickInDir(`/assets/images/transport/${tierFolder}/${matched}`, kind);
+      if (hit) return hit;
+    }
+    const direct = pickInDir(`/assets/images/transport/${tierFolder}/${vehicle}`, kind);
+    if (direct) return direct;
+  }
+  // Tier folder overview / first vehicle
+  for (const child of listChildDirs(`assets/images/transport/${tierFolder}`)) {
+    const hit = pickInDir(`/assets/images/transport/${tierFolder}/${child}`, kind);
+    if (hit) return hit;
+  }
+  return "";
+}

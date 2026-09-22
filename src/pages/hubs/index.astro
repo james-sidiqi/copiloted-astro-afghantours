@@ -1,0 +1,70 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import Hero from '@components/site/Hero.astro';
+import SectionHeader from '@components/ui/SectionHeader.astro';
+import HubCard from '@components/travel/HubCard.astro';
+import ConversionCTA from '@components/travel/ConversionCTA.astro';
+import ExperienceStrip from '@components/travel/ExperienceStrip.astro';
+import { getSiteData } from '@lib/data/site-data';
+import { resolveHubAsset } from '@lib/getAssetUrl';
+import { getActivityCards } from '@lib/content/experienceCards';
+
+const data = getSiteData();
+const hubs = data.locations
+  .filter((l) => l.type === 'destination' && l.isActive && l.isHub)
+  .sort((a, b) => a.sortOrder - b.sortOrder);
+
+const provinceByCode = new Map(data.provinces.map((p) => [p.provinceCode, p]));
+const activityCards = getActivityCards(6);
+---
+
+<BaseLayout title="Travel Hubs – Afghan Tours" description="Operational city hubs across Afghanistan — explore places we plan journeys around, then find a Scheduled Tour or inquire for Custom.">
+  <Hero
+    title="Travel hubs"
+    subtitle="Operational city hubs we plan around — discover the map, then find a Scheduled Tour or inquire for a Custom Journey."
+    imagePath="/assets/images/heroes/hero-destinations.webp"
+    ctaText="View Scheduled Tours"
+    ctaHref="/tours?type=scheduled"
+  />
+
+  <section class="py-16 bg-[#f6f7fb]">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <div class="mb-8">
+        <SectionHeader
+          eyebrow="Operational discovery"
+          title="Hubs & provinces"
+          subtitle="Each hub is an operational base. Open one to see linked attractions, stays, and Scheduled Tours when our data connects them."
+        />
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {hubs.map((hub) => {
+          const province = provinceByCode.get(hub.parentCode);
+          return (
+            <HubCard
+              hub={hub}
+              provinceName={province ? `${province.provinceName} Province` : hub.parentCode}
+              basePath="/hubs"
+              imagePath={resolveHubAsset(hub.slug, province?.coverImagePath || province?.squareImagePath || '', 'hero') || province?.coverImagePath || province?.squareImagePath || ''}
+            />
+          );
+        })}
+      </div>
+    </div>
+  </section>
+
+  <ExperienceStrip
+    id="activities"
+    cards={activityCards}
+    eyebrow="Along the way"
+    title="Activities that appear on journeys"
+    subtitle="Sightseeing, markets, and seasonal activities from our asset library — not thin activity pages. Seasonal or specialised interests usually mean a Custom Journey inquiry."
+  />
+
+  <ConversionCTA
+    variant="soft"
+    eyebrow="Customer journey"
+    title="Discover → find a tour → inquire"
+    subtitle="Hubs and activities orient you. Next step: browse Scheduled Tours, or Build a Custom Journey if your route is specific."
+  />
+</BaseLayout>

@@ -4,6 +4,7 @@ import Hero from '@components/site/Hero.astro';
 import SectionHeader from '@components/ui/SectionHeader.astro';
 import ProvinceCard from '@components/travel/ProvinceCard.astro';
 import AttractionCard from '@components/travel/AttractionCard.astro';
+import ConversionCTA from '@components/travel/ConversionCTA.astro';
 import type { Region } from '@lib/types/view-models';
 import { getSiteData } from '@lib/data/site-data';
 
@@ -57,4 +58,10 @@ const { region } = Astro.props;
       <p class="text-center text-gray-500 py-12">Content coming soon for this region.</p>
     )}
   </div>
+
+  <ConversionCTA
+    variant="soft"
+    title={`Explore the ${region.regionName} region`}
+    subtitle="Use provinces and attractions above for orientation. Next: find a Scheduled Tour that fits, or Build a Custom Journey."
+  />
 </BaseLayout>

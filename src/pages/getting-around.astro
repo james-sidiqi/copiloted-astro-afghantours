@@ -1,0 +1,136 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import Hero from '@components/site/Hero.astro';
+import SectionHeader from '@components/ui/SectionHeader.astro';
+import TransportCard from '@components/travel/TransportCard.astro';
+import ConversionCTA from '@components/travel/ConversionCTA.astro';
+import SafeImage from '@components/ui/SafeImage.astro';
+import { getSiteData } from '@lib/data/site-data';
+import { firstExisting, resolveTransportAsset } from '@lib/getAssetUrl';
+
+const data = getSiteData();
+const transports = data.transports.filter((t) => t.isActive);
+
+const tierOrder = ['budget', 'standard', 'premium', 'luxury', 'armored'];
+const tierExplain: Record<string, string> = {
+  budget: 'Cost-conscious options for suitable corridors and group sizes — allocated by capacity rules in our transport data.',
+  standard: 'Private sedan, van, SUV, Toyota Coaster minibus, or Mercedes/Hino-class coach — matched to group size and corridor routes.',
+  premium: 'Newer or higher-spec vehicles when comfort or longer drives warrant an upgrade.',
+  luxury: 'Specialised vehicles (including armored where listed) — arranged on inquiry when the route and guest profile require them.',
+  armored: 'Armored options when the itinerary and guest profile call for them — confirmed case by case, never assumed.',
+};
+
+const byTier = tierOrder
+  .map((tier) => ({
+    tier,
+    blurb: tierExplain[tier] || '',
+    items: transports.filter((t) => (t.tier || '').toLowerCase() === tier),
+  }))
+  .filter((g) => g.items.length > 0);
+
+const roadSamples = [
+  {
+    label: 'Kabul–Jalalabad',
+    path: firstExisting('/assets/images/transport/roads/kabul-jalalabad/01.webp', '/assets/images/transport/roads/kabul-jalalabad/02.webp'),
+  },
+  {
+    label: 'Kabul–Salang',
+    path: firstExisting('/assets/images/transport/roads/kabul-salang/01.webp'),
+  },
+  {
+    label: 'Bamyan–Band-e-Amir',
+    path: firstExisting('/assets/images/transport/roads/bamyan-band-e-amir/01.webp'),
+  },
+].filter((r) => r.path);
+---
+
+<BaseLayout
+  title="Getting Around – Afghan Tours"
+  description="How Afghan Tours moves guests on tours — vehicle categories, capacity, and when upgrades apply. Inquire for premium or specialised transport."
+>
+  <Hero
+    title="Getting around"
+    subtitle="How we move guests on tours — vehicle categories matched to route, group size, and conditions."
+    imagePath={resolveTransportAsset('standard', 'suv', 'hero') || '/assets/images/heroes/hero-destinations.webp'}
+    ctaText="Inquire about transport"
+    ctaHref="/contact"
+  />
+
+  <section class="py-12 bg-white">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 text-sm sm:text-base text-[rgba(15,23,42,0.75)] leading-relaxed space-y-4">
+      <p>
+        Transport is planned with the itinerary — not sold as a standalone rental catalogue. Categories below come from our operational
+        ground-transport data: tier, vehicle type, passenger capacity, and routing notes.
+      </p>
+      <p>
+        Prefer a premium vehicle, a larger van, or a specialised option? Add that to your inquiry when you book a
+        <strong class="text-[#1e3a5f]"> Scheduled Tour</strong> or request a
+        <strong class="text-[#1e3a5f]"> Custom Journey</strong>.
+      </p>
+    </div>
+  </section>
+
+  <section class="py-10 bg-[#f6f7fb]">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 space-y-14">
+      {byTier.map((group) => (
+        <div>
+          <div class="mb-6">
+            <SectionHeader
+              eyebrow="Vehicle category"
+              title={group.tier.charAt(0).toUpperCase() + group.tier.slice(1)}
+              subtitle={group.blurb}
+            />
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {group.items.map((transport) => <TransportCard transport={transport} />)}
+          </div>
+        </div>
+      ))}
+
+      {transports.length === 0 && (
+        <p class="text-center py-12 text-gray-500">Transport categories coming soon.</p>
+      )}
+    </div>
+  </section>
+
+  {roadSamples.length > 0 && (
+    <section class="py-14 bg-white">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6">
+        <div class="mb-8">
+          <SectionHeader
+            eyebrow="Roads & corridors"
+            title="Drive segments matter"
+            subtitle="Sample corridor imagery from our transport library — realistic drive times and conditions are part of how we plan, not brochure decoration."
+          />
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+          {roadSamples.map((road) => (
+            <figure class="rounded-2xl overflow-hidden bg-gray-100 shadow-sm">
+              <div class="aspect-[16/10]">
+                <SafeImage
+                  src={road.path}
+                  fallback="/assets/images/placeholders/default-card.webp"
+                  alt={road.label}
+                  class="w-full h-full object-cover"
+                  loading="lazy"
+                />
+              </div>
+              <figcaption class="px-4 py-3 text-sm font-medium text-[#1e3a5f]">{road.label}</figcaption>
+            </figure>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <ConversionCTA
+    variant="band"
+    eyebrow="Arrangements"
+    title="Request a vehicle upgrade on inquiry"
+    subtitle="Tell us group size, preferred tier, and any specialised needs. We confirm what fits your Scheduled Tour dates or Custom Journey — we do not take stand-alone vehicle rentals here."
+    primaryHref="/contact"
+    primaryLabel="Inquire about transport"
+    secondaryHref="/tours?type=scheduled"
+    secondaryLabel="View Scheduled Tours"
+  />
+</BaseLayout>

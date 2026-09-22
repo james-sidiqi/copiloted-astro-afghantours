@@ -1,0 +1,224 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import SectionHeader from '@components/ui/SectionHeader.astro';
+import AttractionCard from '@components/travel/AttractionCard.astro';
+import TourCard from '@components/travel/TourCard.astro';
+import DishCard from '@components/travel/DishCard.astro';
+import HotelCard from '@components/travel/HotelCard.astro';
+import TransportCard from '@components/travel/TransportCard.astro';
+import ConversionCTA from '@components/travel/ConversionCTA.astro';
+import { isCustomTravelStyle } from '@lib/content/customAudiences';
+import type { Location, SiteData } from '@lib/types/view-models';
+import { getSiteData } from '@lib/data/site-data';
+import { getCollection, type CollectionEntry } from 'astro:content';
+
+export async function getStaticPaths() {
+  const data = getSiteData();
+  const hubs = data.locations.filter((l) => l.type === 'destination' && l.isActive && l.isHub);
+  const hubDocs = await getCollection('hubs');
+  const docBySlug = new Map(
+    hubDocs.map((doc) => [doc.data.hub_slug || doc.data.slug || doc.slug, doc] as const),
+  );
+  return hubs.map((hub) => ({
+    params: { slug: hub.slug },
+    props: { hub, data, hubDoc: docBySlug.get(hub.slug) ?? null },
+  }));
+}
+
+interface Props {
+  hub: Location;
+  data: SiteData;
+  hubDoc: CollectionEntry<'hubs'> | null;
+}
+
+const { hub, data, hubDoc } = Astro.props;
+const province = data.provinces.find((p) => p.provinceCode === hub.parentCode);
+
+const hubAccessCodes = new Set(
+  data.hubAccess
+    .filter((link) => link.baseLocationCode === hub.locationCode && link.isActive)
+    .map((link) => link.attractionCode),
+);
+
+const relatedAttractions = data.attractions.filter((a) => {
+  if (!a.isActive) return false;
+  if (hubAccessCodes.has(a.attractionCode)) return true;
+  const source = (a.attractionCode || '').toUpperCase().split('-')[0];
+  return a.provinceCode === hub.parentCode && source === hub.parentCode;
+});
+
+const attractionCodes = new Set(relatedAttractions.map((a) => a.attractionCode));
+const relatedToursAll = data.tours.filter((tour) => {
+  if (!tour.isActive) return false;
+  const usesAsPrimaryHub = tour.primaryLocationSlug === hub.slug;
+  const usesHubAttractions = tour.itinerary.some((day) =>
+    day.attractions.some((a) => attractionCodes.has(a.attractionCode)),
+  );
+  const usesLocationName = tour.itinerary.some(
+    (day) => day.location.toLowerCase() === hub.name.toLowerCase(),
+  );
+  return usesAsPrimaryHub || usesHubAttractions || usesLocationName;
+});
+const relatedTours = relatedToursAll.filter((t) => !isCustomTravelStyle(t.travelStyle));
+
+const relatedHotels = data.hotels.filter(
+  (hotel) => hotel.isActive && hotel.destinationsCode === hub.locationCode,
+);
+const relatedDishes = data.dishes.filter(
+  (dish) =>
+    dish.isActive &&
+    (dish.destinationCode === hub.locationCode ||
+      (!dish.destinationCode && dish.provinceCode === hub.parentCode)),
+);
+
+const transportTerms = new Set(
+  relatedTours.flatMap((tour) => tour.transportNote.toLowerCase().split(/[^a-z0-9]+/)).filter(Boolean),
+);
+const relatedTransports = data.transports.filter((transport) => {
+  if (!transport.isActive) return false;
+  if (transport.routeGroupId === 'ALL_LOCATIONS') return true;
+  return (
+    transportTerms.has(transport.vehicleType.toLowerCase()) ||
+    transportTerms.has(transport.transportSlug.toLowerCase()) ||
+    transportTerms.has(transport.transportName.toLowerCase())
+  );
+});
+
+const atAGlance = [
+  { label: 'Linked Attractions', value: relatedAttractions.length },
+  { label: 'Linked Hotels', value: relatedHotels.length },
+  { label: 'Food & Culture', value: relatedDishes.length },
+  { label: 'Transport Options', value: relatedTransports.length },
+  { label: 'Linked Tours', value: relatedTours.length },
+];
+
+const rendered = hubDoc ? await hubDoc.render() : null;
+const HubContent = rendered?.Content;
+---
+
+<BaseLayout
+  title={`${hub.name} Travel Hub – Afghan Tours`}
+  description={`Operational travel hub for ${hub.name}, Afghanistan — linked attractions, stays, and Scheduled Tours when our data connects them.`}
+>
+  <div class="bg-[#1e3a5f] py-16 text-white text-center px-4">
+    <p class="text-xs font-semibold uppercase tracking-widest text-[#b88a2a] mb-3">Operational Hub</p>
+    <h1 class="font-display text-3xl sm:text-4xl lg:text-5xl font-bold">{hub.name}</h1>
+    <div class="mt-4 text-sm sm:text-base text-white/85 space-y-1">
+      <p><span class="font-semibold text-white">Hub:</span> {hub.name}</p>
+      {province && (
+        <p>
+          <span class="font-semibold text-white">Province:</span> {province.provinceName} Province
+        </p>
+      )}
+    </div>
+  </div>
+
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 py-12 space-y-14">
+    {HubContent && (
+      <section class="bg-white rounded-2xl border border-[#1e3a5f]/10 p-5 sm:p-6">
+        <SectionHeader
+          eyebrow="Hub notes"
+          title={`How ${hub.name} works as a travel hub`}
+          subtitle="Practical orientation from our Kabul-based planning notes — not a guidebook encyclopedia."
+        />
+        <div class="mt-6 prose prose-slate prose-lg max-w-none prose-headings:font-display prose-headings:font-semibold prose-headings:text-[#1e3a5f] prose-h2:mt-10 prose-h2:mb-3 prose-h2:text-2xl prose-h3:mt-8 prose-h3:text-xl prose-a:text-[#1f4aa8]">
+          <HubContent />
+        </div>
+      </section>
+    )}
+
+    <section class="bg-white rounded-2xl border border-[#1e3a5f]/10 p-5 sm:p-6">
+      <SectionHeader eyebrow="At a Glance" title={`${hub.name} Hub Connections`} />
+      <div class="mt-5 grid grid-cols-2 md:grid-cols-5 gap-3">
+        {atAGlance.map((item) => (
+          <div class="rounded-xl bg-[#f6f7fb] px-4 py-3 text-center">
+            <p class="text-2xl font-display font-semibold text-[#1e3a5f]">{item.value}</p>
+            <p class="text-xs text-[rgba(15,23,42,0.6)]">{item.label}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    {relatedAttractions.length > 0 && (
+      <section>
+        <div class="mb-8">
+          <SectionHeader eyebrow="Explore" title={`Attractions near ${hub.name}`} />
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {relatedAttractions.map((a) => <AttractionCard attraction={a} />)}
+        </div>
+      </section>
+    )}
+
+    {relatedHotels.length > 0 && (
+      <section>
+        <div class="mb-8">
+          <SectionHeader
+            eyebrow="Stay"
+            title={`How we house guests in ${hub.name}`}
+            subtitle="Tour-context stays from our hotel data — not a hotel booking marketplace."
+          />
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {relatedHotels.map((hotel) => <HotelCard hotel={hotel} />)}
+        </div>
+      </section>
+    )}
+
+    {relatedDishes.length > 0 && (
+      <section>
+        <div class="mb-8">
+          <SectionHeader eyebrow="Food & Culture" title={`Local tastes around ${hub.name}`} />
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {relatedDishes.map((dish) => <DishCard dish={dish} />)}
+        </div>
+      </section>
+    )}
+
+    {relatedTransports.length > 0 && (
+      <section>
+        <div class="mb-8">
+          <SectionHeader eyebrow="Transport" title={`Operational transport for ${hub.name}`} />
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {relatedTransports.map((transport) => <TransportCard transport={transport} />)}
+        </div>
+      </section>
+    )}
+
+    {relatedTours.length > 0 && (
+      <section>
+        <div class="mb-8">
+          <SectionHeader
+            eyebrow="Scheduled Tours"
+            title={`Scheduled tours using ${hub.name}`}
+            subtitle="Only itineraries linked to this hub in our data — not a forced recommendation list."
+          />
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {relatedTours.map((tour) => <TourCard tour={tour} />)}
+        </div>
+      </section>
+    )}
+
+    {relatedAttractions.length === 0 &&
+      relatedHotels.length === 0 &&
+      relatedDishes.length === 0 &&
+      relatedTransports.length === 0 &&
+      relatedTours.length === 0 && (
+        <div class="text-center py-12 text-gray-500">
+          <p class="text-base font-medium">No linked content is currently published for {hub.name}.</p>
+          <a href="/contact" class="mt-4 inline-block text-[#1f4aa8] underline text-sm">
+            Contact us for trip planning
+          </a>
+        </div>
+      )}
+  </div>
+
+  <ConversionCTA
+    variant="soft"
+    title={`Plan time in ${hub.name}`}
+    subtitle="When this hub fits your trip, browse linked Scheduled Tours above — or Build a Custom Journey if you need a different route or timing."
+  />
+</BaseLayout>

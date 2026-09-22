@@ -3,33 +3,111 @@ import BaseLayout from '@layouts/BaseLayout.astro';
 import Hero from '@components/site/Hero.astro';
 import SectionHeader from '@components/ui/SectionHeader.astro';
 import HotelCard from '@components/travel/HotelCard.astro';
+import ConversionCTA from '@components/travel/ConversionCTA.astro';
 import { getSiteData } from '@lib/data/site-data';
 
 const data = getSiteData();
 const hotels = data.hotels.filter((hotel) => hotel.isActive);
+
+const tierOrder = ['budget', 'standard', 'premium', 'luxury'];
+const tierCopy: Record<string, { title: string; blurb: string }> = {
+  budget: {
+    title: 'Budget $',
+    blurb: 'Simple, functional stays when the route and group allow — selected for location and operational fit, not star marketing.',
+  },
+  standard: {
+    title: 'Standard $$',
+    blurb: 'Reliable mid-range properties we commonly use on scheduled itineraries — clean rooms, workable security posture, practical location.',
+  },
+  premium: {
+    title: 'Premium $$$',
+    blurb: 'Higher-spec city hotels when the itinerary and guest preference call for more comfort or meeting space.',
+  },
+  luxury: {
+    title: 'Luxury $$$$',
+    blurb: 'Top-tier options in limited hubs — available as an upgrade on inquiry, not a separate hotel-booking marketplace.',
+  },
+};
+
+const byTier = tierOrder
+  .map((tier) => ({
+    tier,
+    ...tierCopy[tier],
+    hotels: hotels.filter((h) => (h.tier || '').toLowerCase() === tier),
+  }))
+  .filter((g) => g.hotels.length > 0);
+
+const other = hotels.filter((h) => !tierOrder.includes((h.tier || '').toLowerCase()));
 ---
 
-<BaseLayout title="Hotels – Afghan Tours" description="Hotel options across Afghan travel hubs.">
+<BaseLayout
+  title="Hotels – Afghan Tours"
+  description="How Afghan Tours houses guests on tours — vetted stays by hub and tier. Upgrades available on inquiry; not a hotel booking site."
+>
   <Hero
-    title="Hotels"
-    subtitle="Operationally vetted stays by destination hub"
+    title="Hotels on our tours"
+    subtitle="How we house guests — by hub and tier — as part of a scheduled or custom itinerary."
     imagePath="/assets/images/heroes/hero-hotels.webp"
-    ctaText="Contact Us"
+    ctaText="Inquire about stays"
     ctaHref="/contact"
   />
 
-  <section class="py-16 bg-[#f6f7fb]">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6">
-      <div class="mb-8">
-        <SectionHeader
-          eyebrow="Stay"
-          title="Hotels by Hub"
-          subtitle="Hotel cards use safe image fallback logic to avoid broken placeholders."
-        />
-      </div>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {hotels.map((hotel) => <HotelCard hotel={hotel} />)}
-      </div>
+  <section class="py-12 bg-white">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 text-[rgba(15,23,42,0.75)] text-sm sm:text-base leading-relaxed space-y-4">
+      <p>
+        Afghan Tours does not sell hotel nights as a standalone marketplace. Properties below reflect categories we use when planning
+        <strong class="text-[#1e3a5f]"> Scheduled Tours</strong> and
+        <strong class="text-[#1e3a5f]"> Custom Journeys</strong> — chosen for location, suitability, and current operational fit.
+      </p>
+      <p>
+        Tier differences are about comfort and facilities, not guarantees. Prefer a higher tier or a specific property?
+        Note it on your inquiry and we will confirm what is workable for your dates and route.
+      </p>
     </div>
   </section>
+
+  <section class="py-8 bg-[#f6f7fb]">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 space-y-14">
+      {byTier.map((group) => (
+        <div>
+          <div class="mb-6">
+            <SectionHeader
+              eyebrow="Stay tier"
+              title={group.title}
+              subtitle={group.blurb}
+            />
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {group.hotels.map((hotel) => <HotelCard hotel={hotel} />)}
+          </div>
+        </div>
+      ))}
+
+      {other.length > 0 && (
+        <div>
+          <div class="mb-6">
+            <SectionHeader eyebrow="Stay" title="Other listed properties" />
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {other.map((hotel) => <HotelCard hotel={hotel} />)}
+          </div>
+        </div>
+      )}
+
+      {hotels.length === 0 && (
+        <p class="text-center py-12 text-gray-500">Hotel listings coming soon.</p>
+      )}
+    </div>
+  </section>
+
+  <ConversionCTA
+    variant="band"
+    eyebrow="Arrangements"
+    title="Stays are part of the journey plan"
+    subtitle="Tell us your preferred tier or property when you inquire. We confirm what is workable for Scheduled Tours or a Custom Journey — we do not take standalone hotel bookings here."
+    primaryHref="/contact"
+    primaryLabel="Inquire about accommodation"
+    secondaryHref="/tours?type=scheduled"
+    secondaryLabel="View Scheduled Tours"
+  />
 </BaseLayout>
