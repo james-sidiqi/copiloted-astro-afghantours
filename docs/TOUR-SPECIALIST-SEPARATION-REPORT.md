@@ -4,6 +4,7 @@
 **Branch:** `fix/separate-tours-specialist-services`  
 **Baseline SHA:** `73a3634de7ad176ae2351466dcdc22031f91b6d9` (`integration/afghantours-final`)  
 **PR base:** `integration/afghantours-final`  
+**Head SHA:** `5f25af301f0f5e12c298a6b21ec1f8912582bdaf`  
 **Status:** Unmerged · Not deployed  
 
 ---
