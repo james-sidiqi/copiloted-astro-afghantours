@@ -21,6 +21,8 @@ export const siteConfig = {
     'Licensed Afghan tour operator — American-led, Afghan-operated, and based in Kabul. Practical journeys planned around current access, permits, and conditions.',
   email: 'info@afghantours.com',
   operator: 'James Tourist & Travel Agency',
+  /** Tourism operator license — restored from PR #11 brand lock (ATO-KBL-1617). */
+  license: 'ATO-KBL-1617',
   phone: {
     display: '+93-78-012-3456',
     number: '93780123456',
