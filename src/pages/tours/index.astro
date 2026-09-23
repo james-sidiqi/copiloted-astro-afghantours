@@ -3,50 +3,56 @@ import BaseLayout from '@layouts/BaseLayout.astro';
 import Hero from '@components/site/Hero.astro';
 import SectionHeader from '@components/ui/SectionHeader.astro';
 import TourCard from '@components/travel/TourCard.astro';
-import AudienceCard from '@components/travel/AudienceCard.astro';
+import SpecialistCard from '@components/travel/SpecialistCard.astro';
+import ReturnJourneyCard from '@components/travel/ReturnJourneyCard.astro';
 import HorizontalCarousel from '@components/ui/HorizontalCarousel.astro';
 import PageSection from '@components/ui/PageSection.astro';
 import { getSiteData } from '@lib/data/site-data';
-import { getCustomAudiences, isCustomTravelStyle } from '@lib/content/customAudiences';
 import { orderScheduledTours, isPrimaryScheduledSlug } from '@lib/content/primaryScheduled';
+import { buildCustomInquiryHref } from '@lib/inquiry';
 
 const data = getSiteData();
-const tours = data.tours.filter(t => t.isActive);
-const scheduledTours = orderScheduledTours(tours.filter(t => !isCustomTravelStyle(t.travelStyle)));
-const primaryScheduled = scheduledTours.filter(t => isPrimaryScheduledSlug(t.slug));
-const secondaryScheduled = scheduledTours.filter(t => !isPrimaryScheduledSlug(t.slug));
-const customPackageTours = tours.filter(t => isCustomTravelStyle(t.travelStyle));
-const customAudiences = getCustomAudiences();
+const tours = data.tours.filter((t) => t.isActive);
+const scheduledTours = orderScheduledTours(tours.filter((t) => t.productClass === 'scheduled'));
+const privateFixedTours = tours.filter((t) => t.productClass === 'private-fixed');
+const primaryScheduled = scheduledTours.filter((t) => isPrimaryScheduledSlug(t.slug));
+const secondaryScheduled = scheduledTours.filter((t) => !isPrimaryScheduledSlug(t.slug));
+const specialistServices = data.specialistServices.filter((s) => s.isActive);
+const returnJourneys = data.returnJourneys.filter((j) => j.isActive);
+const customHref = buildCustomInquiryHref();
 ---
 
-<BaseLayout title="Tours – Afghan Tours" description="Scheduled tour packages and custom journeys from a licensed Kabul-based operator — American-led, Afghan-operated. Practical itineraries around current access and conditions.">
+<BaseLayout
+  title="Tours – Afghan Tours"
+  description="Scheduled and private fixed-itinerary tours from a licensed Kabul-based operator — American-led, Afghan-operated. Specialist services and return journeys are listed separately."
+>
   <Hero
     title="Our Tours"
-    subtitle="Scheduled packages and inquiry-led custom journeys — planned from Kabul around access, timing, and conditions"
+    subtitle="Itinerary-based journeys with clear day plans — scheduled departures or private fixed routes"
     imagePath="/assets/images/heroes/hero-tours.webp"
-    ctaText="Start a Custom Request"
-    ctaHref="/custom-requests/"
+    ctaText="Build My Journey"
+    ctaHref={customHref}
   />
 
   <section class="py-16 sm:py-20 bg-[#f6f7fb] border-y border-[#1e3a5f]/08">
     <div class="max-w-6xl mx-auto px-4 sm:px-6">
       <div class="mb-8">
         <SectionHeader
-          eyebrow="Tours"
-          title="Scheduled and custom"
-          subtitle="Scheduled tours are proposed set itineraries for inquiry. Custom requests are a planning service — not a fixed 15-day package."
+          eyebrow="Tour packages"
+          title="Scheduled and private fixed-itinerary tours"
+          subtitle="Only itinerary-based products appear here. Specialist logistics, return journeys, and Build My Journey live on their own pages — they are not mixed into this tour grid."
         />
       </div>
 
-      <div class="mb-10 flex flex-wrap gap-2" role="tablist" aria-label="Tour type">
-        <button type="button" data-tour-filter="all" class="tour-filter-btn px-4 py-2 rounded-full text-sm font-semibold border-2 border-[#1e3a5f] bg-[#1e3a5f] text-white transition-all duration-150" aria-pressed="true">
-          All ({tours.length})
+      <div class="mb-10 flex flex-wrap gap-2" role="tablist" aria-label="Tour class">
+        <button type="button" data-tour-filter="all" class="tour-filter-btn px-4 py-2 rounded-full text-sm font-semibold border-2 border-[#1e3a5f] bg-[#1e3a5f] text-white" aria-pressed="true">
+          All itinerary tours ({tours.length})
         </button>
-        <button type="button" data-tour-filter="scheduled" class="tour-filter-btn px-4 py-2 rounded-full text-sm font-semibold border-2 border-[#1e3a5f] text-[#1e3a5f] bg-white hover:bg-[#1e3a5f]/5 transition-all duration-150" aria-pressed="false">
+        <button type="button" data-tour-filter="scheduled" class="tour-filter-btn px-4 py-2 rounded-full text-sm font-semibold border-2 border-[#1e3a5f] text-[#1e3a5f] bg-white hover:bg-[#1e3a5f]/5" aria-pressed="false">
           Scheduled ({scheduledTours.length})
         </button>
-        <button type="button" data-tour-filter="custom" class="tour-filter-btn px-4 py-2 rounded-full text-sm font-semibold border-2 border-[#1e3a5f] text-[#1e3a5f] bg-white hover:bg-[#1e3a5f]/5 transition-all duration-150" aria-pressed="false">
-          Custom ({customAudiences.length})
+        <button type="button" data-tour-filter="private" class="tour-filter-btn px-4 py-2 rounded-full text-sm font-semibold border-2 border-[#1e3a5f] text-[#1e3a5f] bg-white hover:bg-[#1e3a5f]/5" aria-pressed="false">
+          Private fixed ({privateFixedTours.length})
         </button>
       </div>
 
@@ -54,12 +60,12 @@ const customAudiences = getCustomAudiences();
         <div class="mb-6">
           <h2 class="font-display text-xl font-bold text-[#1e3a5f]">Primary scheduled tours</h2>
           <p class="mt-1 text-sm text-[rgba(15,23,42,0.65)]">
-            The core proposed catalog for inquiry. Dates are <strong>proposed ≠ confirmed</strong> until verified with you. Prices show only when operator-verified; otherwise price on request.
+            Core proposed catalog for inquiry. Dates are <strong>proposed ≠ confirmed</strong> until verified with you. Prices show only when operator-verified; otherwise price on request.
           </p>
         </div>
         {primaryScheduled.length > 0 ? (
           <HorizontalCarousel ariaLabel="Primary scheduled tour cards">
-            {primaryScheduled.map(tour => <TourCard tour={tour} />)}
+            {primaryScheduled.map((tour) => <TourCard tour={tour} />)}
           </HorizontalCarousel>
         ) : (
           <p class="text-center py-12 text-gray-500">Primary scheduled tours coming soon.</p>
@@ -69,53 +75,70 @@ const customAudiences = getCustomAudiences();
           <div class="mt-14">
             <h3 class="font-display text-lg font-bold text-[#1e3a5f] mb-2">More scheduled routes</h3>
             <p class="mb-6 text-sm text-[rgba(15,23,42,0.65)]">
-              Retained when distinct by route or purpose (for example Central Afghanistan Discovery vs Heart of the Silk Road). Linked here without homepage clutter.
+              Retained when distinct by route or purpose. Linked here without homepage clutter.
             </p>
             <HorizontalCarousel ariaLabel="More scheduled tour cards">
-              {secondaryScheduled.map(tour => <TourCard tour={tour} />)}
+              {secondaryScheduled.map((tour) => <TourCard tour={tour} />)}
             </HorizontalCarousel>
           </div>
         )}
       </div>
 
-      <div data-tour-panel="custom" class="tour-panel">
+      <div data-tour-panel="private" class="tour-panel mb-8">
         <div class="mb-6">
-          <h2 class="font-display text-xl font-bold text-[#1e3a5f]">Custom requests</h2>
+          <h2 class="font-display text-xl font-bold text-[#1e3a5f]">Private fixed-itinerary tours</h2>
           <p class="mt-1 text-sm text-[rgba(15,23,42,0.65)]">
-            Inquiry-led planning for specific audiences — not a fixed price or day count.
-            Prefer an audience card, or read how planning works on
-            <a href="/custom-requests/" class="text-[#1f4aa8] underline">Custom Requests</a>.
+            Fixed day plans run on private dates. They are not mixed into the public scheduled calendar unless approved departure rows exist.
           </p>
         </div>
-
-        <div class="mb-10">
-          <h3 class="text-sm font-semibold uppercase tracking-wide text-[rgba(15,23,42,0.55)] mb-4">By audience</h3>
-          <HorizontalCarousel ariaLabel="Custom audience cards">
-            {customAudiences.map(audience => <AudienceCard audience={audience} />)}
-          </HorizontalCarousel>
-        </div>
-
-        {customPackageTours.length > 0 && (
-          <div>
-            <h3 class="text-sm font-semibold uppercase tracking-wide text-[rgba(15,23,42,0.55)] mb-4">Planning-service entries in data</h3>
-            <p class="mb-4 text-sm text-[rgba(15,23,42,0.65)]">
-              Rows tagged Custom are conversation starters for quotation — duration and price are not fixed packages.
-            </p>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-              {customPackageTours.map(tour => <TourCard tour={tour} />)}
-            </div>
+        {privateFixedTours.length > 0 ? (
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+            {privateFixedTours.map((tour) => <TourCard tour={tour} />)}
           </div>
+        ) : (
+          <p class="text-center py-12 text-gray-500">No private fixed-itinerary tours listed.</p>
         )}
       </div>
     </div>
   </section>
 
+  <PageSection tone="white">
+    <div class="mb-8">
+      <SectionHeader
+        eyebrow="Not tour packages"
+        title="Specialist services"
+        subtitle="Research, photography, media, business, academic, NGO, film, and fieldwork support — proposal-led, never sold with fixed days or catalog prices."
+      />
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+      {specialistServices.slice(0, 3).map((service) => <SpecialistCard service={service} />)}
+    </div>
+    <div class="mt-8 text-center">
+      <a href="/specialist-services/" class="inline-block px-8 py-3 rounded-full border-2 border-[#1e3a5f] text-[#1e3a5f] font-semibold hover:bg-[#1e3a5f] hover:text-white transition-all">
+        All specialist services
+      </a>
+    </div>
+  </PageSection>
+
+  <PageSection tone="mist" bordered>
+    <div class="mb-8">
+      <SectionHeader
+        eyebrow="Return journeys"
+        title="Diaspora, veterans, and alumni returns"
+        subtitle="Purpose-scoped return travel — distinct from specialist logistics and from scheduled leisure tours."
+      />
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+      {returnJourneys.map((journey) => <ReturnJourneyCard journey={journey} />)}
+    </div>
+  </PageSection>
+
   <section class="py-16 bg-[#1e3a5f]">
     <div class="max-w-3xl mx-auto px-4 sm:px-6 text-center text-white">
-      <h2 class="font-display text-2xl sm:text-3xl font-bold mb-4">Need something that is not on the calendar?</h2>
-      <p class="text-white/80 mb-8">Custom requests are inquiry-led — diaspora, veterans, Peace Corps alumni, business, artists, and media welcome.</p>
-      <a href="/custom-requests/" class="inline-block px-8 py-3.5 rounded-full bg-[#b88a2a] hover:bg-[#a07820] text-white font-semibold shadow-lg transition-all duration-200">
-        Start a Custom Request
+      <h2 class="font-display text-2xl sm:text-3xl font-bold mb-4">Need a journey that is not on the calendar?</h2>
+      <p class="text-white/80 mb-8">Build My Journey is inquiry-led planning — duration and price set after we scope your brief.</p>
+      <a href={customHref} class="inline-block px-8 py-3.5 rounded-full bg-[#b88a2a] hover:bg-[#a07820] text-white font-semibold shadow-lg transition-all duration-200">
+        Build My Journey
       </a>
     </div>
   </section>
@@ -158,6 +181,6 @@ const customAudiences = getCustomAudiences();
 
     const params = new URLSearchParams(window.location.search);
     const initial = (params.get('type') || 'all').toLowerCase();
-    setFilter(['all', 'scheduled', 'custom'].includes(initial) ? initial : 'all');
+    setFilter(['all', 'scheduled', 'private'].includes(initial) ? initial : 'all');
   })();
 </script>

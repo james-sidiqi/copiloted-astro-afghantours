@@ -49,6 +49,7 @@ export interface TourRow {
   season: string;
   is_featured: string;
   is_active: string;
+  product_class?: string;
 }
 
 export interface ItineraryRow {
@@ -239,5 +240,61 @@ export interface HubAttractionAccessRow {
   access_type: string;
   road_condition: string;
   notes: string;
+  is_active: string;
+}
+
+export interface SpecialistServiceRow {
+  service_code: string;
+  name: string;
+  slug: string;
+  category: string;
+  summary: string;
+  description: string;
+  audience: string;
+  service_type: string;
+  regions_supported: string;
+  planning_notes: string;
+  accommodation_note: string;
+  transport_note: string;
+  support_note: string;
+  availability_note: string;
+  image_path: string;
+  hero_image_path: string;
+  cta_label: string;
+  is_featured: string;
+  is_active: string;
+}
+
+export interface ReturnJourneyRow {
+  journey_code: string;
+  name: string;
+  slug: string;
+  audience: string;
+  summary: string;
+  description: string;
+  examples_of_support: string;
+  possible_regions: string;
+  planning_notes: string;
+  accommodation_note: string;
+  transport_note: string;
+  availability_note: string;
+  hero_image_path: string;
+  image_path: string;
+  cta_label: string;
+  is_featured: string;
+  is_active: string;
+}
+
+export interface CustomJourneyRow {
+  journey_code: string;
+  name: string;
+  slug: string;
+  summary: string;
+  description: string;
+  audience: string;
+  hero_image_path: string;
+  image_path: string;
+  cta_label: string;
+  is_featured: string;
   is_active: string;
 }

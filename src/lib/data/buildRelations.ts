@@ -23,6 +23,10 @@ import type {
 import { readCsv } from './readCsv.js';
 import { loadAttractions } from './loadAttractions.js';
 import { loadTours } from './loadTours.js';
+import { loadSpecialistServices } from './loadSpecialistServices.js';
+import { loadReturnJourneys } from './loadReturnJourneys.js';
+import { loadCustomJourneys } from './loadCustomJourneys.js';
+import { assertProductSeparation } from './validateProductSeparation.js';
 import { loadProvinces } from './loadProvinces.js';
 import { loadRegions } from './loadRegions.js';
 import { loadLocations } from './loadLocations.js';
@@ -150,9 +154,14 @@ function loadHubAccess(): HubAttractionAccess[] {
 }
 
 export function buildSiteData(): SiteData {
+  assertProductSeparation();
+
   // Load raw data
   const attractions = loadAttractions();
   const tourBases = loadTours();
+  const specialistServices = loadSpecialistServices();
+  const returnJourneys = loadReturnJourneys();
+  const customJourneys = loadCustomJourneys();
   const provincesBases = loadProvinces();
   const regionBases = loadRegions();
   const locations = loadLocations();
@@ -278,5 +287,5 @@ export function buildSiteData(): SiteData {
     return { ...base, provinces: regionProvinces, attractions: regionAttractions };
   });
 
-  return { tours, attractions, provinces, regions, locations, dishes, faqs, hotels, transports, hubAccess };
+  return { tours, specialistServices, returnJourneys, customJourneys, attractions, provinces, regions, locations, dishes, faqs, hotels, transports, hubAccess };
 }

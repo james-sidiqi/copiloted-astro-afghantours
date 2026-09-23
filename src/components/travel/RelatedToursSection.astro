@@ -42,7 +42,7 @@ const related = allTours
   .map((entry) => entry.tour);
 
 const scheduledPool = allTours.filter(
-  (tour) => tour.isActive && tour.slug !== current.slug && !isCustomTravelStyle(tour.travelStyle),
+  (tour) => tour.isActive && tour.slug !== current.slug && (tour.productClass === 'scheduled' || tour.productClass === 'private-fixed'),
 );
 
 const fallback =

@@ -1,0 +1,81 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import Hero from '@components/site/Hero.astro';
+import SectionHeader from '@components/ui/SectionHeader.astro';
+import { getSiteData } from '@lib/data/site-data';
+import { buildReturnInquiryHref } from '@lib/inquiry';
+
+export function getStaticPaths() {
+  const data = getSiteData();
+  return data.returnJourneys
+    .filter((j) => j.isActive)
+    .map((journey) => ({ params: { slug: journey.slug }, props: { journey } }));
+}
+
+const { journey } = Astro.props;
+const inquiryHref = buildReturnInquiryHref({
+  slug: journey.slug,
+  name: journey.name,
+  code: journey.journeyCode,
+  audience: journey.slug,
+});
+---
+
+<BaseLayout
+  title={`${journey.name} – Return Journeys – Afghan Tours`}
+  description={journey.summary}
+>
+  <Hero
+    title={journey.name}
+    subtitle={journey.summary}
+    imagePath={journey.heroImagePath || journey.imagePath}
+    ctaText={journey.ctaLabel || 'Request a Return Journey'}
+    ctaHref={inquiryHref}
+  />
+
+  <section class="py-14 bg-white">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6">
+      <div class="rounded-2xl border border-[#1e3a5f]/12 bg-[#f6f7fb] px-5 py-4 mb-10 text-sm text-[#1e3a5f]">
+        <p class="font-semibold text-xs uppercase tracking-wider text-[#b88a2a] mb-1">Return journey · inquiry-led</p>
+        <p>
+          No fixed duration, day-by-day catalog itinerary, scheduled departures, or “from $X” pricing on return journeys.
+          Personal history helps us listen — it is not an access guarantee.
+        </p>
+      </div>
+
+      <SectionHeader eyebrow="Audience" title={journey.audience} />
+      <p class="mt-4 text-[rgba(15,23,42,0.75)] leading-relaxed">{journey.description}</p>
+
+      {journey.examplesOfSupport && (
+        <div class="mt-10">
+          <h2 class="font-display text-xl font-bold text-[#1e3a5f] mb-2">Examples of support</h2>
+          <p class="text-[rgba(15,23,42,0.75)] leading-relaxed">{journey.examplesOfSupport}</p>
+        </div>
+      )}
+
+      {journey.possibleRegions.length > 0 && (
+        <div class="mt-8">
+          <h2 class="font-display text-xl font-bold text-[#1e3a5f] mb-2">Possible regions</h2>
+          <p class="text-sm text-[rgba(15,23,42,0.7)]">{journey.possibleRegions.join(' · ')}</p>
+        </div>
+      )}
+
+      {journey.planningNotes && (
+        <div class="mt-8">
+          <h2 class="font-display text-xl font-bold text-[#1e3a5f] mb-2">Planning notes</h2>
+          <p class="text-[rgba(15,23,42,0.75)] leading-relaxed">{journey.planningNotes}</p>
+        </div>
+      )}
+
+      <div class="mt-12 rounded-2xl bg-[#1e3a5f] text-white px-6 py-8 text-center">
+        <h2 class="font-display text-2xl font-bold mb-3">Request a Return Journey</h2>
+        <p class="text-white/80 mb-6 max-w-xl mx-auto">
+          Share context, pace, companions, and timing. We reply from Kabul with what is workable — then a written quotation.
+        </p>
+        <a href={inquiryHref} class="inline-block px-8 py-3.5 rounded-full bg-[#b88a2a] hover:bg-[#a07820] text-white font-semibold">
+          {journey.ctaLabel || 'Request a Return Journey'}
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,104 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import Hero from '@components/site/Hero.astro';
+import SectionHeader from '@components/ui/SectionHeader.astro';
+import { getSiteData } from '@lib/data/site-data';
+import { buildSpecialistInquiryHref } from '@lib/inquiry';
+
+export function getStaticPaths() {
+  const data = getSiteData();
+  return data.specialistServices
+    .filter((s) => s.isActive)
+    .map((service) => ({ params: { slug: service.slug }, props: { service } }));
+}
+
+const { service } = Astro.props;
+const inquiryHref = buildSpecialistInquiryHref({
+  slug: service.slug,
+  name: service.name,
+  code: service.serviceCode,
+  category: service.category,
+});
+---
+
+<BaseLayout
+  title={`${service.name} – Specialist Services – Afghan Tours`}
+  description={service.summary}
+>
+  <Hero
+    title={service.name}
+    subtitle={service.summary}
+    imagePath={service.heroImagePath || service.imagePath}
+    ctaText={service.ctaLabel || 'Request a Proposal'}
+    ctaHref={inquiryHref}
+  />
+
+  <section class="py-14 bg-white">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6">
+      <div class="rounded-2xl border border-[#1e3a5f]/12 bg-[#f6f7fb] px-5 py-4 mb-10 text-sm text-[#1e3a5f]">
+        <p class="font-semibold text-xs uppercase tracking-wider text-[#b88a2a] mb-1">Specialist service · proposal-led</p>
+        <p>
+          This is not a tour package. We do not advertise fixed duration, day-by-day itineraries, scheduled departures, or catalog “from” prices for specialist work.
+          Pricing is a <strong>custom quotation</strong> after scoping.
+        </p>
+      </div>
+
+      <SectionHeader eyebrow="Who this is for" title={service.audience || 'Specialist teams'} />
+      <p class="mt-4 text-[rgba(15,23,42,0.75)] leading-relaxed">{service.description}</p>
+
+      {service.regionsSupported.length > 0 && (
+        <div class="mt-10">
+          <h2 class="font-display text-xl font-bold text-[#1e3a5f] mb-2">Regions we can discuss</h2>
+          <p class="text-sm text-[rgba(15,23,42,0.7)]">{service.regionsSupported.join(' · ')}</p>
+        </div>
+      )}
+
+      {service.planningNotes && (
+        <div class="mt-10">
+          <h2 class="font-display text-xl font-bold text-[#1e3a5f] mb-2">Planning notes</h2>
+          <p class="text-[rgba(15,23,42,0.75)] leading-relaxed">{service.planningNotes}</p>
+        </div>
+      )}
+
+      <div class="mt-10 grid sm:grid-cols-2 gap-6">
+        {service.accommodationNote && (
+          <div class="rounded-xl border border-[#1e3a5f]/10 p-5">
+            <h3 class="font-semibold text-[#1e3a5f] mb-2">Accommodation</h3>
+            <p class="text-sm text-[rgba(15,23,42,0.7)]">{service.accommodationNote}</p>
+          </div>
+        )}
+        {service.transportNote && (
+          <div class="rounded-xl border border-[#1e3a5f]/10 p-5">
+            <h3 class="font-semibold text-[#1e3a5f] mb-2">Transport</h3>
+            <p class="text-sm text-[rgba(15,23,42,0.7)]">{service.transportNote}</p>
+          </div>
+        )}
+        {service.supportNote && (
+          <div class="rounded-xl border border-[#1e3a5f]/10 p-5">
+            <h3 class="font-semibold text-[#1e3a5f] mb-2">What we can arrange</h3>
+            <p class="text-sm text-[rgba(15,23,42,0.7)]">{service.supportNote}</p>
+          </div>
+        )}
+        {service.availabilityNote && (
+          <div class="rounded-xl border border-[#1e3a5f]/10 p-5">
+            <h3 class="font-semibold text-[#1e3a5f] mb-2">Availability</h3>
+            <p class="text-sm text-[rgba(15,23,42,0.7)]">{service.availabilityNote}</p>
+          </div>
+        )}
+      </div>
+
+      <div class="mt-12 rounded-2xl bg-[#1e3a5f] text-white px-6 py-8 text-center">
+        <h2 class="font-display text-2xl font-bold mb-3">Request a Proposal</h2>
+        <p class="text-white/80 mb-6 max-w-xl mx-auto">
+          Share your brief, preferred window, and team size. We reply from Kabul with workable options — then a written quotation. An inquiry is not a booking.
+        </p>
+        <a href={inquiryHref} class="inline-block px-8 py-3.5 rounded-full bg-[#b88a2a] hover:bg-[#a07820] text-white font-semibold">
+          {service.ctaLabel || 'Request a Proposal'}
+        </a>
+        <p class="mt-4 text-xs text-white/60">
+          Prefer a scheduled itinerary? <a class="underline" href="/tours/">Browse Tour Packages</a>
+        </p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

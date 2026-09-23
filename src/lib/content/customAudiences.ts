@@ -100,9 +100,20 @@ export function getCustomAudiences(): CustomAudience[] {
       label: d.label,
       blurb: d.blurb,
       imagePath,
-      href: d.id === "diaspora"
-        ? "/custom-requests/diaspora/"
-        : `/contact/?flow=custom&audience=${encodeURIComponent(d.id)}`,
+      href:
+        d.id === "diaspora"
+          ? "/return-journeys/diaspora/"
+          : d.id === "veterans"
+            ? "/return-journeys/veterans-contractors-diplomats/"
+            : d.id === "peace-corps"
+              ? "/return-journeys/peace-corps-alumni/"
+              : d.id === "business"
+                ? "/specialist-services/business-investment/"
+                : d.id === "artists"
+                  ? "/specialist-services/artist-creative/"
+                  : d.id === "media"
+                    ? "/specialist-services/media-journalist/"
+                    : `/contact/?flow=custom&audience=${encodeURIComponent(d.id)}`,
       assetNote: d.assetNote,
       objectPosition: d.objectPosition,
     };

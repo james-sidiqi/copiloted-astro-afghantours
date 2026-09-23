@@ -1,0 +1,38 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import Hero from '@components/site/Hero.astro';
+import SectionHeader from '@components/ui/SectionHeader.astro';
+import ReturnJourneyCard from '@components/travel/ReturnJourneyCard.astro';
+import { getSiteData } from '@lib/data/site-data';
+
+const data = getSiteData();
+const journeys = data.returnJourneys.filter((j) => j.isActive);
+---
+
+<BaseLayout
+  title="Return Journeys – Afghan Tours"
+  description="Diaspora, veterans/contractors/diplomats, and Peace Corps alumni return journeys — purpose-scoped planning from Kabul. Custom quotation only; no fixed tour package fields."
+>
+  <Hero
+    title="Return Journeys"
+    subtitle="Purpose and history scoped with care — not brochure tour packages"
+    imagePath="/assets/images/return-journeys/diaspora/afghan-diaspora-heritage.webp"
+    ctaText="Request a Return Journey"
+    ctaHref="/contact/?flow=return"
+  />
+
+  <section class="py-16 sm:py-20 bg-[#f6f7fb] border-y border-[#1e3a5f]/08">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <div class="mb-10">
+        <SectionHeader
+          eyebrow="Return travel"
+          title="Reconnect with context — planned from Kabul"
+          subtitle="Return journeys are distinct from specialist research/media work and from scheduled leisure tours. Duration, routing, and price are set after we hear your brief."
+        />
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+        {journeys.map((journey) => <ReturnJourneyCard journey={journey} />)}
+      </div>
+    </div>
+  </section>
+</BaseLayout>

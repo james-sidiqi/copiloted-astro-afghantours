@@ -1,0 +1,38 @@
+---
+import SafeImage from '@components/ui/SafeImage.astro';
+import type { ReturnJourney } from '@lib/types/view-models';
+
+interface Props {
+  journey: ReturnJourney;
+}
+const { journey } = Astro.props;
+---
+
+<article class="group bg-white rounded-[14px] shadow-[0_2px_16px_0_rgba(0,0,0,0.08)] hover:shadow-[0_10px_30px_rgba(15,23,42,0.08)] transition-shadow duration-300 overflow-hidden flex flex-col">
+  <a href={`/return-journeys/${journey.slug}/`} class="block overflow-hidden aspect-[16/10] bg-gray-100 shrink-0">
+    <SafeImage
+      src={journey.heroImagePath || journey.imagePath}
+      fallback="/assets/images/placeholders/default-tour.webp"
+      alt={journey.name}
+      class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
+      loading="lazy"
+    />
+  </a>
+  <div class="flex flex-col flex-1 p-5 gap-3">
+    <span class="self-start text-xs font-semibold px-2.5 py-0.5 rounded-full bg-[#b88a2a]/15 text-[#8a6818]">
+      Return journey
+    </span>
+    <a href={`/return-journeys/${journey.slug}/`} class="block">
+      <h3 class="font-display text-lg font-semibold text-[#1e3a5f] leading-snug group-hover:text-[#1f4aa8] transition-colors duration-150 line-clamp-2">
+        {journey.name}
+      </h3>
+    </a>
+    <p class="text-sm text-[rgba(15,23,42,0.7)] leading-relaxed line-clamp-3 flex-1">
+      {journey.summary}
+    </p>
+    <div class="flex items-center justify-between pt-2 border-t border-gray-100 text-sm">
+      <span class="font-semibold text-[#1f4aa8]">Custom quotation</span>
+      <span class="text-[rgba(15,23,42,0.55)]">Request a Return Journey</span>
+    </div>
+  </div>
+</article>
