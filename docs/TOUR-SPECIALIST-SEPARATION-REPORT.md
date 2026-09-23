@@ -4,7 +4,8 @@
 **Branch:** `fix/separate-tours-specialist-services`  
 **Baseline SHA:** `73a3634de7ad176ae2351466dcdc22031f91b6d9` (`integration/afghantours-final`)  
 **PR base:** `integration/afghantours-final`  
-**Head SHA:** `5f25af301f0f5e12c298a6b21ec1f8912582bdaf`  
+**Head SHA:** `cbe3cdfb718147ddcda5e51b19515d0f80a84e76`  
+**PR:** https://github.com/james-sidiqi/copiloted-astro-afghantours/pull/34  
 **Status:** Unmerged · Not deployed  
 
 ---
