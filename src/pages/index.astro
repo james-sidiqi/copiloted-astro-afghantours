@@ -6,6 +6,8 @@ import PageSection from '@components/ui/PageSection.astro';
 import HorizontalCarousel from '@components/ui/HorizontalCarousel.astro';
 import TourCard from '@components/travel/TourCard.astro';
 import AudienceCard from '@components/travel/AudienceCard.astro';
+import SpecialistCard from '@components/travel/SpecialistCard.astro';
+import ReturnJourneyCard from '@components/travel/ReturnJourneyCard.astro';
 import AttractionCard from '@components/travel/AttractionCard.astro';
 import FaqAccordion from '@components/travel/FaqAccordion.astro';
 import { getSiteData } from '@lib/data/site-data';
@@ -17,6 +19,8 @@ const scheduledAll = data.tours.filter(t => t.isActive && !isCustomTravelStyle(t
 const scheduledTours = orderScheduledTours(scheduledAll)
   .filter((t) => PRIMARY_SCHEDULED_SLUGS.includes(t.slug as typeof PRIMARY_SCHEDULED_SLUGS[number]));
 const customAudiences = getCustomAudiences();
+const specialistServices = data.specialistServices.filter(s => s.isActive && s.isFeatured).slice(0, 3);
+const returnJourneys = data.returnJourneys.filter(j => j.isActive);
 const featuredAttractions = data.attractions.filter(a => a.isActive && a.priority >= 5).slice(0, 6);
 const homeFaqs = data.faqs.filter(f => f.isActive && f.pageAssignment === 'home').slice(0, 6);
 ---
@@ -82,7 +86,7 @@ const homeFaqs = data.faqs.filter(f => f.isActive && f.pageAssignment === 'home'
       <SectionHeader
         eyebrow="Custom Journeys"
         title="No fixed itinerary — inquiry-led"
-        subtitle="Tell us your timing, interests, and group. We plan from Kabul around current access — for diaspora, veterans, Peace Corps alumni, business, artists, and media."
+        subtitle="Tell us your timing, interests, and group. We plan from Kabul around current access — Share timing, regions, and goals. Diaspora and veteran returns, and specialist logistics, also have dedicated pages."
         centered
       />
     </div>
@@ -99,6 +103,45 @@ const homeFaqs = data.faqs.filter(f => f.isActive && f.pageAssignment === 'home'
         How custom planning works
       </a>
     </div>
+  </PageSection>
+
+
+  <!-- Specialist Services -->
+  <PageSection tone="white" bordered>
+    <div class="mb-8">
+      <SectionHeader
+        eyebrow="Specialist Services"
+        title="Research, media, business, and fieldwork support"
+        subtitle="Proposal-led logistics — not fixed tour packages. No catalog day counts or from-prices."
+      />
+    </div>
+    {specialistServices.length > 0 ? (
+      <HorizontalCarousel ariaLabel="Specialist service cards">
+        {specialistServices.map(service => <SpecialistCard service={service} />)}
+      </HorizontalCarousel>
+    ) : null}
+    <div class="mt-10 text-center">
+      <a href="/specialist-services/" class="inline-block px-8 py-3 rounded-full border-2 border-[#1e3a5f] text-[#1e3a5f] font-semibold hover:bg-[#1e3a5f] hover:text-white transition-all duration-200">
+        View Specialist Services
+      </a>
+    </div>
+  </PageSection>
+
+  <!-- Return Journeys -->
+  <PageSection tone="sand">
+    <div class="mb-8 text-center">
+      <SectionHeader
+        eyebrow="Return Journeys"
+        title="Diaspora, veterans, and alumni returns"
+        subtitle="Purpose-scoped return travel — distinct from specialist logistics and scheduled leisure tours."
+        centered
+      />
+    </div>
+    {returnJourneys.length > 0 ? (
+      <HorizontalCarousel ariaLabel="Return journey cards">
+        {returnJourneys.map(journey => <ReturnJourneyCard journey={journey} />)}
+      </HorizontalCarousel>
+    ) : null}
   </PageSection>
 
   <!-- Explore the Country -->

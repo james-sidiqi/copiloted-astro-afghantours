@@ -73,6 +73,8 @@ export interface Tour {
   season: string;
   isFeatured: boolean;
   isActive: boolean;
+  /** scheduled | private-fixed — itinerary-based tours only */
+  productClass: 'scheduled' | 'private-fixed';
   // Relations
   itinerary: ItineraryDay[];
   inclusions: InclusionDay[];
@@ -221,8 +223,71 @@ export interface MapStop {
   slug: string;
 }
 
+
+export type ProductClass = 'scheduled' | 'private-fixed';
+
+/** Specialist logistics — MUST NOT carry durationDays / priceFrom / itinerary / dates */
+export interface SpecialistService {
+  serviceCode: string;
+  name: string;
+  slug: string;
+  category: string;
+  summary: string;
+  description: string;
+  audience: string;
+  serviceType: string;
+  regionsSupported: string[];
+  planningNotes: string;
+  accommodationNote: string;
+  transportNote: string;
+  supportNote: string;
+  availabilityNote: string;
+  imagePath: string;
+  heroImagePath: string;
+  ctaLabel: string;
+  isFeatured: boolean;
+  isActive: boolean;
+}
+
+export interface ReturnJourney {
+  journeyCode: string;
+  name: string;
+  slug: string;
+  audience: string;
+  summary: string;
+  description: string;
+  examplesOfSupport: string;
+  possibleRegions: string[];
+  planningNotes: string;
+  accommodationNote: string;
+  transportNote: string;
+  availabilityNote: string;
+  heroImagePath: string;
+  imagePath: string;
+  ctaLabel: string;
+  isFeatured: boolean;
+  isActive: boolean;
+}
+
+export interface CustomJourney {
+  journeyCode: string;
+  name: string;
+  slug: string;
+  summary: string;
+  description: string;
+  audience: string;
+  heroImagePath: string;
+  imagePath: string;
+  ctaLabel: string;
+  isFeatured: boolean;
+  isActive: boolean;
+}
+
 export interface SiteData {
   tours: Tour[];
+  specialistServices: SpecialistService[];
+  returnJourneys: ReturnJourney[];
+  customJourneys: CustomJourney[];
   attractions: Attraction[];
   provinces: Province[];
   regions: Region[];

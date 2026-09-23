@@ -115,3 +115,7 @@ old_path,final_path,status_code,reason
 /contact.html,/contact/,301,"Legacy flat HTML contact"
 /privacy.html,/privacy/,301,"Legacy flat HTML privacy"
 /terms.html,/terms/,301,"Legacy flat HTML terms"
+/tours/photography-tour/,/specialist-services/photography-documentary/,301,"Specialist separation — photography is not a fixed tour package"
+/tours/scientific-expeditions/,/specialist-services/scientific-research/,301,"Specialist separation — scientific support is not a fixed tour package"
+/tours/custom-expedition/,/custom-requests/,301,"Custom Expedition planning entry → Custom Requests hub"
+/custom-requests/diaspora/,/return-journeys/diaspora/,301,"Diaspora pattern moved under Return Journeys"
