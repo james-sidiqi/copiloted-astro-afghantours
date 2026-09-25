@@ -64,7 +64,6 @@ export function culinaryImage(
 
 export function listCulinaryGallery(slug: string, declared: string[] = []): string[] {
   const fromFront = (declared || []).map((u) => firstExisting(u)).filter(Boolean) as string[];
-  if (fromFront.length) return fromFront;
 
   const base = `/assets/images/experiences/culinary/${slug}/gallery`;
   const out: string[] = [];
@@ -78,5 +77,5 @@ export function listCulinaryGallery(slug: string, declared: string[] = []): stri
     );
     if (hit) out.push(hit);
   }
-  return out;
+  return [...new Set([...fromFront, ...out])];
 }
