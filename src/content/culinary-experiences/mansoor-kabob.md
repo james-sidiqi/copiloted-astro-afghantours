@@ -8,7 +8,7 @@ hub_slug: mazar-e-sharif
 route_context: near-hub
 venue_name: "Mansoor Kabob"
 venue_type: restaurant
-venue_status: "confirmed name; preserve physical Balkh vs Mazar if repo says"
+venue_status: "operator-provided not confirmed"
 signature_food: "Kabob"
 related_food_slugs: []
 related_tour_slugs: []

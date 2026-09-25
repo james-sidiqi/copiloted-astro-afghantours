@@ -671,11 +671,14 @@ export function resolveActivityExperienceAsset(
   relParts: string[],
   kind: "hero" | "thumb" = "hero",
 ): string {
-  const canon = `/assets/images/experiences/activities/${relParts.join("/")}`;
-  const legacy = `/assets/images/activities/${relParts.join("/")}`;
+  // Canonical spelling is "religious" (and shopping is top-level activities/shopping only).
+  // Never treat "religous" as a canonical experiences path — typo folder is legacy fallback only.
+  const parts = relParts.map((p) => (p === "religous" ? "religious" : p));
+  const canon = `/assets/images/experiences/activities/${parts.join("/")}`;
+  const legacy = `/assets/images/activities/${parts.join("/")}`;
   const legacyTypo =
-    relParts.includes("religious")
-      ? `/assets/images/activities/${relParts.map((p) => (p === "religious" ? "religous" : p)).join("/")}`
+    parts.includes("religious")
+      ? `/assets/images/activities/${parts.map((p) => (p === "religious" ? "religous" : p)).join("/")}`
       : "";
   return (
     firstExisting(
@@ -683,6 +686,7 @@ export function resolveActivityExperienceAsset(
       `${canon}/01.webp`,
       `${legacy}/${kind}.webp`,
       `${legacy}/01.webp`,
+      legacyTypo ? `${legacyTypo}/${kind}.webp` : "",
       legacyTypo ? `${legacyTypo}/01.webp` : "",
     ) ||
     pickInDir(canon, kind) ||

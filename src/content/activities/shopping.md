@@ -7,8 +7,8 @@ hero_image: "/assets/images/experiences/activities/shopping/hero.webp"
 image: "/assets/images/experiences/activities/shopping/thumb.webp"
 gallery: []
 subtypes: []
-best_season: "Year-round"
-duration: "Hours within hub days"
+best_season: "Varies — subject to conditions"
+duration: "Varies — confirmed during planning"
 ---
 
 Carpets, jewellery, and local goods as optional hub stops — not a shopping-tour product line.

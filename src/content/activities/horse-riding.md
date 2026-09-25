@@ -7,8 +7,8 @@ hero_image: "/assets/images/experiences/activities/horse-riding/hero.webp"
 image: "/assets/images/experiences/activities/horse-riding/thumb.webp"
 gallery: []
 subtypes: []
-best_season: "Spring–autumn"
-duration: "Hours to half-day"
+best_season: "Varies — subject to conditions"
+duration: "Varies — confirmed during planning"
 ---
 
 Horse riding when local arrangements and access allow — not staged as a guaranteed product.

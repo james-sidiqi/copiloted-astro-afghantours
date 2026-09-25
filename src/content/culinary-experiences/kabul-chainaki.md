@@ -12,6 +12,11 @@ venue_status: "needs exact venue"
 signature_food: "Chainaki"
 related_food_slugs: []
 related_tour_slugs: []
+hero_image: "/assets/images/experiences/culinary/kabul-chainaki/hero.webp"
+image: "/assets/images/experiences/culinary/kabul-chainaki/thumb.webp"
+gallery:
+  - "/assets/images/experiences/culinary/kabul-chainaki/gallery/01.webp"
+  - "/assets/images/experiences/culinary/kabul-chainaki/gallery/02.webp"
 provinces: ["Kabul"]
 best_season: "Year round"
 duration: "1–2 hours"

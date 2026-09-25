@@ -7,8 +7,8 @@ hero_image: "/assets/images/experiences/activities/cycling/hero.webp"
 image: "/assets/images/experiences/activities/cycling/thumb.webp"
 gallery: []
 subtypes: []
-best_season: "Spring–autumn"
-duration: "Hours to half-day"
+best_season: "Varies — subject to conditions"
+duration: "Varies — confirmed during planning"
 ---
 
 Cycling around Kabul when routes and conditions allow — inquire; not a fixed catalogue package.

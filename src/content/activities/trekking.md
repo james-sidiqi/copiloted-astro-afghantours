@@ -7,8 +7,8 @@ hero_image: "/assets/images/experiences/activities/trekking/hero.webp"
 image: "/assets/images/experiences/activities/trekking/thumb.webp"
 gallery: []
 subtypes: []
-best_season: "Summer–early autumn"
-duration: "Multi-day"
+best_season: "Varies — subject to conditions"
+duration: "Varies — confirmed during planning"
 ---
 
 Multi-day trekking when conditions allow — planned from Faizabad. Not a fixed published package; inquire for current access.

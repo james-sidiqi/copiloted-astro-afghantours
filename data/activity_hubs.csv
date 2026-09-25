@@ -1,15 +1,15 @@
 activity_slug,hub_slug,access_type,availability_note,priority,is_active
-hiking,ALL,in-hub,Available across all active hubs when conditions allow (semantic all-hubs rule),1,1
-fishing,kabul-city,near-hub,Season and access dependent,1,1
-fishing,mazar-e-sharif,near-hub,Season and access dependent,1,1
-fishing,faizabad,near-hub,Season and access dependent,1,1
-fishing,jalalabad-city,near-hub,Season and access dependent,1,1
-fishing,kandahar-city,near-hub,Season and access dependent,1,1
-trekking,faizabad,excursion,Primarily Badakhshan / Faizabad planning hub,1,1
-skiing,kabul-city,day-trip,Seasonal highland skiing; conditions dependent,1,1
-skiing,bamyan-city,day-trip,Seasonal highland skiing; conditions dependent,1,1
-shopping,ALL,in-hub,Markets and crafts across all active hubs (semantic all-hubs rule),1,1
-sightseeing,ALL,in-hub,Core hub activity across all active hubs (semantic all-hubs rule),1,1
-horse-riding,kabul-city,near-hub,Access and arrangement dependent,1,1
-horse-riding,mazar-e-sharif,near-hub,Access and arrangement dependent,1,1
-cycling,kabul-city,in-hub,Urban / near-hub cycling when conditions allow,1,1
+hiking,ALL,in-hub,Subject to conditions across active hubs (semantic all-hubs rule),1,1
+fishing,kabul-city,near-hub,Season and access vary — subject to conditions,1,1
+fishing,mazar-e-sharif,near-hub,Season and access vary — subject to conditions,1,1
+fishing,faizabad,near-hub,Season and access vary — subject to conditions,1,1
+fishing,jalalabad-city,near-hub,Season and access vary — subject to conditions,1,1
+fishing,kandahar-city,near-hub,Season and access vary — subject to conditions,1,1
+trekking,faizabad,excursion,Primarily Badakhshan / Faizabad planning hub — access varies,1,1
+skiing,kabul-city,day-trip,Seasonal highland skiing — subject to conditions,1,1
+skiing,bamyan-city,day-trip,Seasonal highland skiing — subject to conditions,1,1
+shopping,ALL,in-hub,Markets and crafts across active hubs when conditions allow (semantic all-hubs rule),1,1
+sightseeing,ALL,in-hub,Core hub activity across active hubs — subject to conditions (semantic all-hubs rule),1,1
+horse-riding,kabul-city,near-hub,Access and arrangement vary — subject to conditions,1,1
+horse-riding,mazar-e-sharif,near-hub,Access and arrangement vary — subject to conditions,1,1
+cycling,kabul-city,in-hub,Urban / near-hub cycling — subject to conditions,1,1

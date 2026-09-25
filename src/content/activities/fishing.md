@@ -7,8 +7,8 @@ hero_image: "/assets/images/experiences/activities/fishing/hero.webp"
 image: "/assets/images/experiences/activities/fishing/thumb.webp"
 gallery: []
 subtypes: []
-best_season: "Seasonal"
-duration: "Half-day to full-day"
+best_season: "Varies — subject to conditions"
+duration: "Varies — confirmed during planning"
 ---
 
 Fishing opportunities near selected hubs — inquire for current access; not a guaranteed inclusion on every itinerary.

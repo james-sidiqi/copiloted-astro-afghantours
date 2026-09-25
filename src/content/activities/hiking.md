@@ -7,8 +7,8 @@ hero_image: "/assets/images/experiences/activities/hiking/hero.webp"
 image: "/assets/images/experiences/activities/hiking/thumb.webp"
 gallery: []
 subtypes: []
-best_season: "Spring–autumn (conditions vary)"
-duration: "Half-day to full-day"
+best_season: "Varies — subject to conditions"
+duration: "Varies — confirmed during planning"
 ---
 
 Short walks and day hikes when access and conditions allow — planned from the hub you are based in, not a fixed catalogue trek product.

@@ -6,6 +6,8 @@ export default defineConfig({
   integrations: [tailwind()],
   output: 'static',
   redirects: {
+    '/hubs/faizabad-city': '/hubs/faizabad/',
+    '/hubs/faizabad-city/': '/hubs/faizabad/',
     '/cultural-experiences/chashma-e-dogh': '/cultural-experiences/culinary/chashma-e-dogh/',
     '/cultural-experiences/chashma-e-dogh/': '/cultural-experiences/culinary/chashma-e-dogh/',
     '/cultural-experiences/arg-restaurant-herat': '/cultural-experiences/culinary/arg-restaurant-herat/',

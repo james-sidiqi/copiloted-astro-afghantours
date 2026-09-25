@@ -7,8 +7,8 @@ hero_image: "/assets/images/experiences/activities/sightseeing/hero.webp"
 image: "/assets/images/experiences/activities/sightseeing/thumb.webp"
 gallery: []
 subtypes: ["historical", "religious", "scenic", "markets"]
-best_season: "Year-round (site-dependent)"
-duration: "Half-day to multi-day within hub"
+best_season: "Varies — subject to conditions"
+duration: "Varies — confirmed during planning"
 ---
 
 Core hub sightseeing — forts, mosques, landscapes, and markets. Subtypes (historical, religious, scenic, markets) are tags, not separate products.
@@ -21,4 +21,4 @@ Activities are inspiration and planning context for Scheduled Tours and Custom J
 
 ## Sightseeing subtypes (tags)
 
-Optional asset folders under `experiences/activities/sightseeing/{historical,religious,scenic,markets}/` support imagery. Subtypes are tags, not separate bookable products.
+Optional asset folders under `experiences/activities/sightseeing/{historical,religious,scenic,markets}/` support imagery. Subtypes are tags, not separate bookable products. Shopping is a separate top-level activity (`/activities/shopping/`) with assets under `experiences/activities/shopping/` — not a sightseeing subtype.

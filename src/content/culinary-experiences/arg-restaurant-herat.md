@@ -8,7 +8,7 @@ hub_slug: herat-city
 route_context: in-hub
 venue_name: "Arg Restaurant"
 venue_type: restaurant
-venue_status: confirmed
+venue_status: "operator-provided not confirmed"
 signature_food: "Herati cuisine"
 related_food_slugs: []
 related_tour_slugs: []

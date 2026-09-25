@@ -15,7 +15,11 @@ export type HubLink = {
   isActive: boolean;
 };
 
-/** Locked active operational hub slugs (locations.csv is_hub=1 destinations). */
+/**
+ * Locked active operational hub page slugs (locations.csv is_hub=1 destinations).
+ * Copiloted hub *page* for Faizabad is `faizabad` (preserve /hubs/faizabad/).
+ * Runtime/compatibility token `faizabad-city` aliases to that page slug.
+ */
 export const ACTIVE_HUB_SLUGS = [
   'kabul-city',
   'jalalabad-city',
@@ -26,6 +30,48 @@ export const ACTIVE_HUB_SLUGS = [
   'herat-city',
   'ghazni-city',
 ] as const;
+
+/** Map alternate runtime tokens → hub page slug used in this repo. */
+export const HUB_SLUG_ALIASES: Record<string, string> = {
+  kabul: 'kabul-city',
+  'kabul-city': 'kabul-city',
+  bamyan: 'bamyan-city',
+  'bamyan-city': 'bamyan-city',
+  ghazni: 'ghazni-city',
+  'ghazni-city': 'ghazni-city',
+  herat: 'herat-city',
+  'herat-city': 'herat-city',
+  kandahar: 'kandahar-city',
+  'kandahar-city': 'kandahar-city',
+  jalalabad: 'jalalabad-city',
+  'jalalabad-city': 'jalalabad-city',
+  // Preserve existing /hubs/faizabad/ URL; accept faizabad-city as the eight-runtime token.
+  faizabad: 'faizabad',
+  'faizabad-city': 'faizabad',
+  'mazar-e-sharif': 'mazar-e-sharif',
+  'mazar-e-sharif-city': 'mazar-e-sharif',
+  mazar: 'mazar-e-sharif',
+};
+
+export function canonicalHubSlug(value: string): string {
+  const slug = String(value || '')
+    .trim()
+    .toLowerCase()
+    .replace(/&/g, 'and')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+  return HUB_SLUG_ALIASES[slug] || slug;
+}
+
+/** Tokens that should match the same hub page (for relationship lookups). */
+export function hubSlugMatchSet(hubSlug: string): Set<string> {
+  const canon = canonicalHubSlug(hubSlug);
+  const out = new Set<string>([canon, hubSlug.toLowerCase()]);
+  for (const [alias, target] of Object.entries(HUB_SLUG_ALIASES)) {
+    if (target === canon) out.add(alias);
+  }
+  return out;
+}
 
 export function listActiveHubSlugs(): string[] {
   return [...ACTIVE_HUB_SLUGS];
@@ -45,7 +91,7 @@ function expandHub(hubSlug: string): string[] {
   const h = (hubSlug || '').trim();
   if (!h) return [];
   if (h === 'ALL' || h === '*') return listActiveHubSlugs();
-  return [h];
+  return [canonicalHubSlug(h)];
 }
 
 function toLink(
@@ -108,23 +154,23 @@ export function getActivityHubLinks(): HubLink[] {
 }
 
 export function getCulturalForHub(hubSlug: string): HubLink[] {
-  const hub = hubSlug.toLowerCase();
+  const hubs = hubSlugMatchSet(hubSlug);
   return getCulturalExperienceHubLinks()
-    .filter((l) => l.hubSlug.toLowerCase() === hub)
+    .filter((l) => hubs.has(l.hubSlug.toLowerCase()) || hubs.has(canonicalHubSlug(l.hubSlug)))
     .sort((a, b) => a.priority - b.priority || a.slug.localeCompare(b.slug));
 }
 
 export function getCulinaryLinksForHub(hubSlug: string): HubLink[] {
-  const hub = hubSlug.toLowerCase();
+  const hubs = hubSlugMatchSet(hubSlug);
   return getCulinaryExperienceHubLinks()
-    .filter((l) => l.hubSlug.toLowerCase() === hub)
+    .filter((l) => hubs.has(l.hubSlug.toLowerCase()) || hubs.has(canonicalHubSlug(l.hubSlug)))
     .sort((a, b) => a.priority - b.priority || a.slug.localeCompare(b.slug));
 }
 
 export function getActivitiesForHub(hubSlug: string): HubLink[] {
-  const hub = hubSlug.toLowerCase();
+  const hubs = hubSlugMatchSet(hubSlug);
   return getActivityHubLinks()
-    .filter((l) => l.hubSlug.toLowerCase() === hub)
+    .filter((l) => hubs.has(l.hubSlug.toLowerCase()) || hubs.has(canonicalHubSlug(l.hubSlug)))
     .sort((a, b) => a.priority - b.priority || a.slug.localeCompare(b.slug));
 }
 
@@ -151,5 +197,5 @@ export function activityHref(slug: string): string {
 }
 
 export function hubHref(slug: string): string {
-  return `/hubs/${slug}/`;
+  return `/hubs/${canonicalHubSlug(slug)}/`;
 }

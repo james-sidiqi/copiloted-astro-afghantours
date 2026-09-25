@@ -7,8 +7,8 @@ hero_image: "/assets/images/experiences/activities/skiing/hero.webp"
 image: "/assets/images/experiences/activities/skiing/thumb.webp"
 gallery: []
 subtypes: []
-best_season: "Winter"
-duration: "Day trips or short stays"
+best_season: "Varies — subject to conditions"
+duration: "Varies — confirmed during planning"
 ---
 
 Backcountry and highland skiing in season — inquire; not a fixed published package with schedule guarantees.
