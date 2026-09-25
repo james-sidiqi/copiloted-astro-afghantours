@@ -1,4 +1,7 @@
 ---
+import fs from 'node:fs';
+import path from 'node:path';
+
 import BaseLayout from '@layouts/BaseLayout.astro';
 import SectionHeader from '@components/ui/SectionHeader.astro';
 import SafeImage from '@components/ui/SafeImage.astro';
@@ -26,6 +29,12 @@ const relatedTours = relatedScheduledByProvinceNames(data.tours, entry.data.prov
   strict: true,
 });
 
+const galleryCandidates: string[] = [];
+const addGalleryImage = (value: unknown) => {
+  const normalized = String(value || '').trim();
+  if (normalized && !galleryCandidates.includes(normalized)) galleryCandidates.push(normalized);
+};
+
 const hero = firstExisting(
   `/assets/images/experiences/culinary/${entry.slug}/hero.webp`,
   `/assets/images/experiences/cultural/${entry.slug}/hero.webp`,
@@ -39,6 +48,32 @@ const hero = firstExisting(
   entry.data.hero_image,
   entry.data.image,
 ) || '/assets/images/placeholders/default-card.webp';
+
+addGalleryImage(hero);
+addGalleryImage(entry.data.image);
+(entry.data.gallery || []).forEach(addGalleryImage);
+
+const foldersToCheck = [
+  `/assets/images/experiences/cultural/${entry.slug}/`,
+  `/assets/images/experiences/cultural/${entry.slug}/gallery/`,
+  `/assets/images/cultural-experiences/${entry.slug}/`,
+  `/assets/images/cultural-experiences/${entry.slug}/gallery/`,
+];
+
+for (const folder of foldersToCheck) {
+  const diskFolder = path.join(process.cwd(), 'public', folder.replace(/^\/+/, ''));
+  if (!fs.existsSync(diskFolder)) continue;
+  try {
+    fs.readdirSync(diskFolder)
+      .filter((name) => /\.(webp|jpg|jpeg|png|avif)$/i.test(name))
+      .sort((a, b) => a.localeCompare(b))
+      .forEach((name) => addGalleryImage(`${folder}${name}`));
+  } catch {
+    // Missing or unreadable optional gallery folders should not block the page.
+  }
+}
+
+const galleryImages = galleryCandidates.slice(0, 9);
 ---
 
 <BaseLayout
@@ -66,6 +101,23 @@ const hero = firstExisting(
       </div>
     </div>
   </div>
+
+  {galleryImages.length > 1 && (
+    <section class="max-w-6xl mx-auto px-4 sm:px-6 py-10" aria-label={`${entry.data.title} gallery`}>
+      <p class="text-xs font-semibold uppercase tracking-widest text-[#b88a2a] mb-2">Visual Story</p>
+      <h2 class="font-display text-2xl sm:text-3xl font-semibold text-[#1e3a5f] mb-5">See the experience</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {galleryImages.map((src, index) => (
+          <img
+            src={src}
+            alt={`${entry.data.title} — view ${index + 1}`}
+            class="w-full h-64 object-cover rounded-xl"
+            loading={index < 2 ? 'eager' : 'lazy'}
+          />
+        ))}
+      </div>
+    </section>
+  )}
 
   <article class="max-w-3xl mx-auto px-4 sm:px-6 py-12">
     <div class="prose prose-slate prose-lg max-w-none prose-headings:font-display prose-headings:font-semibold prose-headings:text-[#1e3a5f] prose-h2:mt-10 prose-h2:mb-3 prose-h2:text-2xl prose-h2:leading-snug prose-h3:mt-8 prose-h3:mb-2 prose-h3:text-xl prose-p:leading-relaxed prose-a:text-[#1f4aa8] prose-strong:text-[#1e3a5f]">
