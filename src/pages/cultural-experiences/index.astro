@@ -42,7 +42,7 @@ function imageFor(slug: string, hero?: string, image?: string) {
         <SectionHeader
           eyebrow="Living Afghanistan"
           title="Experiences that shape a journey"
-          subtitle="These pages inspire and orient — they are not a catalogue of bookable add-ons. Related Scheduled Tours appear only when province data links them."
+          subtitle="These pages inspire and orient — they are not a catalogue of bookable add-ons. Culinary Experiences (meals and food stops planned by hub) live under a dedicated culinary index. Related Scheduled Tours appear only when province data links them."
         />
       </div>
 
@@ -86,7 +86,24 @@ function imageFor(slug: string, hero?: string, image?: string) {
     </div>
   </section>
 
-  <ConversionCTA
+  
+  <section class="pb-8 bg-[#f6f7fb]">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <a
+        href="/cultural-experiences/culinary/"
+        class="block rounded-2xl border border-[#b88a2a]/30 bg-white p-6 sm:p-8 hover:shadow-[0_10px_30px_rgba(15,23,42,0.08)] transition-shadow"
+      >
+        <p class="text-xs font-semibold uppercase tracking-widest text-[#b88a2a] mb-2">Culinary Experiences</p>
+        <h2 class="font-display text-xl sm:text-2xl font-semibold text-[#1e3a5f]">Looking for meals and food stops?</h2>
+        <p class="mt-2 text-sm text-[rgba(15,23,42,0.7)] max-w-2xl">
+          Culinary Experiences are planned from operational hubs and kept separate from this cultural catalogue and from Food &amp; Culture encyclopedia pages.
+        </p>
+        <span class="mt-4 inline-block text-sm font-semibold text-[#1f4aa8]">Browse Culinary Experiences →</span>
+      </a>
+    </div>
+  </section>
+
+<ConversionCTA
     variant="soft"
     eyebrow="Next step"
     title="Inspired? Find a tour that fits"
