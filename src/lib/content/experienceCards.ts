@@ -12,7 +12,7 @@ export type ExperienceCard = {
   blurb: string;
   imagePath: string;
   href: string;
-  kind: "cultural" | "activity";
+  kind: "cultural" | "culinary" | "activity";
 };
 
 const PUBLIC_ROOT = path.join(process.cwd(), "public");
@@ -31,7 +31,6 @@ const CULTURAL_DEFS: Array<{ slug: string; label: string; blurb: string }> = [
   { slug: "istalif-pottery", label: "Istalif pottery", blurb: "Craft and village life outside Kabul — often woven into Central routes when conditions allow." },
   { slug: "afghan-carpets", label: "Afghan carpets", blurb: "Markets and makers — part of how many guests experience cities on scheduled or custom itineraries." },
   { slug: "glassblowers-of-herat", label: "Glassblowers of Herat", blurb: "Herat’s craft traditions — relevant when Western hubs are on your route." },
-  { slug: "qurut-markets-of-bamyan", label: "Qurut markets of Bamyan", blurb: "Highland markets and food culture around Bamyan — paired with landscape days on Central tours." },
   { slug: "afghan-weddings", label: "Afghan weddings", blurb: "Hospitality and celebration guests sometimes witness — never staged as a product, always context-dependent." },
 ];
 
@@ -124,7 +123,7 @@ const CULTURAL_PAGE_SLUG: Record<string, string> = {
   "afghan-carpets": "afghan-carpets",
   "glassblowers-of-herat": "glassblowers-of-herat",
   "afghan-weddings": "afghan-weddings",
-  // qurut-markets-of-bamyan has assets but no MD page yet — keep tours CTA
+  // Culinary (incl. Band-e-Amir dairy/qurut) lives under culinary-experiences collection
 };
 
 export function getCulturalExperienceCards(limit = 6): ExperienceCard[] {
@@ -147,6 +146,26 @@ export function getCulturalExperienceCards(limit = 6): ExperienceCard[] {
         ? `/cultural-experiences/${CULTURAL_PAGE_SLUG[def.slug]}`
         : "/tours?type=scheduled",
       kind: "cultural",
+    });
+    if (cards.length >= limit) break;
+  }
+  return cards;
+}
+
+
+export async function getCulinaryExperienceCards(limit = 6): Promise<ExperienceCard[]> {
+  const { getAllCulinaryExperiences, culinaryHref, culinaryImage } = await import("./culinaryExperiences.js");
+  const entries = await getAllCulinaryExperiences();
+  const cards: ExperienceCard[] = [];
+  for (const entry of entries) {
+    const imagePath = culinaryImage(entry.slug, entry.data.hero_image, entry.data.image, "thumb");
+    cards.push({
+      id: entry.slug,
+      label: entry.data.title,
+      blurb: entry.data.card_description || entry.data.subtitle || entry.data.signature_food,
+      imagePath,
+      href: culinaryHref(entry.slug),
+      kind: "culinary",
     });
     if (cards.length >= limit) break;
   }
