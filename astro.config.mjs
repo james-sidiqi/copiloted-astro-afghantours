@@ -14,8 +14,10 @@ export default defineConfig({
     '/cultural-experiences/aziz-bakery/': '/cultural-experiences/culinary/aziz-bakery/',
     '/cultural-experiences/adam-khan-chapli-kabob': '/cultural-experiences/culinary/adam-khan-chapli-kabob/',
     '/cultural-experiences/adam-khan-chapli-kabob/': '/cultural-experiences/culinary/adam-khan-chapli-kabob/',
-    '/cultural-experiences/qurut-markets-of-bamyan': '/cultural-experiences/culinary/band-e-amir-dairy-market-quroot/',
-    '/cultural-experiences/qurut-markets-of-bamyan/': '/cultural-experiences/culinary/band-e-amir-dairy-market-quroot/',
+    '/cultural-experiences/qurut-markets-of-bamyan': '/cultural-experiences/culinary/band-e-amir-quroot-dairy/',
+    '/cultural-experiences/qurut-markets-of-bamyan/': '/cultural-experiences/culinary/band-e-amir-quroot-dairy/',
+    '/cultural-experiences/culinary/band-e-amir-dairy-market-quroot': '/cultural-experiences/culinary/band-e-amir-quroot-dairy/',
+    '/cultural-experiences/culinary/band-e-amir-dairy-market-quroot/': '/cultural-experiences/culinary/band-e-amir-quroot-dairy/',
   },
 
 });

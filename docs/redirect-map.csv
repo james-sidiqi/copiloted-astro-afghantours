@@ -123,4 +123,5 @@ old_path,final_path,status_code,reason
 /cultural-experiences/arg-restaurant-herat/,/cultural-experiences/culinary/arg-restaurant-herat/,301,"Culinary nested under /cultural-experiences/culinary/"
 /cultural-experiences/aziz-bakery/,/cultural-experiences/culinary/aziz-bakery/,301,"Culinary nested under /cultural-experiences/culinary/"
 /cultural-experiences/adam-khan-chapli-kabob/,/cultural-experiences/culinary/adam-khan-chapli-kabob/,301,"Culinary nested under /cultural-experiences/culinary/"
-/cultural-experiences/qurut-markets-of-bamyan/,/cultural-experiences/culinary/band-e-amir-dairy-market-quroot/,301,"Legacy qurut slug → canonical Band-e-Amir dairy market culinary slug"
+/cultural-experiences/qurut-markets-of-bamyan/,/cultural-experiences/culinary/band-e-amir-quroot-dairy/,301,"Legacy qurut slug → canonical Band-e-Amir dairy market culinary slug"
+/cultural-experiences/culinary/band-e-amir-dairy-market-quroot/,/cultural-experiences/culinary/band-e-amir-quroot-dairy/,301,"Locked culinary slug rename dairy-market-quroot → quroot-dairy"

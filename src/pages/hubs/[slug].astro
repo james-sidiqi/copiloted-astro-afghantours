@@ -12,6 +12,14 @@ import type { Location, SiteData } from '@lib/types/view-models';
 import { getSiteData } from '@lib/data/site-data';
 import { getCollection, type CollectionEntry } from 'astro:content';
 import { getCulinaryByHub, culinaryHref, culinaryImage } from '@lib/content/culinaryExperiences';
+import {
+  getCulturalForHub,
+  getActivitiesForHub,
+  culturalExperienceHref,
+  activityHref,
+} from '@lib/content/hubRelations';
+import { activityImage } from '@lib/content/activities';
+import { firstExisting } from '@lib/getAssetUrl';
 import SafeImage from '@components/ui/SafeImage.astro';
 
 export async function getStaticPaths() {
@@ -87,12 +95,20 @@ const relatedTransports = data.transports.filter((transport) => {
 });
 
 const culinaryExperiences = await getCulinaryByHub(hub.slug);
+const culturalForHub = getCulturalForHub(hub.slug);
+const activitiesForHub = getActivitiesForHub(hub.slug);
+const culturalEntries = await getCollection('cultural-experiences');
+const culturalBySlug = new Map(culturalEntries.map((e) => [e.slug, e]));
+const activityEntries = await getCollection('activities');
+const activityBySlug = new Map(activityEntries.map((e) => [e.slug, e]));
 
 const atAGlance = [
   { label: 'Linked Attractions', value: relatedAttractions.length },
   { label: 'Linked Hotels', value: relatedHotels.length },
   { label: 'Food & Culture', value: relatedDishes.length },
+  { label: 'Cultural Experiences', value: culturalForHub.length },
   { label: 'Culinary Experiences', value: culinaryExperiences.length },
+  { label: 'Activities', value: activitiesForHub.length },
   { label: 'Transport Options', value: relatedTransports.length },
   { label: 'Linked Tours', value: relatedTours.length },
 ];
@@ -183,6 +199,65 @@ const HubContent = rendered?.Content;
     )}
 
     
+
+    {culturalForHub.length > 0 && (
+      <section>
+        <div class="mb-8">
+          <SectionHeader
+            eyebrow="Cultural Experiences"
+            title={`Cultural experiences linked to ${hub.name}`}
+            subtitle="Only locked hub links are shown. Event-based experiences carry no schedule guarantees."
+          />
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {culturalForHub.map((link) => {
+            const entry = culturalBySlug.get(link.slug);
+            const title = entry?.data.title || link.slug.replace(/-/g, ' ');
+            const desc = entry?.data.card_description || entry?.data.subtitle || link.availabilityNote;
+            const img =
+              firstExisting(
+                `/assets/images/experiences/cultural/${link.slug}/thumb.webp`,
+                `/assets/images/experiences/cultural/${link.slug}/hero.webp`,
+                `/assets/images/cultural-experiences/${link.slug}/thumb.webp`,
+                `/assets/images/cultural-experiences/${link.slug}/hero.webp`,
+                entry?.data.image,
+                entry?.data.hero_image,
+              ) || '/assets/images/placeholders/default-card.webp';
+            return (
+              <a
+                href={culturalExperienceHref(link.slug)}
+                class="group bg-white rounded-[14px] shadow-[0_2px_16px_0_rgba(0,0,0,0.08)] hover:shadow-[0_10px_30px_rgba(15,23,42,0.08)] transition-shadow overflow-hidden flex flex-col"
+              >
+                <div class="aspect-[16/10] bg-gray-100 overflow-hidden shrink-0">
+                  <SafeImage
+                    src={img}
+                    fallback="/assets/images/placeholders/default-card.webp"
+                    alt={title}
+                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    loading="lazy"
+                  />
+                </div>
+                <div class="p-5 flex flex-col flex-1 gap-2">
+                  <span class="self-start text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#1e3a5f]/10 text-[#1e3a5f]">
+                    Cultural · {link.accessType}
+                  </span>
+                  <h3 class="font-display text-base font-semibold text-[#1e3a5f] group-hover:text-[#1f4aa8] transition-colors capitalize">
+                    {title}
+                  </h3>
+                  {desc && (
+                    <p class="text-sm text-[rgba(15,23,42,0.7)] leading-relaxed line-clamp-3">{desc}</p>
+                  )}
+                </div>
+              </a>
+            );
+          })}
+        </div>
+        <p class="mt-4 text-sm">
+          <a href="/cultural-experiences/" class="text-[#1f4aa8] hover:underline">All Cultural Experiences →</a>
+        </p>
+      </section>
+    )}
+
     {culinaryExperiences.length > 0 && (
       <section>
         <div class="mb-8">
@@ -232,6 +307,57 @@ const HubContent = rendered?.Content;
       </section>
     )}
 
+
+    {activitiesForHub.length > 0 && (
+      <section>
+        <div class="mb-8">
+          <SectionHeader
+            eyebrow="Activities"
+            title={`Activities planned from ${hub.name}`}
+            subtitle="Hub matrix only — conditions and access decide what is possible. Not a bookable activity catalogue."
+          />
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {activitiesForHub.map((link) => {
+            const entry = activityBySlug.get(link.slug);
+            const title = entry?.data.title || link.slug.replace(/-/g, ' ');
+            const desc = entry?.data.card_description || entry?.data.subtitle || link.availabilityNote;
+            const img = activityImage(link.slug, entry?.data.hero_image, entry?.data.image, 'thumb');
+            return (
+              <a
+                href={activityHref(link.slug)}
+                class="group bg-white rounded-[14px] shadow-[0_2px_16px_0_rgba(0,0,0,0.08)] hover:shadow-[0_10px_30px_rgba(15,23,42,0.08)] transition-shadow overflow-hidden flex flex-col"
+              >
+                <div class="aspect-[16/10] bg-gray-100 overflow-hidden shrink-0">
+                  <SafeImage
+                    src={img}
+                    fallback="/assets/images/placeholders/default-card.webp"
+                    alt={title}
+                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    loading="lazy"
+                  />
+                </div>
+                <div class="p-5 flex flex-col flex-1 gap-2">
+                  <span class="self-start text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#1e3a5f]/10 text-[#1e3a5f]">
+                    Activity · {link.accessType}
+                  </span>
+                  <h3 class="font-display text-base font-semibold text-[#1e3a5f] group-hover:text-[#1f4aa8] transition-colors capitalize">
+                    {title}
+                  </h3>
+                  {desc && (
+                    <p class="text-sm text-[rgba(15,23,42,0.7)] leading-relaxed line-clamp-3">{desc}</p>
+                  )}
+                </div>
+              </a>
+            );
+          })}
+        </div>
+        <p class="mt-4 text-sm">
+          <a href="/activities/" class="text-[#1f4aa8] hover:underline">All Activities →</a>
+        </p>
+      </section>
+    )}
+
 {relatedTransports.length > 0 && (
       <section>
         <div class="mb-8">
@@ -262,6 +388,8 @@ const HubContent = rendered?.Content;
       relatedHotels.length === 0 &&
       relatedDishes.length === 0 &&
       culinaryExperiences.length === 0 &&
+      culturalForHub.length === 0 &&
+      activitiesForHub.length === 0 &&
       relatedTransports.length === 0 &&
       relatedTours.length === 0 && (
         <div class="text-center py-12 text-gray-500">

@@ -717,7 +717,12 @@ export function pickExperienceImage(
       resolveCategorySlugAsset(category, slug, "thumb")
     );
   }
-  return resolveCategorySlugAsset(category, slug, "hero") || resolveCategorySlugAsset(category, slug, "thumb");
+  return (
+    resolveActivityExperienceAsset([slug], "hero") ||
+    resolveCategorySlugAsset(category, slug, "hero") ||
+    resolveActivityExperienceAsset([slug], "thumb") ||
+    resolveCategorySlugAsset(category, slug, "thumb")
+  );
 }
 
 /**

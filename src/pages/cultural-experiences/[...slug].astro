@@ -8,6 +8,7 @@ import { getCollection } from 'astro:content';
 import { getSiteData } from '@lib/data/site-data';
 import { relatedScheduledByProvinceNames } from '@lib/content/relatedScheduled';
 import { firstExisting } from '@lib/getAssetUrl';
+import { getHubsForCultural, hubHref } from '@lib/content/hubRelations';
 
 export async function getStaticPaths() {
   const entries = await getCollection('cultural-experiences');
@@ -20,6 +21,7 @@ export async function getStaticPaths() {
 const { entry } = Astro.props;
 const { Content } = await entry.render();
 const data = getSiteData();
+const hubLinks = getHubsForCultural(entry.slug);
 const relatedTours = relatedScheduledByProvinceNames(data.tours, entry.data.provinces || [], 3, {
   strict: true,
 });
@@ -69,6 +71,28 @@ const hero = firstExisting(
     <div class="prose prose-slate prose-lg max-w-none prose-headings:font-display prose-headings:font-semibold prose-headings:text-[#1e3a5f] prose-h2:mt-10 prose-h2:mb-3 prose-h2:text-2xl prose-h2:leading-snug prose-h3:mt-8 prose-h3:mb-2 prose-h3:text-xl prose-p:leading-relaxed prose-a:text-[#1f4aa8] prose-strong:text-[#1e3a5f]">
       <Content />
     </div>
+
+    
+    {hubLinks.length > 0 && (
+      <div class="mt-10 rounded-2xl border border-[#1e3a5f]/10 p-5">
+        <SectionHeader
+          eyebrow="Hubs"
+          title="Planning hubs for this experience"
+          subtitle="Locked relationships only. Event-based links never imply a fixed schedule."
+        />
+        <ul class="mt-4 space-y-2 text-sm text-[rgba(15,23,42,0.8)]">
+          {hubLinks.map((h) => (
+            <li class="flex flex-wrap items-baseline gap-2">
+              <a href={hubHref(h.hubSlug)} class="text-[#1f4aa8] hover:underline font-medium capitalize">
+                {h.hubSlug.replace(/-/g, ' ')}
+              </a>
+              <span class="text-xs uppercase tracking-wide text-[rgba(15,23,42,0.45)]">{h.accessType}</span>
+              {h.availabilityNote && <span class="text-xs text-[rgba(15,23,42,0.55)]">— {h.availabilityNote}</span>}
+            </li>
+          ))}
+        </ul>
+      </div>
+    )}
 
     {(entry.data.nearby?.length || entry.data.paired_foods?.length) && (
       <div class="mt-10 grid sm:grid-cols-2 gap-6">

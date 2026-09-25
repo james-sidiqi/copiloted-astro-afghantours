@@ -212,7 +212,9 @@
   # Culinary nested under /cultural-experiences/culinary/
   RewriteRule ^cultural-experiences/adam-khan-chapli-kabob/?$ /cultural-experiences/culinary/adam-khan-chapli-kabob/ [R=301,L]
   # Legacy qurut slug → canonical Band-e-Amir dairy market culinary slug
-  RewriteRule ^cultural-experiences/qurut-markets-of-bamyan/?$ /cultural-experiences/culinary/band-e-amir-dairy-market-quroot/ [R=301,L]
+  RewriteRule ^cultural-experiences/qurut-markets-of-bamyan/?$ /cultural-experiences/culinary/band-e-amir-quroot-dairy/ [R=301,L]
+  # Locked culinary slug rename dairy-market-quroot → quroot-dairy
+  RewriteRule ^cultural-experiences/culinary/band-e-amir-dairy-market-quroot/?$ /cultural-experiences/culinary/band-e-amir-quroot-dairy/ [R=301,L]
 </IfModule>
 # END AFGHANTOURS-REDIRECT-MAP
 

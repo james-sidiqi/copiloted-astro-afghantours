@@ -65,8 +65,32 @@ const culinaryExperiences = defineCollection({
   }),
 });
 
+
+/**
+ * Hub-linked Activities (inspiration / planning context — not bookable SKUs).
+ * Public URLs: /activities/<slug>/
+ * Assets: /assets/images/experiences/activities/<slug>/{hero,thumb}.webp + gallery/
+ * Hub matrix: data/activity_hubs.csv (ALL = all active hubs).
+ */
+const activities = defineCollection({
+  type: 'content',
+  schema: z.object({
+    title: z.string(),
+    subtitle: z.string().optional(),
+    card_description: z.string().optional(),
+    activity_type: z.literal('activity'),
+    hero_image: z.string().optional(),
+    image: z.string().optional(),
+    gallery: z.array(z.string()).optional(),
+    subtypes: z.array(z.string()).default([]),
+    best_season: z.string().optional(),
+    duration: z.string().optional(),
+  }),
+});
+
 export const collections = {
   hubs,
   'cultural-experiences': culturalExperiences,
   'culinary-experiences': culinaryExperiences,
+  activities,
 };

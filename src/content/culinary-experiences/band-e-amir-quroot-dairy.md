@@ -12,10 +12,10 @@ venue_status: "market/non-restaurant"
 signature_food: "Quroot, dairy"
 related_food_slugs: []
 related_tour_slugs: []
-hero_image: "/assets/images/experiences/culinary/band-e-amir-dairy-market-quroot/hero.webp"
-image: "/assets/images/experiences/culinary/band-e-amir-dairy-market-quroot/thumb.webp"
+hero_image: "/assets/images/experiences/culinary/band-e-amir-quroot-dairy/hero.webp"
+image: "/assets/images/experiences/culinary/band-e-amir-quroot-dairy/thumb.webp"
 gallery:
-  - "/assets/images/experiences/culinary/band-e-amir-dairy-market-quroot/gallery/01.webp"
+  - "/assets/images/experiences/culinary/band-e-amir-quroot-dairy/gallery/01.webp"
 provinces: ["Bamyan"]
 best_season: "Spring–autumn"
 duration: "15–30 minutes"
