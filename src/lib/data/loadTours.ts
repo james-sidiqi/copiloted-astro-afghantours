@@ -37,6 +37,7 @@ export function loadTours(): Omit<Tour, 'itinerary' | 'inclusions' | 'dates' | '
         season: cleanText(r.season),
         isFeatured: r.is_featured === '1',
         isActive: true,
+        productClass: (cleanText(r.product_class) === 'scheduled' ? 'scheduled' : 'private-fixed') as 'scheduled' | 'private-fixed',
       };
     });
 }

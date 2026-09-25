@@ -1,0 +1,74 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import Hero from '@components/site/Hero.astro';
+import SectionHeader from '@components/ui/SectionHeader.astro';
+import SpecialistCard from '@components/travel/SpecialistCard.astro';
+import { getSiteData } from '@lib/data/site-data';
+
+const data = getSiteData();
+const services = data.specialistServices.filter((s) => s.isActive);
+const featured = services.filter((s) => s.isFeatured);
+const rest = services.filter((s) => !s.isFeatured);
+---
+
+<BaseLayout
+  title="Specialist Services – Afghan Tours"
+  description="Proposal-led specialist support for research, photography, media, business, academic, NGO, film, and fieldwork in Afghanistan. Not fixed tour packages — custom quotation only."
+>
+  <Hero
+    title="Specialist Services"
+    subtitle="Capabilities and logistics planning — not fixed itineraries, day counts, or catalog prices"
+    imagePath="/assets/images/page-assets/travel/specialist-travel.webp"
+    ctaText="Request a Proposal"
+    ctaHref="/contact/?flow=specialist"
+  />
+
+  <section class="py-16 sm:py-20 bg-[#f6f7fb] border-y border-[#1e3a5f]/08">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <div class="mb-10">
+        <SectionHeader
+          eyebrow="How specialist work is scoped"
+          title="Tell us the brief — we reply with a proposal"
+          subtitle="These pages describe what we can help arrange. Duration, routing, and price are outputs of planning, never advertised package fields. Access and permits are confirmed case by case — never guaranteed in advance."
+        />
+      </div>
+
+      <div class="mb-8 rounded-2xl border border-amber-200 bg-amber-50 px-5 py-4 text-sm text-[#1e3a5f] leading-relaxed">
+        <p class="font-semibold text-amber-800 text-xs uppercase tracking-wider mb-1">Not tour packages</p>
+        <p>
+          Specialist services do not publish day-by-day itineraries, fixed durations, scheduled departures, or “from $X” prices.
+          Looking for a set route? See <a class="underline text-[#1f4aa8]" href="/tours/">Tour Packages</a>.
+          Need a fully bespoke leisure plan? <a class="underline text-[#1f4aa8]" href="/custom-requests/">Build My Journey</a>.
+        </p>
+      </div>
+
+      {featured.length > 0 && (
+        <div class="mb-14">
+          <h2 class="font-display text-xl font-bold text-[#1e3a5f] mb-6">Featured specialist support</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+            {featured.map((service) => <SpecialistCard service={service} />)}
+          </div>
+        </div>
+      )}
+
+      {rest.length > 0 && (
+        <div>
+          <h2 class="font-display text-xl font-bold text-[#1e3a5f] mb-6">More specialist categories</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+            {rest.map((service) => <SpecialistCard service={service} />)}
+          </div>
+        </div>
+      )}
+    </div>
+  </section>
+
+  <section class="py-16 bg-[#1e3a5f]">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 text-center text-white">
+      <h2 class="font-display text-2xl sm:text-3xl font-bold mb-4">Ready to scope a specialist engagement?</h2>
+      <p class="text-white/80 mb-8">Share your brief, window, and team size. We reply from Kabul with what is workable — then a written proposal.</p>
+      <a href="/contact/?flow=specialist" class="inline-block px-8 py-3.5 rounded-full bg-[#b88a2a] hover:bg-[#a07820] text-white font-semibold shadow-lg transition-all duration-200">
+        Request a Proposal
+      </a>
+    </div>
+  </section>
+</BaseLayout>

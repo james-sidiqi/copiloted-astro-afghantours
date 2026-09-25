@@ -11,6 +11,8 @@ import { isCustomTravelStyle } from '@lib/content/customAudiences';
 import type { Location, SiteData } from '@lib/types/view-models';
 import { getSiteData } from '@lib/data/site-data';
 import { getCollection, type CollectionEntry } from 'astro:content';
+import { getCulinaryByHub, culinaryHref, culinaryImage } from '@lib/content/culinaryExperiences';
+import SafeImage from '@components/ui/SafeImage.astro';
 
 export async function getStaticPaths() {
   const data = getSiteData();
@@ -84,13 +86,17 @@ const relatedTransports = data.transports.filter((transport) => {
   );
 });
 
+const culinaryExperiences = await getCulinaryByHub(hub.slug);
+
 const atAGlance = [
   { label: 'Linked Attractions', value: relatedAttractions.length },
   { label: 'Linked Hotels', value: relatedHotels.length },
   { label: 'Food & Culture', value: relatedDishes.length },
+  { label: 'Culinary Experiences', value: culinaryExperiences.length },
   { label: 'Transport Options', value: relatedTransports.length },
   { label: 'Linked Tours', value: relatedTours.length },
 ];
+
 
 const rendered = hubDoc ? await hubDoc.render() : null;
 const HubContent = rendered?.Content;
@@ -176,7 +182,57 @@ const HubContent = rendered?.Content;
       </section>
     )}
 
-    {relatedTransports.length > 0 && (
+    
+    {culinaryExperiences.length > 0 && (
+      <section>
+        <div class="mb-8">
+          <SectionHeader
+            eyebrow="Culinary Experiences"
+            title={`Culinary stops planned from ${hub.name}`}
+            subtitle="Hub-based meal and food-stop plans — not a restaurant directory. Exact venues confirmed per departure when needed."
+          />
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {culinaryExperiences.map((entry) => {
+            const img = culinaryImage(entry.slug, entry.data.hero_image, entry.data.image, 'thumb');
+            return (
+              <a
+                href={culinaryHref(entry.slug)}
+                class="group bg-white rounded-[14px] shadow-[0_2px_16px_0_rgba(0,0,0,0.08)] hover:shadow-[0_10px_30px_rgba(15,23,42,0.08)] transition-shadow overflow-hidden flex flex-col"
+              >
+                <div class="aspect-[16/10] bg-gray-100 overflow-hidden shrink-0">
+                  <SafeImage
+                    src={img}
+                    fallback="/assets/images/placeholders/default-card.webp"
+                    alt={entry.data.title}
+                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    loading="lazy"
+                  />
+                </div>
+                <div class="p-5 flex flex-col flex-1 gap-2">
+                  <span class="self-start text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#b88a2a]/15 text-[#8a6418]">
+                    Culinary · {entry.data.route_context}
+                  </span>
+                  <h3 class="font-display text-base font-semibold text-[#1e3a5f] group-hover:text-[#1f4aa8] transition-colors">
+                    {entry.data.title}
+                  </h3>
+                  {entry.data.card_description && (
+                    <p class="text-sm text-[rgba(15,23,42,0.7)] leading-relaxed line-clamp-3">
+                      {entry.data.card_description}
+                    </p>
+                  )}
+                </div>
+              </a>
+            );
+          })}
+        </div>
+        <p class="mt-4 text-sm">
+          <a href="/cultural-experiences/culinary/" class="text-[#1f4aa8] hover:underline">All Culinary Experiences →</a>
+        </p>
+      </section>
+    )}
+
+{relatedTransports.length > 0 && (
       <section>
         <div class="mb-8">
           <SectionHeader eyebrow="Transport" title={`Operational transport for ${hub.name}`} />
@@ -205,6 +261,7 @@ const HubContent = rendered?.Content;
     {relatedAttractions.length === 0 &&
       relatedHotels.length === 0 &&
       relatedDishes.length === 0 &&
+      culinaryExperiences.length === 0 &&
       relatedTransports.length === 0 &&
       relatedTours.length === 0 && (
         <div class="text-center py-12 text-gray-500">

@@ -1,0 +1,128 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import Hero from '@components/site/Hero.astro';
+import SectionHeader from '@components/ui/SectionHeader.astro';
+import SafeImage from '@components/ui/SafeImage.astro';
+import ConversionCTA from '@components/travel/ConversionCTA.astro';
+import {
+  getAllCulinaryExperiences,
+  culinaryHref,
+  culinaryImage,
+} from '@lib/content/culinaryExperiences';
+
+const entries = await getAllCulinaryExperiences();
+
+const byHub = new Map<string, typeof entries>();
+for (const e of entries) {
+  const k = e.data.hub_slug;
+  if (!byHub.has(k)) byHub.set(k, []);
+  byHub.get(k)!.push(e);
+}
+const hubOrder = [
+  'kabul-city',
+  'jalalabad-city',
+  'bamyan-city',
+  'herat-city',
+  'kandahar-city',
+  'ghazni-city',
+  'mazar-e-sharif',
+];
+const hubs = [
+  ...hubOrder.filter((h) => byHub.has(h)),
+  ...[...byHub.keys()].filter((h) => !hubOrder.includes(h)).sort(),
+];
+---
+
+<BaseLayout
+  title="Culinary Experiences – Afghan Tours"
+  description="Hub-based Culinary Experiences — meals and food stops planned from operational hubs. Separate from Food & Culture encyclopedia pages."
+>
+  <Hero
+    title="Culinary experiences"
+    subtitle="Meals and food stops planned from our operational hubs — not a restaurant bookings directory, and not the Food & Culture encyclopedia."
+    imagePath="/assets/images/heroes/hero-destinations.webp"
+    ctaText="View Scheduled Tours"
+    ctaHref="/tours?type=scheduled"
+  />
+
+  <section class="py-16 bg-[#f6f7fb]">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 space-y-12">
+      <div>
+        <SectionHeader
+          eyebrow="Eat with the route"
+          title="Culinary Experiences by planning hub"
+          subtitle="Each experience is attached to a hub for itinerary planning. Physical venues may sit in-hub, near-hub, on a day trip, or on an excursion. We do not invent restaurant names, menus, or prices."
+        />
+        <p class="mt-4 text-sm text-[rgba(15,23,42,0.65)]">
+          Looking for dishes and produce notes instead?
+          <a href="/food-culture/" class="text-[#1f4aa8] underline">Food &amp; Culture</a>
+          stays the encyclopedia.
+          <a href="/cultural-experiences/" class="text-[#1f4aa8] underline ml-1">Cultural Experiences</a>
+          covers crafts, sport, and living traditions.
+        </p>
+      </div>
+
+      {hubs.map((hubSlug) => {
+        const list = byHub.get(hubSlug) || [];
+        return (
+          <div>
+            <div class="mb-5 flex flex-wrap items-baseline justify-between gap-2">
+              <h2 class="font-display text-xl font-semibold text-[#1e3a5f] capitalize">
+                {hubSlug.replace(/-/g, ' ')}
+              </h2>
+              <a href={`/hubs/${hubSlug}/`} class="text-sm text-[#1f4aa8] hover:underline">
+                Open hub →
+              </a>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {list.map((entry) => {
+                const img = culinaryImage(entry.slug, entry.data.hero_image, entry.data.image);
+                return (
+                  <a
+                    href={culinaryHref(entry.slug)}
+                    class="group bg-white rounded-[14px] shadow-[0_2px_16px_0_rgba(0,0,0,0.08)] hover:shadow-[0_10px_30px_rgba(15,23,42,0.08)] transition-shadow duration-300 overflow-hidden flex flex-col"
+                  >
+                    <div class="aspect-[16/10] bg-gray-100 overflow-hidden shrink-0">
+                      <SafeImage
+                        src={img}
+                        fallback="/assets/images/placeholders/default-card.webp"
+                        alt={entry.data.title}
+                        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        loading="lazy"
+                      />
+                    </div>
+                    <div class="p-5 flex flex-col flex-1 gap-2">
+                      <span class="self-start text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#b88a2a]/15 text-[#8a6418]">
+                        Culinary · {entry.data.route_context}
+                      </span>
+                      <h3 class="font-display text-base font-semibold text-[#1e3a5f] group-hover:text-[#1f4aa8] transition-colors">
+                        {entry.data.title}
+                      </h3>
+                      {entry.data.card_description && (
+                        <p class="text-sm text-[rgba(15,23,42,0.7)] leading-relaxed line-clamp-3">
+                          {entry.data.card_description}
+                        </p>
+                      )}
+                      {entry.data.signature_food && (
+                        <p class="mt-auto text-xs text-[rgba(15,23,42,0.55)]">
+                          Signature: {entry.data.signature_food}
+                        </p>
+                      )}
+                    </div>
+                  </a>
+                );
+              })}
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  </section>
+
+  <ConversionCTA
+    variant="soft"
+    eyebrow="Next step"
+    title="Want a culinary stop on your route?"
+    subtitle="Browse Scheduled Tours, or inquire about a Custom Journey planned from Kabul — meal timing follows access, not a public bookings grid."
+  />
+</BaseLayout>

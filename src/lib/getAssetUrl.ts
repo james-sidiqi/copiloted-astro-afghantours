@@ -38,6 +38,14 @@ export function publicUrlExists(urlPath: string | null | undefined): boolean {
 }
 
 /** Return the first candidate URL that exists under public/, else "". */
+
+/**
+ * Canonical experience asset trees (do not invent assets):
+ *   /assets/images/experiences/cultural/<slug>/{hero,thumb}.webp + gallery/
+ *   /assets/images/experiences/culinary/<slug>/{hero,thumb}.webp + gallery/
+ *   /assets/images/experiences/activities/<...>/
+ * Legacy mirrors under /assets/images/cultural-experiences/ may still exist; prefer experiences/*.
+ */
 export function firstExisting(...candidates: Array<string | null | undefined>): string {
   for (const c of candidates) {
     const n = normalizeAssetPath(c);
