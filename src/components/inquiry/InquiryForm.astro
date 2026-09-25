@@ -238,8 +238,12 @@ const contactEmail = siteConfig.email;
     let customStep = 1;
 
     const tourSlug = (params.get('tour') || '').trim();
-    const tourName = (params.get('tourName') || '').trim();
-    const tourCode = (params.get('tourCode') || '').trim();
+    const activityName = (params.get('activityName') || params.get('activity') || '').trim();
+    const tourName = (params.get('tourName') || '').trim() || (activityName ? ('Activity: ' + activityName) : '');
+    // Activity inquiries are standalone — do not require tour_code.
+    const tourCode = (params.get('type') || '').trim().toLowerCase() === 'activity'
+      ? ''
+      : (params.get('tourCode') || '').trim();
     const departure = (params.get('departure') || '').trim();
     const audienceRaw = (params.get('audience') || '').trim();
     const audienceKey = audienceRaw.toLowerCase();

@@ -666,32 +666,37 @@ export function resolveExperienceSlugAsset(
   return pickInDir(`/assets/images/experiences/${kindFolder}/${matched}`, kind);
 }
 
-/** Activity under experiences/activities/<path> with legacy activities/ fallback. */
+/**
+ * Activity under experiences/activities/<path> with legacy activities/ fallback.
+ * Never cross-substitutes another activity slug's hero/thumb (no sibling-folder fallback).
+ * Shopping is top-level activities/shopping only (not sightseeing/shopping).
+ * Canonical subtype spelling is "religious" (legacy "religous" typo path removed).
+ */
 export function resolveActivityExperienceAsset(
   relParts: string[],
   kind: "hero" | "thumb" = "hero",
 ): string {
-  // Canonical spelling is "religious" (and shopping is top-level activities/shopping only).
-  // Never treat "religous" as a canonical experiences path — typo folder is legacy fallback only.
-  const parts = relParts.map((p) => (p === "religous" ? "religious" : p));
+  const parts = relParts
+    .map((p) => (p === "religous" ? "religious" : p))
+    .filter(Boolean);
+  if (!parts.length) return "";
+  // Refuse sightseeing/shopping — shopping is its own top-level activity.
+  if (parts[0] === "sightseeing" && parts[1] === "shopping") {
+    return resolveActivityExperienceAsset(["shopping"], kind);
+  }
   const canon = `/assets/images/experiences/activities/${parts.join("/")}`;
   const legacy = `/assets/images/activities/${parts.join("/")}`;
-  const legacyTypo =
-    parts.includes("religious")
-      ? `/assets/images/activities/${parts.map((p) => (p === "religious" ? "religous" : p)).join("/")}`
-      : "";
+  // Only resolve inside this exact folder — pickInDir must not walk siblings.
   return (
     firstExisting(
       `${canon}/${kind}.webp`,
       `${canon}/01.webp`,
       `${legacy}/${kind}.webp`,
       `${legacy}/01.webp`,
-      legacyTypo ? `${legacyTypo}/${kind}.webp` : "",
-      legacyTypo ? `${legacyTypo}/01.webp` : "",
     ) ||
     pickInDir(canon, kind) ||
     pickInDir(legacy, kind) ||
-    (legacyTypo ? pickInDir(legacyTypo, kind) : "")
+    ""
   );
 }
 
@@ -721,11 +726,11 @@ export function pickExperienceImage(
       resolveCategorySlugAsset(category, slug, "thumb")
     );
   }
+  // Exact activity slug folder only — never fuzzy-match another activity via matchSlugDir.
   return (
     resolveActivityExperienceAsset([slug], "hero") ||
-    resolveCategorySlugAsset(category, slug, "hero") ||
     resolveActivityExperienceAsset([slug], "thumb") ||
-    resolveCategorySlugAsset(category, slug, "thumb")
+    ""
   );
 }
 

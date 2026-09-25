@@ -17,6 +17,12 @@ export interface Attraction {
   locationCode?: string;
   priority: number;
   isActive: boolean;
+  /** Optional enrichment from attraction_time_profile / attraction_access_classification */
+  visitTimeMinutes?: number;
+  tripClassification?: string;
+  accessClassification?: string;
+  typicalAccess?: string;
+  roadCondition?: string;
 }
 
 export interface ItineraryDay {

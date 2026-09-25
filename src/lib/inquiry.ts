@@ -134,3 +134,32 @@ export function buildReturnInquiryHref(opts: {
   if (opts.audience) q.set('audience', opts.audience);
   return `/contact/?${q.toString()}`;
 }
+
+/** Activity inquiry — standalone; no tour_code required. */
+export function buildActivityInquiryHref(opts: {
+  slug: string;
+  name: string;
+}): string {
+  const q = new URLSearchParams();
+  q.set('flow', 'general');
+  q.set('type', 'activity');
+  q.set('activity', opts.slug);
+  q.set('activityName', opts.name);
+  q.set('activities', opts.name);
+  return `/contact/?${q.toString()}`;
+}
+
+/** Add activity into a custom journey inquiry (pre-fills activities field). */
+export function buildActivityJourneyInquiryHref(opts: {
+  slug: string;
+  name: string;
+}): string {
+  const q = new URLSearchParams();
+  q.set('flow', 'custom');
+  q.set('type', 'activity');
+  q.set('activity', opts.slug);
+  q.set('activityName', opts.name);
+  q.set('activities', opts.name);
+  q.set('build', '1');
+  return `/contact/?${q.toString()}`;
+}

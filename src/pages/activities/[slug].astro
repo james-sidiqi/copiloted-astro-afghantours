@@ -3,6 +3,7 @@ import BaseLayout from '@layouts/BaseLayout.astro';
 import SectionHeader from '@components/ui/SectionHeader.astro';
 import SafeImage from '@components/ui/SafeImage.astro';
 import ConversionCTA from '@components/travel/ConversionCTA.astro';
+import RelatedScheduledTours from '@components/travel/RelatedScheduledTours.astro';
 import {
   getAllActivities,
   activityHref,
@@ -11,6 +12,12 @@ import {
   hubsForActivity,
 } from '@lib/content/activities';
 import { hubHref } from '@lib/content/hubRelations';
+import { toursFeaturingActivity } from '@lib/content/tourActivities';
+import {
+  buildActivityInquiryHref,
+  buildActivityJourneyInquiryHref,
+} from '@lib/inquiry';
+import { getSiteData } from '@lib/data/site-data';
 
 export async function getStaticPaths() {
   const entries = await getAllActivities();
@@ -26,6 +33,10 @@ const hero = activityImage(entry.slug, entry.data.hero_image, entry.data.image);
 const gallery = listActivityGallery(entry.slug, entry.data.gallery || []);
 const hubs = hubsForActivity(entry.slug);
 const subtypes = entry.data.subtypes || [];
+const askHref = buildActivityInquiryHref({ slug: entry.slug, name: entry.data.title });
+const journeyHref = buildActivityJourneyInquiryHref({ slug: entry.slug, name: entry.data.title });
+const site = getSiteData();
+const featuringTours = toursFeaturingActivity(site.tours, entry.slug, 6);
 ---
 
 <BaseLayout
@@ -50,6 +61,20 @@ const subtypes = entry.data.subtypes || [];
         {subtypes.slice(0, 4).map((s) => (
           <span class="rounded-full bg-white/10 px-3 py-1 capitalize">{s}</span>
         ))}
+      </div>
+      <div class="mt-6 flex flex-wrap gap-3">
+        <a
+          href={askHref}
+          class="inline-flex items-center px-5 py-2.5 rounded-full bg-[#b88a2a] hover:bg-[#a07820] text-white text-sm font-semibold transition-colors"
+        >
+          Ask about this activity
+        </a>
+        <a
+          href={journeyHref}
+          class="inline-flex items-center px-5 py-2.5 rounded-full border border-white/70 hover:bg-white hover:text-[#1e3a5f] text-white text-sm font-semibold transition-colors"
+        >
+          Add to my journey
+        </a>
       </div>
     </div>
   </div>
@@ -99,9 +124,23 @@ const subtypes = entry.data.subtypes || [];
     </p>
   </article>
 
+  {featuringTours.length > 0 && (
+    <RelatedScheduledTours
+      tours={featuringTours}
+      eyebrow="Scheduled Tours"
+      title="Tours featuring this activity"
+      subtitle="Only tours explicitly linked in our tour↔activity data. An activity is not a mini-tour — ask if you want this woven into a Custom Journey instead."
+      limit={6}
+    />
+  )}
+
   <ConversionCTA
     variant="soft"
     title={`Ask about ${entry.data.title}`}
-    subtitle="We will say honestly whether this fits your dates and route — or suggest a better alternative."
+    subtitle="Standalone activity inquiry — no tour code required. We will say honestly whether this fits your dates and route."
+    primaryHref={askHref}
+    primaryLabel="Ask about this activity"
+    secondaryHref={journeyHref}
+    secondaryLabel="Add to my journey"
   />
 </BaseLayout>

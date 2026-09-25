@@ -6,6 +6,18 @@ interface Props {
 }
 const { tour } = Astro.props;
 
+/** Prefer a dedicated /tours/ card image over a shared attraction hero when both exist. */
+function preferTourCardImage(hero?: string, thumb?: string): string {
+  const h = (hero || '').trim();
+  const t = (thumb || '').trim();
+  const isTourPath = (p: string) => /\/assets\/images\/tours\//i.test(p);
+  if (t && isTourPath(t)) return t;
+  if (h && isTourPath(h)) return h;
+  return t || h || '';
+}
+
+const cardImage = preferTourCardImage(tour.heroImagePath, tour.thumbnailImagePath);
+
 const seasonColors: Record<string, string> = {
   Spring: 'bg-green-100 text-green-800',
   Summer: 'bg-yellow-100 text-yellow-800',
@@ -20,7 +32,7 @@ const seasonClass = seasonColors[tour.season] ?? 'bg-gray-100 text-gray-700';
   <!-- Image -->
   <a href={`/tours/${tour.slug}`} class="block overflow-hidden aspect-[16/10] bg-gray-100 shrink-0">
     <SafeImage
-      src={tour.heroImagePath || tour.thumbnailImagePath}
+      src={cardImage}
       fallback="/assets/images/placeholders/default-tour.webp"
       alt={tour.name}
       class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
