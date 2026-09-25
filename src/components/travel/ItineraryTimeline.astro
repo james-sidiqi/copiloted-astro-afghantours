@@ -22,6 +22,12 @@ interface LinkedItem {
   hubLabel?: string;
   provinceLabel?: string;
   category?: string;
+  regionLabel?: string;
+  tags?: string[];
+  visitDurationLabel?: string;
+  accessLabel?: string;
+  roadCondition?: string;
+  tripClassification?: string;
 }
 
 interface Props {
@@ -52,6 +58,18 @@ const fallbackByType: Record<string, string> = {
 const dayItems = days.map((day) => {
   const attractions: LinkedItem[] = day.attractions.map((attraction) => {
     const hub = attraction.locationCode ? hubByCode.get(attraction.locationCode) : undefined;
+    const visitMins = attraction.visitTimeMinutes;
+    const visitDurationLabel =
+      typeof visitMins === 'number' && visitMins > 0
+        ? visitMins >= 1440
+          ? `${Math.round(visitMins / 1440)} day${Math.round(visitMins / 1440) === 1 ? '' : 's'} typical visit`
+          : visitMins >= 60
+            ? `About ${Math.round(visitMins / 60)} hour${Math.round(visitMins / 60) === 1 ? '' : 's'}`
+            : `About ${visitMins} minutes`
+        : undefined;
+    const accessBits = [attraction.accessClassification, attraction.typicalAccess]
+      .filter(Boolean)
+      .map((s) => String(s).replace(/_/g, ' '));
     return {
       key: `attraction-${day.dayNumber}-${attraction.attractionCode}`,
       type: 'attraction',
@@ -61,8 +79,16 @@ const dayItems = days.map((day) => {
       longDescription: attraction.descLong,
       context: attraction.province ? `${attraction.province} Province` : undefined,
       provinceLabel: attraction.province ? `${attraction.province} Province` : undefined,
+      regionLabel: attraction.region || undefined,
       hubLabel: hub?.name,
       category: attraction.category,
+      tags: attraction.tags?.slice(0, 4) || [],
+      visitDurationLabel,
+      accessLabel: accessBits.length ? accessBits.join(' · ') : undefined,
+      roadCondition: attraction.roadCondition
+        ? String(attraction.roadCondition).replace(/_/g, ' ')
+        : undefined,
+      tripClassification: attraction.tripClassification || undefined,
       dayWhy: day.title
         ? `On Day ${day.dayNumber}${day.location ? ` · ${day.location}` : ''}: ${day.title}`
         : `Included on Day ${day.dayNumber}${day.location ? ` in ${day.location}` : ''}.`,
@@ -251,25 +277,36 @@ const dayItems = days.map((day) => {
                           loading="lazy"
                         />
                       </div>
-                      <div class="p-4">
+                      <div class="p-4 max-h-[70vh] overflow-y-auto overscroll-contain">
                         <p class="text-[11px] font-semibold uppercase tracking-[0.13em] text-[#b88a2a]">{item.type}</p>
                         <h5 class="font-display text-base font-semibold text-[#1e3a5f] mt-1">{item.label}</h5>
-                        {(item.provinceLabel || item.hubLabel || item.category) && (
+                        {(item.provinceLabel || item.regionLabel || item.hubLabel || item.category) && (
                           <p class="text-xs text-[rgba(15,23,42,0.55)] mt-1">
-                            {[item.provinceLabel, item.hubLabel, item.category].filter(Boolean).join(' · ')}
+                            {[item.provinceLabel, item.regionLabel, item.hubLabel, item.category].filter(Boolean).join(' · ')}
                           </p>
                         )}
                         {!item.provinceLabel && item.context && <p class="text-xs text-[rgba(15,23,42,0.55)] mt-1">{item.context}</p>}
+                        {(item.visitDurationLabel || item.accessLabel || item.roadCondition || item.tripClassification) && (
+                          <ul class="mt-2 flex flex-wrap gap-1.5">
+                            {item.visitDurationLabel && <li class="text-[11px] rounded-full bg-white border border-[#1e3a5f]/10 px-2 py-0.5 text-[rgba(15,23,42,0.7)]">{item.visitDurationLabel}</li>}
+                            {item.tripClassification && <li class="text-[11px] rounded-full bg-white border border-[#1e3a5f]/10 px-2 py-0.5 text-[rgba(15,23,42,0.7)] capitalize">{item.tripClassification}</li>}
+                            {item.accessLabel && <li class="text-[11px] rounded-full bg-white border border-[#1e3a5f]/10 px-2 py-0.5 text-[rgba(15,23,42,0.7)] capitalize">{item.accessLabel}</li>}
+                            {item.roadCondition && <li class="text-[11px] rounded-full bg-white border border-[#1e3a5f]/10 px-2 py-0.5 text-[rgba(15,23,42,0.7)] capitalize">Road: {item.roadCondition}</li>}
+                          </ul>
+                        )}
+                        {item.tags && item.tags.length > 0 && (
+                          <p class="text-[11px] text-[rgba(15,23,42,0.5)] mt-2">{item.tags.map((t) => `#${t}`).join(' ')}</p>
+                        )}
                         {item.dayWhy && (
                           <p class="text-xs font-medium text-[#8a651e] mt-2 bg-[#b88a2a]/8 rounded-lg px-2.5 py-1.5">{item.dayWhy}</p>
                         )}
                         {item.description && <p class="text-sm text-[rgba(15,23,42,0.7)] mt-2">{item.description}</p>}
                         {item.longDescription && item.longDescription !== item.description && (
-                          <p class="text-sm text-[rgba(15,23,42,0.65)] mt-2 line-clamp-4">{item.longDescription}</p>
+                          <p class="text-sm text-[rgba(15,23,42,0.65)] mt-2">{item.longDescription}</p>
                         )}
                         {item.href && (
-                          <a href={item.href} class="mt-3 inline-flex items-center gap-1 text-xs font-medium text-[rgba(15,23,42,0.55)] underline underline-offset-2 hover:text-[#1f4aa8]">
-                            {item.type === 'attraction' ? 'Full attraction page' : 'Open full page'} <span aria-hidden="true">→</span>
+                          <a href={item.href} class="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-[#1f4aa8] underline underline-offset-2 hover:text-[#162d4a]">
+                            {item.type === 'attraction' ? `Explore ${item.label}` : 'Open full page'} <span aria-hidden="true">→</span>
                           </a>
                         )}
                       </div>
@@ -291,13 +328,17 @@ const dayItems = days.map((day) => {
     const buttons = Array.from(dayEl.querySelectorAll<HTMLButtonElement>('.js-preview-trigger'));
     if (!cards.length) return;
 
-    const activate = (key: string) => {
+    const activate = (key: string, opts?: { scrollMobile?: boolean }) => {
       cards.forEach((card) => card.classList.toggle('hidden', card.dataset.previewKey !== key));
       buttons.forEach((button) => {
         const active = button.dataset.previewKey === key;
         button.classList.toggle('text-[#1f4aa8]', active);
         button.classList.toggle('font-semibold', active);
       });
+      if (opts?.scrollMobile && typeof window !== 'undefined' && window.matchMedia('(max-width: 1023px)').matches) {
+        const activeCard = cards.find((card) => card.dataset.previewKey === key);
+        activeCard?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
     };
 
     const initialKey = dayEl.dataset.defaultKey || cards[0]?.dataset.previewKey || '';
@@ -306,7 +347,7 @@ const dayItems = days.map((day) => {
     buttons.forEach((button) => {
       button.addEventListener('click', () => {
         const key = button.dataset.previewKey || '';
-        if (key) activate(key);
+        if (key) activate(key, { scrollMobile: true });
       });
     });
   });

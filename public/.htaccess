@@ -195,6 +195,26 @@
   RewriteRule ^privacy\.html/?$ /privacy/ [R=301,L]
   # Legacy flat HTML terms
   RewriteRule ^terms\.html/?$ /terms/ [R=301,L]
+  # Specialist separation — photography is not a fixed tour package
+  RewriteRule ^tours/photography-tour/?$ /specialist-services/photography-documentary/ [R=301,L]
+  # Specialist separation — scientific support is not a fixed tour package
+  RewriteRule ^tours/scientific-expeditions/?$ /specialist-services/scientific-research/ [R=301,L]
+  # Custom Expedition planning entry → Custom Requests hub
+  RewriteRule ^tours/custom-expedition/?$ /custom-requests/ [R=301,L]
+  # Diaspora pattern moved under Return Journeys
+  RewriteRule ^custom-requests/diaspora/?$ /return-journeys/diaspora/ [R=301,L]
+  # Culinary nested under /cultural-experiences/culinary/
+  RewriteRule ^cultural-experiences/chashma-e-dogh/?$ /cultural-experiences/culinary/chashma-e-dogh/ [R=301,L]
+  # Culinary nested under /cultural-experiences/culinary/
+  RewriteRule ^cultural-experiences/arg-restaurant-herat/?$ /cultural-experiences/culinary/arg-restaurant-herat/ [R=301,L]
+  # Culinary nested under /cultural-experiences/culinary/
+  RewriteRule ^cultural-experiences/aziz-bakery/?$ /cultural-experiences/culinary/aziz-bakery/ [R=301,L]
+  # Culinary nested under /cultural-experiences/culinary/
+  RewriteRule ^cultural-experiences/adam-khan-chapli-kabob/?$ /cultural-experiences/culinary/adam-khan-chapli-kabob/ [R=301,L]
+  # Legacy qurut slug → canonical Band-e-Amir dairy market culinary slug
+  RewriteRule ^cultural-experiences/qurut-markets-of-bamyan/?$ /cultural-experiences/culinary/band-e-amir-quroot-dairy/ [R=301,L]
+  # Locked culinary slug rename dairy-market-quroot → quroot-dairy
+  RewriteRule ^cultural-experiences/culinary/band-e-amir-dairy-market-quroot/?$ /cultural-experiences/culinary/band-e-amir-quroot-dairy/ [R=301,L]
 </IfModule>
 # END AFGHANTOURS-REDIRECT-MAP
 

@@ -7,6 +7,7 @@ import RelatedScheduledTours from '@components/travel/RelatedScheduledTours.astr
 import type { Dish } from '@lib/types/view-models';
 import { getSiteData } from '@lib/data/site-data';
 import { relatedScheduledByProvinceNames } from '@lib/content/relatedScheduled';
+import { getCulinaryByFoodSlug, culinaryHref, culinaryImage } from '@lib/content/culinaryExperiences';
 
 export async function getStaticPaths() {
   const data = getSiteData();
@@ -24,6 +25,7 @@ const province = data.provinces.find((p) => p.provinceCode === dish.provinceCode
 const provinceLinked = province
   ? relatedScheduledByProvinceNames(data.tours, [province.provinceName], 3, { strict: true })
   : [];
+const relatedCulinary = await getCulinaryByFoodSlug(dish.slug);
 
 const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 const validMonth = (n: number) => n >= 1 && n <= 12;
@@ -116,6 +118,43 @@ const seasonRange = (validMonth(dish.seasonStart) && validMonth(dish.seasonEnd))
       </aside>
     </div>
   </div>
+
+
+  {relatedCulinary.length > 0 && (
+    <section class="max-w-6xl mx-auto px-4 sm:px-6 pb-12">
+      <SectionHeader
+        eyebrow="Culinary Experiences"
+        title="Related culinary stops"
+        subtitle="Hub-planned food experiences linked to this dish — encyclopedia copy stays here; experiences stay on their own pages."
+      />
+      <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {relatedCulinary.map((entry) => {
+          const img = culinaryImage(entry.slug, entry.data.hero_image, entry.data.image, 'thumb');
+          return (
+            <a
+              href={culinaryHref(entry.slug)}
+              class="group bg-white rounded-[14px] border border-[#1e3a5f]/10 hover:shadow-[0_10px_30px_rgba(15,23,42,0.08)] transition-shadow overflow-hidden flex flex-col"
+            >
+              <div class="aspect-[16/10] bg-gray-100 overflow-hidden shrink-0">
+                <SafeImage
+                  src={img}
+                  fallback="/assets/images/placeholders/default-card.webp"
+                  alt={entry.data.title}
+                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  loading="lazy"
+                />
+              </div>
+              <div class="p-4 flex flex-col gap-1">
+                <span class="text-[10px] font-semibold uppercase tracking-wider text-[#8a6418]">Culinary Experience</span>
+                <h3 class="font-display text-sm font-semibold text-[#1e3a5f] group-hover:text-[#1f4aa8]">{entry.data.title}</h3>
+                <p class="text-xs text-[rgba(15,23,42,0.6)]">Hub: {entry.data.hub_slug.replace(/-/g, ' ')}</p>
+              </div>
+            </a>
+          );
+        })}
+      </div>
+    </section>
+  )}
 
   {provinceLinked.length > 0 && (
     <RelatedScheduledTours

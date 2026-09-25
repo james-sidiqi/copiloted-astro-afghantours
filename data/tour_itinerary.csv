@@ -41,34 +41,10 @@ KTDE,kandahar-durrani-empire-tour,3,Fly Kabul - Kandahar,Kandahar,Flight from Ka
 KTDE,kandahar-durrani-empire-tour,4,Sightseeing Kanadahar,Kandahar,A day of sightseeing in Kandahar.,,Short city transfers.,KDR-001;KDR-002;KDR-004;KDR-005
 KTDE,kandahar-durrani-empire-tour,5,Fly Kandahar - Kabul,Kabul,Flight from Kandahar back to Kabul with the remainder of the day of sightseeing in Kabul.,FL-KDR-KBL,Short city transfers.,KBL-014;KBL-015;KBL-016;KBL-017;KBL-007
 KTDE,kandahar-durrani-empire-tour,6,Airport Transfer - Depart from Kabul,Kabul,"Hotel check-out and Airport Drop-off, departing flights from Kabul.",,Short city transfers.,
-PHOT,photography-tour,1,Arrival & Orientation,Kabul,"Airport pickup, hotel check-in, and a relaxed orientation Sightseeing depending on arrival time.",,Short city transfers.,
-PHOT,photography-tour,2,TBD,Kabul,Planned touring day with flexible pacing and local context. Exact routing may adjust based on conditions.,,Drive times vary; conditions may affect timing.,
-PHOT,photography-tour,3,TBD,Kabul,Planned touring day with flexible pacing and local context. Exact routing may adjust based on conditions.,,Drive times vary; conditions may affect timing.,
-PHOT,photography-tour,4,TBD,Kabul,Planned touring day with flexible pacing and local context. Exact routing may adjust based on conditions.,,Drive times vary; conditions may affect timing.,
-PHOT,photography-tour,5,TBD,Kabul,Planned touring day with flexible pacing and local context. Exact routing may adjust based on conditions.,,Short city transfers.,
-PHOT,photography-tour,6,TBD,Kabul,Planned touring day with flexible pacing and local context. Exact routing may adjust based on conditions.,,Drive times vary; conditions may affect timing.,
-PHOT,photography-tour,7,TBD,Kabul,Planned touring day with flexible pacing and local context. Exact routing may adjust based on conditions.,,Drive times vary; conditions may affect timing.,
-PHOT,photography-tour,8,TBD,Kabul,Planned touring day with flexible pacing and local context. Exact routing may adjust based on conditions.,,Drive times vary; conditions may affect timing.,
-PHOT,photography-tour,9,TBD,Kabul,Planned touring day with flexible pacing and local context. Exact routing may adjust based on conditions.,,Drive times vary; conditions may affect timing.,
-PHOT,photography-tour,10,TBD,Kabul,Planned touring day with flexible pacing and local context. Exact routing may adjust based on conditions.,,Drive times vary; conditions may affect timing.,
-PHOT,photography-tour,11,TBD,Kabul,Planned touring day with flexible pacing and local context. Exact routing may adjust based on conditions.,,Drive times vary; conditions may affect timing.,
-PHOT,photography-tour,12,Airport Transfer - Depart from Kabul,Kabul,"Hotel check-out and Airport Drop-off, departing flights from Kabul.",,Drive times vary; conditions may affect timing.,
 PVEH,panjshir-valley-emeralds-history,1,Arrival & Orientation,Kabul,"Airport pickup, hotel check-in, and a relaxed orientation Sightseeing depending on arrival time.",,Short city transfers.,KBL-007
 PVEH,panjshir-valley-emeralds-history,2,Drive Kabul–Panjshir,Kabul,Drive from Kabul to Panjshir via Parwan. Sightseeing on the way in and out of the valley with trip to mine or emerald auctions depending on the dates.,,Drive times vary; conditions may affect timing.,PRW-002;PJR-001;PJR-002
 PVEH,panjshir-valley-emeralds-history,3,Sightseeing Kabul,Kabul,A day of sightseeing in Kabul.,,Short city transfers.,KBL-006;KBL-005;KBL-001;KBL-002;KBL-003
 PVEH,panjshir-valley-emeralds-history,4,Airport Transfer - Depart from Kabul,Kabul,"Hotel check-out and Airport Drop-off, departing flights from Kabul.",,Short city transfers.,
-SCIE,scientific-expeditions,1,Arrival & Orientation,Kabul,"Airport pickup, hotel check-in, and a relaxed orientation Sightseeing depending on arrival time.",,Short city transfers.,
-SCIE,scientific-expeditions,2,TBD,Kabul,Planned touring day with flexible pacing and local context. Exact routing may adjust based on conditions.,,Drive times vary; conditions may affect timing.,
-SCIE,scientific-expeditions,3,TBD,Kabul,Planned touring day with flexible pacing and local context. Exact routing may adjust based on conditions.,,Drive times vary; conditions may affect timing.,
-SCIE,scientific-expeditions,4,TBD,Kabul,Planned touring day with flexible pacing and local context. Exact routing may adjust based on conditions.,,Drive times vary; conditions may affect timing.,
-SCIE,scientific-expeditions,5,TBD,Kabul,Planned touring day with flexible pacing and local context. Exact routing may adjust based on conditions.,,Short city transfers.,
-SCIE,scientific-expeditions,6,TBD,Kabul,Planned touring day with flexible pacing and local context. Exact routing may adjust based on conditions.,,Drive times vary; conditions may affect timing.,
-SCIE,scientific-expeditions,7,TBD,Kabul,Planned touring day with flexible pacing and local context. Exact routing may adjust based on conditions.,,Drive times vary; conditions may affect timing.,
-SCIE,scientific-expeditions,8,TBD,Kabul,Planned touring day with flexible pacing and local context. Exact routing may adjust based on conditions.,,Drive times vary; conditions may affect timing.,
-SCIE,scientific-expeditions,9,TBD,Kabul,Planned touring day with flexible pacing and local context. Exact routing may adjust based on conditions.,,Drive times vary; conditions may affect timing.,
-SCIE,scientific-expeditions,10,TBD,Kabul,Planned touring day with flexible pacing and local context. Exact routing may adjust based on conditions.,,Drive times vary; conditions may affect timing.,
-SCIE,scientific-expeditions,11,TBD,Kabul,Planned touring day with flexible pacing and local context. Exact routing may adjust based on conditions.,,Drive times vary; conditions may affect timing.,
-SCIE,scientific-expeditions,12,TBD,Kabul,Planned touring day with flexible pacing and local context. Exact routing may adjust based on conditions.,,Drive times vary; conditions may affect timing.,
 TGHT,timurid-grandeur-herat-tour,1,Arrival & Orientation,Kabul,"Airport pickup, hotel check-in, and a relaxed orientation Sightseeing depending on arrival time.",,Short city transfers.,KBL-006;KBL-005
 TGHT,timurid-grandeur-herat-tour,2,Sightseeing Kabul,Kabul,A day of sightseeing in Kabul.,,Short city transfers.,KBL-001;KBL-002;KBL-003
 TGHT,timurid-grandeur-herat-tour,3,Fly Kabul - Herat and Sightseeing in Herat,Herat,Flight from Kabul to Herat with the remainder of the day of sightseeing in Kabul.,FL-KBL-HER,Short city transfers.,HER-003;HER-002;HER-004

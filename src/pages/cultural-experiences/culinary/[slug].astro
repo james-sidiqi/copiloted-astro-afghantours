@@ -1,0 +1,166 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import SectionHeader from '@components/ui/SectionHeader.astro';
+import SafeImage from '@components/ui/SafeImage.astro';
+import ConversionCTA from '@components/travel/ConversionCTA.astro';
+import RelatedScheduledTours from '@components/travel/RelatedScheduledTours.astro';
+import { getCollection } from 'astro:content';
+import { getSiteData } from '@lib/data/site-data';
+import { relatedScheduledByProvinceNames } from '@lib/content/relatedScheduled';
+import {
+  culinaryHref,
+  culinaryImage,
+  listCulinaryGallery,
+} from '@lib/content/culinaryExperiences';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('culinary-experiences');
+  return entries.map((entry) => ({
+    params: { slug: entry.slug },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+const data = getSiteData();
+const relatedTours = relatedScheduledByProvinceNames(data.tours, entry.data.provinces || [], 3, {
+  strict: true,
+});
+
+const hero = culinaryImage(entry.slug, entry.data.hero_image, entry.data.image);
+const gallery = listCulinaryGallery(entry.slug, entry.data.gallery || []);
+
+const relatedFoods = (entry.data.related_food_slugs || [])
+  .map((slug) => data.dishes.find((d) => d.slug === slug && d.isActive))
+  .filter(Boolean);
+
+const venueLabel = (entry.data.venue_name || '').trim() || null;
+---
+
+<BaseLayout
+  title={`${entry.data.title} – Culinary Experiences – Afghan Tours`}
+  description={entry.data.card_description || entry.data.subtitle || `Culinary experience: ${entry.data.title}`}
+>
+  <div class="relative min-h-[320px] sm:min-h-[400px] flex items-end bg-[#1e3a5f]">
+    <SafeImage
+      src={hero}
+      fallback="/assets/images/placeholders/default-card.webp"
+      alt={entry.data.title}
+      class="absolute inset-0 w-full h-full object-cover opacity-50"
+      loading="eager"
+    />
+    <div class="relative z-10 max-w-6xl mx-auto w-full px-4 sm:px-6 py-12 text-white">
+      <p class="text-xs font-semibold uppercase tracking-widest text-[#b88a2a] mb-3">Culinary Experience</p>
+      <h1 class="font-display text-3xl sm:text-4xl lg:text-5xl font-bold">{entry.data.title}</h1>
+      {entry.data.subtitle && <p class="mt-3 text-white/90 max-w-2xl text-base sm:text-lg">{entry.data.subtitle}</p>}
+      <div class="mt-4 flex flex-wrap gap-3 text-xs sm:text-sm text-white/80">
+        <a href={`/hubs/${entry.data.hub_slug}/`} class="rounded-full bg-white/10 px-3 py-1 hover:bg-white/20">
+          Hub: {entry.data.hub_slug.replace(/-/g, ' ')}
+        </a>
+        <span class="rounded-full bg-white/10 px-3 py-1">{entry.data.route_context}</span>
+        {entry.data.best_season && <span class="rounded-full bg-white/10 px-3 py-1">Season: {entry.data.best_season}</span>}
+        {entry.data.duration && <span class="rounded-full bg-white/10 px-3 py-1">{entry.data.duration}</span>}
+        {(entry.data.provinces || []).slice(0, 4).map((p) => (
+          <span class="rounded-full bg-white/10 px-3 py-1">{p}</span>
+        ))}
+      </div>
+    </div>
+  </div>
+
+  <article class="max-w-3xl mx-auto px-4 sm:px-6 py-12">
+    {(venueLabel || entry.data.signature_food) && (
+      <div class="mb-8 grid sm:grid-cols-2 gap-4">
+        {venueLabel && (
+          <div class="rounded-2xl border border-[#1e3a5f]/10 p-4">
+            <p class="text-xs font-semibold uppercase tracking-wider text-[#b88a2a]">Venue</p>
+            <p class="mt-1 font-medium text-[#1e3a5f]">{venueLabel}</p>
+            <p class="mt-1 text-xs text-[rgba(15,23,42,0.55)] capitalize">{entry.data.venue_type.replace(/-/g, ' ')}</p>
+          </div>
+        )}
+        {entry.data.signature_food && (
+          <div class="rounded-2xl border border-[#1e3a5f]/10 p-4">
+            <p class="text-xs font-semibold uppercase tracking-wider text-[#b88a2a]">Signature</p>
+            <p class="mt-1 font-medium text-[#1e3a5f]">{entry.data.signature_food}</p>
+            {!venueLabel && (
+              <p class="mt-1 text-xs text-[rgba(15,23,42,0.55)]">Exact venue confirmed per departure</p>
+            )}
+          </div>
+        )}
+      </div>
+    )}
+
+    <div class="prose prose-slate prose-lg max-w-none prose-headings:font-display prose-headings:font-semibold prose-headings:text-[#1e3a5f] prose-h2:mt-10 prose-h2:mb-3 prose-h2:text-2xl prose-h2:leading-snug prose-h3:mt-8 prose-h3:mb-2 prose-h3:text-xl prose-p:leading-relaxed prose-a:text-[#1f4aa8] prose-strong:text-[#1e3a5f]">
+      <Content />
+    </div>
+
+    {gallery.length > 0 && (
+      <div class="mt-10">
+        <SectionHeader eyebrow="Gallery" title="From this experience" />
+        <div class="mt-4 grid grid-cols-2 sm:grid-cols-3 gap-3">
+          {gallery.map((src) => (
+            <div class="aspect-[4/3] rounded-xl overflow-hidden bg-gray-100">
+              <SafeImage
+                src={src}
+                fallback="/assets/images/placeholders/default-card.webp"
+                alt={entry.data.title}
+                class="w-full h-full object-cover"
+                loading="lazy"
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+    )}
+
+    {((entry.data.nearby?.length || 0) > 0 || relatedFoods.length > 0) && (
+      <div class="mt-10 grid sm:grid-cols-2 gap-6">
+        {(entry.data.nearby?.length || 0) > 0 && (
+          <div class="rounded-2xl border border-[#1e3a5f]/10 p-5">
+            <SectionHeader eyebrow="Context" title="Nearby places" />
+            <ul class="mt-3 space-y-1 text-sm text-[rgba(15,23,42,0.75)]">
+              {entry.data.nearby.map((n) => <li>• {n}</li>)}
+            </ul>
+          </div>
+        )}
+        {relatedFoods.length > 0 && (
+          <div class="rounded-2xl border border-[#1e3a5f]/10 p-5">
+            <SectionHeader eyebrow="Food & Culture" title="Related dishes" />
+            <ul class="mt-3 space-y-2 text-sm">
+              {relatedFoods.map((dish) => (
+                <li>
+                  <a href={`/food-culture/${dish!.slug}/`} class="text-[#1f4aa8] hover:underline">
+                    {dish!.name}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
+    )}
+
+    <p class="mt-8 text-sm text-[rgba(15,23,42,0.55)]">
+      <a href="/cultural-experiences/culinary/" class="text-[#1f4aa8] hover:underline">All Culinary Experiences</a>
+      {' · '}
+      <a href={`/hubs/${entry.data.hub_slug}/`} class="text-[#1f4aa8] hover:underline">
+        {entry.data.hub_slug.replace(/-/g, ' ')} hub
+      </a>
+    </p>
+  </article>
+
+  <RelatedScheduledTours
+    tours={relatedTours}
+    eyebrow="Scheduled Tours"
+    title="Related Scheduled Tours"
+    subtitle="Shown only when province links exist in our tour data — never a forced upsell grid. No invented day assignments."
+  />
+
+  <ConversionCTA
+    variant="soft"
+    title="Want this on your itinerary?"
+    subtitle="Ask us how this culinary stop can fit a Scheduled Tour departure — or inquire about a Custom Journey planned from Kabul."
+    primaryHref="/tours?type=scheduled"
+    secondaryHref="/contact"
+  />
+</BaseLayout>

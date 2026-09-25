@@ -6,7 +6,7 @@ import type { Tour } from "../types/view-models.js";
 import { isCustomTravelStyle } from "./customAudiences.js";
 
 export function scheduledToursOnly(tours: Tour[]): Tour[] {
-  return tours.filter((t) => t.isActive && !isCustomTravelStyle(t.travelStyle));
+  return tours.filter((t) => t.isActive && (t.productClass === 'scheduled' || t.productClass === 'private-fixed'));
 }
 
 export function sortScheduled(tours: Tour[]): Tour[] {

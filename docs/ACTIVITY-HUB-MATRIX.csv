@@ -1,0 +1,36 @@
+activity_slug,hub_slug,access_type,availability_note,priority,is_active,source
+hiking,kabul-city,in-hub,Available across all active hubs when conditions allow (semantic all-hubs rule),1,1,semantic-ALL
+hiking,jalalabad-city,in-hub,Available across all active hubs when conditions allow (semantic all-hubs rule),1,1,semantic-ALL
+hiking,bamyan-city,in-hub,Available across all active hubs when conditions allow (semantic all-hubs rule),1,1,semantic-ALL
+hiking,mazar-e-sharif,in-hub,Available across all active hubs when conditions allow (semantic all-hubs rule),1,1,semantic-ALL
+hiking,faizabad,in-hub,Available across all active hubs when conditions allow (semantic all-hubs rule),1,1,semantic-ALL
+hiking,kandahar-city,in-hub,Available across all active hubs when conditions allow (semantic all-hubs rule),1,1,semantic-ALL
+hiking,herat-city,in-hub,Available across all active hubs when conditions allow (semantic all-hubs rule),1,1,semantic-ALL
+hiking,ghazni-city,in-hub,Available across all active hubs when conditions allow (semantic all-hubs rule),1,1,semantic-ALL
+fishing,kabul-city,near-hub,Season and access dependent,1,1,explicit
+fishing,mazar-e-sharif,near-hub,Season and access dependent,1,1,explicit
+fishing,faizabad,near-hub,Season and access dependent,1,1,explicit
+fishing,jalalabad-city,near-hub,Season and access dependent,1,1,explicit
+fishing,kandahar-city,near-hub,Season and access dependent,1,1,explicit
+trekking,faizabad,excursion,Primarily Badakhshan / Faizabad planning hub,1,1,explicit
+skiing,kabul-city,day-trip,Seasonal highland skiing; conditions dependent,1,1,explicit
+skiing,bamyan-city,day-trip,Seasonal highland skiing; conditions dependent,1,1,explicit
+shopping,kabul-city,in-hub,Markets and crafts across all active hubs (semantic all-hubs rule),1,1,semantic-ALL
+shopping,jalalabad-city,in-hub,Markets and crafts across all active hubs (semantic all-hubs rule),1,1,semantic-ALL
+shopping,bamyan-city,in-hub,Markets and crafts across all active hubs (semantic all-hubs rule),1,1,semantic-ALL
+shopping,mazar-e-sharif,in-hub,Markets and crafts across all active hubs (semantic all-hubs rule),1,1,semantic-ALL
+shopping,faizabad,in-hub,Markets and crafts across all active hubs (semantic all-hubs rule),1,1,semantic-ALL
+shopping,kandahar-city,in-hub,Markets and crafts across all active hubs (semantic all-hubs rule),1,1,semantic-ALL
+shopping,herat-city,in-hub,Markets and crafts across all active hubs (semantic all-hubs rule),1,1,semantic-ALL
+shopping,ghazni-city,in-hub,Markets and crafts across all active hubs (semantic all-hubs rule),1,1,semantic-ALL
+sightseeing,kabul-city,in-hub,Core hub activity across all active hubs (semantic all-hubs rule),1,1,semantic-ALL
+sightseeing,jalalabad-city,in-hub,Core hub activity across all active hubs (semantic all-hubs rule),1,1,semantic-ALL
+sightseeing,bamyan-city,in-hub,Core hub activity across all active hubs (semantic all-hubs rule),1,1,semantic-ALL
+sightseeing,mazar-e-sharif,in-hub,Core hub activity across all active hubs (semantic all-hubs rule),1,1,semantic-ALL
+sightseeing,faizabad,in-hub,Core hub activity across all active hubs (semantic all-hubs rule),1,1,semantic-ALL
+sightseeing,kandahar-city,in-hub,Core hub activity across all active hubs (semantic all-hubs rule),1,1,semantic-ALL
+sightseeing,herat-city,in-hub,Core hub activity across all active hubs (semantic all-hubs rule),1,1,semantic-ALL
+sightseeing,ghazni-city,in-hub,Core hub activity across all active hubs (semantic all-hubs rule),1,1,semantic-ALL
+horse-riding,kabul-city,near-hub,Access and arrangement dependent,1,1,explicit
+horse-riding,mazar-e-sharif,near-hub,Access and arrangement dependent,1,1,explicit
+cycling,kabul-city,in-hub,Urban / near-hub cycling when conditions allow,1,1,explicit

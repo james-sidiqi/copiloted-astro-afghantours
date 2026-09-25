@@ -1,6 +1,7 @@
 /**
  * Light experience cards from existing public asset folders.
- * No thin SEO pages — cards inspire and direct to Scheduled tours or Custom inquire.
+ * Activity cards map to the locked 8 activities (/activities/<slug>/).
+ * No invented claims; no cross-substituted activity heroes.
  */
 import * as fs from "node:fs";
 import * as path from "node:path";
@@ -12,7 +13,7 @@ export type ExperienceCard = {
   blurb: string;
   imagePath: string;
   href: string;
-  kind: "cultural" | "activity";
+  kind: "cultural" | "culinary" | "activity";
 };
 
 const PUBLIC_ROOT = path.join(process.cwd(), "public");
@@ -31,89 +32,63 @@ const CULTURAL_DEFS: Array<{ slug: string; label: string; blurb: string }> = [
   { slug: "istalif-pottery", label: "Istalif pottery", blurb: "Craft and village life outside Kabul — often woven into Central routes when conditions allow." },
   { slug: "afghan-carpets", label: "Afghan carpets", blurb: "Markets and makers — part of how many guests experience cities on scheduled or custom itineraries." },
   { slug: "glassblowers-of-herat", label: "Glassblowers of Herat", blurb: "Herat’s craft traditions — relevant when Western hubs are on your route." },
-  { slug: "qurut-markets-of-bamyan", label: "Qurut markets of Bamyan", blurb: "Highland markets and food culture around Bamyan — paired with landscape days on Central tours." },
   { slug: "afghan-weddings", label: "Afghan weddings", blurb: "Hospitality and celebration guests sometimes witness — never staged as a product, always context-dependent." },
 ];
 
+/** Locked 8 activities — cards link to activity pages, not mini-tours. */
 const ACTIVITY_DEFS: Array<{
   id: string;
   label: string;
   blurb: string;
-  /** Relative parts under experiences/activities/ (and legacy activities/). */
-  activityPath?: string[];
-  imageCandidates: string[];
+  activityPath: string[];
 }> = [
   {
-    id: "sightseeing-historical",
-    label: "Historical sightseeing",
-    blurb: "Forts, mosques, and heritage sites — core to most Cultural / Scenic scheduled packages.",
-    activityPath: ["sightseeing", "historical"],
-    imageCandidates: [
-      "/assets/images/experiences/activities/sightseeing/historical/hero.webp",
-      "/assets/images/experiences/activities/sightseeing/historical/gallery/01.webp",
-      "/assets/images/activities/sightseeing/historical/01.webp",
-    ],
-  },
-  {
-    id: "sightseeing-scenic",
-    label: "Scenic day travel",
-    blurb: "Highlands, lakes, and mountain roads — planned with realistic drive times from Kabul.",
-    activityPath: ["sightseeing", "scenic"],
-    imageCandidates: [
-      "/assets/images/experiences/activities/sightseeing/scenic/hero.webp",
-      "/assets/images/experiences/activities/sightseeing/scenic/gallery/01.webp",
-      "/assets/images/activities/sightseeing/scenic/01.webp",
-    ],
-  },
-  {
-    id: "markets",
-    label: "Markets & cities",
-    blurb: "Bazaars and urban rhythm — how guests actually spend time in hubs between longer drives.",
-    activityPath: ["sightseeing", "markets"],
-    imageCandidates: [
-      "/assets/images/experiences/activities/sightseeing/markets/hero.webp",
-      "/assets/images/experiences/activities/sightseeing/markets/gallery/01.webp",
-      "/assets/images/activities/sightseeing/markets/01.webp",
-    ],
-  },
-  {
-    id: "birding",
-    label: "Birding",
-    blurb: "Wetlands and highland birding when season and access allow — custom inquiry rather than a fixed catalogue package.",
-    activityPath: ["birding"],
-    imageCandidates: [
-      "/assets/images/experiences/activities/birding/hero.webp",
-      "/assets/images/experiences/activities/birding/thumb.webp",
-    ],
-  },
-  {
-    id: "shopping",
-    label: "Shopping & crafts",
-    blurb: "Carpets, jewellery, and local goods — optional stops, not a shopping-tour product line.",
-    imageCandidates: [
-      "/assets/images/activities/shopping/01.webp",
-      "/assets/images/activities/shopping/02.webp",
-    ],
-  },
-  {
-    id: "backcountry-skiing",
-    label: "Backcountry skiing",
-    blurb: "Seasonal highland skiing where access and conditions allow — inquire; not a fixed published package.",
-    imageCandidates: [
-      "/assets/images/activities/backcountry-skiing/01.webp",
-      "/assets/images/activities/backcountry-skiing/02.webp",
-    ],
+    id: "hiking",
+    label: "Hiking",
+    blurb: "Day hikes and short walks planned from operational hubs when access allows — not a packaged trek.",
+    activityPath: ["hiking"],
   },
   {
     id: "fishing",
     label: "Fishing",
-    blurb: "River and highland fishing when season and route support it — custom inquiry rather than a catalogue item.",
+    blurb: "River and lake fishing near selected hubs when season and access allow — inquire; not a catalogue item.",
     activityPath: ["fishing"],
-    imageCandidates: [
-      "/assets/images/experiences/activities/fishing/hero.webp",
-      "/assets/images/experiences/activities/fishing/thumb.webp",
-      "/assets/images/activities/fishing/01.webp",
-    ],
+  },
+  {
+    id: "trekking",
+    label: "Trekking",
+    blurb: "Multi-day trekking planned mainly from Faizabad — not a single fixed trek package.",
+    activityPath: ["trekking"],
+  },
+  {
+    id: "skiing",
+    label: "Skiing",
+    blurb: "Seasonal highland skiing near Kabul and Bamyan — distinct from the Bamyan Skiing Tour.",
+    activityPath: ["skiing"],
+  },
+  {
+    id: "shopping",
+    label: "Shopping",
+    blurb: "Bazaars and crafts as optional hub stops — top-level activity, not a sightseeing subtype.",
+    activityPath: ["shopping"],
+  },
+  {
+    id: "sightseeing",
+    label: "Sightseeing",
+    blurb: "Historical, religious, scenic, and market sightseeing across hubs — subtypes are tags, not products.",
+    activityPath: ["sightseeing"],
+  },
+  {
+    id: "horse-riding",
+    label: "Horse riding",
+    blurb: "Equestrian experiences near Kabul and Mazar when arrangements allow.",
+    activityPath: ["horse-riding"],
+  },
+  {
+    id: "cycling",
+    label: "Cycling",
+    blurb: "Urban and near-hub cycling from Kabul when conditions allow.",
+    activityPath: ["cycling"],
   },
 ];
 
@@ -124,7 +99,6 @@ const CULTURAL_PAGE_SLUG: Record<string, string> = {
   "afghan-carpets": "afghan-carpets",
   "glassblowers-of-herat": "glassblowers-of-herat",
   "afghan-weddings": "afghan-weddings",
-  // qurut-markets-of-bamyan has assets but no MD page yet — keep tours CTA
 };
 
 export function getCulturalExperienceCards(limit = 6): ExperienceCard[] {
@@ -153,24 +127,39 @@ export function getCulturalExperienceCards(limit = 6): ExperienceCard[] {
   return cards;
 }
 
-export function getActivityCards(limit = 6): ExperienceCard[] {
+export async function getCulinaryExperienceCards(limit = 6): Promise<ExperienceCard[]> {
+  const { getAllCulinaryExperiences, culinaryHref, culinaryImage } = await import("./culinaryExperiences.js");
+  const entries = await getAllCulinaryExperiences();
+  const cards: ExperienceCard[] = [];
+  for (const entry of entries) {
+    const imagePath = culinaryImage(entry.slug, entry.data.hero_image, entry.data.image, "thumb");
+    cards.push({
+      id: entry.slug,
+      label: entry.data.title,
+      blurb: entry.data.card_description || entry.data.subtitle || entry.data.signature_food,
+      imagePath,
+      href: culinaryHref(entry.slug),
+      kind: "culinary",
+    });
+    if (cards.length >= limit) break;
+  }
+  return cards;
+}
+
+export function getActivityCards(limit = 8): ExperienceCard[] {
   if (!dirExists("assets/images/activities") && !dirExists("assets/images/experiences/activities")) return [];
   const cards: ExperienceCard[] = [];
   for (const def of ACTIVITY_DEFS) {
     const imagePath =
-      (def.activityPath ? resolveActivityExperienceAsset(def.activityPath, "hero") || resolveActivityExperienceAsset(def.activityPath, "thumb") : "") ||
-      firstExisting(...def.imageCandidates);
+      resolveActivityExperienceAsset(def.activityPath, "hero") ||
+      resolveActivityExperienceAsset(def.activityPath, "thumb");
     if (!imagePath) continue;
-    const href =
-      def.id === "backcountry-skiing" || def.id === "fishing" || def.id === "birding"
-        ? "/contact"
-        : "/tours?type=scheduled";
     cards.push({
       id: def.id,
       label: def.label,
       blurb: def.blurb,
       imagePath,
-      href,
+      href: `/activities/${def.id}/`,
       kind: "activity",
     });
     if (cards.length >= limit) break;

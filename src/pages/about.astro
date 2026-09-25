@@ -2,6 +2,39 @@
 import BaseLayout from '@layouts/BaseLayout.astro';
 import Hero from '@components/site/Hero.astro';
 import SectionHeader from '@components/ui/SectionHeader.astro';
+import SafeImage from '@components/ui/SafeImage.astro';
+import * as fs from 'node:fs';
+import * as path from 'node:path';
+
+/** Approved team/ops photos — gallery only; no invented names or roles. */
+function listExisting(urls: string[]): string[] {
+  const root = path.join(process.cwd(), 'public');
+  return urls.filter((u) => {
+    try {
+      return fs.existsSync(path.join(root, u.replace(/^\//, '')));
+    } catch {
+      return false;
+    }
+  });
+}
+
+const teamGallery = listExisting([
+  '/assets/images/about/team/guides/guides-on-tour.webp',
+  '/assets/images/about/team/guides/drivers-attending-vehicles.webp',
+  '/assets/images/about/team/guides/bamiyan-buddhas-inside.webp',
+  '/assets/images/about/team/guides/fahim-smiling-buddha-bamyan-snow.webp',
+  '/assets/images/about/team/kabul-market-walk.webp',
+  '/assets/images/about/team/james-back-to-kabul-2022.webp',
+  '/assets/images/page-assets/people/group-photos/tour-group-winter.webp',
+  '/assets/images/page-assets/people/hospitality/bamiyan-tea-house.webp',
+  '/assets/images/page-assets/people/local-relationships/james-and-villagers.webp',
+  '/assets/images/about/team/guides/ramin-guiding.webp',
+]);
+
+const leadershipTogether = listExisting([
+  '/assets/images/page-assets/people/guides/james-and-edrees-mountain-road.webp',
+  '/assets/images/about/team/james-edrees.webp',
+])[0] || '';
 ---
 
 <BaseLayout
@@ -24,75 +57,107 @@ import SectionHeader from '@components/ui/SectionHeader.astro';
       </div>
       <div class="prose prose-lg max-w-none text-[rgba(15,23,42,0.75)] leading-relaxed space-y-5">
         <p>Afghan Tours is a licensed Afghan tour operator — American-led, Afghan-operated, and based in Kabul. We work through James Tourist &amp; Travel Agency. Human, practical, honest, and locally rooted.</p>
-        <p>We plan routes around current access, timing, permits, hotels, drivers, and conditions. Afghanistan is not a checkbox. It is a conversation.</p>
+        <p>Leadership is American-led and the team is Afghan. We plan routes around current access, timing, permits, hotels, drivers, and conditions. Afghanistan is not a checkbox. It is a conversation.</p>
         <p>Built by operators, not brochure writers. Guests get clear information, realistic drive times, and coordination from people who live and work here — not a seasonal fly-in model.</p>
       </div>
     </div>
   </section>
 
-  <!-- Meet the Team -->
+  <!-- Leadership: James + Edrees only -->
   <section class="py-20 bg-[#f6f7fb]">
     <div class="max-w-4xl mx-auto px-4 sm:px-6">
-      <div class="mb-12 text-center">
-        <SectionHeader eyebrow="The Team" title="Operators on the ground" centered />
+      <div class="mb-10 text-center">
+        <SectionHeader
+          eyebrow="Leadership"
+          title="American-led leadership. Afghan operations on the ground."
+          centered
+        />
       </div>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <!-- James Sidiqi -->
+
+      {leadershipTogether && (
+        <figure class="mb-10 overflow-hidden rounded-2xl shadow-sm">
+          <SafeImage
+            src={leadershipTogether}
+            fallback="/assets/images/placeholders/default-card.webp"
+            alt="James and Edrees on the road in Afghanistan"
+            class="w-full h-auto object-cover max-h-[420px]"
+            loading="lazy"
+          />
+        </figure>
+      )}
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div class="bg-white rounded-2xl shadow-sm p-6 text-center flex flex-col items-center gap-4">
           <img
             src="/assets/images/about/president.webp"
             alt="James (Amir) Sidiqi"
-            class="w-20 h-20 rounded-full object-cover object-center"
+            class="w-24 h-24 rounded-full object-cover object-center"
             loading="lazy"
             onerror="this.onerror=null;this.style.display='none';this.nextElementSibling.style.display='flex'"
           />
-          <div class="w-20 h-20 rounded-full bg-gradient-to-br from-[#1e3a5f] to-[#1f4aa8] flex items-center justify-center text-white font-display text-2xl font-bold" style="display:none">
+          <div class="w-24 h-24 rounded-full bg-gradient-to-br from-[#1e3a5f] to-[#1f4aa8] flex items-center justify-center text-white font-display text-2xl font-bold" style="display:none">
             JS
           </div>
           <div>
-            <h3 class="font-display text-lg font-bold text-[#1e3a5f]">James (Amir) Sidiqi</h3>
-            <p class="text-[#b88a2a] text-sm font-semibold mt-0.5">Operations Lead</p>
+            <p class="text-[#b88a2a] text-sm font-semibold">President / Co-Founder</p>
+            <h3 class="font-display text-lg font-bold text-[#1e3a5f] mt-0.5">James (Amir) Sidiqi</h3>
           </div>
           <p class="text-sm text-[rgba(15,23,42,0.7)] leading-relaxed">US citizen based in Kabul for 15+ years. Coordinates operations, partner networks, and trip planning across the provinces.</p>
           <a href="/story/" class="text-sm font-semibold text-[#b88a2a] hover:text-[#a07820] underline-offset-2 hover:underline">Read the founder story</a>
         </div>
 
-        <!-- Mohammad Rahimi -->
         <div class="bg-white rounded-2xl shadow-sm p-6 text-center flex flex-col items-center gap-4">
           <img
             src="/assets/images/about/vice-president.webp"
             alt="Mohammad (Edrees) Rahimi"
-            class="w-20 h-20 rounded-full object-cover object-center"
+            class="w-24 h-24 rounded-full object-cover object-center"
             loading="lazy"
             onerror="this.onerror=null;this.style.display='none';this.nextElementSibling.style.display='flex'"
           />
-          <div class="w-20 h-20 rounded-full bg-gradient-to-br from-[#1e3a5f] to-[#1f4aa8] flex items-center justify-center text-white font-display text-2xl font-bold" style="display:none">
+          <div class="w-24 h-24 rounded-full bg-gradient-to-br from-[#1e3a5f] to-[#1f4aa8] flex items-center justify-center text-white font-display text-2xl font-bold" style="display:none">
             MR
           </div>
           <div>
-            <h3 class="font-display text-lg font-bold text-[#1e3a5f]">Mohammad (Edrees) Rahimi</h3>
-            <p class="text-[#b88a2a] text-sm font-semibold mt-0.5">Local Guide & Operations</p>
+            <p class="text-[#b88a2a] text-sm font-semibold">Vice President / Co-Founder</p>
+            <h3 class="font-display text-lg font-bold text-[#1e3a5f] mt-0.5">Mohammad (Edrees) Rahimi</h3>
           </div>
-          <p class="text-sm text-[rgba(15,23,42,0.7)] leading-relaxed">Guide and logistics lead with deep route knowledge, local customs, and languages across complex terrain.</p>
-        </div>
-
-        <!-- Ramin Sediqi -->
-        <div class="bg-white rounded-2xl shadow-sm p-6 text-center flex flex-col items-center gap-4">
-          <div class="w-20 h-20 rounded-full bg-gradient-to-br from-[#1e3a5f] to-[#1f4aa8] flex items-center justify-center text-white font-display text-2xl font-bold">
-            RS
-          </div>
-          <div>
-            <h3 class="font-display text-lg font-bold text-[#1e3a5f]">Ramin Sediqi</h3>
-            <p class="text-[#b88a2a] text-sm font-semibold mt-0.5">Cultural Liaison & Logistics</p>
-          </div>
-          <p class="text-sm text-[rgba(15,23,42,0.7)] leading-relaxed">Bridges guest expectations with Afghan hosts and communities — respectful, clear, and practical on the ground.</p>
+          <p class="text-sm text-[rgba(15,23,42,0.7)] leading-relaxed">Afghan leadership, cultural knowledge, provincial coordination, and the local relationships behind day-to-day travel planning.</p>
         </div>
       </div>
     </div>
   </section>
 
+  <!-- Our Team gallery: approved photos only, no invented names/roles -->
+  {teamGallery.length > 0 && (
+    <section class="py-20 bg-white">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6">
+        <div class="mb-10 text-center">
+          <SectionHeader
+            eyebrow="Our Team"
+            title="Guides, drivers, and partners on the ground"
+            subtitle="Photos from our working relationships across Afghanistan. Individual names and roles are confirmed in person — we do not invent a public roster here."
+            centered
+          />
+        </div>
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
+          {teamGallery.map((src) => (
+            <div class="aspect-[4/3] overflow-hidden rounded-xl bg-gray-100">
+              <SafeImage
+                src={src}
+                fallback="/assets/images/placeholders/default-card.webp"
+                alt="Afghan Tours team and partners in the field"
+                class="w-full h-full object-cover"
+                loading="lazy"
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
   <!-- Why Travel With Us -->
-  <section class="py-20 bg-white">
+  <section class="py-20 bg-[#f6f7fb]">
     <div class="max-w-4xl mx-auto px-4 sm:px-6">
       <div class="mb-12 text-center">
         <SectionHeader eyebrow="How We Work" title="What you can count on" centered />
@@ -116,7 +181,7 @@ import SectionHeader from '@components/ui/SectionHeader.astro';
             desc: 'Set itineraries when they fit — or a Custom Journey built around your timing and interests.'
           }
         ].map(item => (
-          <div class="flex gap-4 p-5 bg-[#f6f7fb] rounded-xl">
+          <div class="flex gap-4 p-5 bg-white rounded-xl">
             <div class="w-8 h-8 rounded-full bg-[#1e3a5f] flex items-center justify-center shrink-0 mt-0.5">
               <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
             </div>
